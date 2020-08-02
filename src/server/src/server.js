@@ -1,6 +1,6 @@
 const {parseCliFlagValue} = require('./utils/parse-cli-flags');
 const environment = parseCliFlagValue('env');
-require('dotenv').config({path: `.env.${environment}`});
+require('dotenv').config({path: `src/environments/.env.${environment}`});
 
 const schema = require('./graphql/schema');
 const express = require('express');
