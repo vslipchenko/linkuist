@@ -1,8 +1,5 @@
 // imports
-require('dotenv').config();
-
-const schema = require('./schema');
-
+const schema = require('./graphql/schema');
 const express = require('express');
 const mongoose = require('mongoose');
 const {ApolloServer} = require('apollo-server-express');
