@@ -1,9 +1,35 @@
+@import 'variables';
+
+$home-background-size: 80vh;
+$home-image-background-color: #fcdabb;
+$home-main-background-color: #ffffff;
+
 .home {
+  &-item {
+    display: flex;
+    justify-content: center;
+  }
+
   &-background {
-    min-height: 100%;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: $home-background-size;
+    padding: $unit-5;
+    background-color: $home-image-background-color;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+
+    &__image {
+      height: 100%;
+    }
+  }
+
+  &-main {
+    margin-top: $home-background-size;
+    height: 100vh;
+    background-color: $home-main-background-color;
   }
 }
