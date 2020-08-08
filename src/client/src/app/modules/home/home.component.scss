@@ -1,10 +1,14 @@
 @import 'variables';
 
 $home-background-size: 80vh;
-$home-image-background-color: #fcdabb;
-$home-main-background-color: #ffffff;
+
+$home-light-color: #ffffff;
+$home-primary-color: #e84c4f;
+$home-secondary-color: #fcdabb;
 
 .home {
+  color: $home-light-color;
+
   &-item {
     display: flex;
     justify-content: center;
@@ -16,7 +20,7 @@ $home-main-background-color: #ffffff;
     align-items: center;
     height: $home-background-size;
     padding: $unit-5;
-    background-color: $home-image-background-color;
+    background-color: $home-secondary-color;
     position: fixed;
     top: 0;
     width: 100%;
@@ -28,8 +32,63 @@ $home-main-background-color: #ffffff;
   }
 
   &-main {
-    margin-top: $home-background-size;
+    display: flex;
+    flex-direction: column;
     height: 100vh;
-    background-color: $home-main-background-color;
+    margin-top: $home-background-size;
+    background-color: $home-secondary-color;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90%;
+    padding: 0 $unit-8 $unit-8;
+    background-color: $home-primary-color;
+  }
+
+  &-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 20vh;
+    width: 100%;
+  }
+
+  &-actions {
+    display: flex;
+
+    :not(:last-child) {
+      margin-right: $unit-2;
+    }
+  }
+
+  &-brand {
+    padding: $unit-2;
+    border: dashed;
+    letter-spacing: 1px;
+    font-size: $font-size-larger;
+  }
+
+  &-description {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    width: 70%;
+    overflow-y: auto;
+    font-size: $font-size-large;
+  }
+
+  &-footer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $home-primary-color;
+
+    &__curator {
+      font-size: $font-size-larger;
+    }
   }
 }

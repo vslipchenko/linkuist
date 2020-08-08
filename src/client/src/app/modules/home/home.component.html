@@ -7,13 +7,29 @@
     <img class="home-background__image" src="./assets/images/home/background.png" alt="">
   </div>
   <div class="home__item home-main">
-    <nav class="home-navigation">
-      <h1>Linkuist</h1>
-      <ul>
-        <li><a href=""></a></li>
-        <li><a href=""></a></li>
-      </ul>
-    </nav>
+    <div class="home-content">
+      <nav class="home-navigation">
+        <ul class="home-actions">
+          <li>
+            <a mat-fab color="primary" aria-label="Example icon button with a delete icon" [disableRipple]="true">
+<!--              <mat-icon>delete</mat-icon>-->
+              L
+            </a>
+          </li>
+          <li>
+            <a mat-fab color="accent" aria-label="Example icon button with a bookmark icon" [disableRipple]="true">
+              <!--              <mat-icon>bookmark</mat-icon>-->
+              R
+            </a>
+          </li>
+        </ul>
+        <h1 class="home-brand"><a href="/">Linkuist</a></h1>
+      </nav>
+      <div class="home-description" [innerHTML]="'HOME.DESCRIPTION' | translate"></div>
+    </div>
+    <footer class="home-footer">
+      <h2 class="home-footer__curator">About</h2>
+    </footer>
   </div>
 </main>
 <!--</perfect-scrollbar>-->

@@ -1,4 +1,7 @@
-/* unit */
+/* default line height */
+$line-height: 1.4;
+
+/* unit measures */
 $unit: 8px;
 $unit-half: $unit / 2;
 $unit-2: $unit * 2;
@@ -10,3 +13,11 @@ $unit-7: $unit * 7;
 $unit-8: $unit * 8;
 $unit-9: $unit * 9;
 $unit-10: $unit * 10;
+
+/* font size (default: 1rem = 16px) */
+$font-size-largest: 2rem;
+$font-size-larger: 1.5rem;
+$font-size-large: 1.2rem;
+$font-size-regular: 0.9rem;
+$font-size-medium: 0.7;
+$font-size-small: 0.5;
