@@ -3,33 +3,33 @@
 <!--</main>-->
 <!--<perfect-scrollbar>-->
 <main class="home">
-  <div class="home__item home-background">
+  <div class="home-background">
     <img class="home-background__image" src="./assets/images/home/background.png" alt="">
   </div>
-  <div class="home__item home-main">
+  <div class="home-main">
     <div class="home-content">
       <nav class="home-navigation">
         <ul class="home-actions">
           <li>
-            <a mat-fab color="primary" aria-label="Example icon button with a delete icon" [disableRipple]="true">
+            <a mat-fab color="primary" aria-label="Example icon button with a delete icon">
 <!--              <mat-icon>delete</mat-icon>-->
               L
             </a>
           </li>
           <li>
-            <a mat-fab color="accent" aria-label="Example icon button with a bookmark icon" [disableRipple]="true">
+            <a mat-fab color="accent" aria-label="Example icon button with a bookmark icon">
               <!--              <mat-icon>bookmark</mat-icon>-->
               R
             </a>
           </li>
         </ul>
-        <h1 class="home-brand"><a href="/">Linkuist</a></h1>
+        <h1><a class="home-link" href="/">Linkuist</a></h1>
       </nav>
-      <div class="home-description" [innerHTML]="'HOME.DESCRIPTION' | translate"></div>
+      <section class="home-section">
+        <h2 class="home-subheading">About</h2>
+        <div class="home-text" [innerHTML]="'HOME.ABOUT' | translate"></div>
+      </section>
     </div>
-    <footer class="home-footer">
-      <h2 class="home-footer__curator">About</h2>
-    </footer>
   </div>
 </main>
 <!--</perfect-scrollbar>-->

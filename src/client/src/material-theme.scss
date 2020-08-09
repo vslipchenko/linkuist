@@ -2,8 +2,8 @@
 
 @include mat-core();
 
-$primary: mat-palette($mat-green, A400, A200, A700);
-$accent: mat-palette($mat-amber, A400, A200, A700);
+$primary: mat-palette($mat-blue);
+$accent: mat-palette($mat-pink);
 $theme: mat-light-theme($primary, $accent);
 
 @include angular-material-theme($theme);
