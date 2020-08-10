@@ -7,6 +7,10 @@ $home-main-screen-height: 85vh;
 $home-navigation-panel-height: 100vh - $home-main-screen-height;
 $home-navigation-panel-shadow: 0 -5px 15px 0 rgba(0, 0, 0, 0.1);
 
+$home-section-margin-top: $home-navigation-panel-height;
+$home-section-height: $home-main-screen-height - $home-section-margin-top;
+$home-section-width: 70%;
+
 .home {
   &-background {
     display: flex;
@@ -75,13 +79,12 @@ $home-navigation-panel-shadow: 0 -5px 15px 0 rgba(0, 0, 0, 0.1);
   }
 
   &-section {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 70%;
-    margin-top: $unit-4;
-    overflow-y: auto;
+    height: $home-section-height;
+    width: $home-section-width;
+    margin-top: $home-section-margin-top;
     font-size: $font-size-large;
   }
 
