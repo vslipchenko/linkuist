@@ -1,25 +1,18 @@
 @import 'variables';
 
-$home-background-size: 80vh;
-
-$home-light-color: #ffffff;
-//$home-primary-color: #e84c4f;
 $home-primary-color: #ffffff;
 $home-secondary-color: #87cefa;
 
+$home-main-screen-height: 85vh;
+$home-navigation-panel-height: 100vh - $home-main-screen-height;
+$home-navigation-panel-shadow: 0 -5px 15px 0 rgba(0, 0, 0, 0.1);
+
 .home {
-  //color: $home-light-color;
-
-  //&-item {
-  //  display: flex;
-  //  justify-content: center;
-  //}
-
   &-background {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: $home-background-size;
+    height: $home-main-screen-height;
     padding: $unit-5;
     background-color: $home-secondary-color;
     position: fixed;
@@ -36,8 +29,7 @@ $home-secondary-color: #87cefa;
     display: flex;
     flex-direction: column;
     height: 100vh;
-    margin-top: $home-background-size;
-    background-color: $home-secondary-color;
+    margin-top: $home-main-screen-height;
   }
 
   &-content {
@@ -45,7 +37,6 @@ $home-secondary-color: #87cefa;
     flex-direction: column;
     align-items: center;
     height: 100%;
-    padding: 0 $unit-8 $unit-8;
     background-color: $home-primary-color;
   }
 
@@ -53,8 +44,13 @@ $home-secondary-color: #87cefa;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 20vh;
+    height: $home-navigation-panel-height;
     width: 100%;
+    padding: 0 $unit-6;
+    box-shadow: $home-navigation-panel-shadow;
+    position: fixed;
+    bottom: 0;
+    background-color: $home-primary-color;
   }
 
   &-actions {
@@ -66,14 +62,16 @@ $home-secondary-color: #87cefa;
   }
 
   &-link {
-    padding: $unit-2;
+    padding: 12px;
     border: dashed;
-    letter-spacing: 1px;
-    font-size: $font-size-larger;
 
     &:hover {
       border: dotted;
     }
+  }
+
+  &-heading {
+    font-size: $font-size-larger;
   }
 
   &-section {
@@ -90,16 +88,4 @@ $home-secondary-color: #87cefa;
   &-subheading {
     font-size: $font-size-largest;
   }
-
-  //&-footer {
-  //  flex: 1;
-  //  display: flex;
-  //  justify-content: center;
-  //  align-items: center;
-  //  color: $home-primary-color;
-  //
-  //  &__curator {
-  //    font-size: $font-size-larger;
-  //  }
-  //}
 }
