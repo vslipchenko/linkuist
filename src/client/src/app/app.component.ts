@@ -1,7 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {TranslateService} from "@ngx-translate/core";
-import {Title} from '@angular/platform-browser';
+import {TranslateService} from '@ngx-translate/core';
+import {DomSanitizer, Title} from '@angular/platform-browser';
 import {DOCUMENT} from '@angular/common';
+import {MatIconRegistry} from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
@@ -12,15 +13,19 @@ export class AppComponent implements OnInit {
   private readonly defaultLanguage = 'en';
   private readonly supportedLanguages = ['en'];
 
-  constructor(private translateService: TranslateService,
-              private titleService: Title,
-              @Inject(DOCUMENT) private document: Document) {
+  constructor(
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    private translateService: TranslateService,
+    private titleService: Title,
+    @Inject(DOCUMENT) private document: Document) {
   }
 
   ngOnInit(): void {
     const selectedLanguage = this.initTranslation();
     this.setDocumentLanguage(selectedLanguage);
     this.setDocumentTitle();
+    this.registerMaterialIcons();
   }
 
   private initTranslation(): string {
@@ -42,5 +47,12 @@ export class AppComponent implements OnInit {
 
   private setDocumentTitle(): void {
     this.translateService.get('APP.TITLE').subscribe(title => this.titleService.setTitle(title));
+  }
+
+  private registerMaterialIcons(): void {
+    this.matIconRegistry.addSvgIcon(
+      "unicorn",
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/unicorn_icon.svg')
+    );
   }
 }
