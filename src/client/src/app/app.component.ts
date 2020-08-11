@@ -4,6 +4,15 @@ import {DomSanitizer, Title} from '@angular/platform-browser';
 import {DOCUMENT} from '@angular/common';
 import {MatIconRegistry} from '@angular/material/icon';
 
+const ICONS_FOLDER = 'assets/icons/';
+const MATERIAL_ICONS_FOLDER = 'assets/icons/material/';
+
+interface IconInfo {
+  name: string;
+  fileName: string;
+  isMaterial?: boolean;
+}
+
 @Component({
   selector: 'app-root',
   template: '<router-outlet></router-outlet>'
@@ -50,9 +59,17 @@ export class AppComponent implements OnInit {
   }
 
   private registerMaterialIcons(): void {
-    this.matIconRegistry.addSvgIcon(
-      "unicorn",
-      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/unicorn_icon.svg')
-    );
+    const registerIcons = (icons: IconInfo[]) => {
+      icons.forEach(icon => {
+        this.matIconRegistry.addSvgIcon(
+          icon.name,
+          this.domSanitizer.bypassSecurityTrustResourceUrl((icon.isMaterial ? MATERIAL_ICONS_FOLDER : ICONS_FOLDER) + 'explore-white-18dp.svg')
+        );
+      })
+    };
+
+    registerIcons([
+      {name: 'unicorn', fileName: 'explore-white-18dp.svg', isMaterial: true}
+    ]);
   }
 }
