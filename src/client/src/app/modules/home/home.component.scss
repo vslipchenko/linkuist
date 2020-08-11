@@ -5,7 +5,7 @@ $home-secondary-color: #87cefa;
 
 $home-main-screen-height: 85vh;
 $home-navigation-panel-height: 100vh - $home-main-screen-height;
-$home-navigation-panel-shadow: 0 -5px 15px 0 rgba(0, 0, 0, 0.1);
+$home-navigation-panel-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
 
 $home-section-margin-top: $home-navigation-panel-height;
 $home-section-height: $home-main-screen-height - $home-section-margin-top;
