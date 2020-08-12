@@ -1,0 +1,12 @@
+@use 'variables' as var;
+
+@function translate-breakpoint($key) {
+  $breakpoints: (
+    'small': 320px,
+    'medium': 768px,
+    'large': 1024px,
+    'huge': 1400px
+  );
+
+  @return map-get($breakpoints, $key);
+}

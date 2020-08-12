@@ -1,5 +1,6 @@
-@import '~@angular/material/theming';
-@import 'variables';
+@use '~@angular/material/theming' as mat;
+@use 'variables' as var;
+//@use 'home.component.media' as home;
 
 $home-primary-color: #ffffff;
 $home-secondary-color: #87cefa;
@@ -20,7 +21,7 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     justify-content: center;
     align-items: center;
     height: $home-main-screen-height;
-    padding: $unit-5;
+    padding: var.$unit-5;
     background-color: $home-secondary-color;
     position: fixed;
     top: 0;
@@ -45,7 +46,7 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     justify-content: space-between;
     height: $home-navigation-panel-height;
     width: 100%;
-    padding: 0 $unit-6;
+    padding: 0 var.$unit-6;
     box-shadow: $home-navigation-panel-shadow;
     position: fixed;
     bottom: 0;
@@ -66,7 +67,7 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     display: flex;
 
     :not(:last-child) {
-      margin-right: $unit-2;
+      margin-right: var.$unit-3;
     }
   }
 
@@ -80,21 +81,21 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
   }
 
   &-heading {
-    font-size: $font-size-larger;
+    font-size: var.$font-size-larger;
   }
 
   &-subheading {
-    font-size: $font-size-largest;
+    font-size: var.$font-size-largest;
   }
 
   &-section {
     display: flex;
     align-items: center;
     width: $home-section-width;
-    font-size: $font-size-large;
+    font-size: var.$font-size-large;
   }
 
-  .about {
+  &-about {
     flex-direction: column;
     margin-top: $home-section-margin-top;
     //min-height: $home-section-height;
@@ -103,7 +104,7 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     }
   }
 
-  .galette {
+  &-galette {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -116,13 +117,15 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     }
 
     &__icon {
-      color: mat-color($mat-pink, 500);
+      color: mat.mat-color(mat.$mat-pink, 500);
       transform: scale(5);
     }
 
     &__text {
-      margin-top: $unit-4;
+      margin-top: var.$unit-4;
       font-weight: 700;
     }
   }
 }
+
+//@include home.media;
