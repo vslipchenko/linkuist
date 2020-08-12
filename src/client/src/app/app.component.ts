@@ -5,12 +5,14 @@ import {DOCUMENT} from '@angular/common';
 import {MatIconRegistry} from '@angular/material/icon';
 
 const ICONS_FOLDER = 'assets/icons/';
-const MATERIAL_ICONS_FOLDER = 'assets/icons/material/';
+const MATERIAL_ICONS_FOLDER = `${ICONS_FOLDER}material/`;
 
 interface IconInfo {
   name: string;
   fileName: string;
   isMaterial?: boolean;
+  isFilled?: boolean;
+  isOutlined?: boolean;
 }
 
 @Component({
@@ -63,13 +65,20 @@ export class AppComponent implements OnInit {
       icons.forEach(icon => {
         this.matIconRegistry.addSvgIcon(
           icon.name,
-          this.domSanitizer.bypassSecurityTrustResourceUrl((icon.isMaterial ? MATERIAL_ICONS_FOLDER : ICONS_FOLDER) + 'explore-white-18dp.svg')
+          this.domSanitizer.bypassSecurityTrustResourceUrl(
+      `${icon.isMaterial ? MATERIAL_ICONS_FOLDER : ICONS_FOLDER}${(icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''}${icon.fileName}.svg`
+          )
         );
       })
     };
 
     registerIcons([
-      {name: 'unicorn', fileName: 'explore-white-18dp.svg', isMaterial: true}
+      {name: 'login', fileName: 'login-24px', isMaterial: true, isOutlined: true},
+      {name: 'person-add', fileName: 'person_add-24px', isMaterial: true, isFilled: true},
+      {name: 'explore', fileName: 'explore-24px', isMaterial: true, isOutlined: true},
+      {name: 'architecture', fileName: 'architecture-24px', isMaterial: true, isOutlined: true},
+      {name: 'share', fileName: 'share-24px', isMaterial: true, isOutlined: true},
+      {name: 'support', fileName: 'support-24px', isMaterial: true, isOutlined: true},
     ]);
   }
 }

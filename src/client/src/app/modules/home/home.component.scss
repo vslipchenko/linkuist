@@ -1,3 +1,4 @@
+@import '~@angular/material/theming';
 @import 'variables';
 
 $home-primary-color: #ffffff;
@@ -7,9 +8,11 @@ $home-main-screen-height: 85vh;
 $home-navigation-panel-height: 100vh - $home-main-screen-height;
 $home-navigation-panel-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
 
-$home-section-margin-top: $home-navigation-panel-height;
+$home-section-margin-top: 10vh;
 $home-section-height: $home-main-screen-height - $home-section-margin-top;
 $home-section-width: 70%;
+
+$home-content-padding-bottom: $home-navigation-panel-height + $home-section-margin-top / 2;
 
 .home {
   &-background {
@@ -36,14 +39,6 @@ $home-section-width: 70%;
     margin-top: $home-main-screen-height;
   }
 
-  &-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    background-color: $home-primary-color;
-  }
-
   &-navigation {
     display: flex;
     align-items: center;
@@ -55,6 +50,16 @@ $home-section-width: 70%;
     position: fixed;
     bottom: 0;
     background-color: $home-primary-color;
+    z-index: 1;
+  }
+
+  &-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $home-primary-color;
+    padding-bottom: $home-content-padding-bottom;
   }
 
   &-actions {
@@ -78,17 +83,46 @@ $home-section-width: 70%;
     font-size: $font-size-larger;
   }
 
+  &-subheading {
+    font-size: $font-size-largest;
+  }
+
   &-section {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    height: $home-section-height;
     width: $home-section-width;
-    margin-top: $home-section-margin-top;
     font-size: $font-size-large;
   }
 
-  &-subheading {
-    font-size: $font-size-largest;
+  .about {
+    flex-direction: column;
+    margin-top: $home-section-margin-top;
+    //min-height: $home-section-height;
+    &__text {
+      margin-top: $home-section-margin-top / 2;
+    }
+  }
+
+  .galette {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &s {
+      flex: 1;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-evenly;
+    }
+
+    &__icon {
+      color: mat-color($mat-pink, 500);
+      transform: scale(5);
+    }
+
+    &__text {
+      margin-top: $unit-4;
+      font-weight: 700;
+    }
   }
 }

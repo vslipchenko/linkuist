@@ -1,35 +1,54 @@
-<!--<main class="home">-->
-
-<!--</main>-->
-<!--<perfect-scrollbar>-->
 <main class="home">
   <div class="home-background">
     <img class="home-background__image" src="./assets/images/home/background.png" alt="">
   </div>
   <div class="home-main">
+    <nav class="home-navigation">
+      <ul class="home-actions">
+        <li>
+          <a mat-fab color="primary" aria-label="Example icon button with a delete icon">
+            <mat-icon svgIcon="login"></mat-icon>
+          </a>
+        </li>
+        <li>
+          <a mat-fab color="accent" aria-label="Example icon button with a bookmark icon">
+            <mat-icon svgIcon="person-add"></mat-icon>
+          </a>
+        </li>
+      </ul>
+      <a class="home-link" href="/"><h1 class="home-heading">Linkuist</h1></a>
+    </nav>
     <div class="home-content">
-      <nav class="home-navigation">
-        <ul class="home-actions">
-          <li>
-            <a mat-fab color="primary" aria-label="Example icon button with a delete icon">
-<!--              <mat-icon>delete</mat-icon>-->
-              L
-            </a>
-          </li>
-          <li>
-            <a mat-fab color="accent" aria-label="Example icon button with a bookmark icon">
-              <!--              <mat-icon>bookmark</mat-icon>-->
-              R
-            </a>
-          </li>
-        </ul>
-        <a class="home-link" href="/"><h1 class="home-heading">Linkuist</h1></a>
-      </nav>
-      <section class="home-section">
+      <section class="home-section about">
         <h2 class="home-subheading">About</h2>
-        <div class="home-text" [innerHTML]="'HOME.ABOUT' | translate"></div>
+        <div class="about__text" [innerHTML]="'HOME.ABOUT' | translate"></div>
+      </section>
+      <section class="home-section galettes">
+        <div class="galette">
+          <div class="galette__icon">
+            <mat-icon svgIcon="explore"></mat-icon>
+          </div>
+          <p class="galette__text">Explore</p>
+        </div>
+        <div class="galette">
+          <div class="galette__icon">
+            <mat-icon svgIcon="architecture"></mat-icon>
+          </div>
+          <p class="galette__text">Create</p>
+        </div>
+        <div class="galette">
+          <div class="galette__icon">
+            <mat-icon svgIcon="share"></mat-icon>
+          </div>
+          <p class="galette__text">Share</p>
+        </div>
+        <div class="galette">
+          <div class="galette__icon">
+            <mat-icon svgIcon="support"></mat-icon>
+          </div>
+          <p class="galette__text">Support</p>
+        </div>
       </section>
     </div>
   </div>
 </main>
-<!--</perfect-scrollbar>-->
