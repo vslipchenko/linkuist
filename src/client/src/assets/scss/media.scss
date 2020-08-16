@@ -1,0 +1,161 @@
+@use 'variables' as var;
+@use 'functions' as fn;
+
+$breakpoints: (
+  'small': var.$small-breakpoint,
+  'medium': var.$medium-breakpoint,
+  'large': var.$large-breakpoint,
+  'huge': var.$huge-breakpoint
+);
+
+$unit-intervals: (
+  // px is default
+  'px': var.$px-unit-interval,
+  'em': var.$em-unit-interval,
+  'rem': var.$rem-unit-interval,
+  '': 0
+);
+
+/*
+  https://github.com/eduardoboucas/include-media/blob/master/dist/_include-media.scss
+  https://eduardoboucas.github.io/include-media/documentation/
+*/
+
+//$unit-intervals: (
+//  'px': 1,
+//  '': 0
+//);
+//
+//@mixin for($expression-1, $expression-2: null) {
+//  $operator: get-expression-operator($expression-1);
+//  $prefix: get-expression-prefix($operator);
+//  $value: get-expression-value($expression-1, $operator);
+//  $dimension: 'width';
+//
+//  @media #{unquote('(#{$prefix}-#{$dimension}: #{$value})')} {
+//    @if ($expression-2) {
+//      @include for($expression-2) {
+//        @content;
+//      }
+//    } @else {
+//      @content;
+//    }
+//  }
+//}
+//
+//@function translate-breakpoint($key) {
+//  @return map-get($breakpoints, $key);
+//}
+//
+//@function get-expression-operator($expression) {
+//  @each $operator in ('>=', '>', '<=', '<') {
+//    @if str-index($expression, $operator) {
+//      @return $operator;
+//    }
+//  }
+//}
+//
+//@function get-expression-prefix($operator) {
+//  @return if(index(('<', '<='), $operator), 'max', 'min');
+//}
+//
+//@function get-expression-value($expression, $operator) {
+//  $operator-index: str-index($expression, $operator);
+//  $value: str-slice($expression, $operator-index + str-length($operator));
+//
+//  @if map-has-key($breakpoints, $value) {
+//    $value: map-get($breakpoints, $value);
+//  } @else {
+//    $value: to-number($value);
+//  }
+//
+//  $interval: map-get($unit-intervals, unit($value));
+//
+//  @if not $interval {
+//    $_: fn.throwError('Unknown unit `#{unit($value)}`.');
+//  }
+//
+//  @if $operator == '>' {
+//    $value: $value + $interval;
+//  } @else if $operator == '<' {
+//    $value: $value - $interval;
+//  }
+//
+//  @return $value;
+//}
+//
+//@function to-number($value) {
+//  @if type-of($value) == 'number' {
+//    @return $value;
+//  } @else if type-of($value) != 'string' {
+//    $_: fn.throwError('Value for `to-number` should be a number or a string.');
+//  }
+//
+//  $numbers: ('0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9);
+//  $result: 0;
+//
+//  @for $i from 1 through str-length($value) {
+//    $character: str-slice($value, $i, $i);
+//    $number: map-get($numbers, $character);
+//
+//    @if not $number {
+//      $_: fn.throwError('Can`t convert unknown character #{$character}');
+//    }
+//
+//    $result: $result + map-get($numbers, $character);
+//  }
+//
+//  @return $result;
+//}
+
+@mixin above-small() {
+  @media (min-width: var.$small-breakpoint) {
+    @content;
+  }
+}
+
+@mixin above-medium() {
+  @media (min-width: var.$medium-breakpoint) {
+    @content;
+  }
+}
+
+@mixin above-large() {
+  @media (min-width: var.$large-breakpoint) {
+    @content;
+  }
+}
+
+@mixin above-huge() {
+  @media (min-width: var.$huge-breakpoint) {
+    @content;
+  }
+}
+
+@mixin zero-small() {
+  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$small-breakpoint);
+  @media (min-width: 0) and (max-width: var.$small-breakpoint - $subtrahend) {
+    @content;
+  }
+}
+
+@mixin small-medium() {
+  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$medium-breakpoint);
+  @media (min-width: var.$small-breakpoint) and (max-width: var.$medium-breakpoint - $subtrahend) {
+    @content;
+  }
+}
+
+@mixin medium-large() {
+  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$large-breakpoint);
+  @media (min-width: var.$medium-breakpoint) and (max-width: var.$large-breakpoint - $subtrahend) {
+    @content;
+  }
+}
+
+@mixin large-huge() {
+  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$huge-breakpoint);
+  @media (min-width: var.$large-breakpoint) and (max-width: var.$huge-breakpoint - $subtrahend) {
+    @content;
+  }
+}

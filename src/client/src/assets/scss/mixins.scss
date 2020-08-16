@@ -1,3 +1,6 @@
 @use 'functions' as fn;
+//@use 'variables' as var;
 
-//@mixin media()
+//@mixin throwError($message) {
+//  @if fn.throwError($message) {}
+//}

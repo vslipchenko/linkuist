@@ -1,5 +1,6 @@
 @use '~@angular/material/theming' as mat;
 @use 'variables' as var;
+@use 'media';
 //@use 'home.component.media' as home;
 
 $home-primary-color: #ffffff;
@@ -99,6 +100,15 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     flex-direction: column;
     margin-top: $home-section-margin-top;
     //min-height: $home-section-height;
+
+    //@include media.for('>=0', '<small') {
+    //  font-size: 5rem;
+    //};
+
+    //@include media.for('>=small') {
+    //  font-size: 10rem;
+    //};
+
     &__text {
       margin-top: $home-section-margin-top / 2;
     }

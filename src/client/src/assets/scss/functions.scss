@@ -1,12 +1,25 @@
 @use 'variables' as var;
+@use 'mixins' as mix;
 
-@function translate-breakpoint($key) {
-  $breakpoints: (
-    'small': 320px,
-    'medium': 768px,
-    'large': 1024px,
-    'huge': 1400px
-  );
+@function throwError($message) {
+  @if feature-exists('at-error') {
+    @error $message;
+  }
+  @warn $message;
+}
 
-  @return map-get($breakpoints, $key);
+@function map-get-by-unit($map, $value) {
+  $unit: unit($value);
+
+  @if not $unit {
+    $_: throwError('Value contains invalid unit: #{$value}');
+  }
+
+  $interval: map-get($map, $unit);
+
+  @if not $interval {
+    $_: throwError('Theres no interval for such value: #{$value}');
+  }
+
+  @return $interval;
 }

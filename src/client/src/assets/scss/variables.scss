@@ -1,4 +1,12 @@
-/* responsive breakpoints */
+/* responsive breakpoints and unit intervals */
+$small-breakpoint: 568px;
+$medium-breakpoint: 768px;
+$large-breakpoint: 992px;
+$huge-breakpoint: 1200px;
+// px is default unit
+$px-unit-interval: 1;
+$em-unit-interval: 0.01;
+$rem-unit-interval: 0.1;
 
 
 /* default line height */
@@ -18,9 +26,10 @@ $unit-9: $unit * 9;
 $unit-10: $unit * 10;
 
 /* font size (default: 1rem = 16px) */
+$font-size-root: 16px;
 $font-size-largest: 2rem;
 $font-size-larger: 1.5rem;
 $font-size-large: 1.2rem;
 $font-size-regular: 0.9rem;
-$font-size-medium: 0.7;
-$font-size-small: 0.5;
+$font-size-medium: 0.7rem;
+$font-size-small: 0.5rem;
