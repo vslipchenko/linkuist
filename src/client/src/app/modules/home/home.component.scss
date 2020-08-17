@@ -9,7 +9,7 @@ $home-secondary-color: #87cefa;
 $home-main-screen-height: 85vh;
 
 $home-navigation-panel-height: 100vh - $home-main-screen-height;
-$home-navigation-panel-min-height: 86px;
+$home-navigation-panel-min-height: 64px;
 $home-navigation-panel-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
 
 $home-section-margin-top: 10vh;
@@ -58,7 +58,7 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     align-items: center;
     justify-content: space-between;
     height: $home-navigation-panel-height;
-    //min-height: $home-navigation-panel-min-height;
+    min-height: $home-navigation-panel-min-height;
     width: 100%;
     box-shadow: $home-navigation-panel-shadow;
     position: fixed;
