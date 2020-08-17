@@ -139,6 +139,13 @@ $unit-intervals: (
   }
 }
 
+@mixin zero-medium() {
+  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$medium-breakpoint);
+  @media (min-width: 0) and (max-width: var.$medium-breakpoint - $subtrahend) {
+    @content;
+  }
+}
+
 @mixin small-medium() {
   $subtrahend: fn.map-get-by-unit($unit-intervals, var.$medium-breakpoint);
   @media (min-width: var.$small-breakpoint) and (max-width: var.$medium-breakpoint - $subtrahend) {

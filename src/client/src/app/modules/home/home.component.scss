@@ -32,12 +32,8 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     z-index: -1;
 
     &__image {
-      @include media.zero-small {
+      @include media.zero-medium {
         height: 43%;
-      }
-
-      @include media.small-medium {
-        height: 100%;
       }
 
       @include media.medium-huge {
