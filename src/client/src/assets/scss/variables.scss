@@ -1,8 +1,8 @@
 /* responsive breakpoints and unit intervals */
-$small-breakpoint: 568px;
-$medium-breakpoint: 768px;
-$large-breakpoint: 992px;
-$huge-breakpoint: 1200px;
+$small-breakpoint: 568px;  // < portrait phones, > landscape phones
+$medium-breakpoint: 768px; // > tablets
+$large-breakpoint: 992px;  // > laptops, desktops
+$huge-breakpoint: 1200px;  // > large desktops
 // px is default unit
 $px-unit-interval: 1;
 $em-unit-interval: 0.01;

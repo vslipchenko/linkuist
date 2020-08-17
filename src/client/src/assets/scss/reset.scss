@@ -6,25 +6,19 @@ html {
   box-sizing: inherit;
 }
 
-html, body {
+html, body, ul {
   padding: 0;
-  margin: 0;
 }
 
-h1, h2 {
+html, body, ul, p, h1, h2 {
   margin: 0;
 }
 
 ul {
-  padding: 0;
   list-style-type: none;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-p {
-  margin: 0;
 }

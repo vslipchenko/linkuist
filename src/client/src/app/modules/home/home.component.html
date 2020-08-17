@@ -4,7 +4,7 @@
   </div>
   <div class="home-main">
     <nav class="home-navigation">
-      <ul class="home-actions">
+      <ul class="home-navigation__item home-actions">
         <li>
           <a mat-fab color="primary" aria-label="Example icon button with a delete icon">
             <mat-icon svgIcon="login"></mat-icon>
@@ -16,37 +16,37 @@
           </a>
         </li>
       </ul>
-      <a class="home-link" href="/"><h1 class="home-heading">Linkuist</h1></a>
+      <a class="home-navigation__item home-link" href="/"><h1 class="home-heading">Linkuist</h1></a>
     </nav>
     <div class="home-content">
       <section class="home-section home-about">
         <h2 class="home-subheading">About</h2>
         <div class="home-about__text" [innerHTML]="'HOME.ABOUT' | translate"></div>
       </section>
-      <section class="home-section home-galettes">
-        <div class="home-galette">
-          <div class="home-galette__icon">
+      <section class="home-section home-pills">
+        <div class="home-pill">
+          <div class="home-pill__icon">
             <mat-icon svgIcon="explore"></mat-icon>
           </div>
-          <p class="home-galette__text">Explore</p>
+          <p class="home-pill__text">Explore</p>
         </div>
-        <div class="home-galette">
-          <div class="home-galette__icon">
+        <div class="home-pill">
+          <div class="home-pill__icon">
             <mat-icon svgIcon="architecture"></mat-icon>
           </div>
-          <p class="home-galette__text">Create</p>
+          <p class="home-pill__text">Create</p>
         </div>
-        <div class="home-galette">
-          <div class="home-galette__icon">
+        <div class="home-pill">
+          <div class="home-pill__icon">
             <mat-icon svgIcon="share"></mat-icon>
           </div>
-          <p class="home-galette__text">Share</p>
+          <p class="home-pill__text">Share</p>
         </div>
-        <div class="home-galette">
-          <div class="home-galette__icon">
+        <div class="home-pill">
+          <div class="home-pill__icon">
             <mat-icon svgIcon="support"></mat-icon>
           </div>
-          <p class="home-galette__text">Support</p>
+          <p class="home-pill__text">Support</p>
         </div>
       </section>
     </div>
