@@ -2,21 +2,19 @@
 @use 'variables' as var;
 @use 'media';
 //@use 'home.component.media' as home;
-
 $home-primary-color: #ffffff;
 $home-secondary-color: #87cefa;
 
-$home-main-screen-height: 85vh;
-
-$home-navigation-panel-height: 100vh - $home-main-screen-height;
-$home-navigation-panel-min-height: 64px;
+$home-navigation-panel-height: 100px;
 $home-navigation-panel-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
+
+$home-main-screen-height: calc(100vh - #{$home-navigation-panel-height});
 
 $home-section-margin-top: 10vh;
 $home-section-height: $home-main-screen-height - $home-section-margin-top;
 $home-section-width: 70%;
 
-$home-content-padding-bottom: $home-navigation-panel-height + $home-section-margin-top / 2;
+$home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-section-margin-top} / 2);
 
 .home {
   &-background {
@@ -58,7 +56,6 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     align-items: center;
     justify-content: space-between;
     height: $home-navigation-panel-height;
-    min-height: $home-navigation-panel-min-height;
     width: 100%;
     box-shadow: $home-navigation-panel-shadow;
     position: fixed;
@@ -104,7 +101,7 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
 
 
     @include media.zero-small {
-      padding: 0 var.$unit-3 $home-content-padding-bottom - 5vh;
+      padding: 0 var.$unit-3 calc(#{$home-content-padding-bottom} - #{$home-section-margin-top} / 2);
     }
 
     @include media.above-small {
@@ -143,7 +140,7 @@ $home-content-padding-bottom: $home-navigation-panel-height + $home-section-marg
     font-size: var.$font-size-large;
 
     @include media.zero-small {
-      margin-top: 5vh;
+      margin-top: $home-section-margin-top / 2;
       //min-height: $home-section-height;
     }
 
