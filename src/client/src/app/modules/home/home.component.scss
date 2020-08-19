@@ -1,7 +1,7 @@
 @use '~@angular/material/theming' as mat;
 @use 'variables' as var;
 @use 'media';
-//@use 'home.component.media' as home;
+
 $home-primary-color: #ffffff;
 $home-secondary-color: #87cefa;
 
@@ -11,10 +11,9 @@ $home-navigation-panel-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
 $home-main-screen-height: calc(100vh - #{$home-navigation-panel-height});
 
 $home-section-margin-top: 10vh;
+$home-section-space: $home-section-margin-top / 2;
 $home-section-height: $home-main-screen-height - $home-section-margin-top;
 $home-section-width: 70%;
-
-$home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-section-margin-top} / 2);
 
 .home {
   &-background {
@@ -70,12 +69,6 @@ $home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-se
     @include media.above-small {
       padding: 0 var.$unit-6;
     }
-
-    //&__item {
-    //  @include media.small-medium {
-    //    transform: scale(0.65);
-    //  }
-    //}
   }
 
   &-actions {
@@ -99,12 +92,12 @@ $home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-se
     align-items: center;
     background-color: $home-primary-color;
 
-
     @include media.zero-small {
-      padding: 0 var.$unit-3 calc(#{$home-content-padding-bottom} - #{$home-section-margin-top} / 2);
+      padding: 0 var.$unit-3 $home-navigation-panel-height;
     }
 
     @include media.above-small {
+      $home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-section-space});
       padding-bottom: $home-content-padding-bottom;
     }
   }
@@ -112,14 +105,6 @@ $home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-se
   &-link {
     border: dashed;
     padding: var.$unit;
-
-    //@include media.zero-small {
-    //  padding: var.$unit;
-    //}
-    //
-    //@include media.above-small {
-    //  padding: 12px;
-    //}
 
     &:hover {
       border: dotted;
@@ -140,8 +125,7 @@ $home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-se
     font-size: var.$font-size-large;
 
     @include media.zero-small {
-      margin-top: $home-section-margin-top / 2;
-      //min-height: $home-section-height;
+      margin-top: $home-section-space;
     }
 
     @include media.above-small {
@@ -153,18 +137,8 @@ $home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-se
   &-about {
     flex-direction: column;
 
-    //min-height: $home-section-height;
-
-    //@include media.for('>=0', '<small') {
-    //  font-size: 5rem;
-    //};
-
-    //@include media.for('>=small') {
-    //  font-size: 10rem;
-    //};
-
     &__text {
-      margin-top: $home-section-margin-top / 2;
+      margin-top: $home-section-space;
     }
   }
 
@@ -177,22 +151,12 @@ $home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-se
       padding: 0 var.$unit-2 var.$unit-2;
       flex: 50%;
     }
-    //
-    //@include media.medium-large {
-    //  &:not(:last-child) {
-    //    margin-right: var.$unit-2;
-    //  }
-    //}
 
     &s {
       flex: 1;
       flex-wrap: wrap;
       align-items: flex-end;
       justify-content: space-evenly;
-
-      //@include media.medium-huge {
-      //  justify-content: space-between;
-      //}
     }
 
     &__icon {
@@ -200,33 +164,25 @@ $home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-se
 
       .mat-icon {
         @include media.zero-small {
-          $mat-icon-size: 24px * 2;
+          $mat-icon-size: var.$default-material-icon-size * 2;
           width: $mat-icon-size;
           height: $mat-icon-size;
         }
 
         @include media.above-small {
-          $mat-icon-size: 24px * 5;
+          $mat-icon-size: var.$default-material-icon-size * 5;
           width: $mat-icon-size;
           height: $mat-icon-size;
         }
       }
-
-
     }
 
     &__text {
       font-weight: 700;
 
-      //@include media.zero-small {
-      //  margin-top: var.$unit-half;
-      //}
-      //
       @include media.above-small {
         margin-top: var.$unit;
       }
     }
   }
 }
-
-//@include home.media;
