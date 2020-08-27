@@ -1,15 +1,12 @@
 @use '~@angular/material/theming' as mat;
+@use 'components/navigation/variables' as navigationVar;
 @use 'variables' as var;
 @use 'media';
 
 $home-primary-color: #ffffff;
 $home-secondary-color: #87cefa;
 
-$home-navigation-panel-height: 100px;
-$home-navigation-panel-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
-$home-navigation-panel-border: 1px solid #dbdbdb;
-
-$home-main-screen-height: calc(100vh - #{$home-navigation-panel-height});
+$home-main-screen-height: calc(100vh - #{navigationVar.$navigation-panel-height});
 
 $home-section-margin-top: 10vh;
 $home-section-space: $home-section-margin-top / 2;
@@ -51,41 +48,41 @@ $home-section-width: 70%;
     margin-top: $home-main-screen-height;
   }
 
-  &-navigation {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: $home-navigation-panel-height;
-    width: 100%;
-    //box-shadow: $home-navigation-panel-shadow;
-    border-top: $home-navigation-panel-border;
-    position: fixed;
-    bottom: 0;
-    background-color: $home-primary-color;
-    z-index: 1;
-
-    @include media.zero-small {
-      padding: 0 var.$unit-3;
-    }
-
-    @include media.above-small {
-      padding: 0 var.$unit-6;
-    }
-  }
-
-  &-actions {
-    display: flex;
-
-    :not(:last-child) {
-      @include media.zero-small {
-        margin-right: var.$unit-2;
-      }
-
-      @include media.above-small {
-        margin-right: var.$unit-3;
-      }
-    }
-  }
+  //&-navigation {
+  //  display: flex;
+  //  align-items: center;
+  //  justify-content: space-between;
+  //  height: navigationVar.$navigation-panel-height;
+  //  width: 100%;
+  //  //box-shadow: navigationVar.$navigation-panel-shadow;
+  //  border-top: navigationVar.$navigation-panel-border;
+  //  position: fixed;
+  //  bottom: 0;
+  //  background-color: $home-primary-color;
+  //  z-index: 1;
+  //
+  //  @include media.zero-small {
+  //    padding: 0 var.$unit-3;
+  //  }
+  //
+  //  @include media.above-small {
+  //    padding: 0 var.$unit-6;
+  //  }
+  //}
+  //
+  //&-actions {
+  //  display: flex;
+  //
+  //  :not(:last-child) {
+  //    @include media.zero-small {
+  //      margin-right: var.$unit-2;
+  //    }
+  //
+  //    @include media.above-small {
+  //      margin-right: var.$unit-3;
+  //    }
+  //  }
+  //}
 
   &-content {
     flex: 1;
@@ -95,24 +92,24 @@ $home-section-width: 70%;
     background-color: $home-primary-color;
 
     @include media.zero-small {
-      padding: 0 var.$unit-3 $home-navigation-panel-height;
+      padding: 0 var.$unit-3 navigationVar.$navigation-panel-height;
     }
 
     @include media.above-small {
-      $home-content-padding-bottom: calc(#{$home-navigation-panel-height} + #{$home-section-space});
+      $home-content-padding-bottom: calc(#{navigationVar.$navigation-panel-height} + #{$home-section-space});
       padding-bottom: $home-content-padding-bottom;
     }
   }
 
-  &-logo {
-    border: dashed;
-    padding: var.$unit;
-    font-size: var.$font-size-larger;
-
-    &:hover {
-      border: dotted;
-    }
-  }
+  //&-logo {
+  //  border: dashed;
+  //  padding: var.$unit;
+  //  font-size: var.$font-size-larger;
+  //
+  //  &:hover {
+  //    border: dotted;
+  //  }
+  //}
 
   &-section {
     display: flex;
@@ -183,5 +180,15 @@ $home-section-width: 70%;
         margin-top: var.$unit;
       }
     }
+  }
+}
+
+::ng-deep .logo {
+  border: dashed;
+  padding: var.$unit;
+  font-size: var.$font-size-larger;
+
+  &:hover {
+    border: dotted;
   }
 }

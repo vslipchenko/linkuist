@@ -1,0 +1,39 @@
+@use 'components/navigation/variables' as navigationVar;
+@use 'variables' as var;
+@use 'media';
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: navigationVar.$navigation-panel-height;
+  width: 100%;
+  //box-shadow: $home-navigation-panel-shadow;
+  border-top: navigationVar.$navigation-panel-border;
+  position: fixed;
+  bottom: 0;
+  background-color: #ffffff; // TODO improve colors
+  z-index: 1;
+
+  @include media.zero-small {
+    padding: 0 var.$unit-3;
+  }
+
+  @include media.above-small {
+    padding: 0 var.$unit-6;
+  }
+
+  .actions {
+    display: flex;
+
+    :not(:last-child) {
+      @include media.zero-small {
+        margin-right: var.$unit-2;
+      }
+
+      @include media.above-small {
+        margin-right: var.$unit-3;
+      }
+    }
+  }
+}
