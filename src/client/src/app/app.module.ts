@@ -20,7 +20,7 @@ function TranslateLoaderFactory(http: HttpClient): TranslateHttpLoader {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (TranslateLoaderFactory),
+        useFactory: TranslateLoaderFactory,
         deps: [HttpClient]
       }
     }),
