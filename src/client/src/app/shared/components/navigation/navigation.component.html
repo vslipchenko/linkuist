@@ -1,15 +1,11 @@
 <nav class="navigation">
-  <ul class="actions">
-    <li>
-      <a routerLink="/login" mat-fab color="primary" aria-label="Example icon button with a delete icon">
-        <mat-icon svgIcon="login"></mat-icon>
-      </a>
-    </li>
-    <li>
-      <a routerLink="/signup" mat-fab color="accent" aria-label="Example icon button with a bookmark icon">
-        <mat-icon svgIcon="person-add"></mat-icon>
-      </a>
-    </li>
-  </ul>
-  <h1 class="logo">Linkuist</h1>
+  <div class="secondary-actions">
+    <ng-content></ng-content>
+  </div>
+  <div class="main-action">
+    <a [appWrapIf]="configuration.mainActionHref" [routerLink]="configuration.mainActionHref">
+      <!--TODO replace with h2-->
+      <h2 class="main-action__label as-h1">Linkuist</h2>
+    </a>
+  </div>
 </nav>

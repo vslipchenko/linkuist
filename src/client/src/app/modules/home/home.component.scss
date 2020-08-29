@@ -6,11 +6,9 @@
 $home-primary-color: #ffffff;
 $home-secondary-color: #87cefa;
 
-$home-main-screen-height: calc(100vh - #{navigationVar.$navigation-panel-height});
-
 $home-section-margin-top: 10vh;
 $home-section-space: $home-section-margin-top / 2;
-$home-section-height: $home-main-screen-height - $home-section-margin-top;
+$home-section-height: var.$main-screen-height - $home-section-margin-top;
 $home-section-width: 70%;
 
 .home {
@@ -18,7 +16,7 @@ $home-section-width: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: $home-main-screen-height;
+    height: var.$main-screen-height;
     padding: var.$unit-5 0;
     background-color: $home-secondary-color;
     position: fixed;
@@ -44,18 +42,18 @@ $home-section-width: 70%;
   &-main {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    margin-top: $home-main-screen-height;
+    height: 100%;
+    margin-top: var.$main-screen-height;
   }
 
   //&-navigation {
   //  display: flex;
   //  align-items: center;
   //  justify-content: space-between;
-  //  height: navigationVar.$navigation-panel-height;
+  //  height: navigationVar.$height;
   //  width: 100%;
-  //  //box-shadow: navigationVar.$navigation-panel-shadow;
-  //  border-top: navigationVar.$navigation-panel-border;
+  //  //box-shadow: navigationVar.$shadow;
+  //  border-top: navigationVar.$border-top;
   //  position: fixed;
   //  bottom: 0;
   //  background-color: $home-primary-color;
@@ -92,12 +90,11 @@ $home-section-width: 70%;
     background-color: $home-primary-color;
 
     @include media.zero-small {
-      padding: 0 var.$unit-3 navigationVar.$navigation-panel-height;
+      padding: 0 var.$unit-3;
     }
 
     @include media.above-small {
-      $home-content-padding-bottom: calc(#{navigationVar.$navigation-panel-height} + #{$home-section-space});
-      padding-bottom: $home-content-padding-bottom;
+      padding-bottom: $home-section-space;
     }
   }
 
@@ -111,6 +108,7 @@ $home-section-width: 70%;
   //  }
   //}
 
+  // TODO make shared mixin for sign-up and sign-in components
   &-section {
     display: flex;
     align-items: center;
@@ -180,15 +178,5 @@ $home-section-width: 70%;
         margin-top: var.$unit;
       }
     }
-  }
-}
-
-::ng-deep .logo {
-  border: dashed;
-  padding: var.$unit;
-  font-size: var.$font-size-larger;
-
-  &:hover {
-    border: dotted;
   }
 }

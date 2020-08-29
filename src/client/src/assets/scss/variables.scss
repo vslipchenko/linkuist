@@ -1,3 +1,8 @@
+@use 'components/navigation/variables' as navigationVar;
+
+/* global */
+$main-screen-height: calc(100vh - #{navigationVar.$height});
+
 /* responsive breakpoints and unit intervals */
 $small-breakpoint: 568px;  // < portrait phones, > landscape phones
 $medium-breakpoint: 768px; // > tablets

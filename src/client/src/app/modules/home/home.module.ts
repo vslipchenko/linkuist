@@ -5,6 +5,7 @@ import {HomeRoutingModule} from "./home-routing.module";
 import {TranslateModule} from "@ngx-translate/core";
 import {SharedModule} from "../../shared/shared.module";
 import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [HomeComponent],
@@ -13,7 +14,8 @@ import {MatIconModule} from "@angular/material/icon";
     HomeRoutingModule,
     MatIconModule,
     TranslateModule,
-    SharedModule
+    SharedModule,
+    MatButtonModule
   ]
 })
 export class HomeModule {

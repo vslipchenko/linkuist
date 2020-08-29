@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {NavigationConfiguration, NavigationMainActionHref} from '../../../models/components/navigation';
 
 @Component({
   selector: 'app-navigation',
@@ -6,8 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit {
+  private readonly defaultConfiguration: NavigationConfiguration = {
+    mainActionHref: NavigationMainActionHref.NONE
+  };
 
-  constructor() { }
+  @Input() configuration = this.defaultConfiguration;
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

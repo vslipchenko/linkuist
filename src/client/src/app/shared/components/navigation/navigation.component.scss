@@ -6,10 +6,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: navigationVar.$navigation-panel-height;
+  height: navigationVar.$height; // TODO simplify naming
   width: 100%;
-  //box-shadow: $home-navigation-panel-shadow;
-  border-top: navigationVar.$navigation-panel-border;
+  //box-shadow: $home-shadow;
+  border-top: navigationVar.$border-top;
   position: fixed;
   bottom: 0;
   background-color: #ffffff; // TODO improve colors
@@ -23,16 +23,28 @@
     padding: 0 var.$unit-6;
   }
 
-  .actions {
+  .secondary-actions {
     display: flex;
 
-    :not(:last-child) {
+    ::ng-deep [mat-fab]:not(:last-child) {
       @include media.zero-small {
         margin-right: var.$unit-2;
       }
 
       @include media.above-small {
         margin-right: var.$unit-3;
+      }
+    }
+  }
+
+  .main-action {
+    &__label {
+      border: dashed;
+      padding: var.$unit;
+      font-size: var.$font-size-larger;
+
+      &:hover {
+        border: dotted;
       }
     }
   }

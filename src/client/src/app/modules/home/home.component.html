@@ -52,4 +52,11 @@
     </div>
   </div>
 </main>
-<app-navigation></app-navigation>
+<app-navigation>
+  <a routerLink="/login" mat-fab color="primary" aria-label="Example icon button with a delete icon">
+    <mat-icon svgIcon="login"></mat-icon>
+  </a>
+  <a routerLink="/signup" mat-fab color="accent" aria-label="Example icon button with a bookmark icon">
+    <mat-icon svgIcon="person-add"></mat-icon>
+  </a>
+</app-navigation>

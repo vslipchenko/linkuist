@@ -1,0 +1,16 @@
+@use 'variables' as var;
+
+.sign-up {
+  //display: flex;
+  //flex-direction: column;
+  //justify-content: center;
+
+  &__title {
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    //max-width: var.$unit * 40;
+  }
+}

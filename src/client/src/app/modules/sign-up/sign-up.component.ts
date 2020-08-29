@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {NavigationConfiguration, NavigationMainActionHref} from "../../models/components/navigation";
 
 @Component({
   selector: 'app-sign-up',
@@ -6,8 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
+  readonly navigationConfig: NavigationConfiguration = {
+    mainActionHref: NavigationMainActionHref.HOME
+  };
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

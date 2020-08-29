@@ -1,22 +1,26 @@
-@import 'variables';
+@use 'variables' as var;
 
 html, body {
   height: 100%;
-  font-size: $font-size-root;
+  font-size: var.$font-size-root;
 }
 
-h1 {
-  font-size: $font-size-largest;
-  line-height: $font-size-largest;
+h1, .as-h1 {
+  font-size: var.$font-size-largest;
+  line-height: var.$font-size-largest;
 }
 
 h2 {
-  font-size: $font-size-larger;
-  line-height: $font-size-larger;
+  font-size: var.$font-size-larger;
+  line-height: var.$font-size-larger;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
-  line-height: $line-height;
-  overflow-x: hidden;
+  line-height: var.$line-height;
+}
+
+main {
+  height: var.$main-screen-height;
+  overflow-y: auto;
 }
