@@ -20,7 +20,7 @@
         <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
           <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
         </button>
-        <mat-hint class="generate-password">Generate password</mat-hint>
+        <mat-hint><button mat-button type="button" color="primary">Generate password</button></mat-hint>
         <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
       </mat-form-field>
       <mat-form-field appearance="outline">

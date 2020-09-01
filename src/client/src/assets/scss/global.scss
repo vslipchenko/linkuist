@@ -29,3 +29,7 @@ main {
 //.as-link {
 //  color: theme.$primary !important;
 //}
+mat-hint [mat-button] {
+  line-height: unset;
+  margin-left: - var.$unit-2;
+}

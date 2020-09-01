@@ -15,7 +15,7 @@
           <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
             <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
           </button>
-          <mat-hint><a routerLink="account-recovery" class="account-recovery">Forgot password ?</a></mat-hint>
+          <mat-hint><a routerLink="account-recovery" mat-button color="primary">Forgot password ?</a></mat-hint>
         </mat-form-field>
       </form>
       <div class="sign-up__item primary-actions actions">
