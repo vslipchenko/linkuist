@@ -1,0 +1,57 @@
+@use 'variables' as var;
+@use 'theme';
+@use 'media';
+
+@mixin auth-page-styles() {
+  background-color: theme.$primary;
+
+  @include media.zero-small {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &__main {
+    background: #ffffff;
+    padding: var.$unit-2 var.$unit-3;
+    overflow-y: auto;
+
+    @include media.zero-small {
+      width: 100%;
+    }
+
+    @include media.above-small {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: auto;
+      min-height: 100%;
+    }
+
+    @include media.medium-huge {
+      width: 50%;
+    }
+
+    @include media.above-huge {
+      width: 35%;
+    }
+  }
+
+  &__item {
+    margin-bottom: var.$unit-2;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .actions {
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

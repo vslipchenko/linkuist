@@ -1,4 +1,5 @@
 @use 'variables' as var;
+@use 'theme';
 
 html, body {
   height: 100%;
@@ -24,3 +25,7 @@ main {
   height: var.$main-screen-height;
   overflow-y: auto;
 }
+
+//.as-link {
+//  color: theme.$primary !important;
+//}

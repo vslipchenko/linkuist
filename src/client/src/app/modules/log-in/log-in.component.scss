@@ -1,0 +1,18 @@
+@use 'components/shared';
+@use 'theme';
+@use 'variables' as var;
+
+.log-in {
+  @include shared.auth-page-styles;
+
+  .form {
+    margin-bottom: var.$unit-2;
+  }
+
+  .account-recovery {
+    color: theme.$primary;
+  }
+  //mat-hint.account-recovery {
+  //  margin-left: - var.$unit-2;
+  //}
+}

@@ -1,16 +1,42 @@
 @use 'variables' as var;
+@use 'components/shared';
+@use 'theme';
+@use 'media';
 
 .sign-up {
-  //display: flex;
-  //flex-direction: column;
-  //justify-content: center;
+  @include shared.auth-page-styles;
 
-  &__title {
+  &__main {
+    height: 100%;
+  }
+
+  .generate-password {
+    cursor: pointer;
+    color: theme.$primary;
   }
 
   .actions {
     display: flex;
     flex-direction: column;
-    //max-width: var.$unit * 40;
+
+    :not(:last-child) {
+      margin-bottom: var.$unit;
+    }
+
+    .social-icon {
+      margin-right: var.$unit;
+      font-size: var.$font-size-large;
+      font-weight: 700;
+    }
+  }
+
+  .primary-actions {
+    margin-bottom: var.$unit-4;
+  }
+
+  .secondary-actions {
+    button {
+      text-align: left;
+    }
   }
 }

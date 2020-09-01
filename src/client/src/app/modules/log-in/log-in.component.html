@@ -1,0 +1,31 @@
+<main class="log-in">
+  <div class="log-in__main">
+    <div>
+      <h2 class="log-in__item title as-h1">Log in</h2>
+      <form [formGroup]="logInForm" class="form">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="pat@example.com" formControlName="email">
+          <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="pat@example.com" formControlName="password">
+          <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+            <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
+          </button>
+          <mat-hint><a routerLink="account-recovery" class="account-recovery">Forgot password ?</a></mat-hint>
+        </mat-form-field>
+      </form>
+      <div class="sign-up__item primary-actions actions">
+        <button mat-flat-button color="primary">Log in</button>
+      </div>
+    </div>
+  </div>
+</main>
+<app-navigation [configuration]="navigationConfig">
+  <a routerLink="/signup" mat-fab color="accent" aria-label="Example icon button with a bookmark icon">
+    <mat-icon svgIcon="person-add"></mat-icon>
+  </a>
+</app-navigation>

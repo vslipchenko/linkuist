@@ -5,6 +5,7 @@ import {DOCUMENT} from '@angular/common';
 import {MatIconRegistry} from '@angular/material/icon';
 
 const ICONS_FOLDER = 'assets/icons/';
+const CUSTOM_ICONS_FOLDER = `${ICONS_FOLDER}custom/`;
 const MATERIAL_ICONS_FOLDER = `${ICONS_FOLDER}material/`;
 
 interface IconInfo {
@@ -66,7 +67,7 @@ export class AppComponent implements OnInit {
         this.matIconRegistry.addSvgIcon(
           icon.name,
           this.domSanitizer.bypassSecurityTrustResourceUrl(
-      `${icon.isMaterial ? MATERIAL_ICONS_FOLDER : ICONS_FOLDER}${(icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''}${icon.fileName}.svg`
+      `${icon.isMaterial ? MATERIAL_ICONS_FOLDER : CUSTOM_ICONS_FOLDER}${(icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''}${icon.fileName}.svg`
           )
         );
       })
@@ -79,6 +80,10 @@ export class AppComponent implements OnInit {
       {name: 'architecture', fileName: 'architecture-24px', isMaterial: true, isOutlined: true},
       {name: 'share', fileName: 'share-24px', isMaterial: true, isOutlined: true},
       {name: 'support', fileName: 'support-24px', isMaterial: true, isOutlined: true},
+      {name: 'visibility', fileName: 'visibility-24px', isMaterial: true, isFilled: true},
+      {name: 'visibility-off', fileName: 'visibility_off-24px', isMaterial: true, isFilled: true},
+      // {name: 'google', fileName: 'google-24px', isOutlined: true},
+      // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
     ]);
   }
 }
