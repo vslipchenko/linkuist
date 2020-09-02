@@ -1,7 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {NavigationConfiguration, NavigationMainActionHref} from '../../models/components/navigation';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {EMAIL_REGEXP, USERNAME_REGEXP} from '../../constants/regexp.constants';
+import {
+  EMAIL_REGEXP, PASSWORD_MAXLENGTH,
+  PASSWORD_MINLENGTH,
+  USERNAME_MAXLENGTH,
+  USERNAME_REGEXP
+} from '../../constants/validation.constants';
+import {generatePassword} from '../../utilities/password.utilities';
 
 @Component({
   templateUrl: './sign-up.component.html',
@@ -25,14 +31,19 @@ export class SignUpComponent implements OnInit {
   private initSignUpForm(): void {
     this.signUpForm = this.formBuilder.group({
       email: ['', [Validators.pattern(EMAIL_REGEXP)]],
-      username: ['', [Validators.maxLength(33), Validators.pattern(USERNAME_REGEXP)]],
-      password: ['', [Validators.minLength(8), Validators.maxLength(50)]],
+      username: ['', [Validators.maxLength(USERNAME_MAXLENGTH), Validators.pattern(USERNAME_REGEXP)]],
+      password: ['', [Validators.minLength(PASSWORD_MINLENGTH), Validators.maxLength(PASSWORD_MAXLENGTH)]],
       repeatPassword: ['', [this.repeatPasswordValidator.bind(this)]]
     });
   }
 
   private repeatPasswordValidator(control: AbstractControl): null | ValidationErrors {
     return control.value === this.passwordField?.value ? null : {passwordMismatch: true};
+  }
+
+  generatePassword(): void {
+    this.signUpForm.patchValue({password: generatePassword(PASSWORD_MINLENGTH, 20)});
+    this.hidePassword = false;
   }
 
   get emailField(): AbstractControl {
