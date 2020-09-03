@@ -2,12 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {NavigationConfiguration, NavigationMainActionHref} from '../../models/components/navigation';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {
-  EMAIL_REGEXP, PASSWORD_MAXLENGTH,
+  EMAIL_REGEXP,
+  PASSWORD_MAXLENGTH,
   PASSWORD_MINLENGTH,
   USERNAME_MAXLENGTH,
   USERNAME_REGEXP
 } from '../../constants/validation.constants';
 import {generatePassword} from '../../utilities/password.utilities';
+import {Clipboard} from "@angular/cdk/clipboard";
+import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 
 @Component({
   templateUrl: './sign-up.component.html',
@@ -21,7 +24,7 @@ export class SignUpComponent implements OnInit {
   hidePassword = true;
   signUpForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private clipboard: Clipboard, private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {
@@ -42,7 +45,10 @@ export class SignUpComponent implements OnInit {
   }
 
   generatePassword(): void {
-    this.signUpForm.patchValue({password: generatePassword(PASSWORD_MINLENGTH, 20)});
+    const password = generatePassword(PASSWORD_MINLENGTH, 20);
+    this.signUpForm.patchValue({password});
+    this.clipboard.copy(password);
+    this.snackbarService.show('Copied to clipboard');
     this.hidePassword = false;
   }
 
