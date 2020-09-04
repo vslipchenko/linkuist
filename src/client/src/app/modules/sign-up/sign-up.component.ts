@@ -52,6 +52,13 @@ export class SignUpComponent implements OnInit {
     this.hidePassword = false;
   }
 
+  signUp(): void {
+    this.signUpForm.markAllAsTouched();
+    if (this.signUpForm.valid) {
+
+    }
+  }
+
   get emailField(): AbstractControl {
     return this.signUpForm.get('email');
   }

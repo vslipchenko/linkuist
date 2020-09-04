@@ -8,6 +8,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
 import {SNACKBAR_CONFIG} from './constants/snackbar.constants';
+import {GraphQLModule} from './graphql/graphql.module';
 
 function TranslateLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
@@ -29,7 +30,8 @@ function TranslateLoaderFactory(http: HttpClient): TranslateHttpLoader {
       }
     }),
     AppRoutingModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    GraphQLModule
   ],
   providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: SNACKBAR_CONFIG}],
   bootstrap: [AppComponent]
