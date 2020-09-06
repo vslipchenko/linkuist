@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {NavigationConfiguration, NavigationMainActionHref} from "../../models/components/navigation";
+import {NavigationConfiguration, NavigationMainActionHref} from "../../models/components/navigation.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({

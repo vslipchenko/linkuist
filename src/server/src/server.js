@@ -1,4 +1,4 @@
-const {parseCliFlagValue} = require('./utils/parse-cli-flags');
+const {parseCliFlagValue} = require('./utilities/parse-cli-flags');
 const environment = parseCliFlagValue('env');
 require('dotenv').config({path: `src/environments/.env.${environment}`});
 
@@ -6,7 +6,6 @@ const schema = require('./graphql/schema');
 const express = require('express');
 const mongoose = require('mongoose');
 const {ApolloServer} = require('apollo-server-express');
-// imports */
 
 const server = new ApolloServer({schema});
 const app = express();

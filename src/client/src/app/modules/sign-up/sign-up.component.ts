@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationConfiguration, NavigationMainActionHref} from '../../models/components/navigation';
+import {NavigationConfiguration, NavigationMainActionHref} from '../../models/components/navigation.model';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {
   EMAIL_REGEXP,
@@ -11,6 +11,7 @@ import {
 import {generatePassword} from '../../utilities/password.utilities';
 import {Clipboard} from "@angular/cdk/clipboard";
 import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
+import {UserService} from "../../services/user/user.service";
 
 @Component({
   templateUrl: './sign-up.component.html',
@@ -24,7 +25,10 @@ export class SignUpComponent implements OnInit {
   hidePassword = true;
   signUpForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private clipboard: Clipboard, private snackbarService: SnackbarService) {
+  constructor(private formBuilder: FormBuilder,
+              private clipboard: Clipboard,
+              private snackbarService: SnackbarService,
+              private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -55,7 +59,7 @@ export class SignUpComponent implements OnInit {
   signUp(): void {
     this.signUpForm.markAllAsTouched();
     if (this.signUpForm.valid) {
-
+      this.userService.create(this.signUpForm.value).subscribe();
     }
   }
 

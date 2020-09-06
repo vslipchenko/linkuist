@@ -1,21 +1,21 @@
 const merge = require('lodash/merge');
+const {userInputs} = require("./user/user.inputs");
+const {userTypes} = require('./user/user.types');
+const {userMutationTypes, userMutationResolvers} = require('./user/user.mutations');
 const {makeExecutableSchema, gql} = require('apollo-server-express');
 
-// Construct a schema, using GraphQL schema language
-const typeDef = gql`
+// TODO remove as soon as extend of empty types is available
+const rootTypeDefs = gql`
   type Query {
-    hello: String
+    _: String
+  }
+
+  type Mutation {
+    _: String
   }
 `;
 
-// Provide resolver functions for your schema fields
-const resolver = {
-    Query: {
-        hello: () => 'Hello world!',
-    },
-};
-
 module.exports = makeExecutableSchema({
-    typeDefs: [typeDef],
-    resolvers: merge({}, resolver),
+    typeDefs: [rootTypeDefs, userTypes, userInputs, userMutationTypes],
+    resolvers: merge({}, userMutationResolvers),
 });

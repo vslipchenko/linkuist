@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NavigationConfiguration, NavigationMainActionHref} from '../../../models/components/navigation';
+import {NavigationConfiguration, NavigationMainActionHref} from '../../../models/components/navigation.model';
 
 @Component({
   selector: 'app-navigation',
