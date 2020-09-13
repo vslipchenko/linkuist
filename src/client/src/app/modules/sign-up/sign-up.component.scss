@@ -6,16 +6,14 @@
 .sign-up {
   @include shared.auth-page-styles;
 
-  &__main {
-    height: 100%;
-  }
-
   .actions {
-    display: flex;
-    flex-direction: column;
+    @include media.zero-large {
+      display: flex;
+      flex-direction: column;
+    }
 
-    :not(:last-child) {
-      margin-bottom: var.$unit;
+    button {
+      margin: var.$unit-half;
     }
 
     .social-icon {
@@ -26,7 +24,7 @@
   }
 
   .primary-actions {
-    margin-bottom: var.$unit-4;
+    margin-bottom: var.$unit-2;
   }
 
   .secondary-actions {

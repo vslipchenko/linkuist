@@ -9,43 +9,38 @@
   height: navigationVar.$height; // TODO simplify naming
   width: 100%;
   //box-shadow: $home-shadow;
+  padding: 0 var.$unit-2;
   border-top: navigationVar.$border-top;
   position: fixed;
   bottom: 0;
   background-color: #ffffff; // TODO improve colors
   z-index: 1;
 
-  @include media.zero-small {
-    padding: 0 var.$unit-3;
-  }
-
-  @include media.above-small {
-    padding: 0 var.$unit-6;
-  }
+  //@include media.zero-small {
+  //  padding: 0 var.$unit-3;
+  //}
+  //
+  //@include media.above-small {
+  //  padding: 0 var.$unit-2;
+  //}
 
   .secondary-actions {
     display: flex;
 
-    ::ng-deep [mat-fab]:not(:last-child) {
-      @include media.zero-small {
-        margin-right: var.$unit-2;
-      }
-
-      @include media.above-small {
-        margin-right: var.$unit-3;
-      }
+    ::ng-deep [mat-icon-button]:not(:last-child) {
+      margin-right: var.$unit-2;
     }
   }
 
   .main-action {
     &__label {
-      border: dashed;
-      padding: var.$unit;
-      font-size: var.$font-size-larger;
-
-      &:hover {
-        border: dotted;
-      }
+      border: 2px solid transparent;
+      padding: 0 var.$unit-half;
+      font-size: var.$font-size-large;
     }
   }
+
+  //a:hover {
+  //  text-decoration: underline;
+  //}
 }

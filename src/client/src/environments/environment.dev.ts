@@ -5,7 +5,7 @@
 export class Environment {
   static readonly production = false;
   static readonly apiHost = 'http://localhost:4300';
-  static readonly graphQlUri = Environment.apiHost + '/graphql';
+  static readonly graphqlUri = Environment.apiHost + '/graphql';
 }
 
 /*

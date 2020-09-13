@@ -2,6 +2,7 @@
 @use 'components/navigation/variables' as navigationVar;
 @use 'variables' as var;
 @use 'media';
+@use 'theme';
 
 $home-primary-color: #ffffff;
 $home-secondary-color: #87cefa;
@@ -18,7 +19,7 @@ $home-section-width: 70%;
     align-items: center;
     height: var.$main-screen-height;
     padding: var.$unit-5 0;
-    background-color: $home-secondary-color;
+    background-color: theme.$primary;
     position: fixed;
     top: 0;
     width: 100%;

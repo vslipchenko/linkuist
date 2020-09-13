@@ -12,6 +12,7 @@ import {generatePassword} from '../../utilities/password.utilities';
 import {Clipboard} from "@angular/cdk/clipboard";
 import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 import {UserService} from "../../services/user/user.service";
+import {map} from "rxjs/operators";
 
 @Component({
   templateUrl: './sign-up.component.html',
@@ -37,15 +38,30 @@ export class SignUpComponent implements OnInit {
 
   private initSignUpForm(): void {
     this.signUpForm = this.formBuilder.group({
-      email: ['', [Validators.pattern(EMAIL_REGEXP)]],
-      username: ['', [Validators.maxLength(USERNAME_MAXLENGTH), Validators.pattern(USERNAME_REGEXP)]],
+      email: ['', [Validators.pattern(EMAIL_REGEXP)], this.emailValidator.bind(this)],
+      username: ['', [Validators.maxLength(USERNAME_MAXLENGTH), Validators.pattern(USERNAME_REGEXP)], this.usernameValidator.bind(this)],
       password: ['', [Validators.minLength(PASSWORD_MINLENGTH), Validators.maxLength(PASSWORD_MAXLENGTH)]],
       repeatPassword: ['', [this.repeatPasswordValidator.bind(this)]]
     });
   }
 
+  private emailValidator (control: AbstractControl): null | ValidationErrors {
+    const email = control.value;
+    return this.userService.getIdByEmail(email).pipe(map(({data}) => {
+      return data.userByEmail?._id ? {isUsed: true} : null;
+    }));
+  }
+
+  private usernameValidator (control: AbstractControl): null | ValidationErrors {
+    const username = control.value;
+    return this.userService.getIdByUsername(username).pipe(map(({data}) => {
+      return data.userByUsername?._id ? {isUsed: true} : null;
+    }));
+  }
+
   private repeatPasswordValidator(control: AbstractControl): null | ValidationErrors {
-    return control.value === this.passwordField?.value ? null : {passwordMismatch: true};
+    const repeatPassword = control.value;
+    return repeatPassword === this.passwordField?.value ? null : {passwordMismatch: true};
   }
 
   generatePassword(): void {
@@ -59,7 +75,9 @@ export class SignUpComponent implements OnInit {
   signUp(): void {
     this.signUpForm.markAllAsTouched();
     if (this.signUpForm.valid) {
-      this.userService.create(this.signUpForm.value).subscribe();
+      this.userService.create(this.signUpForm.value)
+        .subscribe()
+        .unsubscribe();
     }
   }
 
