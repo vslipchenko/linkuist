@@ -12,9 +12,10 @@ const app = express();
 
 server.applyMiddleware({app});
 
-app.get('/', function (req, res) {
-    res.send(`Hello World${server.graphqlPath}${process.env.NODE_ENV}`);
-})
+// TODO make all requests silently fail except /graphql
+// app.get('/', function (req, res) {
+//     res.send(`Hello World ${server.graphqlPath} ${process.env.NODE_ENV}`);
+// });
 
 mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true}, (error) => {
     if (error) return console.error(error);

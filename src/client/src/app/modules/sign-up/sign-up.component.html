@@ -18,14 +18,14 @@
 
         <mat-error *ngIf="usernameField.errors?.required">Required field</mat-error>
         <mat-error *ngIf="usernameField.errors?.maxlength">Maximal length - 33 characters</mat-error>
-        <mat-error *ngIf="usernameField.errors?.pattern">Invalid format. Use 0-9 A-Z a-z ._-</mat-error>
+        <mat-error *ngIf="usernameField.errors?.pattern">Invalid format. Use 0-9 A-Z a-z .-</mat-error>
         <mat-error *ngIf="usernameField.errors?.isUsed">Username already in use</mat-error>
         <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
         <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Type your password" formControlName="password" required>
-        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
           <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
         </button>
         <mat-hint><button mat-button type="button" color="primary" (click)="generatePassword()">Generate password</button></mat-hint>
@@ -33,6 +33,9 @@
         <mat-error *ngIf="passwordField.errors?.required">Required field</mat-error>
         <mat-error *ngIf="passwordField.errors?.minlength">Minimal length - 8 characters</mat-error>
         <mat-error *ngIf="passwordField.errors?.maxlength">Password is too long</mat-error>
+        <mat-error *ngIf="passwordField.errors?.hasNoNumber">Use at least 1 digit</mat-error>
+        <mat-error *ngIf="passwordField.errors?.hasNoLetter">Use at least 1 letter</mat-error>
+        <mat-error *ngIf="passwordField.errors?.pattern">Contains invalid character</mat-error>
         <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
       </mat-form-field>
       <mat-form-field appearance="outline">

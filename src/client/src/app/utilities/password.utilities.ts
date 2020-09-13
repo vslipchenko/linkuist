@@ -1,4 +1,4 @@
-import {PASSWORD_MINLENGTH} from '../constants/validation.constants';
+import {PASSWORD_MINLENGTH, PASSWORD_SPECIAL_CHARS_POOL} from '../constants/validation.constants';
 
 function getRandomInt(min: number, max: number): number {
   min = Math.ceil(min);
@@ -14,7 +14,7 @@ function getRandomCharacter(characters: string): string {
 export function generatePassword(minLength = PASSWORD_MINLENGTH, maxLength = PASSWORD_MINLENGTH): string {
   const numbersPool = '0123456789';
   const lettersPool = 'abcdefghijklmnopqrstuvwxyz';
-  const specialCharsPool = '$#!@_^%+-';
+  const specialCharsPool = PASSWORD_SPECIAL_CHARS_POOL;
   const lowerToUpperCaseCoefficient = 0.75;
   const passwordLength = getRandomInt(minLength, maxLength);
   let pool: string | string[] = [numbersPool, lettersPool, specialCharsPool];

@@ -4,7 +4,7 @@ import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} f
 import {
   EMAIL_REGEXP,
   PASSWORD_MAXLENGTH,
-  PASSWORD_MINLENGTH,
+  PASSWORD_MINLENGTH, PASSWORD_REGEXP,
   USERNAME_MAXLENGTH,
   USERNAME_REGEXP
 } from '../../constants/validation.constants';
@@ -25,6 +25,7 @@ export class SignUpComponent implements OnInit {
 
   hidePassword = true;
   signUpForm: FormGroup;
+  // snackbarRef;
 
   constructor(private formBuilder: FormBuilder,
               private clipboard: Clipboard,
@@ -36,11 +37,12 @@ export class SignUpComponent implements OnInit {
     this.initSignUpForm();
   }
 
+  // TODO merge username and password validators to prevent multiple error display
   private initSignUpForm(): void {
     this.signUpForm = this.formBuilder.group({
       email: ['', [Validators.pattern(EMAIL_REGEXP)], this.emailValidator.bind(this)],
       username: ['', [Validators.maxLength(USERNAME_MAXLENGTH), Validators.pattern(USERNAME_REGEXP)], this.usernameValidator.bind(this)],
-      password: ['', [Validators.minLength(PASSWORD_MINLENGTH), Validators.maxLength(PASSWORD_MAXLENGTH)]],
+      password: ['', [Validators.minLength(PASSWORD_MINLENGTH), Validators.maxLength(PASSWORD_MAXLENGTH), SignUpComponent.passwordValidator]],
       repeatPassword: ['', [this.repeatPasswordValidator.bind(this)]]
     });
   }
@@ -59,25 +61,48 @@ export class SignUpComponent implements OnInit {
     }));
   }
 
+  private static passwordValidator(control: AbstractControl): null | ValidationErrors {
+    const password = control.value;
+    const hasNumber = password.search(/[0-9]/) !== -1;
+    const hasLetter = password.search(/[A-Za-z]/) !== -1;
+
+    if (!hasNumber) {
+      return {hasNoNumber: true};
+    } else if (!hasLetter) {
+      return {hasNoLetter: true};
+    }
+
+    return PASSWORD_REGEXP.test(password) ? null : {pattern: true};
+  }
+
   private repeatPasswordValidator(control: AbstractControl): null | ValidationErrors {
     const repeatPassword = control.value;
     return repeatPassword === this.passwordField?.value ? null : {passwordMismatch: true};
   }
 
   generatePassword(): void {
-    const password = generatePassword(PASSWORD_MINLENGTH, 20);
+    const password = generatePassword(PASSWORD_MINLENGTH, 16);
     this.signUpForm.patchValue({password});
     this.clipboard.copy(password);
-    this.snackbarService.show('Copied to clipboard');
+    this.snackbarService.showWithDismiss('Copied to clipboard');
     this.hidePassword = false;
   }
 
   signUp(): void {
     this.signUpForm.markAllAsTouched();
     if (this.signUpForm.valid) {
+      const snackbar = this.snackbarService.showInfinite('Creating account...');
       this.userService.create(this.signUpForm.value)
-        .subscribe()
-        .unsubscribe();
+        .subscribe(
+          () => {
+            snackbar.dismiss();
+            this.snackbarService.showSuccess('Successfully created!');
+          },
+          () => {
+            snackbar.dismiss();
+            this.snackbarService.showError();
+          }
+        );
     }
   }
 
