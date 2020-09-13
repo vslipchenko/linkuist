@@ -18,7 +18,7 @@
 
         <mat-error *ngIf="usernameField.errors?.required">Required field</mat-error>
         <mat-error *ngIf="usernameField.errors?.maxlength">Maximal length - 33 characters</mat-error>
-        <mat-error *ngIf="usernameField.errors?.pattern">Invalid format. Use 0-9 A-Z a-z .-</mat-error>
+        <mat-error *ngIf="usernameField.errors?.pattern">Invalid format. Use 0-9 A-Z a-z {{usernameSeparators}}</mat-error>
         <mat-error *ngIf="usernameField.errors?.isUsed">Username already in use</mat-error>
         <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
       </mat-form-field>

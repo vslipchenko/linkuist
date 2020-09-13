@@ -6,7 +6,7 @@ import {
   PASSWORD_MAXLENGTH,
   PASSWORD_MINLENGTH, PASSWORD_REGEXP,
   USERNAME_MAXLENGTH,
-  USERNAME_REGEXP
+  USERNAME_REGEXP, USERNAME_SEPARATORS
 } from '../../constants/validation.constants';
 import {generatePassword} from '../../utilities/password.utilities';
 import {Clipboard} from "@angular/cdk/clipboard";
@@ -120,5 +120,9 @@ export class SignUpComponent implements OnInit {
 
   get repeatPasswordField(): AbstractControl {
     return this.signUpForm.get('repeatPassword');
+  }
+
+  get usernameSeparators(): string {
+    return USERNAME_SEPARATORS;
   }
 }
