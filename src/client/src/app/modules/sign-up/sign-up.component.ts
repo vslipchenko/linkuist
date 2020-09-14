@@ -4,9 +4,11 @@ import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} f
 import {
   EMAIL_REGEXP,
   PASSWORD_MAXLENGTH,
-  PASSWORD_MINLENGTH, PASSWORD_REGEXP,
+  PASSWORD_MINLENGTH,
+  PASSWORD_REGEXP,
   USERNAME_MAXLENGTH,
-  USERNAME_REGEXP, USERNAME_SEPARATORS
+  USERNAME_REGEXP,
+  USERNAME_SEPARATORS
 } from '../../constants/validation.constants';
 import {generatePassword} from '../../utilities/password.utilities';
 import {Clipboard} from "@angular/cdk/clipboard";
@@ -14,6 +16,7 @@ import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 import {UserService} from "../../services/user/user.service";
 import {map} from "rxjs/operators";
 
+// TODO unsubscribe decorator
 @Component({
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss']
@@ -23,9 +26,9 @@ export class SignUpComponent implements OnInit {
     mainActionHref: NavigationMainActionHref.HOME
   };
 
-  hidePassword = true;
   signUpForm: FormGroup;
-  // snackbarRef;
+  hidePassword = true;
+  isSubmitting = false;
 
   constructor(private formBuilder: FormBuilder,
               private clipboard: Clipboard,
@@ -37,7 +40,6 @@ export class SignUpComponent implements OnInit {
     this.initSignUpForm();
   }
 
-  // TODO merge username and password validators to prevent multiple error display
   private initSignUpForm(): void {
     this.signUpForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern(EMAIL_REGEXP)], this.emailValidator.bind(this)],
@@ -125,14 +127,17 @@ export class SignUpComponent implements OnInit {
   signUp(): void {
     this.signUpForm.markAllAsTouched();
     if (this.signUpForm.valid) {
+      this.isSubmitting = true;
       const snackbar = this.snackbarService.showInfinite('Creating account...');
       this.userService.create(this.signUpForm.value)
         .subscribe(
           () => {
+            this.isSubmitting = false;
             snackbar.dismiss();
             this.snackbarService.showSuccess('Successfully created!');
           },
           () => {
+            this.isSubmitting = false;
             snackbar.dismiss();
             this.snackbarService.showError();
           }

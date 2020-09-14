@@ -4,9 +4,7 @@
 @use 'media';
 @use 'theme';
 
-$home-primary-color: #ffffff;
-$home-secondary-color: #87cefa;
-
+//$home-secondary-color: #87cefa;
 $home-section-margin-top: 10vh;
 $home-section-space: $home-section-margin-top / 2;
 $home-section-height: var.$main-screen-height - $home-section-margin-top;
@@ -88,7 +86,7 @@ $home-section-width: 70%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: $home-primary-color;
+    background-color: theme.$light;
 
     @include media.zero-small {
       padding: 0 var.$unit-3;
