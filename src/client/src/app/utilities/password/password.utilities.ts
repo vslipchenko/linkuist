@@ -1,4 +1,4 @@
-import {PASSWORD_MINLENGTH, PASSWORD_SPECIAL_CHARS_POOL} from '../constants/validation.constants';
+import {PASSWORD_MINLENGTH, PASSWORD_SPECIAL_CHARS_POOL} from '../../constants/validation.constants';
 
 function getRandomInt(min: number, max: number): number {
   min = Math.ceil(min);

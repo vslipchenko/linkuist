@@ -10,11 +10,12 @@ import {
   USERNAME_REGEXP,
   USERNAME_SEPARATORS
 } from '../../constants/validation.constants';
-import {generatePassword} from '../../utilities/password.utilities';
+import {generatePassword} from '../../utilities/password/password.utilities';
 import {Clipboard} from "@angular/cdk/clipboard";
 import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 import {UserService} from "../../services/user/user.service";
 import {map} from "rxjs/operators";
+import {ValidationService} from "../../shared/services/validation/validation.service";
 
 // TODO unsubscribe decorator
 @Component({
@@ -33,7 +34,8 @@ export class SignUpComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private clipboard: Clipboard,
               private snackbarService: SnackbarService,
-              private userService: UserService) {
+              private userService: UserService,
+              private validationService: ValidationService) {
   }
 
   ngOnInit(): void {
@@ -42,18 +44,11 @@ export class SignUpComponent implements OnInit {
 
   private initSignUpForm(): void {
     this.signUpForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.pattern(EMAIL_REGEXP)], this.emailValidator.bind(this)],
+      email: ['', [Validators.required, Validators.pattern(EMAIL_REGEXP)], this.validationService.userEmailValidator.bind(this)],
       username: ['', [SignUpComponent.usernameValidator], this.usernameValidator.bind(this)],
       password: ['', [SignUpComponent.passwordValidator]],
       repeatPassword: ['', [this.repeatPasswordValidator.bind(this)]]
     });
-  }
-
-  private emailValidator(control: AbstractControl): null | ValidationErrors {
-    const email = control.value;
-    return this.userService.getIdByEmail(email).pipe(map(({data}) => {
-      return data.userByEmail?._id ? {isUsed: true} : null;
-    }));
   }
 
   private usernameValidator(control: AbstractControl): null | ValidationErrors {

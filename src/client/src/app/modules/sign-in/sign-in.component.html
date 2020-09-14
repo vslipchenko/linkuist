@@ -9,10 +9,10 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="pat@example.com"
+        <input matInput [type]="hidePassword ? 'password' : 'text'"
                formControlName="password">
         <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
-        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+        <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
                 [attr.aria-pressed]="hidePassword">
           <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
         </button>
