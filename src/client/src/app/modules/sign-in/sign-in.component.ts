@@ -3,25 +3,25 @@ import {NavigationConfiguration, NavigationMainActionHref} from "../../models/co
 import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
-  templateUrl: './log-in.component.html',
-  styleUrls: ['./log-in.component.scss']
+  templateUrl: './sign-in.component.html',
+  styleUrls: ['./sign-in.component.scss']
 })
-export class LogInComponent implements OnInit {
+export class SignInComponent implements OnInit {
   readonly navigationConfig: NavigationConfiguration = {
     mainActionHref: NavigationMainActionHref.HOME
   };
 
   hidePassword = true;
-  logInForm: FormGroup;
+  signInForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
-    this.initLogInForm();
+    this.initSignInForm();
   }
 
-  private initLogInForm(): void {
-    this.logInForm = this.formBuilder.group({
+  private initSignInForm(): void {
+    this.signInForm = this.formBuilder.group({
       email: [''],
       password: ['']
     });

@@ -2,7 +2,7 @@
 @use 'theme';
 @use 'variables' as var;
 
-.log-in {
+.sign-in {
   @include shared.auth-page-styles;
 
   .form {

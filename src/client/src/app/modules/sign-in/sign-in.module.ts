@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {LogInComponent} from './log-in.component';
-import {LogInRoutingModule} from './log-in-routing.module';
+import {SignInComponent} from './sign-in.component';
+import {SignInRoutingModule} from './sign-in-routing.module';
 import {SharedModule} from "../../shared/shared.module";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
@@ -11,10 +11,10 @@ import {MatInputModule} from "@angular/material/input";
 
 
 @NgModule({
-  declarations: [LogInComponent],
+  declarations: [SignInComponent],
   imports: [
     CommonModule,
-    LogInRoutingModule,
+    SignInRoutingModule,
     SharedModule,
     MatIconModule,
     MatButtonModule,
@@ -23,5 +23,5 @@ import {MatInputModule} from "@angular/material/input";
     MatInputModule
   ]
 })
-export class LogInModule {
+export class SignInModule {
 }
