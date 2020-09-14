@@ -6,6 +6,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import {SharedModule} from "../../shared/shared.module";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [HomeComponent],
@@ -15,7 +16,8 @@ import {MatButtonModule} from "@angular/material/button";
     MatIconModule,
     TranslateModule,
     SharedModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTooltipModule
   ]
 })
 export class HomeModule {

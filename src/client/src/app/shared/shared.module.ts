@@ -4,6 +4,7 @@ import {NavigationComponent} from './components/navigation/navigation.component'
 import {MatIconModule} from "@angular/material/icon";
 import {RouterModule} from "@angular/router";
 import {WrapIfDirective} from './directives/wrap-if/wrap-if.directive';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [NavigationComponent, WrapIfDirective],
@@ -13,7 +14,8 @@ import {WrapIfDirective} from './directives/wrap-if/wrap-if.directive';
   imports: [
     CommonModule,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    MatTooltipModule
   ]
 })
 export class SharedModule {

@@ -19,4 +19,11 @@ export class NavigationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  get canNavigateToHomepage(): boolean {
+    return this.configuration.mainActionHref === NavigationMainActionHref.HOME;
+  }
+
+  get tooltipContent(): string {
+    return this.canNavigateToHomepage ? 'Home' : 'Profile';
+  }
 }
