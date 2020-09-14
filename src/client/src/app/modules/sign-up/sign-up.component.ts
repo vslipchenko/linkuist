@@ -40,44 +40,78 @@ export class SignUpComponent implements OnInit {
   // TODO merge username and password validators to prevent multiple error display
   private initSignUpForm(): void {
     this.signUpForm = this.formBuilder.group({
-      email: ['', [Validators.pattern(EMAIL_REGEXP)], this.emailValidator.bind(this)],
-      username: ['', [Validators.maxLength(USERNAME_MAXLENGTH), Validators.pattern(USERNAME_REGEXP)], this.usernameValidator.bind(this)],
-      password: ['', [Validators.minLength(PASSWORD_MINLENGTH), Validators.maxLength(PASSWORD_MAXLENGTH), SignUpComponent.passwordValidator]],
+      email: ['', [Validators.required, Validators.pattern(EMAIL_REGEXP)], this.emailValidator.bind(this)],
+      username: ['', [SignUpComponent.usernameValidator], this.usernameValidator.bind(this)],
+      password: ['', [SignUpComponent.passwordValidator]],
       repeatPassword: ['', [this.repeatPasswordValidator.bind(this)]]
     });
   }
 
-  private emailValidator (control: AbstractControl): null | ValidationErrors {
+  private emailValidator(control: AbstractControl): null | ValidationErrors {
     const email = control.value;
     return this.userService.getIdByEmail(email).pipe(map(({data}) => {
       return data.userByEmail?._id ? {isUsed: true} : null;
     }));
   }
 
-  private usernameValidator (control: AbstractControl): null | ValidationErrors {
+  private usernameValidator(control: AbstractControl): null | ValidationErrors {
     const username = control.value;
     return this.userService.getIdByUsername(username).pipe(map(({data}) => {
       return data.userByUsername?._id ? {isUsed: true} : null;
     }));
   }
 
-  private static passwordValidator(control: AbstractControl): null | ValidationErrors {
-    const password = control.value;
-    const hasNumber = password.search(/[0-9]/) !== -1;
-    const hasLetter = password.search(/[A-Za-z]/) !== -1;
+  private static usernameValidator(control: AbstractControl): null | ValidationErrors {
+    const username = control.value;
+    const isEmpty = !username.length;
+    const tooLong = username.length > USERNAME_MAXLENGTH;
+    const validFormat = USERNAME_REGEXP.test(username);
 
-    if (!hasNumber) {
-      return {hasNoNumber: true};
-    } else if (!hasLetter) {
-      return {hasNoLetter: true};
+    if (isEmpty) {
+      return {required: true};
+    } else if (tooLong) {
+      return {maxlength: true};
     }
 
-    return PASSWORD_REGEXP.test(password) ? null : {pattern: true};
+    return validFormat ? null : {pattern: true};
+  }
+
+  private static passwordValidator(control: AbstractControl): null | ValidationErrors {
+    const password = control.value;
+    const isEmpty = !password.length;
+    const hasNumber = password.search(/[0-9]/) !== -1;
+    const hasLetter = password.search(/[A-Za-z]/) !== -1;
+    const tooShort = password.length < PASSWORD_MINLENGTH;
+    const tooLong = password.length > PASSWORD_MAXLENGTH;
+
+    switch (true) {
+      case isEmpty:
+        return {required: true};
+      case tooShort:
+        return {minlength: true};
+      case tooLong:
+        return {maxlength: true};
+      case !hasNumber:
+        return {hasNoNumber: true};
+      case !hasLetter:
+        return {hasNoLetter: true};
+      default:
+        const validFormat = PASSWORD_REGEXP.test(password);
+        return validFormat ? null : {pattern: true};
+    }
   }
 
   private repeatPasswordValidator(control: AbstractControl): null | ValidationErrors {
     const repeatPassword = control.value;
-    return repeatPassword === this.passwordField?.value ? null : {passwordMismatch: true};
+    const isEmpty = !repeatPassword.length;
+
+    if (isEmpty) {
+      return {required: true};
+    }
+
+    const arePasswordsEqual = repeatPassword === this.passwordField?.value;
+
+    return arePasswordsEqual ? null : {mismatch: true};
   }
 
   generatePassword(): void {
