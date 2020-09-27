@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NavigationConfiguration, NavigationMainActionHref} from "../../models/components/navigation.model";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from "@angular/forms";
+import {EMAIL_REGEXP, PASSWORD_REGEXP} from "../../constants/validation.constants";
+import {ErrorStateMatcher} from "@angular/material/core";
+import {combineLatest} from "rxjs";
 
 @Component({
   templateUrl: './sign-in.component.html',
@@ -11,19 +14,88 @@ export class SignInComponent implements OnInit {
     mainActionHref: NavigationMainActionHref.HOME
   };
 
-  hidePassword = true;
   signInForm: FormGroup;
+  hidePassword = true;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.initSignInForm();
+    this.resetPatternErrorOnInput();
+  }
+
+  private static emailValidator(control: AbstractControl): null | ValidationErrors {
+    const email = control.value;
+    const isEmpty = !email.length;
+
+    return isEmpty ? {required: true} : null;
+  }
+
+  private static passwordValidator(control: AbstractControl): null | ValidationErrors {
+    const password = control.value;
+    const isEmpty = !password.length;
+
+    return isEmpty ? {required: true} : null;
   }
 
   private initSignInForm(): void {
     this.signInForm = this.formBuilder.group({
-      email: [''],
-      password: ['']
+      email: ['', [SignInComponent.emailValidator]],
+      password: ['', [SignInComponent.passwordValidator]]
     });
+  }
+
+  private resetPatternErrorOnInput(): void {
+    combineLatest([this.emailField.valueChanges, this.passwordField.valueChanges]).subscribe(
+      () => {
+        if (this.hasPatternError) {
+          this.dispatchErrors(null);
+        }
+      }
+    );
+  }
+
+  private dispatchErrors(error: ValidationErrors | null): void {
+    this.emailField.setErrors(error);
+    this.passwordField.setErrors(error);
+  }
+
+  signIn(): void {
+    this.signInForm.markAllAsTouched();
+    if (this.signInForm.valid) {
+      const invalidPasswordPattern = !PASSWORD_REGEXP.test(this.passwordField.value);
+      const invalidEmailPattern = !EMAIL_REGEXP.test(this.emailField.value);
+      const invalidPattern = invalidPasswordPattern || invalidEmailPattern;
+
+      if (invalidPattern) {
+        return this.dispatchErrors({pattern: true});
+      }
+    }
+  }
+
+  private get emailField(): AbstractControl {
+    return this.signInForm.get('email');
+  }
+
+  private get passwordField(): AbstractControl {
+    return this.signInForm.get('password');
+  }
+
+  get hasRequiredError(): boolean | undefined {
+    return this.emailField.hasError('required') || this.passwordField.hasError('required');
+  }
+
+  get hasPatternError(): boolean | undefined {
+    return this.emailField.hasError('pattern') || this.passwordField.hasError('pattern');
+  }
+
+  get customErrorStateMatcher(): ErrorStateMatcher {
+    return { // email or password field touched and is empty OR one of them has pattern error
+      isErrorState: (control) =>
+        (control.touched && control.hasError('required'))
+        || (this.passwordField.touched && this.passwordField.hasError('required'))
+        || (control.hasError('pattern') || this.passwordField.hasError('pattern'))
+    } as ErrorStateMatcher;
   }
 }

@@ -4,23 +4,25 @@
     <form [formGroup]="signInForm" class="form">
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="email">
-        <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
+        <input matInput formControlName="email"  [errorStateMatcher]="customErrorStateMatcher">
+
+        <mat-error *ngIf="hasRequiredError">Fill in all fields</mat-error>
+        <mat-error *ngIf="hasPatternError">Email or password is invalid</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
         <input matInput [type]="hidePassword ? 'password' : 'text'"
                formControlName="password">
-        <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
         <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
                 [attr.aria-pressed]="hidePassword">
           <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
         </button>
+
         <mat-hint><a routerLink="account-recovery" mat-button color="primary">Forgot password ?</a></mat-hint>
       </mat-form-field>
     </form>
     <div class="primary-actions actions">
-      <button mat-flat-button color="primary">Log in</button>
+      <button mat-flat-button color="primary" (click)="signIn()">Sign in</button>
     </div>
   </div>
 </main>
