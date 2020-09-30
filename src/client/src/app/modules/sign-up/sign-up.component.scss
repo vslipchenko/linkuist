@@ -4,32 +4,30 @@
 @use 'media';
 
 .sign-up {
+  //@include media.above-small {
+    background: url('/assets/images/sign-up/background.jpg');
+  //}
   @include shared.auth-page-styles;
 
-  .actions {
-    @include media.zero-large {
-      display: flex;
-      flex-direction: column;
-    }
+  .primary-actions {
+    margin-bottom: var.$unit-3;
+  }
+
+  .secondary-actions {
+    //@include media.zero-large {
+    display: flex;
+    flex-direction: column;
+    //}
 
     button {
       margin: var.$unit-half;
+      text-align: left;
     }
 
     .social-icon {
       margin-right: var.$unit;
       font-size: var.$font-size-large;
       font-weight: 700;
-    }
-  }
-
-  .primary-actions {
-    margin-bottom: var.$unit-2;
-  }
-
-  .secondary-actions {
-    button {
-      text-align: left;
     }
   }
 }

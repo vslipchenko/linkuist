@@ -16,14 +16,27 @@ $home-section-width: 70%;
     justify-content: center;
     align-items: center;
     height: var.$main-screen-height;
-    padding: var.$unit-5 0;
     background-color: theme.$primary;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: -1;
 
+    @include media.zero-small {
+      padding-top: var.$unit-8;
+      padding-bottom: var.$unit-8;
+    }
+
+    @include media.above-small {
+      padding-top: var.$unit-7;
+      padding-bottom: var.$unit-7;
+    }
+
     &__image {
+      @include media.zero-small {
+        height: 43%;
+      }
+
       @include media.zero-medium {
         height: 43%;
       }

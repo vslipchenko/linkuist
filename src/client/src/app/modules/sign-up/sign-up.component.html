@@ -6,21 +6,20 @@
         <mat-label>Email</mat-label>
         <input matInput placeholder="Type your email" formControlName="email">
         <mat-hint>Should be unique</mat-hint>
-<!--        <mat-error *ngIf="emailField.invalid">Invalid email format</mat-error>-->
-        <mat-error *ngIf="emailField.errors?.required">Required field</mat-error>
-        <mat-error *ngIf="emailField.errors?.pattern">Invalid email format</mat-error>
-        <mat-error *ngIf="emailField.errors?.isUsed">Email already in use</mat-error>
+
+        <mat-error *ngIf="emailField.hasError('required')">Required field</mat-error>
+        <mat-error *ngIf="emailField.hasError('pattern')">Invalid email format</mat-error>
+        <mat-error *ngIf="emailField.hasError('isUsed')">Email already in use</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
         <input matInput placeholder="Type your username" formControlName="username">
         <mat-hint>Should be unique</mat-hint>
 
-        <mat-error *ngIf="usernameField.errors?.required">Required field</mat-error>
-        <mat-error *ngIf="usernameField.errors?.maxlength">Username is too long</mat-error>
-        <mat-error *ngIf="usernameField.errors?.pattern">Invalid format. Use 0-9 A-Z a-z {{usernameSeparators}}</mat-error>
-        <mat-error *ngIf="usernameField.errors?.isUsed">Username already in use</mat-error>
-        <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
+        <mat-error *ngIf="usernameField.hasError('required')">Required field</mat-error>
+        <mat-error *ngIf="usernameField.hasError('maxlength')">Username is too long</mat-error>
+        <mat-error *ngIf="usernameField.hasError('pattern')">Invalid format. Use 0-9 A-Z a-z {{usernameSeparators}}</mat-error>
+        <mat-error *ngIf="usernameField.hasError('isUsed')">Username already in use</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
@@ -30,20 +29,20 @@
         </button>
         <mat-hint><button mat-button type="button" color="primary" (click)="generatePassword()">Generate password</button></mat-hint>
 
-        <mat-error *ngIf="passwordField.errors?.required">Required field</mat-error>
-        <mat-error *ngIf="passwordField.errors?.minlength">Minimal length - 8 characters</mat-error>
-        <mat-error *ngIf="passwordField.errors?.maxlength">Password is too long</mat-error>
-        <mat-error *ngIf="passwordField.errors?.hasNoNumber">Use at least 1 digit</mat-error>
-        <mat-error *ngIf="passwordField.errors?.hasNoLetter">Use at least 1 letter</mat-error>
-        <mat-error *ngIf="passwordField.errors?.pattern">Contains invalid character</mat-error>
+        <mat-error *ngIf="passwordField.hasError('required')">Required field</mat-error>
+        <mat-error *ngIf="passwordField.hasError('minlength')">Minimal length - 8 characters</mat-error>
+        <mat-error *ngIf="passwordField.hasError('maxlength')">Password is too long</mat-error>
+        <mat-error *ngIf="passwordField.hasError('hasNoNumber')">Use at least 1 digit</mat-error>
+        <mat-error *ngIf="passwordField.hasError('hasNoLetter')">Use at least 1 letter</mat-error>
+        <mat-error *ngIf="passwordField.hasError('pattern')">Contains invalid character</mat-error>
         <!--      <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>-->
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Repeat password</mat-label>
         <input matInput type="password" placeholder="Repeat your password" formControlName="repeatPassword">
 
-        <mat-error *ngIf="repeatPasswordField.errors?.required">Required field</mat-error>
-        <mat-error *ngIf="repeatPasswordField.errors?.mismatch">Passwords mismatch</mat-error>
+        <mat-error *ngIf="repeatPasswordField.hasError('required')">Required field</mat-error>
+        <mat-error *ngIf="repeatPasswordField.hasError('mismatch')">Passwords mismatch</mat-error>
       </mat-form-field>
     </form>
     <div class="primary-actions actions">

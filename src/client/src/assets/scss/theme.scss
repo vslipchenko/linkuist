@@ -1,5 +1,6 @@
 @use '~@angular/material/theming' as mat;
 
 //$primary: #2196f3;
-$primary: map-get(mat.$mat-blue, 500);
+$primary: map-get(mat.$mat-blue, 500); // #2196f3
 $light: #ffffff;
+$dark: #000000;

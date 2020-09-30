@@ -1,9 +1,21 @@
 @use 'components/shared';
 @use 'theme';
+@use 'media';
 @use 'variables' as var;
 
 .sign-in {
+  //@include media.above-small {
+    background: url('/assets/images/sign-in/background.jpg');
+  //}
   @include shared.auth-page-styles;
+
+  &__main {
+    //@include media.zero-small {
+    //  width: 100%;
+    //  padding: var.$unit-6;
+    //}
+    //padding: var.$unit-6;
+  }
 
   .form {
     margin-bottom: var.$unit-2;
