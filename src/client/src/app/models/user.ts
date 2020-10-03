@@ -1,4 +1,4 @@
-import {RecordId} from "./graphql.model";
+import {RecordId} from "./graphql";
 
 interface UserByEmail<T = RecordId> {
   userByEmail: T

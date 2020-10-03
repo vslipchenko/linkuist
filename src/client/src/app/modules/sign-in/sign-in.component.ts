@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationConfiguration, NavigationMainActionHref} from "../../models/components/navigation.model";
+import {NavigationConfiguration, NavigationMainActionHref} from "../../models/components/navigation";
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from "@angular/forms";
-import {EMAIL_REGEXP, PASSWORD_REGEXP} from "../../constants/validation.constants";
+import {EMAIL_REGEXP, PASSWORD_REGEXP} from "../../constants/validation";
 import {ErrorStateMatcher} from "@angular/material/core";
 import {combineLatest} from "rxjs";
 
