@@ -1,31 +1,23 @@
-const {parseCliFlagValue} = require('./utilities/parse-cli-flags');
-const environment = parseCliFlagValue('env');
-// Include dev or prod env variables file dynamically
-require('dotenv').config({path: `src/environments/.env.${environment}`});
+// TODO post (client) data validation
+const {APP_PORT, MONGODB_URI} = require('./constants/app');
 // External imports
 const mongoose = require('mongoose');
 const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
-const passport = require('passport');
 // Internal imports
 const schema = require('./graphql/schema');
-const passportConfigurationInit = require('./configurations/passport');
-// Readonly members
-const {
-    APP_PORT,
-    MONGODB_URI
-} = process.env;
 /* Main */
-const server = new ApolloServer({schema});
+const server = new ApolloServer({
+    schema
+});
 const app = express();
-// Passport middleware
-passportConfigurationInit();
-app.use(passport.initialize({}));
-app.use(passport.session({}));
+// Middleware
+
 //
 server.applyMiddleware({app});
 // Start app only on successful DB connection
 mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true}, (error) => {
     if (error) return console.error(error);
+    console.log('Port:', APP_PORT);
     app.listen(APP_PORT);
 });

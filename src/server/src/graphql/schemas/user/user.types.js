@@ -7,4 +7,8 @@ module.exports.userTypes = gql`
         username: String!
         password: String!
     }
+    type JwtTokens {
+      accessToken: String!
+      refreshToken: String!
+    }
 `;
