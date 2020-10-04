@@ -1,3 +1,3 @@
 export interface RecordId {
-  _id: string
+  _id: string;
 }

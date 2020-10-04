@@ -10,7 +10,7 @@ const createUser = (_, {input}) => {
     return User.create(input);
 };
 // TODO server side validation
-const userMutationTypeDefs = gql`
+const userMutationTypeDefinitions = gql`
     extend type Mutation {
         createUser(input: CreateUserMutationInput!): User!
     }
@@ -23,6 +23,6 @@ const userMutationResolvers = {
 };
 
 module.exports = {
-    userMutationTypeDefs,
+    userMutationTypeDefinitions,
     userMutationResolvers
 }

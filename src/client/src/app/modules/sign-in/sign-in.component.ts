@@ -4,6 +4,7 @@ import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from "@angula
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from "../../constants/validation";
 import {ErrorStateMatcher} from "@angular/material/core";
 import {combineLatest} from "rxjs";
+import {AuthenticationService} from "../../services/authentication/authentication.service";
 
 @Component({
   templateUrl: './sign-in.component.html',
@@ -17,7 +18,8 @@ export class SignInComponent implements OnInit {
   signInForm: FormGroup;
   hidePassword = true;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
@@ -71,6 +73,8 @@ export class SignInComponent implements OnInit {
       if (invalidPattern) {
         return this.dispatchErrors({pattern: true});
       }
+      // TODO
+      this.authenticationService.signIn(this.signInForm.value);
     }
   }
 

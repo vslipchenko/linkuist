@@ -16,3 +16,8 @@ export interface UserSignUpData {
   username: string;
   password: string;
 }
+
+export interface UserSignInData {
+  email: string;
+  password: string;
+}

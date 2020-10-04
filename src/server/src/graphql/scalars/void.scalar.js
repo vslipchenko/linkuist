@@ -1,7 +1,7 @@
 const {GraphQLScalarType} = require('graphql');
 const {gql} = require('apollo-server-express');
 
-const VoidTypeDef = gql`
+const VoidTypeDefinition = gql`
   scalar Void
 `;
 
@@ -24,6 +24,6 @@ const VoidResolver = new GraphQLScalarType({
 })
 
 module.exports = {
-  VoidTypeDef,
+  VoidTypeDefinition,
   VoidResolver
 };

@@ -1,9 +1,9 @@
 const {userInputs} = require("./user.inputs");
 const {userTypes} = require("./user.types");
-const {userMutationTypeDefs, userMutationResolvers} = require("./user.mutations");
-const {userQueryTypeDefs, userQueryResolvers} = require("./user.queries");
+const {userMutationTypeDefinitions, userMutationResolvers} = require("./user.mutations");
+const {userQueryTypeDefinitions, userQueryResolvers} = require("./user.queries");
 
 module.exports = {
-    userTypeDefs: [userTypes, userInputs, userQueryTypeDefs, userMutationTypeDefs],
+    userTypeDefinitions: [userTypes, userInputs, userQueryTypeDefinitions, userMutationTypeDefinitions],
     userResolvers: [userQueryResolvers, userMutationResolvers]
 };

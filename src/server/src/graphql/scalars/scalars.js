@@ -1,8 +1,8 @@
-const {VoidTypeDef, VoidResolver} = require('./void.scalar');
+const {VoidTypeDefinition, VoidResolver} = require('./void.scalar');
 
 module.exports = {
-  scalarTypeDefs: [
-    VoidTypeDef
+  scalarTypeDefinitions: [
+    VoidTypeDefinition
   ],
   scalarResolvers: [
     {[VoidResolver.name]: VoidResolver}
