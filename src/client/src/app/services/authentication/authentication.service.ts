@@ -11,6 +11,8 @@ import {JwtTokens} from "../../models/authentication";
 })
 export class AuthenticationService {
 
+  accessToken: string;
+
   constructor(private apollo: Apollo) {
   }
 
@@ -19,5 +21,10 @@ export class AuthenticationService {
       query: SIGN_IN,
       variables: {input}
     });
+  }
+
+  set tokens({accessToken, refreshToken}: JwtTokens) {
+    this.accessToken = accessToken;
+    localStorage.setItem('token', refreshToken);
   }
 }

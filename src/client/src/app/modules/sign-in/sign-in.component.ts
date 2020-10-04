@@ -5,6 +5,7 @@ import {EMAIL_REGEXP, PASSWORD_REGEXP} from "../../constants/validation";
 import {ErrorStateMatcher} from "@angular/material/core";
 import {combineLatest} from "rxjs";
 import {AuthenticationService} from "../../services/authentication/authentication.service";
+import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 
 @Component({
   templateUrl: './sign-in.component.html',
@@ -17,9 +18,11 @@ export class SignInComponent implements OnInit {
 
   signInForm: FormGroup;
   hidePassword = true;
+  isSubmitting = false;
 
   constructor(private formBuilder: FormBuilder,
-              private authenticationService: AuthenticationService) {
+              private authenticationService: AuthenticationService,
+              private snackbarService: SnackbarService) {
   }
 
   ngOnInit(): void {
@@ -66,15 +69,27 @@ export class SignInComponent implements OnInit {
   signIn(): void {
     this.signInForm.markAllAsTouched();
     if (this.signInForm.valid) {
-      const invalidPasswordPattern = !PASSWORD_REGEXP.test(this.passwordField.value);
-      const invalidEmailPattern = !EMAIL_REGEXP.test(this.emailField.value);
-      const invalidPattern = invalidPasswordPattern || invalidEmailPattern;
-
-      if (invalidPattern) {
+      if (this.isInvalidUserData) {
         return this.dispatchErrors({pattern: true});
       }
-      // TODO
-      this.authenticationService.signIn(this.signInForm.value);
+
+      this.isSubmitting = true;
+      const snackbar = this.snackbarService.showInfinite('Loading...');
+
+      this.authenticationService.signIn(this.signInForm.value).subscribe(
+        ({data}) => {
+          this.isSubmitting = false;
+          snackbar.dismiss();
+          this.authenticationService.tokens = data;
+        },
+        (error) => {
+          // TODO improve error handling
+          console.log('error ', error);
+          this.isSubmitting = false;
+          snackbar.dismiss();
+          this.snackbarService.showError();
+        }
+      );
     }
   }
 
@@ -84,6 +99,14 @@ export class SignInComponent implements OnInit {
 
   private get passwordField(): AbstractControl {
     return this.signInForm.get('password');
+  }
+
+  private get isInvalidUserData(): boolean {
+    const invalidPasswordPattern = !PASSWORD_REGEXP.test(this.passwordField.value);
+    const invalidEmailPattern = !EMAIL_REGEXP.test(this.emailField.value);
+    const invalidPattern = invalidPasswordPattern || invalidEmailPattern;
+
+    return invalidPattern;
   }
 
   get hasRequiredError(): boolean | undefined {
