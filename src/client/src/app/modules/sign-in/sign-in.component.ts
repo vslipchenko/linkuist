@@ -85,13 +85,11 @@ export class SignInComponent implements OnInit {
           this.authenticationService.tokens = data;
         },
         ({graphQLErrors}: ApolloError) => {
-          // TODO improve error handling
-          console.log('error ',graphQLErrors);
           this.isSubmitting = false;
           snackbar.dismiss();
 
           const errors = getGraphQLErrors(graphQLErrors);
-          console.log('errors ', errors);
+
           errors.forEach(error => {
             switch (error.code) {
               case 'BAD_USER_INPUT':

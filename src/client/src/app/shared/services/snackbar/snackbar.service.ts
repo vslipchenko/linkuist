@@ -3,7 +3,7 @@ import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
 import {SnackbarConfig} from "../../../models/components/snackbar";
 import {MatSnackBarRef} from "@angular/material/snack-bar/snack-bar-ref";
 import {TextOnlySnackBar} from "@angular/material/snack-bar/simple-snack-bar";
-
+// TODO implement multiples snackbars
 @Injectable({
   providedIn: 'root'
 })
