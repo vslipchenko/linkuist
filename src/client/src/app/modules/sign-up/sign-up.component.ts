@@ -15,6 +15,7 @@ import {Clipboard} from "@angular/cdk/clipboard";
 import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 import {UserService} from "../../services/user/user.service";
 import {map} from "rxjs/operators";
+import {Router} from "@angular/router";
 
 // TODO unsubscribe decorator
 @Component({
@@ -33,7 +34,8 @@ export class SignUpComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private clipboard: Clipboard,
               private snackbarService: SnackbarService,
-              private userService: UserService) {
+              private userService: UserService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -120,7 +122,7 @@ export class SignUpComponent implements OnInit {
     const password = generatePassword(PASSWORD_MINLENGTH, 16);
     this.signUpForm.patchValue({password});
     this.clipboard.copy(password);
-    this.snackbarService.showWithDismiss('Copied to clipboard');
+    this.snackbarService.showWithDismiss('Copied to the clipboard');
     this.hidePassword = false;
   }
 
@@ -134,7 +136,13 @@ export class SignUpComponent implements OnInit {
           () => {
             this.isSubmitting = false;
             snackbar.dismiss();
-            this.snackbarService.showSuccess('Successfully created!');
+            // TODO add form reset button that dismisses infinite snackbar as well
+            this.snackbarService
+              .showInfinite('Successfully signed up!', {action: 'Sign in'})
+              .afterDismissed()
+              .subscribe(() => {
+                this.router.navigate(['/sign-in']);
+              });
           },
           () => {
             this.isSubmitting = false;

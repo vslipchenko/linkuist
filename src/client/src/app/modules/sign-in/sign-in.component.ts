@@ -6,6 +6,8 @@ import {ErrorStateMatcher} from "@angular/material/core";
 import {combineLatest} from "rxjs";
 import {AuthenticationService} from "../../services/authentication/authentication.service";
 import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
+import {ApolloError} from "@apollo/client";
+import {getGraphQLErrors} from "../../utilities/graphql/graphql.utilities";
 
 @Component({
   templateUrl: './sign-in.component.html',
@@ -82,12 +84,24 @@ export class SignInComponent implements OnInit {
           snackbar.dismiss();
           this.authenticationService.tokens = data;
         },
-        (error) => {
+        ({graphQLErrors}: ApolloError) => {
           // TODO improve error handling
-          console.log('error ', error);
+          console.log('error ',graphQLErrors);
           this.isSubmitting = false;
           snackbar.dismiss();
-          this.snackbarService.showError();
+
+          const errors = getGraphQLErrors(graphQLErrors);
+          console.log('errors ', errors);
+          errors.forEach(error => {
+            switch (error.code) {
+              case 'BAD_USER_INPUT':
+                return this.dispatchErrors({pattern: true});
+              case 'FORBIDDEN':
+                return this.snackbarService.showError(error.message);
+              default: // 'INTERNAL_SERVER_ERROR'
+                this.snackbarService.showError();
+            }
+          });
         }
       );
     }

@@ -18,11 +18,11 @@
           <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
         </button>
 
-        <mat-hint><a routerLink="account-recovery" mat-button color="primary">Forgot password ?</a></mat-hint>
+        <mat-hint><a routerLink="/account-recovery" mat-button color="primary">Forgot password ?</a></mat-hint>
       </mat-form-field>
     </form>
     <div class="primary-actions actions">
-      <button mat-flat-button color="primary" (click)="signIn()">Sign in</button>
+      <button mat-flat-button color="primary" (click)="signIn()" [disabled]="isSubmitting">Sign in</button>
     </div>
   </div>
 </main>
