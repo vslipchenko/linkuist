@@ -6,7 +6,7 @@ import {ErrorStateMatcher} from "@angular/material/core";
 import {combineLatest} from "rxjs";
 import {AuthenticationService} from "../../services/authentication/authentication.service";
 import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
-import {ApolloError} from "@apollo/client";
+import {ApolloError} from "@apollo/client/core";
 import {getGraphQLErrors} from "../../utilities/graphql/graphql.utilities";
 
 @Component({
@@ -82,7 +82,7 @@ export class SignInComponent implements OnInit {
         ({data}) => {
           this.isSubmitting = false;
           snackbar.dismiss();
-          this.authenticationService.tokens = data;
+          this.authenticationService.tokens = data.signIn;
         },
         ({graphQLErrors}: ApolloError) => {
           this.isSubmitting = false;
