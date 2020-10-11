@@ -18,7 +18,10 @@ interface IconInfo {
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>'
+  template: `
+    <app-progress-bar></app-progress-bar>
+    <router-outlet></router-outlet>
+  `
 })
 export class AppComponent implements OnInit {
 
@@ -67,7 +70,7 @@ export class AppComponent implements OnInit {
         this.matIconRegistry.addSvgIcon(
           icon.name,
           this.domSanitizer.bypassSecurityTrustResourceUrl(
-      `${icon.isMaterial ? MATERIAL_ICONS_FOLDER : CUSTOM_ICONS_FOLDER}${(icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''}${icon.fileName}.svg`
+            `${icon.isMaterial ? MATERIAL_ICONS_FOLDER : CUSTOM_ICONS_FOLDER}${(icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''}${icon.fileName}.svg`
           )
         );
       })

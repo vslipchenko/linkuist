@@ -1,0 +1,20 @@
+import { Injectable } from '@angular/core';
+import {BehaviorSubject} from "rxjs";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProgressBarService {
+
+  showProgressBar$ = new BehaviorSubject(false);
+
+  constructor() { }
+
+  show(): void {
+    this.showProgressBar$.next(true);
+  }
+
+  hide(): void {
+    this.showProgressBar$.next(false);
+  }
+}

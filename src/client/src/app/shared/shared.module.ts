@@ -5,17 +5,21 @@ import {MatIconModule} from "@angular/material/icon";
 import {RouterModule} from "@angular/router";
 import {WrapIfDirective} from './directives/wrap-if/wrap-if.directive';
 import {MatTooltipModule} from "@angular/material/tooltip";
+import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 @NgModule({
-  declarations: [NavigationComponent, WrapIfDirective],
+  declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent],
   exports: [
-    NavigationComponent
+    NavigationComponent,
+    ProgressBarComponent
   ],
   imports: [
     CommonModule,
     MatIconModule,
     RouterModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressBarModule
   ]
 })
 export class SharedModule {

@@ -16,6 +16,7 @@ import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 import {UserService} from "../../services/user/user.service";
 import {map} from "rxjs/operators";
 import {Router} from "@angular/router";
+import {ProgressBarService} from "../../shared/services/progress-bar/progress-bar.service";
 
 // TODO unsubscribe decorator
 @Component({
@@ -35,7 +36,8 @@ export class SignUpComponent implements OnInit {
               private clipboard: Clipboard,
               private snackbarService: SnackbarService,
               private userService: UserService,
-              private router: Router) {
+              private router: Router,
+              private progressBarService: ProgressBarService) {
   }
 
   ngOnInit(): void {
@@ -130,12 +132,14 @@ export class SignUpComponent implements OnInit {
     this.signUpForm.markAllAsTouched();
     if (this.signUpForm.valid) {
       this.isSubmitting = true;
-      const snackbar = this.snackbarService.showInfinite('Creating account...');
+      // const snackbar = this.snackbarService.showInfinite('Creating account...');
+      this.progressBarService.show();
       this.userService.create(this.signUpForm.value)
         .subscribe(
           () => {
             this.isSubmitting = false;
-            snackbar.dismiss();
+            // snackbar.dismiss();
+            this.progressBarService.hide();
             // TODO add form reset button that dismisses infinite snackbar as well
             this.snackbarService
               .showInfinite('Successfully signed up!', {action: 'Sign in'})
@@ -146,7 +150,8 @@ export class SignUpComponent implements OnInit {
           },
           () => {
             this.isSubmitting = false;
-            snackbar.dismiss();
+            // snackbar.dismiss();
+            this.progressBarService.hide();
             this.snackbarService.showError();
           }
         );

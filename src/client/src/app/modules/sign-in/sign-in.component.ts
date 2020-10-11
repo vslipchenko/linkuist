@@ -8,6 +8,7 @@ import {AuthenticationService} from "../../services/authentication/authenticatio
 import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 import {ApolloError} from "@apollo/client/core";
 import {getGraphQLErrors} from "../../utilities/graphql/graphql.utilities";
+import {ProgressBarService} from "../../shared/services/progress-bar/progress-bar.service";
 
 @Component({
   templateUrl: './sign-in.component.html',
@@ -24,12 +25,14 @@ export class SignInComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private authenticationService: AuthenticationService,
-              private snackbarService: SnackbarService) {
+              private snackbarService: SnackbarService,
+              private progressBarService: ProgressBarService) {
   }
 
   ngOnInit(): void {
     this.initSignInForm();
     this.resetPatternErrorOnInput();
+    // console.log(this.authenticationService.accessTokenData);
   }
 
   private static emailValidator(control: AbstractControl): null | ValidationErrors {
@@ -76,17 +79,20 @@ export class SignInComponent implements OnInit {
       }
 
       this.isSubmitting = true;
-      const snackbar = this.snackbarService.showInfinite('Loading...');
+      // const snackbar = this.snackbarService.showInfinite('Loading...');
+      this.progressBarService.show();
 
       this.authenticationService.signIn(this.signInForm.value).subscribe(
         ({data}) => {
           this.isSubmitting = false;
-          snackbar.dismiss();
+          // snackbar.dismiss();
+          this.progressBarService.hide();
           this.authenticationService.tokens = data.signIn;
         },
         ({graphQLErrors}: ApolloError) => {
           this.isSubmitting = false;
-          snackbar.dismiss();
+          // snackbar.dismiss();
+          this.progressBarService.hide();
 
           const errors = getGraphQLErrors(graphQLErrors);
 

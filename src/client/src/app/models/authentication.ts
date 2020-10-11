@@ -6,3 +6,13 @@ export interface JwtTokens {
 export interface SignInQueryResult {
   signIn: JwtTokens;
 }
+
+export interface AccessTokenData {
+  iat: number;
+  exp: number;
+  username: string;
+}
+
+export interface AccessTokenQueryResult {
+  accessTokenByRefreshToken: string;
+}
