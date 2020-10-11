@@ -74,7 +74,7 @@ const accessTokenByRefreshToken = (_, {refreshToken}) => {
 
         try {
           jwt.verify(refreshToken, REFRESH_JWT_SECRET);
-        } catch { // Token is forged
+        } catch { // Token is forged or expired
           return reject(new AuthenticationError('Token is invalid'));
         }
         // Token is valid

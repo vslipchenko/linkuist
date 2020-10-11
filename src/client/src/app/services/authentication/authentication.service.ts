@@ -3,7 +3,7 @@ import {UserSignInData} from "../../models/user";
 import {Apollo} from "apollo-angular";
 import {ACCESS_TOKEN_BY_REFRESH_TOKEN, SIGN_IN} from "../../graphql/authentication/authentication.queries";
 import {Observable} from "rxjs";
-import {ApolloError, ApolloQueryResult} from "@apollo/client/core";
+import {ApolloQueryResult} from "@apollo/client/core";
 import {AccessTokenData, AccessTokenQueryResult, JwtTokens, SignInQueryResult} from "../../models/authentication";
 import jwt_decode from 'jwt-decode';
 
@@ -32,6 +32,11 @@ export class AuthenticationService {
     });
   }
 
+  resetTokens(): void {
+    this.accessToken = null;
+    localStorage.removeItem('token');
+  }
+
   set accessToken(accessToken: string) {
     this.token = accessToken;
   }
@@ -48,6 +53,7 @@ export class AuthenticationService {
   get refreshToken(): string | null {
     return localStorage.getItem('token');
   }
+
   // Only access token's data can be trusted and verified
   get isValidAccessToken(): boolean {
     if (!this.accessToken) {
