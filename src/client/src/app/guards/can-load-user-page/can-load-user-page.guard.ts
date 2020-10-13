@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CanLoad, Router} from '@angular/router';
-import {AuthenticationService} from "../services/authentication/authentication.service";
+import {AuthenticationService} from "../../services/authentication/authentication.service";
 import {Observable, of} from "rxjs";
 import {catchError, map} from "rxjs/operators";
 
@@ -25,6 +25,7 @@ export class CanLoadUserPageGuard implements CanLoad {
           return true;
         }),
         catchError(() => { // refresh token is not valid anymore
+          // TODO improve UI's app state reflectivness
           this.authenticationService.resetTokens();
           this.router.navigate(['/sign-in']);
           return of(false);
