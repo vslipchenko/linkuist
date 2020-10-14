@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const authenticationHandler = (accessToken, successCallback) => {
   if (!accessToken) {
-    return new ApolloError('', 'TOKEN_EMPTY');
+    return new ApolloError('', 'ACCESS_TOKEN_EMPTY');
   }
 
   return new Promise((resolve, reject) => {
@@ -15,9 +15,9 @@ const authenticationHandler = (accessToken, successCallback) => {
     } catch (error) {
       // The only legit error
       if (error.name === 'TokenExpiredError') {
-        return reject(new ApolloError('', 'TOKEN_EXPIRED'));
+        return reject(new ApolloError('', 'ACCESS_TOKEN_EXPIRED'));
       } else {
-        return reject(new ApolloError('', 'TOKEN_INVALID'));
+        return reject(new ApolloError('', 'ACCESS_TOKEN_INVALID'));
       }
     }
 
