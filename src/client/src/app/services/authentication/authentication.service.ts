@@ -2,18 +2,19 @@ import {Injectable} from '@angular/core';
 import {UserSignInData} from "../../models/user";
 import {Apollo} from "apollo-angular";
 import {ACCESS_TOKEN_BY_REFRESH_TOKEN, SIGN_IN} from "../../graphql/authentication/authentication.queries";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {ApolloQueryResult} from "@apollo/client/core";
 import {AccessTokenData, AccessTokenQueryResult, JwtTokens, SignInQueryResult} from "../../models/authentication";
 import jwt_decode from 'jwt-decode';
+import gql from 'graphql-tag';
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-
-  // accessToken
-  private token: string;
+  //accessToken
+  private readonly token$ = new BehaviorSubject('');
 
   constructor(private apollo: Apollo) {
   }
@@ -32,47 +33,59 @@ export class AuthenticationService {
     });
   }
 
+  mock() {
+    return this.apollo.query({
+      query: gql`
+        query {
+          testAuth
+        }
+      `
+    });
+  }
+
   resetTokens(): void {
-    this.accessToken = null;
+    this.accessToken = '';
     localStorage.removeItem('token');
   }
 
-  set accessToken(accessToken: string) {
-    this.token = accessToken;
-  }
-
   set tokens({accessToken, refreshToken}: JwtTokens) {
-    this.token = accessToken;
+    this.accessToken = accessToken;
     localStorage.setItem('token', refreshToken);
   }
 
-  get accessToken(): string | undefined {
-    return this.token;
+  set accessToken(accessToken: string) {
+    this.token$.next(accessToken);
   }
 
-  get refreshToken(): string | null {
-    return localStorage.getItem('token');
+  get accessToken(): string {
+    return this.token$.getValue();
   }
 
-  // Only access token's data can be trusted and verified
-  get isValidAccessToken(): boolean {
-    if (!this.accessToken) {
-      return false;
-    }
-
-    const payload = jwt_decode(this.accessToken);
-    const currentTimeMs = Date.now();
-    const expirationTimeMs = payload.exp * 1000;
-    const isExpired = currentTimeMs >= expirationTimeMs;
-
-    return !isExpired;
+  get accessToken$(): Observable<string> {
+    return this.token$.asObservable();
   }
 
   get accessTokenData(): AccessTokenData | null {
     try {
       return jwt_decode(this.accessToken);
-    } catch {
+    } catch { // ignore error
       return null;
     }
+  }
+
+  get accessTokenData$(): Observable<AccessTokenData | null> {
+    return this.accessToken$.pipe(
+      map((accessToken) => {
+        try {
+          return jwt_decode(accessToken);
+        } catch { // ignore error
+          return null;
+        }
+      })
+    );
+  }
+
+  get refreshToken(): string {
+    return localStorage.getItem('token') || '';
   }
 }

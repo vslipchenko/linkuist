@@ -80,12 +80,11 @@ function setApolloClient(
               case 'ACCESS_TOKEN_EXPIRED':
                 console.log('recovering');
                 authenticationService.recoverAccessToken().pipe(
-                  first(),
-                  map(({data: {accessTokenByRefreshToken}}) => {
-                    console.log(accessTokenByRefreshToken);
-                    authenticationService.accessToken = accessTokenByRefreshToken;
-                  })
-                ).subscribe();
+                  first()
+                ).subscribe(({data: {accessTokenByRefreshToken}}) => {
+                  console.log(accessTokenByRefreshToken);
+                  authenticationService.accessToken = accessTokenByRefreshToken;
+                });
                 // suppress error logging
                 response.errors = null;
                 return;

@@ -28,7 +28,7 @@ function userRoutingHandler(authenticationService: AuthenticationService, router
       return routes;
     }
   }
-  debugger;
+
   routes.push({path: '', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)});
   return routes;
 }
