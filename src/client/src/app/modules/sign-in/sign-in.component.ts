@@ -7,8 +7,9 @@ import {combineLatest} from "rxjs";
 import {AuthenticationService} from "../../services/authentication/authentication.service";
 import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 import {ApolloError} from "@apollo/client/core";
-import {getGraphQLErrors} from "../../utilities/graphql/graphql.utilities";
+import {shapeGraphQLErrors} from "../../utilities/graphql/graphql.utilities";
 import {ProgressBarService} from "../../shared/services/progress-bar/progress-bar.service";
+import {Router} from "@angular/router";
 
 @Component({
   templateUrl: './sign-in.component.html',
@@ -26,12 +27,14 @@ export class SignInComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private authenticationService: AuthenticationService,
               private snackbarService: SnackbarService,
-              private progressBarService: ProgressBarService) {
+              private progressBarService: ProgressBarService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
     this.initSignInForm();
     this.resetPatternErrorOnInput();
+    // this.authenticationService.mock().subscribe();
     // console.log(this.authenticationService.accessTokenData);
   }
 
@@ -88,20 +91,20 @@ export class SignInComponent implements OnInit {
           // snackbar.dismiss();
           this.progressBarService.hide();
           this.authenticationService.tokens = data.signIn;
+          const username = this.authenticationService.accessTokenData.username;
+          this.router.navigate([`/@${username}`]);
         },
         ({graphQLErrors}: ApolloError) => {
           this.isSubmitting = false;
           // snackbar.dismiss();
           this.progressBarService.hide();
 
-          const errors = getGraphQLErrors(graphQLErrors);
+          const errors = shapeGraphQLErrors(graphQLErrors);
 
           errors.forEach(error => {
             switch (error.code) {
               case 'BAD_USER_INPUT':
                 return this.dispatchErrors({pattern: true});
-              case 'FORBIDDEN':
-                return this.snackbarService.showError(error.message);
               default: // 'INTERNAL_SERVER_ERROR'
                 this.snackbarService.showError();
             }

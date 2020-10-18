@@ -18,16 +18,13 @@ export class CanLoadUserPageGuard implements CanLoad {
     const refreshToken = this.authenticationService.refreshToken;
     // user signed in & has refresh token & no access token
     if (refreshToken && !accessToken) {
-      return this.authenticationService.recoverAccessToken().pipe(
+      return this.authenticationService.refreshAccessToken().pipe(
         map(({data: {accessTokenByRefreshToken}}) => {
           this.authenticationService.accessToken = accessTokenByRefreshToken;
-
           return true;
         }),
-        catchError(() => { // refresh token is not valid anymore
+        catchError(() => { // non-auth error occurred
           // TODO improve UI's app state reflectivness
-          this.authenticationService.resetTokens();
-          this.router.navigate(['/sign-in']);
           return of(false);
         })
       );

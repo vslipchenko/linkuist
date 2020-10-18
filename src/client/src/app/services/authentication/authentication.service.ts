@@ -2,21 +2,24 @@ import {Injectable} from '@angular/core';
 import {UserSignInData} from "../../models/user";
 import {Apollo} from "apollo-angular";
 import {ACCESS_TOKEN_BY_REFRESH_TOKEN, SIGN_IN} from "../../graphql/authentication/authentication.queries";
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject, Observable, throwError} from "rxjs";
 import {ApolloQueryResult} from "@apollo/client/core";
 import {AccessTokenData, AccessTokenQueryResult, JwtTokens, SignInQueryResult} from "../../models/authentication";
 import jwt_decode from 'jwt-decode';
-import gql from 'graphql-tag';
 import {map} from "rxjs/operators";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
-  //accessToken
+  // accessToken
   private readonly token$ = new BehaviorSubject('');
+  // isRefreshingAccessToken
+  isRefreshing$ = new BehaviorSubject(false);
 
-  constructor(private apollo: Apollo) {
+  constructor(private apollo: Apollo,
+              private router: Router) {
   }
 
   signIn(input: UserSignInData): Observable<ApolloQueryResult<SignInQueryResult>> {
@@ -26,24 +29,21 @@ export class AuthenticationService {
     });
   }
 
-  recoverAccessToken(): Observable<ApolloQueryResult<AccessTokenQueryResult>> {
-    return this.apollo.query({
-      query: ACCESS_TOKEN_BY_REFRESH_TOKEN,
-      variables: {refreshToken: this.refreshToken}
-    });
+  refreshAccessToken(): Observable<ApolloQueryResult<AccessTokenQueryResult>> {
+    return this.refreshToken
+      ? this.apollo.query({
+        query: ACCESS_TOKEN_BY_REFRESH_TOKEN,
+        variables: {refreshToken: this.refreshToken}
+      })
+      : throwError('REFRESH_TOKEN_EMPTY');
   }
 
-  mock() {
-    return this.apollo.query({
-      query: gql`
-        query {
-          testAuth
-        }
-      `
-    });
+  logOut(): void {
+    this.resetTokens();
+    this.router.navigate(['/sign-in']);
   }
 
-  resetTokens(): void {
+  private resetTokens(): void {
     this.accessToken = '';
     localStorage.removeItem('token');
   }
@@ -55,6 +55,26 @@ export class AuthenticationService {
 
   set accessToken(accessToken: string) {
     this.token$.next(accessToken);
+  }
+
+  set isRefreshingAccessToken(isRefreshing) {
+    this.isRefreshing$.next(isRefreshing);
+  }
+
+  private get accessTokenData$(): Observable<AccessTokenData | null> {
+    return this.accessToken$.pipe(
+      map((accessToken) => {
+        try {
+          return jwt_decode(accessToken);
+        } catch { // ignore error
+          return null;
+        }
+      })
+    );
+  }
+
+  private get isRefreshingAccessToken$(): Observable<boolean> {
+    return this.isRefreshing$.asObservable();
   }
 
   get accessToken(): string {
@@ -73,19 +93,11 @@ export class AuthenticationService {
     }
   }
 
-  get accessTokenData$(): Observable<AccessTokenData | null> {
-    return this.accessToken$.pipe(
-      map((accessToken) => {
-        try {
-          return jwt_decode(accessToken);
-        } catch { // ignore error
-          return null;
-        }
-      })
-    );
-  }
-
   get refreshToken(): string {
     return localStorage.getItem('token') || '';
+  }
+
+  get isRefreshingAccessToken(): boolean {
+    return this.isRefreshing$.getValue();
   }
 }
