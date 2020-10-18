@@ -14,7 +14,7 @@ import {generatePassword} from '../../utilities/password/password.utilities';
 import {Clipboard} from "@angular/cdk/clipboard";
 import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
 import {UserService} from "../../services/user/user.service";
-import {map} from "rxjs/operators";
+import {finalize, map} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {ProgressBarService} from "../../shared/services/progress-bar/progress-bar.service";
 
@@ -135,11 +135,12 @@ export class SignUpComponent implements OnInit {
       // const snackbar = this.snackbarService.showInfinite('Creating account...');
       this.progressBarService.show();
       this.userService.create(this.signUpForm.value)
+        .pipe(finalize(() => {
+          this.isSubmitting = false;
+          this.progressBarService.hide();
+        }))
         .subscribe(
           () => {
-            this.isSubmitting = false;
-            // snackbar.dismiss();
-            this.progressBarService.hide();
             // TODO add form reset button that dismisses infinite snackbar as well
             this.snackbarService
               .showInfinite('Successfully signed up!', {action: 'Sign in'})
@@ -149,9 +150,6 @@ export class SignUpComponent implements OnInit {
               });
           },
           () => {
-            this.isSubmitting = false;
-            // snackbar.dismiss();
-            this.progressBarService.hide();
             this.snackbarService.showError();
           }
         );

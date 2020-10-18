@@ -10,6 +10,7 @@ import {ApolloError} from "@apollo/client/core";
 import {shapeGraphQLErrors} from "../../utilities/graphql/graphql.utilities";
 import {ProgressBarService} from "../../shared/services/progress-bar/progress-bar.service";
 import {Router} from "@angular/router";
+import {finalize} from "rxjs/operators";
 
 @Component({
   templateUrl: './sign-in.component.html',
@@ -85,20 +86,19 @@ export class SignInComponent implements OnInit {
       // const snackbar = this.snackbarService.showInfinite('Loading...');
       this.progressBarService.show();
 
-      this.authenticationService.signIn(this.signInForm.value).subscribe(
-        ({data}) => {
+      this.authenticationService.signIn(this.signInForm.value)
+        .pipe(finalize(() => {
           this.isSubmitting = false;
-          // snackbar.dismiss();
           this.progressBarService.hide();
+        }))
+        .subscribe(
+        ({data}) => {
           this.authenticationService.tokens = data.signIn;
           const username = this.authenticationService.accessTokenData.username;
+
           this.router.navigate([`/@${username}`]);
         },
         ({graphQLErrors}: ApolloError) => {
-          this.isSubmitting = false;
-          // snackbar.dismiss();
-          this.progressBarService.hide();
-
           const errors = shapeGraphQLErrors(graphQLErrors);
 
           errors.forEach(error => {
