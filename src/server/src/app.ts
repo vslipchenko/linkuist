@@ -6,8 +6,10 @@ const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
 // Internal imports
 const schema = require('./graphql/schema');
+//
+import {ApolloServerExpressConfig} from "apollo-server-express/dist/ApolloServer";
 /* Main */
-const server = new ApolloServer({
+const server = new ApolloServer(<ApolloServerExpressConfig>{
     schema,
     context: ({ req: request }) => {
         // Note! This example uses the `req` object to access headers,
@@ -32,7 +34,7 @@ const app = express();
 //
 server.applyMiddleware({app});
 // Start app only on successful DB connection
-mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true}, (error) => {
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true}, (error: unknown) => {
     if (error) return console.error(error);
     console.log('Port:', APP_PORT);
     app.listen(APP_PORT);
