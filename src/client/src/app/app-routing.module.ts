@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {userPageUrlMatcher} from "./utilities/url/url.utilities";
-import {CanLoadUserPageGuard} from "./guards/can-load-user-page/can-load-user-page.guard";
+import {userPageUrlMatcher} from './utilities/url/url.utilities';
+import {CanLoadUserPageGuard} from './guards/can-load-user-page/can-load-user-page.guard';
 // TODO 404 page
 const routes: Routes = [
   {

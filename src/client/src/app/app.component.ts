@@ -73,7 +73,7 @@ export class AppComponent implements OnInit {
             `${icon.isMaterial ? MATERIAL_ICONS_FOLDER : CUSTOM_ICONS_FOLDER}${(icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''}${icon.fileName}.svg`
           )
         );
-      })
+      });
     };
 
     registerIcons([

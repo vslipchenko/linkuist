@@ -8,9 +8,9 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
 import {SNACKBAR_CONFIG} from './constants/snackbar';
-import {SharedModule} from "./shared/shared.module";
-import {AuthenticationInterceptor} from "./interceptors/authentication/authentication.interceptor";
-import {GraphQLModule} from "./graphql/graphql.module";
+import {SharedModule} from './shared/shared.module';
+import {AuthenticationInterceptor} from './interceptors/authentication/authentication.interceptor';
+import {GraphQLModule} from './graphql/graphql.module';
 
 @NgModule({
   declarations: [

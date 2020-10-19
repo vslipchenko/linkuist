@@ -30,11 +30,11 @@ const server = new ApolloServer(<ApolloServerExpressConfig>{
 });
 const app = express();
 // Middleware
-
 //
 server.applyMiddleware({app});
 // Start app only on successful DB connection
-mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true}, (error: unknown) => {
+mongoose.set('debug', true);
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true}, (error: unknown) => {
     if (error) return console.error(error);
     console.log('Port:', APP_PORT);
     app.listen(APP_PORT);
