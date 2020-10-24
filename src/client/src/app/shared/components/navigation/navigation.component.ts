@@ -19,11 +19,14 @@ export class NavigationComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  get canNavigateToHomepage(): boolean {
-    return this.configuration.mainActionHref === NavigationMainActionHref.HOME;
-  }
-
   get tooltipContent(): string {
-    return this.canNavigateToHomepage ? 'Home' : 'Profile';
+    switch (this.configuration.mainActionHref) {
+      case NavigationMainActionHref.NONE:
+        return '';
+      case NavigationMainActionHref.HOME:
+        return 'Home';
+      default: // assume account
+        return 'Profile';
+    }
   }
 }

@@ -1,9 +1,44 @@
 @use 'variables' as var;
-@use 'theme';
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: var.$line-height;
+}
 
 html, body {
   height: 100%;
   font-size: var.$font-size-root;
+}
+
+html, body, ul {
+  padding: 0;
+}
+
+html, body, ul, p, h1, h2 {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 h1, .as-h1 {
@@ -18,19 +53,11 @@ h2 {
   line-height: var.$font-size-larger;
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
-  line-height: var.$line-height;
-}
-
 main {
   height: var.$main-screen-height;
   overflow-y: auto;
 }
 
-//.as-link {
-//  color: theme.$primary !important;
-//}
 mat-form-field mat-hint [mat-button] {
   line-height: unset;
   margin-left: - var.$unit-2;

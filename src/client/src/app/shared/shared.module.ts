@@ -7,9 +7,10 @@ import {WrapIfDirective} from './directives/wrap-if/wrap-if.directive';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
-  declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent],
+  declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent, PageNotFoundComponent],
   exports: [
     NavigationComponent,
     ProgressBarComponent

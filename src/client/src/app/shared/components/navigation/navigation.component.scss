@@ -1,7 +1,7 @@
 @use 'components/navigation/variables' as navigationVar;
 @use 'variables' as var;
 @use 'media';
-@use 'theme';
+
 
 .navigation {
   display: flex;
@@ -14,7 +14,7 @@
   border-top: 1px solid navigationVar.$border-color;
   position: fixed;
   bottom: 0;
-  background-color: theme.$light; // TODO improve colors
+  background-color: var.$theme-light; // TODO improve colors
   z-index: 1;
 
   //@include media.zero-small {

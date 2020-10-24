@@ -1,12 +1,11 @@
-import {UrlMatchResult, UrlSegment} from "@angular/router";
-import {URL_USERNAME_REGEXP, USERNAME_REGEXP} from "../../constants/validation";
+import {UrlMatchResult, UrlSegment} from '@angular/router';
+import {URL_USERNAME_REGEXP} from '../../constants/validation';
 
 export const userPageUrlMatcher = (segments: UrlSegment[]): UrlMatchResult | null => {
   const hasOnlyOneSegment = segments.length === 1;
-  const username = segments[0]?.path.slice(1); // skip @ char
-  const isValidUsername = USERNAME_REGEXP.test(username);
+  const isValidUrl = URL_USERNAME_REGEXP.test(segments[0]?.path);
 
-  return hasOnlyOneSegment && isValidUsername ? {consumed: segments} : null;
+  return hasOnlyOneSegment && isValidUrl ? {consumed: segments} : null;
 };
 
 export const extractUsername = (input: string): string | null => {

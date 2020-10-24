@@ -16,7 +16,7 @@ export class AuthenticationService {
   // accessToken
   private readonly token$ = new BehaviorSubject('');
   // isRefreshingAccessToken
-  isRefreshing$ = new BehaviorSubject(false);
+  private readonly isRefreshing$ = new BehaviorSubject(false);
 
   constructor(private apollo: Apollo,
               private router: Router) {
@@ -45,12 +45,12 @@ export class AuthenticationService {
 
   private resetTokens(): void {
     this.accessToken = '';
-    localStorage.removeItem('token');
+    this.refreshToken = '';
   }
 
   set tokens({accessToken, refreshToken}: JwtTokens) {
     this.accessToken = accessToken;
-    localStorage.setItem('token', refreshToken);
+    this.refreshToken = refreshToken;
   }
 
   set accessToken(accessToken: string) {
@@ -95,6 +95,13 @@ export class AuthenticationService {
 
   get refreshToken(): string {
     return localStorage.getItem('token') || '';
+  }
+
+  set refreshToken(refreshToken) {
+    if (!refreshToken) {
+      localStorage.removeItem('token');
+    }
+    localStorage.setItem('token', refreshToken);
   }
 
   get isRefreshingAccessToken(): boolean {

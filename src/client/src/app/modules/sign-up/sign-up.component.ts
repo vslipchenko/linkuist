@@ -11,12 +11,12 @@ import {
   USERNAME_SEPARATORS
 } from '../../constants/validation';
 import {generatePassword} from '../../utilities/password/password.utilities';
-import {Clipboard} from "@angular/cdk/clipboard";
-import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
-import {UserService} from "../../services/user/user.service";
-import {finalize, map} from "rxjs/operators";
-import {Router} from "@angular/router";
-import {ProgressBarService} from "../../shared/services/progress-bar/progress-bar.service";
+import {Clipboard} from '@angular/cdk/clipboard';
+import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
+import {UserService} from '../../services/user/user.service';
+import {finalize, map} from 'rxjs/operators';
+import {Router} from '@angular/router';
+import {ProgressBarService} from '../../shared/services/progress-bar/progress-bar.service';
 
 // TODO unsubscribe decorator
 @Component({

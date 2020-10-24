@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {userPageUrlMatcher} from './utilities/url/url.utilities';
 import {CanLoadUserPageGuard} from './guards/can-load-user-page/can-load-user-page.guard';
+import {PageNotFoundComponent} from './shared/components/page-not-found/page-not-found.component';
 // TODO 404 page
 const routes: Routes = [
   {
@@ -20,7 +21,8 @@ const routes: Routes = [
     matcher: userPageUrlMatcher,
     loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule),
     canLoad: [CanLoadUserPageGuard] // Pre-fetch data
-  }
+  },
+  {path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({

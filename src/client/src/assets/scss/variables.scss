@@ -1,21 +1,16 @@
+@use '~@angular/material/theming' as mat;
 @use 'components/navigation/variables' as navigationVar;
 
 /* global */
 $main-screen-height: calc(100vh - #{navigationVar.$height});
-
-/* responsive breakpoints and unit intervals */
-$small-breakpoint: 568px;  // < portrait phones, > landscape phones
-$medium-breakpoint: 768px; // > tablets
-$large-breakpoint: 992px;  // > laptops, desktops
-$huge-breakpoint: 1200px;  // > large desktops
-// px is default unit
-$px-unit-interval: 1;
-$em-unit-interval: 0.01;
-$rem-unit-interval: 0.1;
-
-
-/* default line height */
 $line-height: 1.428;
+$default-material-icon-size: 24px;
+
+/* theme */
+$theme-primary: map-get(mat.$mat-blue, 500); // #2196f3
+$theme-accent: map-get(mat.$mat-pink, 500);  // #e91e63
+$theme-light: #ffffff;
+$theme-dark: #000000;
 
 /* unit measures */
 $unit: 8px;
@@ -39,5 +34,12 @@ $font-size-regular: 0.9rem;
 $font-size-medium: 0.7rem;
 $font-size-small: 0.5rem;
 
-/* material */
-$default-material-icon-size: 24px;
+/* responsive breakpoints and unit intervals */
+$small-breakpoint: 568px;  // < portrait phones, > landscape phones
+$medium-breakpoint: 768px; // > tablets
+$large-breakpoint: 992px;  // > laptops, desktops
+$huge-breakpoint: 1200px;  // > large desktops
+// px is default unit
+$px-unit-interval: 1;
+$em-unit-interval: 0.01;
+$rem-unit-interval: 0.1;

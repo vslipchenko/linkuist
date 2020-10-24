@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent} from "@angular/router";
-import {ProgressBarMode} from "@angular/material/progress-bar/progress-bar";
-import {ProgressBarService} from "../../services/progress-bar/progress-bar.service";
-import {ThemePalette} from "@angular/material/core/common-behaviors/color";
+import {Component, OnInit} from '@angular/core';
+import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent} from '@angular/router';
+import {ProgressBarMode} from '@angular/material/progress-bar/progress-bar';
+import {ProgressBarService} from '../../services/progress-bar/progress-bar.service';
+import {ThemePalette} from '@angular/material/core/common-behaviors/color';
+import {SnackbarService} from '../../services/snackbar/snackbar.service';
+import {SNACKBAR_CONFIG} from '../../../constants/snackbar';
 
 @Component({
   selector: 'app-progress-bar',
@@ -16,31 +18,50 @@ export class ProgressBarComponent implements OnInit {
   errorState = false;
   show: boolean;
 
-  constructor(private router: Router,
-              private progressBarService: ProgressBarService) {
-    this.router.events.subscribe((event: RouterEvent) => {
-      this.handleLoadingProgress(event);
-    });
+  constructor(
+    private router: Router,
+    private progressBarService: ProgressBarService,
+    private snackbarService: SnackbarService
+  ) {
     this.progressBarService.showProgressBar$.subscribe(showProgress => this.show = showProgress);
+    this.router.events.subscribe((event: RouterEvent) => {
+      this.handleNavigationProgress(event);
+    });
   }
 
   ngOnInit(): void {
   }
 
-  private handleLoadingProgress(event: RouterEvent): void {
+  private handleNavigationProgress(event: RouterEvent): void {
     switch (true) {
       case (event instanceof NavigationStart):
+        this.errorState = false;
         this.color = 'primary';
         this.show = true;
         break;
       case (event instanceof NavigationEnd):
+        // remove snackbar before navigation end
+        if (this.snackbarService.isOpened) {
+          this.snackbarService.hide();
+        }
         this.show = false;
         break;
       case (event instanceof NavigationCancel):
       case (event instanceof NavigationError):
         this.errorState = true;
-        this.color = 'warn'; // check for bug
+        this.color = 'warn';
+
+        this.handleNavigationFailure();
         break;
     }
+  }
+
+  private handleNavigationFailure(): void {
+    this.snackbarService.showError('Something went wrong during navigation');
+    setTimeout(() => {
+      if (this.errorState) {
+        this.show = false;
+      } // actual duration + ~fadeout
+    }, SNACKBAR_CONFIG.duration + 200);
   }
 }

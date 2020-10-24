@@ -1,5 +1,5 @@
 @use 'components/shared';
-@use 'theme';
+
 @use 'media';
 @use 'variables' as var;
 
@@ -25,7 +25,7 @@
   //  margin-bottom: var.$unit;
   //}
   //.account-recovery {
-  //  color: theme.$primary;
+  //  color: var.$theme-primary;
   //}
   //mat-hint.account-recovery {
   //  margin-left: - var.$unit-2;

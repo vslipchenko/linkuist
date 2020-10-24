@@ -3,7 +3,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {DomSanitizer, Title} from '@angular/platform-browser';
 import {DOCUMENT} from '@angular/common';
 import {MatIconRegistry} from '@angular/material/icon';
-
+// TODO replace private keyword with # notation throughout project + prepend underscore to an external private members
+// #example - private inner members, _example - private external members, $example - protected members
 const ICONS_FOLDER = 'assets/icons/';
 const CUSTOM_ICONS_FOLDER = `${ICONS_FOLDER}custom/`;
 const MATERIAL_ICONS_FOLDER = `${ICONS_FOLDER}material/`;
