@@ -62,3 +62,11 @@ mat-form-field mat-hint [mat-button] {
   line-height: unset;
   margin-left: - var.$unit-2;
 }
+
+.background-logo {
+  // visible until components views are loaded, will be overlapped by them
+  background-image: url('/assets/icons/custom/outlined/linkuist-24px.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 15%;
+}

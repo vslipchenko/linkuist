@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent} from '@angular/router';
 import {ProgressBarMode} from '@angular/material/progress-bar/progress-bar';
 import {ProgressBarService} from '../../services/progress-bar/progress-bar.service';
 import {ThemePalette} from '@angular/material/core/common-behaviors/color';
 import {SnackbarService} from '../../services/snackbar/snackbar.service';
 import {SNACKBAR_CONFIG} from '../../../constants/snackbar';
+import {DOCUMENT} from '@angular/common';
 
 @Component({
   selector: 'app-progress-bar',
@@ -21,7 +22,8 @@ export class ProgressBarComponent implements OnInit {
   constructor(
     private router: Router,
     private progressBarService: ProgressBarService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.progressBarService.showProgressBar$.subscribe(showProgress => this.show = showProgress);
     this.router.events.subscribe((event: RouterEvent) => {
@@ -40,10 +42,9 @@ export class ProgressBarComponent implements OnInit {
         this.show = true;
         break;
       case (event instanceof NavigationEnd):
+        this.removeBackgroundLogo();
         // remove snackbar before navigation end
-        if (this.snackbarService.isOpened) {
-          this.snackbarService.hide();
-        }
+        this.removeSnackbar();
         this.show = false;
         break;
       case (event instanceof NavigationCancel):
@@ -63,5 +64,17 @@ export class ProgressBarComponent implements OnInit {
         this.show = false;
       } // actual duration + ~fadeout
     }, SNACKBAR_CONFIG.duration + 200);
+  }
+
+  private removeSnackbar(): void {
+    if (this.snackbarService.isOpened) {
+      this.snackbarService.hide();
+    }
+  }
+
+  private removeBackgroundLogo(): void {
+    if (this.document.body.classList.contains('background-logo')) {
+      this.document.body.classList.remove('background-logo');
+    }
   }
 }
