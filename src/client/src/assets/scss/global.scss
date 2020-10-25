@@ -1,4 +1,5 @@
 @use 'variables' as var;
+@use 'media';
 
 *,
 *:before,
@@ -68,5 +69,16 @@ mat-form-field mat-hint [mat-button] {
   background-image: url('/assets/icons/custom/outlined/linkuist-24px.svg');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 15%;
+
+  @include media.zero-small {
+    background-size: 15%;
+  }
+
+  @include media.small-huge {
+    background-size: 10%;
+  }
+
+  @include media.above-huge {
+    background-size: 5%;
+  }
 }

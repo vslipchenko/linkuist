@@ -160,6 +160,13 @@ $unit-intervals: (
   }
 }
 
+@mixin small-huge() {
+  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$huge-breakpoint);
+  @media (min-width: var.$small-breakpoint) and (max-width: var.$huge-breakpoint - $subtrahend) {
+    @content;
+  }
+}
+
 @mixin medium-large() {
   $subtrahend: fn.map-get-by-unit($unit-intervals, var.$large-breakpoint);
   @media (min-width: var.$medium-breakpoint) and (max-width: var.$large-breakpoint - $subtrahend) {
