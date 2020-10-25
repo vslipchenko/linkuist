@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable, of, Subject, throwError} from 'rxjs';
-import {AuthenticationService} from "../../services/authentication/authentication.service";
-import {catchError, finalize, first, switchMap, tap} from "rxjs/operators";
-import {shapeGraphQLErrors} from "../../utilities/graphql/graphql.utilities";
-import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
+import {AuthenticationService} from '../../services/authentication/authentication.service';
+import {catchError, finalize, first, switchMap, tap} from 'rxjs/operators';
+import {shapeGraphQLErrors} from '../../utilities/graphql/graphql.utilities';
+import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -66,13 +66,13 @@ export class AuthenticationInterceptor implements HttpInterceptor {
               case 'REFRESH_TOKEN_INVALID':
               case 'ACCESS_TOKEN_INVALID':
                 console.warn('LOG USER OUT');
-                this.authenticationService.logOut();
+                this.authenticationService.resetTokens();
                 // let request initiator catch this error
                 break;
               case 'USER_BLOCKED':
                 console.warn('USER IS BLOCKED');
                 this.snackbarService.showError(error.message);
-                this.authenticationService.logOut();
+                this.authenticationService.resetTokens();
                 // let request initiator catch this error
                 break;
             }

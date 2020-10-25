@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import {UserSignInData} from "../../models/user";
-import {Apollo} from "apollo-angular";
-import {ACCESS_TOKEN_BY_REFRESH_TOKEN, SIGN_IN} from "../../graphql/authentication/authentication.queries";
-import {BehaviorSubject, Observable, throwError} from "rxjs";
-import {ApolloQueryResult} from "@apollo/client/core";
-import {AccessTokenData, AccessTokenQueryResult, JwtTokens, SignInQueryResult} from "../../models/authentication";
+import {UserSignInData} from '../../models/user';
+import {Apollo} from 'apollo-angular';
+import {ACCESS_TOKEN_BY_REFRESH_TOKEN, SIGN_IN} from '../../graphql/authentication/authentication.queries';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {ApolloQueryResult} from '@apollo/client/core';
+import {AccessTokenData, AccessTokenQueryResult, JwtTokens, SignInQueryResult} from '../../models/authentication';
 import jwt_decode from 'jwt-decode';
-import {map} from "rxjs/operators";
-import {Router} from "@angular/router";
+import {map} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -39,11 +39,10 @@ export class AuthenticationService {
   }
 
   logOut(): void {
-    this.resetTokens();
     this.router.navigate(['/sign-in']);
   }
 
-  private resetTokens(): void {
+  resetTokens(): void {
     this.accessToken = '';
     this.refreshToken = '';
   }

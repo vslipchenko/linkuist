@@ -5,6 +5,9 @@ import {ProfileRoutingModule} from "./profile-routing.module";
 
 @NgModule({
   declarations: [ProfileComponent],
+  exports: [
+    ProfileComponent
+  ],
   imports: [
     CommonModule,
     ProfileRoutingModule

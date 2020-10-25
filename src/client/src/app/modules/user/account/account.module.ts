@@ -5,6 +5,9 @@ import {AccountRoutingModule} from "./account-routing.module";
 
 @NgModule({
   declarations: [AccountComponent],
+  exports: [
+    AccountComponent
+  ],
   imports: [
     CommonModule,
     AccountRoutingModule
