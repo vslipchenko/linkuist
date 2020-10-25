@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../../services/authentication/authentication.service";
 
 @Component({
-  selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss']
 })
@@ -15,5 +14,4 @@ export class AccountComponent implements OnInit {
     console.log('account access token is ', this.authenticationService.accessToken);
     console.log('account access tokenData is ', this.authenticationService.accessTokenData);
   }
-
 }

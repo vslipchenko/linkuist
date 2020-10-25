@@ -99,7 +99,7 @@ $home-section-width: 70%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var.$theme-light;
+    background-color: var.$theme-light-darker;
 
     @include media.zero-small {
       padding: 0 var.$unit-3;
