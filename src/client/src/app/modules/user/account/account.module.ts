@@ -5,6 +5,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [AccountComponent],
@@ -16,7 +17,8 @@ import {MatButtonModule} from '@angular/material/button';
     SharedModule,
     MatTooltipModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatMenuModule
   ]
 })
 export class AccountModule {

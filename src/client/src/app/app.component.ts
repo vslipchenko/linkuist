@@ -87,9 +87,10 @@ export class AppComponent implements OnInit {
       {name: 'visibility', fileName: 'visibility-24px', isMaterial: true, isFilled: true},
       {name: 'visibility-off', fileName: 'visibility_off-24px', isMaterial: true, isFilled: true},
       {name: 'account-settings', fileName: 'account_settings-24px', isMaterial: true, isFilled: true},
-      {name: 'add', fileName: 'add-24px', isMaterial: true, isFilled: true},
+      {name: 'add', fileName: 'add-24px', isMaterial: true, isOutlined: true},
       {name: 'linkuist', fileName: 'linkuist_bold-24px', isMaterial: false, isOutlined: true},
       {name: 'home', fileName: 'home-24px', isMaterial: true, isFilled: true},
+      {name: 'exit-to-app', fileName: 'exit_to_app-24px', isMaterial: true, isOutlined: true},
       // {name: 'google', fileName: 'google-24px', isOutlined: true},
       // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
     ]);

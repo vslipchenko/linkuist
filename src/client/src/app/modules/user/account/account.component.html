@@ -32,7 +32,14 @@
   </div>
 </main>
 <app-navigation [configuration]="navigationConfig">
-  <button matTooltip="Settings" matTooltipPosition="above" mat-icon-button aria-label="Example icon button with a delete icon">
+  <!-- Account Settings -->
+  <mat-menu #accountSettings>
+    <button mat-menu-item>
+      <mat-icon svgIcon="exit-to-app" color="warn"></mat-icon>
+      Logout
+    </button>
+  </mat-menu>
+  <button [matMenuTriggerFor]="accountSettings" matTooltip="Settings" matTooltipPosition="above" mat-icon-button aria-label="Example icon button with a delete icon">
     <mat-icon svgIcon="account-settings"></mat-icon>
   </button>
 </app-navigation>
