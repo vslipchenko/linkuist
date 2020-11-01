@@ -24,7 +24,7 @@ export class UserComponent implements OnInit {
               private userService: UserService,
               private router: Router) {
   }
-
+  // define component to render
   ngOnInit(): void {
     this.progressBarService.show();
 
@@ -37,7 +37,6 @@ export class UserComponent implements OnInit {
       // 404
       this.router.navigate(['**'], {skipLocationChange: true});
     }
-    console.log('username is ', username);
 
     if (refreshToken) {
       if (accessToken) {

@@ -1,17 +1,16 @@
-@use 'components/navigation/variables' as navigationVar;
+//@use 'components/navigation/variables' as navigationVar;
 @use 'variables' as var;
 @use 'media';
-
 
 .navigation {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: navigationVar.$height; // TODO simplify naming
+  height: var.$navigation-height; // TODO simplify naming
   width: 100%;
   //box-shadow: $home-shadow;
   padding: 0 var.$unit-2;
-  border-top: 1px solid navigationVar.$border-color;
+  border-top: 1px solid var.$theme-light-darkest;
   position: fixed;
   bottom: 0;
   background-color: var.$theme-light; // TODO improve colors
@@ -34,10 +33,17 @@
   }
 
   .main-action {
+    display: flex;
+
     &__label {
       border: 2px solid transparent;
       padding: 0 var.$unit-half;
       font-size: var.$font-size-large;
+    }
+
+    ::ng-deep > .mat-button-wrapper {
+      display: flex;
+      margin-right: 10px;
     }
   }
 

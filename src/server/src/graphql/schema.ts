@@ -15,7 +15,7 @@ const rootTypeDefs = gql`
   }
 `;
 
-module.exports = makeExecutableSchema({
+export default makeExecutableSchema({
     typeDefs: [
       rootTypeDefs,
       ...scalarTypeDefinitions,

@@ -56,7 +56,17 @@ h2 {
 
 main {
   height: var.$main-screen-height;
+  background-color: var.$theme-light-darker;
   overflow-y: auto;
+}
+
+textarea {
+  border: unset;
+  background: unset;
+  width: 100%;
+  height: 100%;
+  resize: none;
+  font-family: inherit;
 }
 
 mat-form-field mat-hint [mat-button] {

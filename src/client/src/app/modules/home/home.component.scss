@@ -1,5 +1,5 @@
 @use '~@angular/material/theming' as mat;
-@use 'components/navigation/variables' as navigationVar;
+//@use '../../../assets/scss/components/navigation/variables' as navigationVar;
 @use 'variables' as var;
 @use 'media';
 
@@ -11,6 +11,8 @@ $home-section-height: var.$main-screen-height - $home-section-margin-top;
 $home-section-width: 70%;
 
 .home {
+  background-color: initial;
+
   &-background {
     display: flex;
     justify-content: center;

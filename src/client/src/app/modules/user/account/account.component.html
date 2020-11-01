@@ -1,1 +1,38 @@
-<p>account works!</p>
+<main class="account">
+  <div class="account-main">
+    <section class="account-content">
+      <div class="notes" data-empty-notes="There are no notes here..."></div>
+      <div class="add-note">
+        <textarea class="input" placeholder="Capture your ideas..."></textarea>
+        <div class="panel">
+          <button mat-flat-button color="primary" class="button-add">
+            <mat-icon svgIcon="add"></mat-icon>
+            Add note
+          </button>
+        </div>
+      </div>
+    </section>
+    <aside class="account-sidebar">
+      <div class="user-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Brown_hairstreak_%28Thecla_betulae%29_Bulgaria.jpg/600px-Brown_hairstreak_%28Thecla_betulae%29_Bulgaria.jpg" alt="">
+      </div>
+      <div class="user-profile">
+
+        <div class="user-names">
+          <div class="user-name">Vlad Slipchenko</div>
+          <div class="username">@vlad</div>
+        </div>
+<!--        <div class="user-info">-->
+<!--          <div class="about">-->
+
+<!--          </div>-->
+<!--        </div>-->
+      </div>
+    </aside>
+  </div>
+</main>
+<app-navigation>
+  <button matTooltip="Settings" matTooltipPosition="above" mat-icon-button aria-label="Example icon button with a delete icon">
+    <mat-icon svgIcon="account-settings"></mat-icon>
+  </button>
+</app-navigation>

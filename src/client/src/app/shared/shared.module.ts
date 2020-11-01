@@ -8,6 +8,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent, PageNotFoundComponent],
@@ -20,7 +21,8 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     MatIconModule,
     RouterModule,
     MatTooltipModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatButtonModule
   ]
 })
 export class SharedModule {

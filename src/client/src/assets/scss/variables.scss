@@ -1,16 +1,12 @@
 @use '~@angular/material/theming' as mat;
-@use 'components/navigation/variables' as navigationVar;
-
-/* global */
-$main-screen-height: calc(100vh - #{navigationVar.$height});
-$line-height: 1.428;
-$default-material-icon-size: 24px;
+//@use 'components/navigation/variables' as navigationVar;
 
 /* theme */
 $theme-primary: map-get(mat.$mat-blue, 500); // #2196f3
 $theme-accent: map-get(mat.$mat-pink, 500);  // #e91e63
 $theme-light: #ffffff;
 $theme-light-darker: #fafafa;
+$theme-light-darkest: #dbdbdb;
 $theme-dark: #000000;
 
 /* unit measures */
@@ -44,3 +40,11 @@ $huge-breakpoint: 1200px;  // > large desktops
 $px-unit-interval: 1;
 $em-unit-interval: 0.01;
 $rem-unit-interval: 0.1;
+
+/* component variables */
+$navigation-height: 48px;
+
+/* global */
+$main-screen-height: calc(100vh - #{$navigation-height});
+$line-height: 1.428;
+$default-material-icon-size: 24px;

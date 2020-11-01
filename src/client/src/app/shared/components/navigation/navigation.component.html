@@ -3,8 +3,13 @@
     <ng-content></ng-content>
   </div>
   <div class="main-action" [matTooltip]="tooltipContent" matTooltipPosition="above">
-    <a [appWrapIf]="configuration.mainActionHref" [routerLink]="configuration.mainActionHref">
-      <h2 class="main-action__label as-h3">Linkuist</h2>
+    <a *ngIf="isUserAuthenticated; else defaultAction" [appWrapIf]="configuration.mainActionHref" [routerLink]="configuration.mainActionHref" mat-icon-button aria-label="Example icon button with a bookmark icon">
+      <mat-icon svgIcon="linkuist"></mat-icon>
     </a>
+    <ng-template #defaultAction>
+      <a [appWrapIf]="configuration.mainActionHref" [routerLink]="configuration.mainActionHref">
+        <h2 class="main-action__label as-h3">Linkuist</h2>
+      </a>
+    </ng-template>
   </div>
 </nav>

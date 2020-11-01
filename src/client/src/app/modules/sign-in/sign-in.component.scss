@@ -5,7 +5,7 @@
 
 .sign-in {
   //@include media.above-small {
-    background: url('/assets/images/sign-in/background.jpg');
+  background-image: url('/assets/images/sign-in/background.jpg');
   //}
   @include shared.auth-page-styles;
 

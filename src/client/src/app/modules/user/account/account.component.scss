@@ -1,0 +1,101 @@
+@use 'variables' as var;
+@use 'components/shared';
+
+.account {
+  @include shared.user-page-styles;
+
+  &-main {
+    display: flex;
+    height: 100%;
+    width: 65%;
+    margin-left: auto;
+    margin-right: 10%;
+  }
+
+
+  &-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: 50px;
+  }
+
+  &-sidebar {
+    height: max-content;
+    margin-top: 50px;
+    width: 35%;
+    text-align: center;
+    border-width: 1px;
+  }
+
+  .notes {
+    flex: 1;
+    display: flex;
+    //border-width: 0 1px 1px;
+
+    &:empty::after {
+      content: attr(data-empty-notes);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-top: 50px;
+      background-color: var.$theme-light;
+      border: 1.5px dashed var.$theme-light-darkest;
+    }
+  }
+
+  .add-note {
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+    margin-top: 20px;
+    border-width: 1px 1px 0;
+
+    .input {
+      flex: 1;
+      border-bottom: 1px solid var.$theme-light-darkest;
+      padding: 10px;
+    }
+
+    .panel {
+      display: flex;
+      padding: 10px;
+    }
+
+    .button-add {
+      padding-left: 10px;
+      margin-left: auto;
+    }
+  }
+
+  .add-note,
+  &-sidebar {
+    background-color: var.$theme-light;
+    border-color: var.$theme-light-darkest;
+    border-style: solid;
+  }
+
+  .user {
+    &-image {
+      margin: -1px;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    &-profile {
+      padding: 20px 20px 30px;
+    }
+
+    &-name {
+      font-weight: bold;
+    }
+
+    &name {
+      font-size: var.$font-size-regular;
+    }
+  }
+}

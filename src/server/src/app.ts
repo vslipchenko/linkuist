@@ -1,11 +1,13 @@
 // TODO post (client) data validation
+import schema from './graphql/schema';
+
 const {APP_PORT, MONGODB_URI} = require('./constants/app');
 // External imports
 const mongoose = require('mongoose');
 const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
 // Internal imports
-const schema = require('./graphql/schema');
+
 //
 import {ApolloServerExpressConfig} from "apollo-server-express/dist/ApolloServer";
 /* Main */

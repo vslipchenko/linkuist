@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NavigationConfiguration, NavigationMainActionHref} from '../../../models/components/navigation';
+import {AuthenticationService} from '../../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-navigation',
@@ -13,7 +14,7 @@ export class NavigationComponent implements OnInit {
 
   @Input() configuration = this.defaultConfiguration;
 
-  constructor() {
+  constructor(private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
@@ -28,5 +29,10 @@ export class NavigationComponent implements OnInit {
       default: // assume account
         return 'Profile';
     }
+  }
+
+  get isUserAuthenticated(): boolean {
+    console.log('isUserAuthenticated ',this.authenticationService.isUserAuthenticated);
+    return this.authenticationService.isUserAuthenticated;
   }
 }
