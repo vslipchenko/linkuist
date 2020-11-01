@@ -89,6 +89,7 @@ export class AppComponent implements OnInit {
       {name: 'account-settings', fileName: 'account_settings-24px', isMaterial: true, isFilled: true},
       {name: 'add', fileName: 'add-24px', isMaterial: true, isFilled: true},
       {name: 'linkuist', fileName: 'linkuist_bold-24px', isMaterial: false, isOutlined: true},
+      {name: 'home', fileName: 'home-24px', isMaterial: true, isFilled: true},
       // {name: 'google', fileName: 'google-24px', isOutlined: true},
       // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
     ]);

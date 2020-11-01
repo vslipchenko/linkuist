@@ -38,7 +38,7 @@ import {Router} from '@angular/router';
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: SNACKBAR_CONFIG},
     {provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true},
-    {provide: APP_INITIALIZER, useFactory: AuthorizationFactory, deps: [AuthenticationService, Router], multi: true}
+    {provide: APP_INITIALIZER, useFactory: AuthenticationFactory, deps: [AuthenticationService, Router], multi: true}
   ],
   bootstrap: [AppComponent]
 })
@@ -50,7 +50,7 @@ function TranslateLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
 }
 
-function AuthorizationFactory(authenticationService: AuthenticationService, router: Router): () => Promise<boolean> {
+function AuthenticationFactory(authenticationService: AuthenticationService, router: Router): () => Promise<boolean> {
   return () => new Promise((resolve) => {
     const refreshToken = authenticationService.refreshToken;
 

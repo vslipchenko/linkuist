@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../../services/authentication/authentication.service";
+import {NavigationConfiguration, NavigationMainActionHref} from '../../../models/components/navigation';
 
 @Component({
   selector: 'app-account',
@@ -7,6 +8,9 @@ import {AuthenticationService} from "../../../services/authentication/authentica
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent implements OnInit {
+  readonly navigationConfig: NavigationConfiguration = {
+    mainActionHref: NavigationMainActionHref.HOME
+  };
 
   constructor(private authenticationService: AuthenticationService) {
   }

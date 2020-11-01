@@ -3,13 +3,19 @@
     <ng-content></ng-content>
   </div>
   <div class="main-action" [matTooltip]="tooltipContent" matTooltipPosition="above">
-    <a *ngIf="isUserAuthenticated; else defaultAction" [appWrapIf]="configuration.mainActionHref" [routerLink]="configuration.mainActionHref" mat-icon-button aria-label="Example icon button with a bookmark icon">
-      <mat-icon svgIcon="linkuist"></mat-icon>
-    </a>
-    <ng-template #defaultAction>
-      <a [appWrapIf]="configuration.mainActionHref" [routerLink]="configuration.mainActionHref">
+    <ng-container [ngSwitch]="true">
+      <!-- profileHomeAction -->
+      <a *ngSwitchCase="configuration.mainActionHref && isUserAuthenticated" [routerLink]="configuration.mainActionHref" mat-icon-button aria-label="Example icon button with a bookmark icon">
+        <mat-icon svgIcon="home"></mat-icon>
+      </a>
+      <!-- profileAction -->
+      <a *ngSwitchCase="!configuration.mainActionHref && isUserAuthenticated" [routerLink]="userAccountPageUrl" mat-icon-button aria-label="Example icon button with a bookmark icon">
+        <mat-icon svgIcon="linkuist"></mat-icon>
+      </a>
+      <!-- homeAction -->
+      <a *ngSwitchCase="!isUserAuthenticated" [appWrapIf]="configuration.mainActionHref" [routerLink]="configuration.mainActionHref">
         <h2 class="main-action__label as-h3">Linkuist</h2>
       </a>
-    </ng-template>
+    </ng-container>
   </div>
 </nav>

@@ -18,14 +18,17 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('wawdwd', this.configuration.mainActionHref && this.isUserAuthenticated)
   }
 
   get tooltipContent(): string {
     switch (this.configuration.mainActionHref) {
-      case NavigationMainActionHref.NONE:
+      // assume not authenticated; home page
+      case !this.isUserAuthenticated && NavigationMainActionHref.NONE:
         return '';
       case NavigationMainActionHref.HOME:
         return 'Home';
+      // assume authenticated; profile page
       default: // assume account
         return 'Profile';
     }
@@ -34,5 +37,9 @@ export class NavigationComponent implements OnInit {
   get isUserAuthenticated(): boolean {
     console.log('isUserAuthenticated ',this.authenticationService.isUserAuthenticated);
     return this.authenticationService.isUserAuthenticated;
+  }
+
+  get userAccountPageUrl(): string {
+    return `/@${this.authenticationService.accessTokenData.username}`;
   }
 }
