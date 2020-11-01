@@ -24,6 +24,7 @@ export class UserComponent implements OnInit {
               private userService: UserService,
               private router: Router) {
   }
+
   // define component to render
   ngOnInit(): void {
     this.progressBarService.show();
@@ -38,22 +39,8 @@ export class UserComponent implements OnInit {
       this.router.navigate(['**'], {skipLocationChange: true});
     }
 
-    if (refreshToken) {
-      if (accessToken) {
-        this.tryRenderAccount(username);
-      } else {
-        this.authenticationService.refreshAccessToken().pipe(
-          first()
-        ).subscribe(
-          ({data: {accessTokenByRefreshToken}}) => {
-            this.authenticationService.accessToken = accessTokenByRefreshToken;
-            this.tryRenderAccount(username);
-          },
-          () => {
-            this.tryRenderProfile(username);
-          }
-        );
-      }
+    if (refreshToken && accessToken) {
+      this.tryRenderAccount(username);
     } else {
       this.tryRenderProfile(username);
     }

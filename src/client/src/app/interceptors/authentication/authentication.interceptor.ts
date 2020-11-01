@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable, of, Subject, throwError} from 'rxjs';
 import {AuthenticationService} from '../../services/authentication/authentication.service';
-import {catchError, finalize, first, switchMap, tap} from 'rxjs/operators';
+import {catchError, finalize, first, retry, switchMap, tap} from 'rxjs/operators';
 import {shapeGraphQLErrors} from '../../utilities/graphql/graphql.utilities';
 import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
 
@@ -55,6 +55,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
                       this.freshAccessToken$.next(accessTokenByRefreshToken);
                       this.authenticationService.accessToken = accessTokenByRefreshToken;
                     }),
+                    retry(2), // retry twice on fail
                     catchError(error => { // new token was not received
                       this.authenticationService.logOut();
                       return throwError(error);

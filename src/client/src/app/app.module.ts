@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
@@ -11,6 +11,9 @@ import {SNACKBAR_CONFIG} from './constants/snackbar';
 import {SharedModule} from './shared/shared.module';
 import {AuthenticationInterceptor} from './interceptors/authentication/authentication.interceptor';
 import {GraphQLModule} from './graphql/graphql.module';
+import {AuthenticationService} from './services/authentication/authentication.service';
+import {first} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,8 @@ import {GraphQLModule} from './graphql/graphql.module';
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: SNACKBAR_CONFIG},
-    {provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true},
+    {provide: APP_INITIALIZER, useFactory: AuthorizationFactory, deps: [AuthenticationService, Router], multi: true}
   ],
   bootstrap: [AppComponent]
 })
@@ -44,4 +48,28 @@ export class AppModule {
 // TODO create & move to specific folder
 function TranslateLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
+}
+
+function AuthorizationFactory(authenticationService: AuthenticationService, router: Router): () => Promise<boolean> {
+  return () => new Promise((resolve) => {
+    const refreshToken = authenticationService.refreshToken;
+
+    if (refreshToken) {
+      authenticationService.refreshAccessToken().pipe(
+        first()
+      ).subscribe(
+        ({data: {accessTokenByRefreshToken}}) => {
+          authenticationService.accessToken = accessTokenByRefreshToken;
+          return resolve(true);
+        },
+        () => {
+          authenticationService.resetTokens();
+          router.navigate(['/']);
+          return resolve(true);
+        }
+      );
+    } else {
+      return resolve(true);
+    }
+  });
 }
