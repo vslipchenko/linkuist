@@ -9,9 +9,11 @@ import { ProgressBarComponent } from './components/progress-bar/progress-bar.com
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import {MatButtonModule} from '@angular/material/button';
+import { DialogComponent } from './components/dialog/dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent, PageNotFoundComponent],
+  declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent, PageNotFoundComponent, DialogComponent],
   exports: [
     NavigationComponent,
     ProgressBarComponent
@@ -22,7 +24,8 @@ import {MatButtonModule} from '@angular/material/button';
     RouterModule,
     MatTooltipModule,
     MatProgressBarModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule
   ]
 })
 export class SharedModule {

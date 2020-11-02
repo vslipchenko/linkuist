@@ -5,9 +5,8 @@
       <div class="add-note">
         <textarea class="input" placeholder="Capture your ideas..."></textarea>
         <div class="panel">
-          <button mat-flat-button color="primary" class="button-add">
-            <mat-icon svgIcon="add"></mat-icon>
-            Add note
+          <button mat-flat-button color="primary" class="button-post">
+            Post
           </button>
         </div>
       </div>
@@ -34,7 +33,7 @@
 <app-navigation [configuration]="navigationConfig">
   <!-- Account Settings -->
   <mat-menu #accountSettings>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="confirmLogout()">
       <mat-icon svgIcon="exit-to-app" color="warn"></mat-icon>
       Logout
     </button>
