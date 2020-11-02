@@ -1,23 +1,32 @@
 import { Injectable } from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../components/dialog/dialog.component';
-import {DialogConfig} from '../../../models/components/dialog';
+import {Dialog, DialogConfig} from '../../../models/components/dialog';
+import {finalize} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DialogService {
-
   private dialogRef: MatDialogRef<DialogComponent>;
 
   constructor(private dialog: MatDialog) { }
 
-  open(dialogConfig: DialogConfig): MatDialogRef<DialogComponent> {
-    this.dialogRef = this.dialog.open(DialogComponent);
-    this.dialogRef.afterClosed().subscribe(result => {
-      this.dialogRef = null;
+  open(dialogConfig: DialogConfig): Dialog {
+    this.dialogRef = this.dialog.open(DialogComponent, {
+      ...dialogConfig.config,
+      data: {
+        ...dialogConfig.config?.data,
+        dialogType: dialogConfig.type
+      },
     });
 
-    return this.dialogRef;
+    const dialogAfterClosed$ = this.dialogRef.afterClosed()
+      .pipe(finalize(() => this.dialogRef = null));
+
+    return {
+      dialogRef: this.dialogRef,
+      dialogAfterClosed$
+    };
   }
 }

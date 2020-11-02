@@ -1,4 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {DialogData, DialogType} from '../../../models/components/dialog';
 
 @Component({
   templateUrl: './dialog.component.html',
@@ -6,10 +8,13 @@ import {Component, OnInit} from '@angular/core';
 })
 export class DialogComponent implements OnInit {
 
-  constructor() {
+  constructor(@Inject(MAT_DIALOG_DATA) private data: DialogData) {
   }
 
   ngOnInit(): void {
   }
 
+  get dialogType(): DialogType {
+    return this.data.dialogType;
+  }
 }

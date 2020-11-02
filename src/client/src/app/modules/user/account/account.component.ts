@@ -24,7 +24,7 @@ export class AccountComponent implements OnInit {
   }
 
   confirmLogout(): void {
-    this.dialogService.open();
+    this.dialogService.open({type: 'confirmation'});
     // console.log('account access token is ', this.dialogService.gs());
   }
 }
