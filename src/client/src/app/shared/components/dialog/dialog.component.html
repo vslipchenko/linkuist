@@ -1,6 +1,4 @@
-<ng-container [ngTemplateOutlet]="confirmation"></ng-container>
-
-<ng-template #confirmation>
+<ng-template [ngIf]="dialogType === dialogTypes.CONFIRMATION">
   <h2 mat-dialog-title>Confirmation</h2>
   <mat-dialog-content>This will delete all elements that are currently on this page and cannot be undone.</mat-dialog-content>
   <mat-dialog-actions>

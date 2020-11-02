@@ -5,6 +5,10 @@ import {Observable} from 'rxjs';
 
 export type DialogType = 'confirmation';
 
+export enum DialogTypes {
+  CONFIRMATION = 'confirmation'
+}
+
 export interface Dialog {
   dialogRef: MatDialogRef<DialogComponent>;
   dialogAfterClosed$: Observable<unknown>;

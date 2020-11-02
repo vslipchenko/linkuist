@@ -18,7 +18,6 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('wawdwd', this.configuration.mainActionHref && this.isUserAuthenticated)
   }
 
   get tooltipContent(): string {
@@ -35,7 +34,6 @@ export class NavigationComponent implements OnInit {
   }
 
   get isUserAuthenticated(): boolean {
-    console.log('isUserAuthenticated ',this.authenticationService.isUserAuthenticated);
     return this.authenticationService.isUserAuthenticated;
   }
 
