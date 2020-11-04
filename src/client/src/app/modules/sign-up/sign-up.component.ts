@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationConfiguration, NavigationMainActionHref} from '../../models/components/navigation';
+import {NavigationMainActionType} from '../../models/components/navigation';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {
   EMAIL_REGEXP,
@@ -17,6 +17,7 @@ import {UserService} from '../../services/user/user.service';
 import {finalize, map} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {ProgressBarService} from '../../shared/services/progress-bar/progress-bar.service';
+import {AuthenticationService} from '../../services/authentication/authentication.service';
 
 // TODO unsubscribe decorator
 @Component({
@@ -24,10 +25,6 @@ import {ProgressBarService} from '../../shared/services/progress-bar/progress-ba
   styleUrls: ['./sign-up.component.scss']
 })
 export class SignUpComponent implements OnInit {
-  readonly navigationConfig: NavigationConfiguration = {
-    mainActionHref: NavigationMainActionHref.HOME
-  };
-
   signUpForm: FormGroup;
   hidePassword = true;
   isSubmitting = false;
@@ -37,7 +34,8 @@ export class SignUpComponent implements OnInit {
               private snackbarService: SnackbarService,
               private userService: UserService,
               private router: Router,
-              private progressBarService: ProgressBarService) {
+              private progressBarService: ProgressBarService,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
@@ -174,5 +172,11 @@ export class SignUpComponent implements OnInit {
 
   get usernameSeparators(): string {
     return USERNAME_SEPARATORS;
+  }
+
+  get navigationMainActionType(): NavigationMainActionType {
+    return this.authenticationService.isUserAuthenticated
+      ? NavigationMainActionType.PROFILE
+      : NavigationMainActionType.HOME;
   }
 }

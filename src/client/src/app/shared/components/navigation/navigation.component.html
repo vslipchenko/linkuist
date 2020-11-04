@@ -3,17 +3,17 @@
     <ng-content></ng-content>
   </div>
   <div class="main-action" [matTooltip]="tooltipContent" matTooltipPosition="above">
-    <!-- profileHomeAction -->
-    <a *ngIf="configuration.mainActionHref && isUserAuthenticated" [routerLink]="configuration.mainActionHref" mat-icon-button aria-label="Example icon button with a bookmark icon">
-      <mat-icon svgIcon="home"></mat-icon>
-    </a>
-    <!-- profileAction -->
-    <a *ngIf="!configuration.mainActionHref && isUserAuthenticated" [routerLink]="userAccountPageUrl" mat-icon-button aria-label="Example icon button with a bookmark icon">
+    <!-- Profile action -->
+    <a *ngIf="mainActionType === mainActionTypes.PROFILE" [routerLink]="userAccountPageUrl" mat-icon-button aria-label="Example icon button with a bookmark icon">
       <mat-icon svgIcon="linkuist"></mat-icon>
     </a>
-    <!-- homeAction -->
-    <a *ngIf="!isUserAuthenticated" [appWrapIf]="configuration.mainActionHref" [routerLink]="configuration.mainActionHref">
-      <h2 class="main-action__label as-h3">Linkuist</h2>
+    <!-- Home action -->
+    <a *ngIf="mainActionType === mainActionTypes.NONE || mainActionType === mainActionTypes.HOME"
+       [appWrapIf]="mainActionType === mainActionTypes.HOME" routerLink="/">
+      <mat-icon *ngIf="isUserAuthenticated; else title" svgIcon="home"></mat-icon>
+      <ng-template #title>
+        <h2  class="main-action__title as-h3">Linkuist</h2>
+      </ng-template>
     </a>
   </div>
 </nav>

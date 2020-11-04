@@ -1,8 +1,5 @@
-export enum NavigationMainActionHref {
+export enum NavigationMainActionType {
   NONE = '',
-  HOME = '/'
-}
-
-export interface NavigationConfiguration {
-  mainActionHref: NavigationMainActionHref;
+  HOME = 'Home',
+  PROFILE = 'Profile'
 }

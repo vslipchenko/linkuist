@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NavigationConfiguration, NavigationMainActionHref} from '../../../models/components/navigation';
+import {NavigationMainActionType} from '../../../models/components/navigation';
 import {AuthenticationService} from '../../../services/authentication/authentication.service';
 
 @Component({
@@ -8,28 +8,27 @@ import {AuthenticationService} from '../../../services/authentication/authentica
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit {
-  private readonly defaultConfiguration: NavigationConfiguration = {
-    mainActionHref: NavigationMainActionHref.NONE
-  };
-
-  @Input() configuration = this.defaultConfiguration;
+  // private readonly defaultConfiguration: NavigationConfiguration = {
+  //   mainActionHref: NavigationMainActionHref.NONE
+  // };
+  @Input() mainActionType: NavigationMainActionType;
 
   constructor(private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
+    // console.log('WOW ', this.route.snapshot.pathFromRoot.filter(o => o.url[0]?.path).map(o => o.url[0]?.path));
+    // console.log('WOW ', extractUsername('/wad/ahah'));
   }
 
   get tooltipContent(): string {
-    switch (this.configuration.mainActionHref) {
-      // assume not authenticated; home page
-      case !this.isUserAuthenticated && NavigationMainActionHref.NONE:
-        return '';
-      case NavigationMainActionHref.HOME:
-        return 'Home';
-      // assume authenticated; profile page
-      default: // assume account
-        return 'Profile';
+    switch (this.mainActionType) {
+      case this.mainActionTypes.NONE:
+        return this.mainActionTypes.NONE;
+      case this.mainActionTypes.HOME:
+        return this.mainActionTypes.HOME;
+      case this.mainActionTypes.PROFILE:
+        return this.mainActionTypes.PROFILE;
     }
   }
 
@@ -39,5 +38,9 @@ export class NavigationComponent implements OnInit {
 
   get userAccountPageUrl(): string {
     return `/@${this.authenticationService.accessTokenData.username}`;
+  }
+
+  get mainActionTypes(): typeof NavigationMainActionType {
+    return NavigationMainActionType;
   }
 }

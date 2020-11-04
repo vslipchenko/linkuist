@@ -1,26 +1,22 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationConfiguration, NavigationMainActionHref} from "../../models/components/navigation";
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from "@angular/forms";
-import {EMAIL_REGEXP, PASSWORD_REGEXP} from "../../constants/validation";
-import {ErrorStateMatcher} from "@angular/material/core";
-import {combineLatest} from "rxjs";
-import {AuthenticationService} from "../../services/authentication/authentication.service";
-import {SnackbarService} from "../../shared/services/snackbar/snackbar.service";
-import {ApolloError} from "@apollo/client/core";
-import {shapeGraphQLErrors} from "../../utilities/graphql/graphql.utilities";
-import {ProgressBarService} from "../../shared/services/progress-bar/progress-bar.service";
-import {Router} from "@angular/router";
-import {finalize} from "rxjs/operators";
+import {NavigationMainActionType} from '../../models/components/navigation';
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms';
+import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../constants/validation';
+import {ErrorStateMatcher} from '@angular/material/core';
+import {combineLatest} from 'rxjs';
+import {AuthenticationService} from '../../services/authentication/authentication.service';
+import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
+import {ApolloError} from '@apollo/client/core';
+import {shapeGraphQLErrors} from '../../utilities/graphql/graphql.utilities';
+import {ProgressBarService} from '../../shared/services/progress-bar/progress-bar.service';
+import {Router} from '@angular/router';
+import {finalize} from 'rxjs/operators';
 
 @Component({
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
-  readonly navigationConfig: NavigationConfiguration = {
-    mainActionHref: NavigationMainActionHref.HOME
-  };
-
   signInForm: FormGroup;
   hidePassword = true;
   isSubmitting = false;
@@ -92,25 +88,25 @@ export class SignInComponent implements OnInit {
           this.progressBarService.hide();
         }))
         .subscribe(
-        ({data}) => {
-          this.authenticationService.tokens = data.signIn;
-          const username = this.authenticationService.accessTokenData.username;
+          ({data}) => {
+            this.authenticationService.tokens = data.signIn;
+            const username = this.authenticationService.accessTokenData.username;
 
-          this.router.navigate([`/@${username}`]);
-        },
-        ({graphQLErrors}: ApolloError) => {
-          const errors = shapeGraphQLErrors(graphQLErrors);
+            this.router.navigate([`/@${username}`]);
+          },
+          ({graphQLErrors}: ApolloError) => {
+            const errors = shapeGraphQLErrors(graphQLErrors);
 
-          errors.forEach(error => {
-            switch (error.code) {
-              case 'BAD_USER_INPUT':
-                return this.dispatchErrors({pattern: true});
-              default: // 'INTERNAL_SERVER_ERROR'
-                this.snackbarService.showError();
-            }
-          });
-        }
-      );
+            errors.forEach(error => {
+              switch (error.code) {
+                case 'BAD_USER_INPUT':
+                  return this.dispatchErrors({pattern: true});
+                default: // 'INTERNAL_SERVER_ERROR'
+                  this.snackbarService.showError();
+              }
+            });
+          }
+        );
     }
   }
 
@@ -145,5 +141,11 @@ export class SignInComponent implements OnInit {
         || (this.passwordField.touched && this.passwordField.hasError('required'))
         || (control.hasError('pattern') || this.passwordField.hasError('pattern'))
     } as ErrorStateMatcher;
+  }
+
+  get navigationMainActionType(): NavigationMainActionType {
+    return this.authenticationService.isUserAuthenticated
+      ? NavigationMainActionType.PROFILE
+      : NavigationMainActionType.HOME;
   }
 }

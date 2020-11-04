@@ -32,19 +32,9 @@
     }
   }
 
-  .main-action {
-    display: flex;
-
-    &__label {
-      border: 2px solid transparent;
-      padding: 0 var.$unit-half;
-      font-size: var.$font-size-large;
-    }
-
-    ::ng-deep > .mat-button-wrapper {
-      display: flex;
-      margin-right: 10px;
-    }
+  .main-action__title {
+    //padding: 0 var.$unit-half;
+    font-size: var.$font-size-large;
   }
 
   //a:hover {

@@ -30,7 +30,7 @@
     </aside>
   </div>
 </main>
-<app-navigation [configuration]="navigationConfig">
+<app-navigation [mainActionType]="navigationMainActionType">
   <!-- Account Settings -->
   <mat-menu #accountSettings>
     <button mat-menu-item (click)="confirmLogout()">
