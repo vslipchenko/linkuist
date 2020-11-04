@@ -9,7 +9,7 @@
     </a>
     <!-- Home action -->
     <a *ngIf="mainActionType === mainActionTypes.NONE || mainActionType === mainActionTypes.HOME"
-       [appWrapIf]="mainActionType === mainActionTypes.HOME" routerLink="/">
+       [appWrapIf]="mainActionType === mainActionTypes.HOME" routerLink="/" mat-icon-button>
       <mat-icon *ngIf="isUserAuthenticated; else title" svgIcon="home"></mat-icon>
       <ng-template #title>
         <h2  class="main-action__title as-h3">Linkuist</h2>
