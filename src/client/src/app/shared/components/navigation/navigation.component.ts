@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NavigationMainActionType} from '../../../models/components/navigation';
 import {AuthenticationService} from '../../../services/authentication/authentication.service';
 
@@ -23,12 +23,12 @@ export class NavigationComponent implements OnInit {
 
   get tooltipContent(): string {
     switch (this.mainActionType) {
-      case this.mainActionTypes.NONE:
-        return this.mainActionTypes.NONE;
-      case this.mainActionTypes.HOME:
-        return this.mainActionTypes.HOME;
-      case this.mainActionTypes.PROFILE:
-        return this.mainActionTypes.PROFILE;
+      case NavigationMainActionType.NONE:
+        return NavigationMainActionType.NONE;
+      case NavigationMainActionType.HOME:
+        return NavigationMainActionType.HOME;
+      case NavigationMainActionType.PROFILE:
+        return NavigationMainActionType.PROFILE;
     }
   }
 
@@ -40,7 +40,20 @@ export class NavigationComponent implements OnInit {
     return `/@${this.authenticationService.accessTokenData.username}`;
   }
 
-  get mainActionTypes(): typeof NavigationMainActionType {
-    return NavigationMainActionType;
+  get isProfileMainAction(): boolean {
+    return this.isUserAuthenticated && this.mainActionType === NavigationMainActionType.PROFILE;
+  }
+
+  get isHomeMainAction(): boolean {
+    return this.mainActionType === NavigationMainActionType.HOME;
+  }
+
+  get isHomeIconMainAction(): boolean {
+    return this.isUserAuthenticated && this.isHomeMainAction;
+  }
+
+  get isHomeTextMainAction(): boolean {
+    return !this.isUserAuthenticated
+      && (this.isHomeMainAction || this.mainActionType === NavigationMainActionType.NONE);
   }
 }

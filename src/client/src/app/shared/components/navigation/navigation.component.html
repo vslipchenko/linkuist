@@ -4,16 +4,17 @@
   </div>
   <div class="main-action" [matTooltip]="tooltipContent" matTooltipPosition="above">
     <!-- Profile action -->
-    <a *ngIf="mainActionType === mainActionTypes.PROFILE" [routerLink]="userAccountPageUrl" mat-icon-button aria-label="Example icon button with a bookmark icon">
+    <a *ngIf="isProfileMainAction" [routerLink]="userAccountPageUrl" mat-icon-button
+       aria-label="Example icon button with a bookmark icon">
       <mat-icon svgIcon="linkuist"></mat-icon>
     </a>
-    <!-- Home action -->
-    <a *ngIf="mainActionType === mainActionTypes.NONE || mainActionType === mainActionTypes.HOME"
-       [appWrapIf]="mainActionType === mainActionTypes.HOME" routerLink="/" mat-icon-button>
-      <mat-icon *ngIf="isUserAuthenticated; else title" svgIcon="home"></mat-icon>
-      <ng-template #title>
-        <h2  class="main-action__title as-h3">Linkuist</h2>
-      </ng-template>
+    <!-- Home icon action -->
+    <a *ngIf="isHomeIconMainAction" routerLink="/" mat-icon-button>
+      <mat-icon svgIcon="home"></mat-icon>
+    </a>
+    <!-- Home text action -->
+    <a *ngIf="isHomeTextMainAction" [appWrapIf]="isHomeMainAction" routerLink="/">
+      <h2 class="main-action__title as-h3">Linkuist</h2>
     </a>
   </div>
 </nav>
