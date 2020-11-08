@@ -31,20 +31,22 @@ $font-size-regular: 0.9rem;
 $font-size-medium: 0.7rem;
 $font-size-small: 0.5rem;
 
-/* responsive breakpoints and unit intervals */
-$small-breakpoint: 568px;  // < portrait phones, > landscape phones
-$medium-breakpoint: 768px; // > tablets
-$large-breakpoint: 992px;  // > laptops, desktops
-$huge-breakpoint: 1200px;  // > large desktops
-// px is default unit
-$px-unit-interval: 1;
-$em-unit-interval: 0.01;
-$rem-unit-interval: 0.1;
+/* responsive breakpoints and unit interval */
+$breakpoint-small: 568px;  // < portrait phones, > landscape phones
+$breakpoint-medium: 768px; // > tablets
+$breakpoint-large: 992px;  // > laptops, desktops
+$breakpoint-huge: 1200px;  // > large desktops
+$unit-interval-px: 1;
+//$unit-interval-em: 0.01;
+//$unit-interval-rem: 0.1;
 
-/* component variables */
-$navigation-height: 48px;
-
-/* global */
-$main-screen-height: calc(100vh - #{$navigation-height});
-$line-height: 1.428;
-$default-material-icon-size: 24px;
+/* common variables */
+// navigation component
+$common-navigation-height: 48px;
+// global
+$common-main-screen-height: calc(100vh - #{$common-navigation-height});
+$common-line-height: 1.428;
+$common-default-material-icon-size: 24px;
+// user-page
+$common-user-page-content-block-width: 500px;
+$common-user-page-content-block-min-height: 100px;

@@ -91,6 +91,7 @@ export class AppComponent implements OnInit {
       {name: 'linkuist', fileName: 'linkuist_bold-24px', isMaterial: false, isOutlined: true},
       {name: 'home', fileName: 'home-24px', isMaterial: true, isFilled: true},
       {name: 'exit-to-app', fileName: 'exit_to_app-24px', isMaterial: true, isOutlined: true},
+      {name: 'pencil-plus', fileName: 'pencil-plus_24px', isMaterial: true, isFilled: true},
       // {name: 'google', fileName: 'google-24px', isOutlined: true},
       // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
     ]);

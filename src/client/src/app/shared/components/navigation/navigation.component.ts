@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NavigationMainActionType} from '../../../models/components/navigation';
 import {AuthenticationService} from '../../../services/authentication/authentication.service';
 

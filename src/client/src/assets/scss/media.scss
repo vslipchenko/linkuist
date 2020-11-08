@@ -1,20 +1,20 @@
 @use 'variables' as var;
-@use 'functions' as fn;
+//@use 'functions' as fn;
 
-$breakpoints: (
-  'small': var.$small-breakpoint,
-  'medium': var.$medium-breakpoint,
-  'large': var.$large-breakpoint,
-  'huge': var.$huge-breakpoint
-);
+//$breakpoints: (
+//  'small': var.$breakpoint-small,
+//  'medium': var.$breakpoint-medium,
+//  'large': var.$breakpoint-large,
+//  'huge': var.$breakpoint-huge
+//);
 
-$unit-intervals: (
-  // px is default
-  'px': var.$px-unit-interval,
-  'em': var.$em-unit-interval,
-  'rem': var.$rem-unit-interval,
-  '': 0
-);
+//$unit-intervals: (
+//  // px is default
+//  'px': var.$px-unit-interval,
+//  'em': var.$em-unit-interval,
+//  'rem': var.$rem-unit-interval,
+//  '': 0
+//);
 
 /*
   https://github.com/eduardoboucas/include-media/blob/master/dist/_include-media.scss
@@ -109,81 +109,73 @@ $unit-intervals: (
 //}
 
 @mixin above-small() {
-  @media (min-width: var.$small-breakpoint) {
+  @media (min-width: var.$breakpoint-small) {
     @content;
   }
 }
 
 @mixin above-medium() {
-  @media (min-width: var.$medium-breakpoint) {
+  @media (min-width: var.$breakpoint-medium) {
     @content;
   }
 }
 
 //@mixin above-large() {
-//  @media (min-width: var.$large-breakpoint) {
+//  @media (min-width: var.$breakpoint-large) {
 //    @content;
 //  }
 //}
 
 @mixin above-huge() {
-  @media (min-width: var.$huge-breakpoint) {
+  @media (min-width: var.$breakpoint-huge) {
     @content;
   }
 }
 
 @mixin zero-small() {
-  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$small-breakpoint);
-  @media (min-width: 0) and (max-width: var.$small-breakpoint - $subtrahend) {
+  @media (min-width: 0) and (max-width: var.$breakpoint-small - var.$unit-interval-px) {
     @content;
   }
 }
 
 @mixin zero-medium() {
-  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$medium-breakpoint);
-  @media (min-width: 0) and (max-width: var.$medium-breakpoint - $subtrahend) {
+  @media (min-width: 0) and (max-width: var.$breakpoint-medium - var.$unit-interval-px) {
     @content;
   }
 }
 
 @mixin zero-large() {
-  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$large-breakpoint);
-  @media (min-width: 0) and (max-width: var.$large-breakpoint - $subtrahend) {
+  @media (min-width: 0) and (max-width: var.$breakpoint-large - var.$unit-interval-px) {
     @content;
   }
 }
 
 @mixin small-medium() {
-  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$medium-breakpoint);
-  @media (min-width: var.$small-breakpoint) and (max-width: var.$medium-breakpoint - $subtrahend) {
+  @media (min-width: var.$breakpoint-small) and (max-width: var.$breakpoint-medium - var.$unit-interval-px) {
     @content;
   }
 }
 
 @mixin small-huge() {
-  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$huge-breakpoint);
-  @media (min-width: var.$small-breakpoint) and (max-width: var.$huge-breakpoint - $subtrahend) {
+  @media (min-width: var.$breakpoint-small) and (max-width: var.$breakpoint-huge - var.$unit-interval-px) {
     @content;
   }
 }
 
 @mixin medium-large() {
-  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$large-breakpoint);
-  @media (min-width: var.$medium-breakpoint) and (max-width: var.$large-breakpoint - $subtrahend) {
+  @media (min-width: var.$breakpoint-medium) and (max-width: var.$breakpoint-large - var.$unit-interval-px) {
     @content;
   }
 }
 
 @mixin medium-huge() {
-  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$huge-breakpoint);
-  @media (min-width: var.$medium-breakpoint) and (max-width: var.$huge-breakpoint - $subtrahend) {
+  @media (min-width: var.$breakpoint-medium) and (max-width: var.$breakpoint-huge - var.$unit-interval-px) {
     @content;
   }
 }
 
 @mixin large-huge() {
-  $subtrahend: fn.map-get-by-unit($unit-intervals, var.$huge-breakpoint);
-  @media (min-width: var.$large-breakpoint) and (max-width: var.$huge-breakpoint - $subtrahend) {
+  @media (min-width: var.$breakpoint-large) and (max-width: var.$breakpoint-huge - var.$unit-interval-px) {
     @content;
   }
 }

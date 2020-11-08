@@ -1,0 +1,180 @@
+@use 'variables' as var;
+@use 'media';
+
+// sign-in; sign-up
+@mixin auth-page-styles() {
+  //background-color: var.$theme-primary;
+  display: flex;
+  //@include media.above-small {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  //}
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    //min-height: 100%;
+    background: var.$theme-light;
+    overflow-y: auto;
+    min-width: max-content;
+    //padding-top: var.$unit-2;
+    //padding-left: var.$unit-6 !important;
+    //padding-right: var.$unit-6 !important;
+    padding: var.$unit-4;
+    //box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
+    margin: auto;
+    border: 1px solid var.$theme-light-darkest;
+
+    @include media.zero-small {
+      width: 100%;
+      //padding: var.$unit-6;
+      //padding-bottom: var.$unit-3;
+    }
+
+    @include media.above-small {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      //padding: var.$unit-2;
+      //padding-bottom: var.$unit;
+    }
+
+    @include media.medium-huge {
+      width: 50%;
+    }
+
+    @include media.above-huge {
+      width: 35%;
+    }
+  }
+
+  &__title {
+    text-align: center;
+    margin-bottom: var.$unit-2;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .actions {
+    //width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+// account; profile
+@mixin user-page-styles() {
+  display: flex;
+
+  .user {
+    width: 35%;
+    background-color: var.$theme-light;
+    border-right: 1px solid var.$theme-light-darkest;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &-background {
+      height: 150px;
+      //margin-right: -1px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    &-avatar {
+      width: 150px;
+      height: 150px;
+      margin-top: -75px;
+      margin-left: auto;
+      margin-right: auto;
+      background-size: cover;
+      background-position: center;
+      border-radius: 50%;
+      border: 3px solid var.$theme-light;
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: var.$unit-3;
+    }
+
+    &-names {
+      text-align: center;
+
+      .full-name {
+        margin-bottom: var.$unit-half;
+      }
+
+      .username {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .notes {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    //position: relative;
+    overflow-y: auto;
+    background-image: url('/assets/images/account/background.jpg');
+    background-size: contain;
+
+    //&__item {
+    //  width: 60%;
+    //}
+
+    &-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: var.$common-user-page-content-block-min-height;
+      //overflow-y: auto;
+      //border-width: 0 1px 1px;
+
+      &:empty::after {
+        content: attr(data-empty-notes);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var.$common-user-page-content-block-width;
+        height: 100%;
+        max-height: var.$common-user-page-content-block-width;
+        //margin-top: 50px;
+        margin: var.$unit-2 auto;
+        background-color: var.$theme-light;
+        border: 1.5px dashed var.$theme-light-darkest;
+      }
+
+      .note {
+        height: max-content;
+        width: var.$common-user-page-content-block-width;
+        margin-left: auto;
+        margin-right: auto;
+        padding: var.$unit-2;
+        background-color: var.$theme-light;
+        border: 1px solid var.$theme-light-darkest;
+
+        &:first-child {
+          margin-top: var.$unit-2;
+        }
+
+        &:not(:last-child) {
+          margin-bottom: var.$unit-4;
+        }
+
+        &:last-child {
+          margin-bottom: var.$unit-2;
+        }
+      }
+    }
+  }
+}

@@ -13,7 +13,7 @@ html {
 
 body {
   font-family: 'Roboto', sans-serif;
-  line-height: var.$line-height;
+  line-height: var.$common-line-height;
 }
 
 html, body {
@@ -56,7 +56,7 @@ h2 {
 }
 
 main {
-  height: var.$main-screen-height;
+  height: var.$common-main-screen-height;
   background-color: var.$theme-light-darker;
   overflow-y: auto;
 }

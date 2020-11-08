@@ -16,11 +16,16 @@ export class AccountComponent implements OnInit {
   ngOnInit(): void {
 
     console.log('account access tokenData is ', this.authenticationService.accessTokenData);
+
   }
 
   confirmLogout(): void {
     this.dialogService.open({type: 'confirmation'});
     // console.log('account access token is ', this.dialogService.gs());
+  }
+
+  toggleAddNote(element: HTMLDivElement): void {
+    element.classList.toggle('show');
   }
 
   get navigationMainActionType(): NavigationMainActionType {
