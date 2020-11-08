@@ -5,6 +5,7 @@ import {AuthenticationService} from '../../services/authentication/authenticatio
 import {catchError, finalize, first, retry, switchMap, tap} from 'rxjs/operators';
 import {shapeGraphQLErrors} from '../../utilities/graphql/graphql.utilities';
 import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -14,7 +15,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   private readonly freshAccessToken$ = new Subject<string>();
 
   constructor(private authenticationService: AuthenticationService,
-              private snackbarService: SnackbarService) {
+              private snackbarService: SnackbarService,
+              private router: Router) {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -57,7 +59,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
                     }),
                     retry(2), // retry twice on fail
                     catchError(error => { // new token was not received
-                      this.authenticationService.logOut();
+                      this.router.navigate(['/sign-in']);
                       return throwError(error);
                     }), // always finish refresh token process
                     finalize(() => this.authenticationService.isRefreshingAccessToken = false)

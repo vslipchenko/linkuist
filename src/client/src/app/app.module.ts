@@ -14,6 +14,8 @@ import {GraphQLModule} from './graphql/graphql.module';
 import {AuthenticationService} from './services/authentication/authentication.service';
 import {first} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
+import {DIALOG_CONFIG} from './constants/dialog';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import {Router} from '@angular/router';
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: SNACKBAR_CONFIG},
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: DIALOG_CONFIG},
     {provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true},
     {provide: APP_INITIALIZER, useFactory: AuthenticationFactory, deps: [AuthenticationService, Router], multi: true}
   ],

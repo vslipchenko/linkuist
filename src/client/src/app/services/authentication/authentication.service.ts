@@ -38,7 +38,8 @@ export class AuthenticationService {
       : throwError('REFRESH_TOKEN_EMPTY');
   }
 
-  logOut(): void {
+  signOut(): void {
+    this.resetTokens();
     this.router.navigate(['/sign-in']);
   }
 
