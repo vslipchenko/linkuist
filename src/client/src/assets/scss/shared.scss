@@ -2,13 +2,14 @@
 @use 'media';
 
 // sign-in; sign-up
-@mixin auth-page-styles() {
+@mixin auth-page-styles($background-url) {
   //background-color: var.$theme-primary;
   display: flex;
   //@include media.above-small {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-image: url($background-url);
   //}
 
   &__main {
@@ -67,15 +68,35 @@
   }
 }
 // account; profile
+@mixin user-page-content-background {
+  background-image: url('/assets/images/account/background.jpg');
+  background-size: contain;
+}
 @mixin user-page-styles() {
-  display: flex;
+  @include media.zero-small {
+    @include user-page-content-background;
+  }
+
+  @include media.above-small {
+    display: flex;
+  }
 
   .user {
-    width: 35%;
     background-color: var.$theme-light;
-    border-right: 1px solid var.$theme-light-darkest;
+    border-style: solid;
+    border-color: var.$theme-light-darkest;
     overflow-y: auto;
-    overflow-x: hidden;
+    padding-bottom: var.$unit-4;
+
+    @include media.zero-small {
+      width: 100%;
+      border-width: 0 0 1px 0;
+    }
+
+    @include media.above-small {
+      width: 35%;
+      border-width: 0 1px 0 0;
+    }
 
     &-background {
       height: 150px;
@@ -101,7 +122,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: var.$unit-3;
+      margin-top: var.$unit-4;
     }
 
     &-names {
@@ -123,10 +144,12 @@
     flex-direction: column;
     align-items: center;
     //position: relative;
-    overflow-y: auto;
-    background-image: url('/assets/images/account/background.jpg');
-    background-size: contain;
 
+
+    @include media.above-small {
+      overflow-y: auto;
+      @include user-page-content-background;
+    }
     //&__item {
     //  width: 60%;
     //}
@@ -136,22 +159,26 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      min-height: var.$common-user-page-content-block-min-height;
       //overflow-y: auto;
       //border-width: 0 1px 1px;
 
-      &:empty::after {
-        content: attr(data-empty-notes);
-        display: flex;
-        align-items: center;
+      &:empty {
         justify-content: center;
-        width: var.$common-user-page-content-block-width;
-        height: 100%;
-        max-height: var.$common-user-page-content-block-width;
-        //margin-top: 50px;
-        margin: var.$unit-2 auto;
-        background-color: var.$theme-light;
-        border: 1.5px dashed var.$theme-light-darkest;
+
+        &::after {
+          content: attr(data-empty-notes);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: var.$common-user-page-content-block-width;
+          height: 100%;
+          min-height: var.$common-user-page-content-block-min-height;
+          max-height: var.$common-user-page-content-block-width;
+          //margin-top: 50px;
+          margin: var.$unit-2 auto;
+          background-color: var.$theme-light;
+          border: 1.5px dashed var.$theme-light-darkest;
+        }
       }
 
       .note {
@@ -164,7 +191,13 @@
         border: 1px solid var.$theme-light-darkest;
 
         &:first-child {
-          margin-top: var.$unit-2;
+          @include media.zero-small {
+            margin-top: var.$unit-4;
+          }
+
+          @include media.above-small {
+            margin-top: var.$unit-2;
+          }
         }
 
         &:not(:last-child) {
@@ -172,7 +205,13 @@
         }
 
         &:last-child {
-          margin-bottom: var.$unit-2;
+          @include media.zero-small {
+            margin-bottom: var.$unit-4;
+          }
+
+          @include media.above-small {
+            margin-bottom: var.$unit-2;
+          }
         }
       }
     }

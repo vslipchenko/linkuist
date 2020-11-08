@@ -5,9 +5,8 @@
 
 .sign-up {
   //@include media.above-small {
-  background-image: url('/assets/images/sign-up/background.jpg');
   //}
-  @include shared.auth-page-styles;
+  @include shared.auth-page-styles($background-url: '/assets/images/sign-up/background.jpg');
 
   .primary-actions {
     margin-bottom: var.$unit-3;

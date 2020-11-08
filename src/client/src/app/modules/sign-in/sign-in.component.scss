@@ -4,9 +4,8 @@
 
 .sign-in {
   //@include media.above-small {
-  background-image: url('/assets/images/sign-in/background.jpg');
   //}
-  @include shared.auth-page-styles;
+  @include shared.auth-page-styles($background-url: '/assets/images/sign-in/background.jpg');
 
   &__main {
     //@include media.zero-small {
