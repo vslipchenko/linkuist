@@ -120,11 +120,11 @@
   }
 }
 
-//@mixin above-large {
-//  @media (min-width: var.$breakpoint-large) {
-//    @content;
-//  }
-//}
+@mixin above-large {
+  @media (min-width: var.$breakpoint-large) {
+    @content;
+  }
+}
 
 @mixin above-huge {
   @media (min-width: var.$breakpoint-huge) {
@@ -152,6 +152,12 @@
 
 @mixin small-medium {
   @media (min-width: var.$breakpoint-small) and (max-width: var.$breakpoint-medium - var.$unit-interval-px) {
+    @content;
+  }
+}
+
+@mixin small-large {
+  @media (min-width: var.$breakpoint-small) and (max-width: var.$breakpoint-large - var.$unit-interval-px) {
     @content;
   }
 }

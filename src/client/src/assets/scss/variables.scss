@@ -48,5 +48,7 @@ $common-main-screen-height: calc(100vh - #{$common-navigation-height});
 $common-line-height: 1.428;
 $common-default-material-icon-size: 24px;
 // user-page
-$common-user-page-content-block-width: 500px;
 $common-user-page-content-block-min-height: 148px; // littlest height that dont cause scroll on device viewport >= iphone se
+$common-user-page-content-block-width-1: calc(100% - #{$unit-3} * 2);
+$common-user-page-content-block-width-2: 400px;
+$common-user-page-content-block-width-3: 500px;
