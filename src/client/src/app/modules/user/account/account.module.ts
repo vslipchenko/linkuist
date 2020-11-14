@@ -6,6 +6,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [AccountComponent],
@@ -18,7 +19,8 @@ import {MatMenuModule} from '@angular/material/menu';
     MatTooltipModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    RouterModule
   ]
 })
 export class AccountModule {

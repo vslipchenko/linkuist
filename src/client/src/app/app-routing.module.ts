@@ -1,7 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {userPageUrlMatcher} from './utilities/url/url.utilities';
+import {urlMatcher} from './utilities/url/url.utilities';
 import {PageNotFoundComponent} from './shared/components/page-not-found/page-not-found.component';
+import {AuthenticationCanActivateGuard} from './guards/authentication/can-activate/authentication.guard';
+import {AuthenticationCanLoadGuard} from './guards/authentication/can-load/authentication.guard';
+import {URL_USERNAME_REGEXP} from './constants/validation';
 // TODO 404 page
 const routes: Routes = [
   {
@@ -17,8 +20,14 @@ const routes: Routes = [
     loadChildren: () => import('./modules/sign-up/sign-up.module').then(m => m.SignUpModule)
   },
   {
-    matcher: userPageUrlMatcher,
+    matcher: urlMatcher([URL_USERNAME_REGEXP]),
     loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule)
+  },
+  {
+    matcher: urlMatcher([URL_USERNAME_REGEXP, 'collections']),
+    canActivate: [AuthenticationCanActivateGuard],
+    canLoad: [AuthenticationCanLoadGuard],
+    loadChildren: () => import('./modules/user/collections/collections.module').then(m => m.CollectionsModule)
   },
   {path: '**', component: PageNotFoundComponent}
 ];

@@ -44,6 +44,10 @@
   <button matTooltip="Add note" matTooltipPosition="above" mat-icon-button (click)="toggleAddNote(addNote)">
     <mat-icon svgIcon="pencil-plus"></mat-icon>
   </button>
+  <!-- Link collections -->
+  <a matTooltip="Collections" matTooltipPosition="above" mat-icon-button routerLink="collections">
+    <mat-icon svgIcon="bookmark-collections"></mat-icon>
+  </a>
   <!-- Account Settings -->
   <mat-menu #accountSettings>
     <button mat-menu-item (click)="confirmLogout()">
