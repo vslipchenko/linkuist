@@ -1,11 +1,23 @@
-<ng-template [ngIf]="dialogType === dialogTypes.CONFIRMATION">
-  <h2 mat-dialog-title>Confirmation</h2>
+<ng-template [ngIf]="dialogType === dialogTypes.CONFIRM">
+  <h2 mat-dialog-title>{{confirmTypeTitle}}</h2>
   <mat-dialog-content>
     This will delete all elements that are currently on this page and cannot be undone.
   </mat-dialog-content>
   <mat-dialog-actions class="dialog-actions">
-    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-dialog-close mat-stroked-button>Cancel</button>
     <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-    <button mat-button [mat-dialog-close]="true">Delete</button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="true">OK</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template [ngIf]="dialogType === dialogTypes.ADD">
+  <h2 mat-dialog-title>{{addTypeTitle}}</h2>
+  <mat-dialog-content>
+    <ng-container [ngTemplateOutlet]="contentTemplateRef"></ng-container>
+  </mat-dialog-content>
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-dialog-close mat-stroked-button>Close</button>
+    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+    <button mat-flat-button color="primary" [mat-dialog-close]="true">Add</button>
   </mat-dialog-actions>
 </ng-template>

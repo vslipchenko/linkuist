@@ -1,1 +1,10 @@
 <p>collections works!</p>
+<app-navigation [mainActionType]="navigationMainActionType">
+  <button matTooltip="Add bookmark" matTooltipPosition="above" mat-icon-button (click)="addBookmark()">
+    <mat-icon svgIcon="pencil-plus"></mat-icon>
+  </button>
+</app-navigation>
+
+<ng-template #addBookmarkContent>
+wdoawod
+</ng-template>

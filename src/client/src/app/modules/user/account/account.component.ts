@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../../services/authentication/authentication.service';
 import {NavigationMainActionType} from '../../../models/components/navigation';
 import {DialogService} from '../../../shared/services/dialog/dialog.service';
+import {DialogTypes} from '../../../models/components/dialog';
 
 @Component({
   selector: 'app-account',
@@ -20,7 +21,7 @@ export class AccountComponent implements OnInit {
   }
 
   confirmLogout(): void {
-    this.dialogService.open({type: 'confirmation'});
+    this.dialogService.open({type: DialogTypes.CONFIRM});
     // console.log('account access token is ', this.dialogService.gs());
   }
 

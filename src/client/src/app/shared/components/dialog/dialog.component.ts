@@ -1,6 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, TemplateRef} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {DialogData, DialogType, DialogTypes} from '../../../models/components/dialog';
+import {DialogData, DialogTypes} from '../../../models/components/dialog';
 
 @Component({
   templateUrl: './dialog.component.html',
@@ -16,11 +16,23 @@ export class DialogComponent implements OnInit {
     // console.log(this.dialogTemplates);
   }
 
-  get dialogType(): DialogType {
+  get dialogType(): DialogTypes {
     return this.data.dialogType;
   }
 
   get dialogTypes(): typeof DialogTypes {
     return DialogTypes;
+  }
+
+  get confirmTypeTitle(): string {
+    return this.data?.dialogTitle ?? 'Confirmation';
+  }
+
+  get addTypeTitle(): string {
+    return this.data?.dialogTitle ?? 'Add';
+  }
+
+  get contentTemplateRef(): TemplateRef<unknown> {
+    return this.data?.dialogContentTemplateRef;
   }
 }

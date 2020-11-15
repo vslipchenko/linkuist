@@ -2,11 +2,11 @@ import {MatDialogConfig} from '@angular/material/dialog/dialog-config';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../shared/components/dialog/dialog.component';
 import {Observable} from 'rxjs';
-
-export type DialogType = 'confirmation';
+import {TemplateRef} from '@angular/core';
 
 export enum DialogTypes {
-  CONFIRMATION = 'confirmation'
+  ADD = 'add',
+  CONFIRM = 'confirm'
 }
 
 export interface Dialog {
@@ -15,11 +15,16 @@ export interface Dialog {
 }
 
 export interface DialogConfig {
-  type: DialogType;
+  type: DialogTypes;
+  title?: string;
+  contentTemplateRef?: TemplateRef<unknown>;
+  data?: {[key: string]: unknown};
   config?: MatDialogConfig;
 }
 
 export interface DialogData {
-  dialogType: DialogType;
+  dialogType: DialogTypes;
+  dialogTitle?: string;
+  dialogContentTemplateRef?: TemplateRef<unknown>;
   [key: string]: unknown;
 }

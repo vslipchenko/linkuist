@@ -13,7 +13,6 @@ export class AuthenticationCanActivateGuard implements CanActivate {
   canActivate(): boolean {
     const data = this.authenticationService.accessTokenData;
     const username = extractUsername(window.location.pathname);
-    debugger;
     return data?.username === username;
   }
 }

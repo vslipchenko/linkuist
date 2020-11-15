@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../components/dialog/dialog.component';
-import {Dialog, DialogConfig} from '../../../models/components/dialog';
+import {Dialog, DialogConfig, DialogData} from '../../../models/components/dialog';
 import {finalize} from 'rxjs/operators';
 
 @Injectable({
@@ -16,9 +16,11 @@ export class DialogService {
     this.dialogRef = this.dialog.open(DialogComponent, {
       ...dialogConfig.config,
       data: {
-        ...dialogConfig.config?.data,
-        dialogType: dialogConfig.type
-      },
+        ...dialogConfig.data,
+        dialogType: dialogConfig.type,
+        dialogTitle: dialogConfig.title,
+        dialogContentTemplateRef: dialogConfig.contentTemplateRef
+      } as DialogData
     });
 
     const dialogAfterClosed$ = this.dialogRef.afterClosed()
