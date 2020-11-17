@@ -7,6 +7,7 @@ export const URL_USERNAME_REGEXP = new RegExp(`@[a-z0-9]+([${USERNAME_SEPARATORS
 export const PASSWORD_SPECIAL_CHARS_POOL = '&$#!@_^%+-';
 // Should have at least one number and one letter https://regex101.com/r/Pmzmuj/3
 export const PASSWORD_REGEXP = new RegExp(`^(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z${PASSWORD_SPECIAL_CHARS_POOL}]*$`);
+export const EMAIL_MAXLENGTH = 254;
 export const USERNAME_MAXLENGTH = 33;
 export const PASSWORD_MINLENGTH = 8;
 export const PASSWORD_MAXLENGTH = 50;

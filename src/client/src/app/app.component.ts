@@ -93,6 +93,7 @@ export class AppComponent implements OnInit {
       {name: 'exit-to-app', fileName: 'exit_to_app-24px', isMaterial: true, isOutlined: true},
       {name: 'pencil-plus', fileName: 'pencil_plus-24px', isMaterial: true, isFilled: true},
       {name: 'bookmark-collection', fileName: 'collections_bookmark-24px', isMaterial: true, isFilled: true},
+      {name: 'bookmark-plus', fileName: 'book_plus-24px', isMaterial: true, isFilled: true},
       // {name: 'google', fileName: 'google-24px', isOutlined: true},
       // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
     ]);

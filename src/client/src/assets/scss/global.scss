@@ -70,7 +70,8 @@ textarea {
   font-family: inherit;
 }
 
-mat-form-field mat-hint [mat-button] {
+// make mat-hint act like mat-button
+.hint-as-button [mat-button] {
   line-height: unset;
   margin-left: - var.$unit-2;
 }
@@ -92,4 +93,24 @@ mat-form-field mat-hint [mat-button] {
   @include media.above-huge {
     background-size: 5%;
   }
+}
+
+//.color-warn {
+//  color: var.$theme-warn;
+//}
+
+//.min-half-width {
+//  min-width: 50%;
+//}
+
+// force dialog always take whole width on small devices
+.dialog {
+  @include media.zero-small {
+    min-width: calc(100vw - #{var.$unit-3 * 2});
+  }
+}
+
+.dialog .mat-dialog-actions .mat-button-base+.mat-button-base,
+.dialog .mat-dialog-actions .mat-mdc-button-base+.mat-mdc-button-base {
+  margin-left: var.$unit-2;
 }

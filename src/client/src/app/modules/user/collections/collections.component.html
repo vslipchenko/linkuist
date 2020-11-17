@@ -1,10 +1,34 @@
 <p>collections works!</p>
 <app-navigation [mainActionType]="navigationMainActionType">
   <button matTooltip="Add bookmark" matTooltipPosition="above" mat-icon-button (click)="addBookmark()">
-    <mat-icon svgIcon="pencil-plus"></mat-icon>
+    <mat-icon svgIcon="bookmark-plus"></mat-icon>
   </button>
 </app-navigation>
 
 <ng-template #addBookmarkContent>
-wdoawod
+  <form [formGroup]="addBookmarkForm" class="add-bookmark">
+    <mat-form-field>
+      <mat-label>Link</mat-label>
+      <textarea type="url" matInput formControlName="link" required></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input type="text" matInput formControlName="title" placeholder="Custom bookmark title" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Thumbnail url</mat-label>
+      <input type="text" matInput formControlName="title" placeholder="Custom bookmark thumbnail" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea type="text" matInput formControlName="description"></textarea>
+    </mat-form-field>
+<!--    <mat-form-field>-->
+<!--      <mat-label>Thumbnail</mat-label>-->
+<!--      <input type="text" matInput formControlName="title" placeholder="Custom bookmark thumbnail" />-->
+<!--    </mat-form-field>-->
+    <mat-form-field>
+      <app-chips></app-chips>
+    </mat-form-field>
+  </form>
 </ng-template>

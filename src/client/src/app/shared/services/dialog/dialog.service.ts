@@ -15,6 +15,9 @@ export class DialogService {
   open(dialogConfig: DialogConfig): Dialog {
     this.dialogRef = this.dialog.open(DialogComponent, {
       ...dialogConfig.config,
+      panelClass: dialogConfig.config?.panelClass // set default custom class
+        ? ['dialog'].concat(dialogConfig.config.panelClass)
+        : 'dialog',
       data: {
         ...dialogConfig.data,
         dialogType: dialogConfig.type,

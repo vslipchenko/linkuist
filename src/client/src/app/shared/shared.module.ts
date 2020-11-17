@@ -11,12 +11,17 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import {MatButtonModule} from '@angular/material/button';
 import { DialogComponent } from './components/dialog/dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { ChipsComponent } from './components/chips/chips.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatChipsModule} from '@angular/material/chips';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
-  declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent, PageNotFoundComponent, DialogComponent],
+  declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent, PageNotFoundComponent, DialogComponent, ChipsComponent],
   exports: [
     NavigationComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    ChipsComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +30,10 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatTooltipModule,
     MatProgressBarModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatAutocompleteModule,
+    MatChipsModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedModule {

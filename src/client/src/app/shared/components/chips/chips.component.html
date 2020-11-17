@@ -1,0 +1,24 @@
+<mat-chip-list #tags aria-label="Tags">
+  <mat-chip
+    *ngFor="let tag of chips.items"
+    [selectable]="tag.isSelectable || chips.itemsAreSelectable"
+    [removable]="tag.isRemovable || chips.itemsAreRemovable"
+    (removed)="tag.onRemove ? tag.onRemove() : chips.onRemove()"
+  >
+    {{tag.text || tag}}
+    <!--        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>-->
+  </mat-chip>
+  <input
+    placeholder="Tags"
+    #fruitInput
+    [formControlName]="formControlName"
+    [matAutocomplete]="autoComplete"
+    [matChipInputFor]="tags"
+    [matChipInputSeparatorKeyCodes]="chips.itemSeparatorKeyCodes"
+    (matChipInputTokenEnd)="chips.input.onItemAdd($event)">
+</mat-chip-list>
+<mat-autocomplete #autoComplete (optionSelected)="selected($event)">
+  <mat-option *ngFor="let fruit of []" [value]="fruit">
+    {{fruit}}
+  </mat-option>
+</mat-autocomplete>

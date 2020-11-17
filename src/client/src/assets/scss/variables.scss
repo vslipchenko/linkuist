@@ -4,6 +4,7 @@
 /* theme */
 $theme-primary: map-get(mat.$mat-blue, 500); // #2196f3
 $theme-accent: map-get(mat.$mat-pink, 500);  // #e91e63
+$theme-warn: map-get(mat.$mat-red, 500);  // #f44336
 $theme-light: #ffffff;
 $theme-light-darker: #fafafa;
 $theme-light-darkest: #dbdbdb;

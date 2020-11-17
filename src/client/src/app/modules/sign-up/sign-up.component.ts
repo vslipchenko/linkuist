@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NavigationMainActionType} from '../../models/components/navigation';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {
+  EMAIL_MAXLENGTH,
   EMAIL_REGEXP,
   PASSWORD_MAXLENGTH,
   PASSWORD_MINLENGTH,
@@ -68,14 +69,15 @@ export class SignUpComponent implements OnInit {
   private static usernameValidator(control: AbstractControl): null | ValidationErrors {
     const username = control.value;
     const isEmpty = !username.length;
-    const tooLong = username.length > USERNAME_MAXLENGTH;
+    // const tooLong = username.length > USERNAME_MAXLENGTH;
     const validFormat = USERNAME_REGEXP.test(username);
 
     if (isEmpty) {
       return {required: true};
-    } else if (tooLong) {
-      return {maxlength: true};
     }
+    // else if (tooLong) {
+    //   return {maxlength: true};
+    // }
 
     return validFormat ? null : {pattern: true};
   }
@@ -158,8 +160,28 @@ export class SignUpComponent implements OnInit {
     return this.signUpForm.get('email');
   }
 
+  get emailMaxLength(): number {
+    return EMAIL_MAXLENGTH;
+  }
+
+  // get isEmailLengthExceeded(): boolean {
+  //   return this.emailField.value.length > EMAIL_MAXLENGTH;
+  // }
+
   get usernameField(): AbstractControl {
     return this.signUpForm.get('username');
+  }
+
+  get usernameMaxLength(): number {
+    return USERNAME_MAXLENGTH;
+  }
+
+  // get isUsernameLengthExceeded(): boolean {
+  //   return this.usernameField.value.length > USERNAME_MAXLENGTH;
+  // }
+
+  get usernameSeparators(): string {
+    return USERNAME_SEPARATORS;
   }
 
   get passwordField(): AbstractControl {
@@ -168,10 +190,6 @@ export class SignUpComponent implements OnInit {
 
   get repeatPasswordField(): AbstractControl {
     return this.signUpForm.get('repeatPassword');
-  }
-
-  get usernameSeparators(): string {
-    return USERNAME_SEPARATORS;
   }
 
   get navigationMainActionType(): NavigationMainActionType {

@@ -1,0 +1,17 @@
+@use 'variables' as var;
+@use 'media';
+
+.add-bookmark {
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .bookmark-dialog {
+  @include media.above-small {
+    min-width: 50vw;
+  }
+}
+
+//mat-dialog-container {
+//  min-width: 50vw;
+//}

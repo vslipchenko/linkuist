@@ -4,8 +4,9 @@
     <form [formGroup]="signUpForm" class="form">
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput placeholder="Type your email" formControlName="email">
-        <mat-hint *ngIf="!emailField.value">Should be unique</mat-hint>
+        <input type="email" matInput placeholder="Type your email" formControlName="email" [maxlength]="emailMaxLength">
+        <mat-hint *ngIf="!emailField.value" align="start">Should be unique</mat-hint>
+        <mat-hint align="end">{{emailField.value.length}} / {{emailMaxLength}}</mat-hint>
 
         <mat-error *ngIf="emailField.hasError('required')">Required field</mat-error>
         <mat-error *ngIf="emailField.hasError('pattern')">Invalid email format</mat-error>
@@ -13,11 +14,12 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
-        <input matInput placeholder="Type your username" formControlName="username">
-        <mat-hint *ngIf="!usernameField.value">Should be unique</mat-hint>
+        <input type="text" matInput placeholder="Type your username" formControlName="username" [maxlength]="usernameMaxLength">
+        <mat-hint *ngIf="!usernameField.value" align="start">Should be unique</mat-hint>
+        <mat-hint align="end">{{usernameField.value.length}} / {{usernameMaxLength}}</mat-hint>
 
         <mat-error *ngIf="usernameField.hasError('required')">Required field</mat-error>
-        <mat-error *ngIf="usernameField.hasError('maxlength')">Username is too long</mat-error>
+<!--        <mat-error *ngIf="usernameField.hasError('maxlength')">Username is too long</mat-error>-->
         <mat-error *ngIf="usernameField.hasError('pattern')">Invalid format. Use: a-z 0-9 {{usernameSeparators}}</mat-error>
         <mat-error *ngIf="usernameField.hasError('isUsed')">Username already in use</mat-error>
       </mat-form-field>
@@ -27,7 +29,9 @@
         <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
           <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
         </button>
-        <mat-hint><button mat-button type="button" color="primary" (click)="generatePassword()">Generate password</button></mat-hint>
+        <mat-hint align="start" class="hint-as-button">
+          <button mat-button type="button" color="primary" (click)="generatePassword()">Generate password</button>
+        </mat-hint>
 
         <mat-error *ngIf="passwordField.hasError('required')">Required field</mat-error>
         <mat-error *ngIf="passwordField.hasError('minlength')">Minimal length - 8 characters</mat-error>
@@ -39,7 +43,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Repeat password</mat-label>
-        <input matInput type="password" placeholder="Repeat your password" formControlName="repeatPassword">
+        <input type="password" matInput placeholder="Repeat your password" formControlName="repeatPassword">
 
         <mat-error *ngIf="repeatPasswordField.hasError('required')">Required field</mat-error>
         <mat-error *ngIf="repeatPasswordField.hasError('mismatch')">Passwords mismatch</mat-error>
