@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {COMMA, ENTER, INSERT, SPACE} from '@angular/cdk/keycodes';
 import {BookmarkType} from '../../../models/bookmark';
 import {BOOKMARK_TAG_LETTER_REGEXP} from '../../../constants/validation';
+import {Chip} from '../../../models/components/chips';
 
 @Component({
   selector: 'app-collections',
@@ -66,7 +67,11 @@ export class CollectionsComponent implements OnInit {
       thumbnail: [null],
       description: [null],
       private: [false],
-      tags: [[BookmarkType.PUBLIC, '$AHAawdwad-#@! -awo79128!#']]
+      tags: [[{
+        text: BookmarkType.PUBLIC,
+        isSelected: true,
+        color: 'accent'
+      } as Chip]]
     });
 
     // this.addBookmarkForm.next(

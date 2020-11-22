@@ -56,8 +56,8 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(chips: Array<any>): void {
-    debugger;
-    chips = this.filterChips(this.tuneChips(chips));
+    // tune the most recent chip, assume other are valid
+    chips = this.filterChips(this.tuneRecentChip(chips));
     this.formControl.setValue(chips, {emitModelToViewChange: false});
     this.resetChipInput();
 
@@ -101,27 +101,31 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     return [...new Set(chips.filter(chip => chip.text ? !!chip.text : !!chip))];
   }
 
-  private tuneChips(chips: Array<any>): Array<any> {
+  private tuneRecentChip(chips: Array<any>): Array<any> {
     if (this.chipLetterValidator) {
       const wordSeparator = String.fromCharCode(this.chipSeparatorKeyCode);
-      return chips.map(chip => {
-        let chipText = chip.text ? chip.text : chip;
-        let words = chipText.split(wordSeparator).filter(word => !!word);
-        words = words.map(word => {
-          const letters = [...word];
-          // filter letters
-          return letters.map(letter => {
-            if (this.chipLetterValidator.test(letter)) {
-              return this.areChipsLowerCased ? letter.toLowerCase() : letter;
-            }
-          }).join('');
-        });
-        // remove separator duplicates
-        chipText = words.length ? words.join(wordSeparator).replace(new RegExp(`${wordSeparator}{2,}`), wordSeparator) : '';
-        debugger;
-        // debugger;
-        return chip.text ? {...chip, text: chipText} : chipText;
+
+      const chip = chips.pop();
+      // return chips.map(chip => {
+      let chipText = chip.text ? chip.text : chip;
+      let words = chipText.split(wordSeparator).filter(word => !!word);
+      words = words.map(word => {
+        const letters = [...word];
+        // filter letters
+        return letters.map(letter => {
+          if (this.chipLetterValidator.test(letter)) {
+            return this.areChipsLowerCased ? letter.toLowerCase() : letter;
+          }
+        }).join('');
       });
+      // remove separator duplicates
+      chipText = words.length && words.join(wordSeparator).replace(new RegExp(`${wordSeparator}{2,}`), wordSeparator);
+      debugger;
+      // debugger;
+      if (chipText) {
+        return chips.concat(chip.text ? {...chip, text: chipText} : chipText);
+      }
+      // });
     }
 
     return chips;
