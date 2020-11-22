@@ -1,24 +1,46 @@
-<mat-chip-list #tags aria-label="Tags">
-  <mat-chip
-    *ngFor="let tag of chips.items"
-    [selectable]="tag.isSelectable || chips.itemsAreSelectable"
-    [removable]="tag.isRemovable || chips.itemsAreRemovable"
-    (removed)="tag.onRemove ? tag.onRemove() : chips.onRemove()"
-  >
-    {{tag.text || tag}}
-    <!--        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>-->
-  </mat-chip>
-  <input
-    placeholder="Tags"
-    #fruitInput
-    [formControlName]="formControlName"
-    [matAutocomplete]="autoComplete"
-    [matChipInputFor]="tags"
-    [matChipInputSeparatorKeyCodes]="chips.itemSeparatorKeyCodes"
-    (matChipInputTokenEnd)="chips.input.onItemAdd($event)">
-</mat-chip-list>
-<mat-autocomplete #autoComplete (optionSelected)="selected($event)">
-  <mat-option *ngFor="let fruit of []" [value]="fruit">
-    {{fruit}}
-  </mat-option>
-</mat-autocomplete>
+<mat-form-field [appWrapIf]="isInputAvailable">
+  <mat-chip-list #chipList [attr.aria-label]="label">
+    <mat-chip #chipItem="matChip"
+      *ngFor="let chip of chips"
+      [selectable]="chip.isSelectable || areChipsSelectable"
+      [removable]="chip.isRemovable || areChipsRemovable"
+      (removed)="chip.onRemove ? chip.onRemove($event) : removeChip($event)"
+      [color]="
+        chip.isSelected
+        ? chipItem.selected
+          ? chip.color
+          : chipItem.toggleSelected() && chip.color
+        : null
+      "
+    >
+      {{chip.text || chip}}
+      <mat-icon *ngIf="chip.isRemovable || areChipsRemovable"
+                matChipRemove
+                svgIcon="cancel"
+      ></mat-icon>
+    </mat-chip>
+    <input *ngIf="isInputAvailable"
+      #chipInput
+      [placeholder]="label"
+      [matAutocomplete]="autocomplete"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="chipsSeparatorKeyCodes"
+      [matChipInputAddOnBlur]="isAddOnBlurAvailable"
+      (matChipInputTokenEnd)="appendChip($event)"/>
+  </mat-chip-list>
+  <mat-autocomplete #autocomplete
+                    (opened)="loadAutocompleteOptions()"
+                    (optionSelected)="onAutocompleteOptionSelect($event)">
+    <mat-option *ngIf="areAutocompleteOptionsLoading; else autocompleteOptions"
+                class="autocomplete-spinner"
+                disabled=""
+    >
+      <mat-spinner></mat-spinner>
+    </mat-option>
+    <ng-template #autocompleteOptions>
+      <mat-option *ngFor="let chip of []" [value]="chip.text || chip">
+        {{chip.text || chip}}
+      </mat-option>
+    </ng-template>
+  </mat-autocomplete>
+</mat-form-field>

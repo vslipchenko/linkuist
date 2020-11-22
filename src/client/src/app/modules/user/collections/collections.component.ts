@@ -3,6 +3,9 @@ import {NavigationMainActionType} from '../../../models/components/navigation';
 import {DialogService} from '../../../shared/services/dialog/dialog.service';
 import {DialogTypes} from '../../../models/components/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {COMMA, ENTER, INSERT, SPACE} from '@angular/cdk/keycodes';
+import {BookmarkType} from '../../../models/bookmark';
+import {BOOKMARK_TAG_LETTER_REGEXP} from '../../../constants/validation';
 
 @Component({
   selector: 'app-collections',
@@ -10,7 +13,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./collections.component.scss']
 })
 export class CollectionsComponent implements OnInit {
-  // readonly tagSeparatorKeysCodes = [ENTER, COMMA];
+  readonly tagsSeparatorKeysCodes = [SPACE, COMMA, ENTER];
+  readonly tagSeparatorKeyCode = INSERT;
+  readonly tagRegExp = BOOKMARK_TAG_LETTER_REGEXP;
 
   // tagList = [
   //   {text: 'mine', isRemovable: true},
@@ -18,13 +23,35 @@ export class CollectionsComponent implements OnInit {
   //   'tags'
   // ];
 
+  readonly chips = {
+    items: [
+      {
+        text: 'mine', isRemovable: true, isSelectable: true, onRemove: () => {
+        }
+      },
+      'text',
+      'tags'
+    ],
+    itemsAreSelectable: true,
+    itemsAreRemovable: true,
+    itemSeparatorKeyCodes: [ENTER, COMMA],
+    input: {
+      onItemAdd: (event) => {
+      }
+    },
+    onRemove: () => {
+    }
+  };
+
 
   @ViewChild('addBookmarkContent') addBookmarkContent: TemplateRef<unknown>;
 
   addBookmarkForm: FormGroup;
 
   constructor(private dialogService: DialogService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder
+  ) {
+
   }
 
   ngOnInit(): void {
@@ -39,7 +66,7 @@ export class CollectionsComponent implements OnInit {
       thumbnail: [null],
       description: [null],
       private: [false],
-      tags: [[]]
+      tags: [[BookmarkType.PUBLIC, '$AHAawdwad-#@! -awo79128!#']]
     });
 
     // this.addBookmarkForm.next(

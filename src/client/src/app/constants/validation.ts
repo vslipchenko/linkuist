@@ -11,3 +11,4 @@ export const EMAIL_MAXLENGTH = 254;
 export const USERNAME_MAXLENGTH = 33;
 export const PASSWORD_MINLENGTH = 8;
 export const PASSWORD_MAXLENGTH = 50;
+export const BOOKMARK_TAG_LETTER_REGEXP = /[a-zA-Z0-9]/; // TODO russian tags

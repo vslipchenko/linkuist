@@ -94,6 +94,7 @@ export class AppComponent implements OnInit {
       {name: 'pencil-plus', fileName: 'pencil_plus-24px', isMaterial: true, isFilled: true},
       {name: 'bookmark-collection', fileName: 'collections_bookmark-24px', isMaterial: true, isFilled: true},
       {name: 'bookmark-plus', fileName: 'book_plus-24px', isMaterial: true, isFilled: true},
+      {name: 'cancel', fileName: 'cancel-24px', isMaterial: true, isFilled: true},
       // {name: 'google', fileName: 'google-24px', isOutlined: true},
       // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
     ]);

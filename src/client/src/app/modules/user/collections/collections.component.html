@@ -27,8 +27,15 @@
 <!--      <mat-label>Thumbnail</mat-label>-->
 <!--      <input type="text" matInput formControlName="title" placeholder="Custom bookmark thumbnail" />-->
 <!--    </mat-form-field>-->
-    <mat-form-field>
-      <app-chips></app-chips>
-    </mat-form-field>
+     <app-chips formControlName="tags"
+                label="Tags"
+                [areChipsRemovable]="true"
+                [isInputAvailable]="true"
+                [isAddOnBlurAvailable]="true"
+                [chipsSeparatorKeyCodes]="tagsSeparatorKeysCodes"
+                [chipSeparatorKeyCode]="tagSeparatorKeyCode"
+                [chipLetterValidator]="tagRegExp"
+                [areChipsLowerCased]="true"
+     ></app-chips>
   </form>
 </ng-template>

@@ -1,0 +1,10 @@
+mat-form-field {
+  width: 100%;
+}
+
+.autocomplete-spinner ::ng-deep .mat-option-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.25);
+}

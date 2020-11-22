@@ -15,6 +15,8 @@ import { ChipsComponent } from './components/chips/chips.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {ReactiveFormsModule} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent, PageNotFoundComponent, DialogComponent, ChipsComponent],
@@ -33,7 +35,9 @@ import {ReactiveFormsModule} from '@angular/forms';
     MatDialogModule,
     MatAutocompleteModule,
     MatChipsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SharedModule {
