@@ -3,7 +3,7 @@ import {ControlContainer, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} 
 import {MatChipEvent} from '@angular/material/chips/chip';
 import {MatChipInputEvent} from '@angular/material/chips/chip-input';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autocomplete';
-
+// TODO fix template falsy values handling
 @Component({
   selector: 'app-chips',
   templateUrl: './chips.component.html',
@@ -57,7 +57,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
 
   writeValue(chips: Array<any>): void {
     // tune the most recent chip, assume other are valid
-    chips = this.filterChips(this.tuneRecentChip(chips));
+    chips = this.removeChipDuplicates(this.tuneRecentChip(chips));
     this.formControl.setValue(chips, {emitModelToViewChange: false});
     this.resetChipInput();
 
@@ -96,19 +96,29 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     // debugger;
   }
 
-  private filterChips(chips: Array<any>) {
-    // remove duplicates and empty strings
-    return [...new Set(chips.filter(chip => chip.text ? !!chip.text : !!chip))];
+  private removeChipDuplicates(chips: Array<any>) {
+    return chips.reduce(
+      (previousValue, currentValue) => {
+        if (!previousValue.length || !previousValue.find(chip => chip.text ? chip.text === currentValue || chip.text === currentValue.text : chip === currentValue || chip === currentValue.text)) {
+          // debugger;
+          return previousValue.concat(currentValue);
+        }
+        // debugger;
+        return previousValue;
+      },
+      []
+    );
   }
 
   private tuneRecentChip(chips: Array<any>): Array<any> {
-    if (this.chipLetterValidator) {
+    if (this.chipLetterValidator && chips.length) {
       const wordSeparator = String.fromCharCode(this.chipSeparatorKeyCode);
 
       const chip = chips.pop();
       // return chips.map(chip => {
       let chipText = chip.text ? chip.text : chip;
       let words = chipText.split(wordSeparator).filter(word => !!word);
+      // debugger;
       words = words.map(word => {
         const letters = [...word];
         // filter letters
@@ -120,7 +130,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
       });
       // remove separator duplicates
       chipText = words.length && words.join(wordSeparator).replace(new RegExp(`${wordSeparator}{2,}`), wordSeparator);
-      debugger;
+      // debugger;
       // debugger;
       if (chipText) {
         return chips.concat(chip.text ? {...chip, text: chipText} : chipText);

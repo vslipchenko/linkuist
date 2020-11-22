@@ -70,6 +70,7 @@ export class CollectionsComponent implements OnInit {
       tags: [[{
         text: BookmarkType.PUBLIC,
         isSelected: true,
+        isRemovable: false,
         color: 'accent'
       } as Chip]]
     });
