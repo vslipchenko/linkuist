@@ -1,0 +1,8 @@
+{
+  "name": "Linkuist",
+  "short_name": "Linkuist",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Link management service"
+}

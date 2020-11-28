@@ -24,6 +24,7 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
+              "src/manifest.webmanifest",
               "src/favicon.ico",
               "src/assets"
             ],
@@ -94,6 +95,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
+              "src/manifest.webmanifest",
               "src/favicon.ico",
               "src/assets"
             ],

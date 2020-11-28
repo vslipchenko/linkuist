@@ -3,7 +3,10 @@ import {ControlContainer, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} 
 import {MatChipEvent} from '@angular/material/chips/chip';
 import {MatChipInputEvent} from '@angular/material/chips/chip-input';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autocomplete';
+import {Observable} from 'rxjs';
+
 // TODO fix template falsy values handling
+// TODO remove chip color directive logic once autocomplete issue fixed
 @Component({
   selector: 'app-chips',
   templateUrl: './chips.component.html',
@@ -64,16 +67,18 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     console.log(this.chips);
   }
 
-  registerOnChange(fn: unknown): void {}
+  registerOnChange(fn: unknown): void {
+  }
 
-  registerOnTouched(fn: unknown): void {}
+  registerOnTouched(fn: unknown): void {
+  }
 
   removeChip(event: MatChipEvent): void {
     const text = event.chip.value.trim();
     this.writeValue(this.chips.filter(
       chip => {
         // debugger;
-        return chip.text ? chip.text !== text : chip !== text
+        return chip.text ? chip.text !== text : chip !== text;
       }
     ));
     // this.();
