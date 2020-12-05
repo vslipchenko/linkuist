@@ -31,7 +31,7 @@
   <mat-autocomplete #autocomplete
                     (opened)="serveAutocompleteOptions()"
                     (optionSelected)="onAutocompleteOptionSelect($event)">
-    <mat-option *ngIf="areAutocompleteOptionsLoading; else autocompleteOptionsTemplate"
+    <mat-option *ngIf="areAutocompleteOptionsLoading; else autocompleteOptions?.length && autocompleteOptionsTemplate"
                 class="autocomplete-spinner"
                 disabled=""
     >
@@ -43,4 +43,6 @@
       </mat-option>
     </ng-template>
   </mat-autocomplete>
+  <mat-hint *ngIf="leftHint" align="start">{{leftHint}}</mat-hint>
+  <mat-hint *ngIf="rightHint" align="end">{{rightHint}}</mat-hint>
 </mat-form-field>

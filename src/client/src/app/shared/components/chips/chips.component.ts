@@ -7,7 +7,6 @@ import {Observable} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {has as _has} from 'lodash';
 
-// TODO fix template falsy values handling
 // TODO remove chip color directive logic once autocomplete issue fixed
 @Component({
   selector: 'app-chips',
@@ -25,34 +24,35 @@ import {has as _has} from 'lodash';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChipsComponent implements OnInit, ControlValueAccessor {
+  // General
   @Input() formControlName: string;
   @Input() formControl: FormControl;
   @Input() label: string;
-  @Input() areChipsSelectable: boolean;
-  @Input() areChipsRemovable: boolean;
-  // @Input() onChipRemove: (event: MatChipEvent) => unknown;
+  // Formatting
   @Input() chipsSeparatorKeyCodes: Array<number>;
   @Input() chipSeparator: string;
   @Input() chipLetterValidator: RegExp;
+  // States
+  @Input() areChipsSelectable: boolean;
+  @Input() areChipsRemovable: boolean;
   @Input() areChipsLowerCased: boolean;
   @Input() isInputAvailable: boolean;
   @Input() isAddOnBlurAvailable: boolean;
-  // @Input() onChipInput: (event: MatChipInputEvent) => unknown = this.appendChip;
+  // Autocomplete
   @Input() autocompleteOptions$: () => Observable<Array<unknown>>;
   @Input() autocompleteOptions: Array<unknown>;
   @Input() cacheAutocompleteOptions: boolean;
   @Input() onAutocompleteOptionSelect: (event: MatAutocompleteSelectedEvent) => unknown;
+  // Hints
+  @Input() leftHint: string;
+  @Input() rightHint: string;
 
   @ViewChild('chipInput')
   inputElementRef: ElementRef<HTMLInputElement>;
-  // inputFormControl = new FormControl(); // COULD BE REMOVED
+
   areAutocompleteOptionsLoading: boolean;
 
-  // autocompleteValue;
-
-
   constructor(private controlContainer: ControlContainer) {
-
   }
 
   ngOnInit(): void {
