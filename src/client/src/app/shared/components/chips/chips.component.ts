@@ -32,7 +32,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   @Input() areChipsRemovable: boolean;
   // @Input() onChipRemove: (event: MatChipEvent) => unknown;
   @Input() chipsSeparatorKeyCodes: Array<number>;
-  @Input() chipSeparatorKeyCode: number;
+  @Input() chipSeparator: string;
   @Input() chipLetterValidator: RegExp;
   @Input() areChipsLowerCased: boolean;
   @Input() isInputAvailable: boolean;
@@ -146,12 +146,10 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
 
   private tuneRecentChip(chips: Array<any>): Array<any> {
     if (this.chipLetterValidator && chips.length) {
-      const wordSeparator = String.fromCharCode(this.chipSeparatorKeyCode);
-
       const chip = chips.pop();
       // return chips.map(chip => {
       let chipText = chip.text ? chip.text : chip;
-      let words = chipText.split(wordSeparator).filter(word => !!word);
+      let words = chipText.split(this.chipSeparator).filter(word => !!word);
       // debugger;
       words = words.map(word => {
         const letters = [...word];
@@ -163,7 +161,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
         }).join('');
       });
       // remove separator duplicates
-      chipText = words.length && words.join(wordSeparator).replace(new RegExp(`${wordSeparator}{2,}`), wordSeparator);
+      chipText = words.length && words.join(this.chipSeparator).replace(new RegExp(`${this.chipSeparator}{2,}`), this.chipSeparator);
       // debugger;
       // debugger;
       if (chipText) {

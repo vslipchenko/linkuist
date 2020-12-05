@@ -3,7 +3,7 @@ import {NavigationMainActionType} from '@models/components/navigation';
 import {DialogService} from '@shared/services/dialog/dialog.service';
 import {DialogTypes} from '@models/components/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {COMMA, ENTER, INSERT, SPACE} from '@angular/cdk/keycodes';
+import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
 import {BookmarkType} from '@models/bookmark';
 import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/validation';
 import {Chip} from '@models/components/chips';
@@ -14,7 +14,7 @@ import {Chip} from '@models/components/chips';
 })
 export class BookmarksComponent implements OnInit {
   readonly tagsSeparatorKeysCodes = [SPACE, COMMA, ENTER];
-  readonly tagSeparatorKeyCode = INSERT;
+  readonly tagSeparator = '-';
   readonly tagRegExp = BOOKMARK_TAG_LETTER_REGEXP;
 
   // tagList = [
@@ -49,7 +49,7 @@ export class BookmarksComponent implements OnInit {
   addBookmarkForm: FormGroup;
 
   constructor(private dialogService: DialogService,
-              private formBuilder: FormBuilder
+    private formBuilder: FormBuilder
   ) {
 
   }
