@@ -2,8 +2,8 @@
   <mat-chip-list #chipList [attr.aria-label]="label">
     <mat-chip #chipItem="matChip"
       *ngFor="let chip of chips"
-      [selectable]="chip.isSelectable || areChipsSelectable"
-      [removable]="chip.isRemovable || areChipsRemovable"
+      [selectable]="getExactValueOrUseDefault(chip, 'isSelectable', areChipsSelectable)"
+      [removable]="getExactValueOrUseDefault(chip, 'isRemovable', areChipsRemovable)"
       (removed)="chip.onRemove ? chip.onRemove($event) : removeChip($event)"
       [color]="
         chip.isSelected
@@ -14,7 +14,7 @@
       "
     >
       {{chip.text || chip}}
-      <mat-icon *ngIf="chip.isRemovable || areChipsRemovable"
+      <mat-icon *ngIf="getExactValueOrUseDefault(chip, 'isRemovable', areChipsRemovable)"
                 matChipRemove
                 svgIcon="cancel"
       ></mat-icon>
@@ -29,17 +29,17 @@
       (matChipInputTokenEnd)="appendChip($event)"/>
   </mat-chip-list>
   <mat-autocomplete #autocomplete
-                    (opened)="loadAutocompleteOptions()"
+                    (opened)="serveAutocompleteOptions()"
                     (optionSelected)="onAutocompleteOptionSelect($event)">
-    <mat-option *ngIf="areAutocompleteOptionsLoading; else autocompleteOptions"
+    <mat-option *ngIf="areAutocompleteOptionsLoading; else autocompleteOptionsTemplate"
                 class="autocomplete-spinner"
                 disabled=""
     >
       <mat-spinner></mat-spinner>
     </mat-option>
-    <ng-template #autocompleteOptions>
-      <mat-option *ngFor="let chip of []" [value]="chip.text || chip">
-        {{chip.text || chip}}
+    <ng-template #autocompleteOptionsTemplate>
+      <mat-option *ngFor="let option of autocompleteOptions" [value]="option.text || option">
+        {{option.text || option}}
       </mat-option>
     </ng-template>
   </mat-autocomplete>

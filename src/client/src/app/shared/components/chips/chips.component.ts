@@ -4,6 +4,8 @@ import {MatChipEvent} from '@angular/material/chips/chip';
 import {MatChipInputEvent} from '@angular/material/chips/chip-input';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autocomplete';
 import {Observable} from 'rxjs';
+import {first} from 'rxjs/operators';
+import {has as _has} from 'lodash';
 
 // TODO fix template falsy values handling
 // TODO remove chip color directive logic once autocomplete issue fixed
@@ -36,7 +38,9 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   @Input() isInputAvailable: boolean;
   @Input() isAddOnBlurAvailable: boolean;
   // @Input() onChipInput: (event: MatChipInputEvent) => unknown = this.appendChip;
-  @Input() autocompleteOptionsQuery: () => Observable<unknown>;
+  @Input() autocompleteOptions$: () => Observable<Array<unknown>>;
+  @Input() autocompleteOptions: Array<unknown>;
+  @Input() cacheAutocompleteOptions: boolean;
   @Input() onAutocompleteOptionSelect: (event: MatAutocompleteSelectedEvent) => unknown;
 
   @ViewChild('chipInput')
@@ -95,10 +99,31 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   //   this.formControlDirective.valueAccessor.setDisabledState(isDisabled);
   // }
 
-  loadAutocompleteOptions(): void {
-    // TODO add backend handling
-    // this.autocompleteOptionsQuery();
-    // debugger;
+  serveAutocompleteOptions(): void {
+    // if cache is ON
+    if (this.cacheAutocompleteOptions) {
+      // if options not cached yet
+      if (!this.autocompleteOptions.length) {
+        this.autocompleteOptions$()
+          .pipe(first())
+          .subscribe((options) => {
+            this.autocompleteOptions = options;
+          });
+      } // stream autocomplete options; else serve static autocompleteOptions
+    } else if (this.autocompleteOptions$) {
+      this.autocompleteOptions$()
+        .subscribe((options) => {
+          this.autocompleteOptions = options;
+        });
+    }
+  }
+
+  getExactValueOrUseDefault(source: any, property: string, defaultValue: unknown): unknown {
+    if (_has(source, property)) {
+      return source[property];
+    } else {
+      return defaultValue;
+    }
   }
 
   private removeChipDuplicates(chips: Array<any>) {
