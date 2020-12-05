@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '../../models/components/navigation';
+import {NavigationMainActionType} from '@models/components/navigation';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {
   EMAIL_MAXLENGTH,
@@ -10,15 +10,15 @@ import {
   USERNAME_MAXLENGTH,
   USERNAME_REGEXP,
   USERNAME_SEPARATORS
-} from '../../constants/validation';
-import {generatePassword} from '../../utilities/password/password.utilities';
+} from '@constants/validation';
+import {generatePassword} from '@utilities/password/password.utilities';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
-import {UserService} from '../../services/user/user.service';
+import {SnackbarService} from '@shared/services/snackbar/snackbar.service';
+import {UserService} from '@services/user/user.service';
 import {finalize, map} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {ProgressBarService} from '../../shared/services/progress-bar/progress-bar.service';
-import {AuthenticationService} from '../../services/authentication/authentication.service';
+import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
+import {AuthenticationService} from '@services/authentication/authentication.service';
 
 // TODO unsubscribe decorator
 @Component({

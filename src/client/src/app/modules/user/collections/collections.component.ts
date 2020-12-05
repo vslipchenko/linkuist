@@ -1,12 +1,12 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {NavigationMainActionType} from '../../../models/components/navigation';
-import {DialogService} from '../../../shared/services/dialog/dialog.service';
-import {DialogTypes} from '../../../models/components/dialog';
+import {NavigationMainActionType} from '@models/components/navigation';
+import {DialogService} from '@shared/services/dialog/dialog.service';
+import {DialogTypes} from '@models/components/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {COMMA, ENTER, INSERT, SPACE} from '@angular/cdk/keycodes';
-import {BookmarkType} from '../../../models/bookmark';
-import {BOOKMARK_TAG_LETTER_REGEXP} from '../../../constants/validation';
-import {Chip} from '../../../models/components/chips';
+import {BookmarkType} from '@models/bookmark';
+import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/validation';
+import {Chip} from '@models/components/chips';
 
 @Component({
   selector: 'app-collections',
