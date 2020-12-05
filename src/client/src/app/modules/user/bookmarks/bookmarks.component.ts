@@ -9,7 +9,6 @@ import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/validation';
 import {Chip} from '@models/components/chips';
 
 @Component({
-  selector: 'app-bookmarks',
   templateUrl: './bookmarks.component.html',
   styleUrls: ['./bookmarks.component.scss']
 })

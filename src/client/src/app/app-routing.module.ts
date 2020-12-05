@@ -24,7 +24,7 @@ const routes: Routes = [
     loadChildren: () => import('@modules/user/user.module').then(m => m.UserModule)
   },
   {
-    matcher: urlMatcher([URL_USERNAME_REGEXP, 'collections']),
+    matcher: urlMatcher([URL_USERNAME_REGEXP, 'bookmarks']),
     canActivate: [AuthenticationCanActivateGuard],
     canLoad: [AuthenticationCanLoadGuard],
     loadChildren: () => import('@modules/user/bookmarks/bookmarks.module').then(m => m.BookmarksModule)
