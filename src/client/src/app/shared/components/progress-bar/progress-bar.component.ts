@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent} from '@angular/router';
 import {ProgressBarMode} from '@angular/material/progress-bar/progress-bar';
-import {ProgressBarService} from '../../services/progress-bar/progress-bar.service';
+import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
 import {ThemePalette} from '@angular/material/core/common-behaviors/color';
-import {SnackbarService} from '../../services/snackbar/snackbar.service';
-import {SNACKBAR_CONFIG} from '../../../constants/snackbar';
+import {SnackbarService} from '@shared/services/snackbar/snackbar.service';
+import {SNACKBAR_CONFIG} from '@constants/snackbar';
 import {DOCUMENT} from '@angular/common';
 
 @Component({

@@ -1,5 +1,5 @@
 import {UrlMatchResult, UrlSegment} from '@angular/router';
-import {URL_USERNAME_REGEXP} from '../../constants/validation';
+import {URL_USERNAME_REGEXP} from '@constants/validation';
 
 // export const userPageUrlMatcher = (segments: UrlSegment[]): UrlMatchResult | null => {
 //   const hasOnlyOneSegment = segments.length === 1;
@@ -35,8 +35,7 @@ export const extractUsername = (input: string): string | null => {
   const result = URL_USERNAME_REGEXP.exec(input);
 
   if (result && result[0]) {
-    const username = result[0].slice(1); // skip '@' char
-    return username;
+    return result[0].slice(1);// skip '@' char
   }
 
   return null;

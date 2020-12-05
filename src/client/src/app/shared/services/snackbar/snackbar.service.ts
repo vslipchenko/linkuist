@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
-import {SnackbarConfig} from "../../../models/components/snackbar";
-import {MatSnackBarRef} from "@angular/material/snack-bar/snack-bar-ref";
-import {TextOnlySnackBar} from "@angular/material/snack-bar/simple-snack-bar";
+import {SnackbarConfig} from '@models/components/snackbar';
+import {MatSnackBarRef} from '@angular/material/snack-bar/snack-bar-ref';
+import {TextOnlySnackBar} from '@angular/material/snack-bar/simple-snack-bar';
+
 // TODO implement multiple snackbars
 @Injectable({
   providedIn: 'root'
@@ -25,11 +26,11 @@ export class SnackbarService {
     return this.show(message, {action, config: {duration: undefined, ...config}});
   }
 
-  showSuccess(message= 'Success!'): void {
+  showSuccess(message = 'Success!'): void {
     this.show(`✔ ${message}`);
   }
 
-  showError(message= 'Something went wrong during the request'): void {
+  showError(message = 'Something went wrong during the request'): void {
     this.show(`❌ ${message}`);
   }
 
