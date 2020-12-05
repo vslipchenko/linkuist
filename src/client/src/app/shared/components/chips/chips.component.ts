@@ -104,15 +104,19 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     if (this.cacheAutocompleteOptions) {
       // if options not cached yet
       if (!this.autocompleteOptions.length) {
+        this.areAutocompleteOptionsLoading = true;
         this.autocompleteOptions$()
           .pipe(first())
           .subscribe((options) => {
+            this.areAutocompleteOptionsLoading = false;
             this.autocompleteOptions = options;
           });
       } // stream autocomplete options; else serve static autocompleteOptions
     } else if (this.autocompleteOptions$) {
+      this.areAutocompleteOptionsLoading = true;
       this.autocompleteOptions$()
         .subscribe((options) => {
+          this.areAutocompleteOptionsLoading = false;
           this.autocompleteOptions = options;
         });
     }
