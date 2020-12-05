@@ -9,11 +9,11 @@ import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/validation';
 import {Chip} from '@models/components/chips';
 
 @Component({
-  selector: 'app-collections',
-  templateUrl: './collections.component.html',
-  styleUrls: ['./collections.component.scss']
+  selector: 'app-bookmarks',
+  templateUrl: './bookmarks.component.html',
+  styleUrls: ['./bookmarks.component.scss']
 })
-export class CollectionsComponent implements OnInit {
+export class BookmarksComponent implements OnInit {
   readonly tagsSeparatorKeysCodes = [SPACE, COMMA, ENTER];
   readonly tagSeparatorKeyCode = INSERT;
   readonly tagRegExp = BOOKMARK_TAG_LETTER_REGEXP;

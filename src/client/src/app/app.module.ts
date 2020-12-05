@@ -7,15 +7,15 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
-import {SNACKBAR_CONFIG} from './constants/snackbar';
-import {SharedModule} from './shared/shared.module';
-import {AuthenticationInterceptor} from './interceptors/authentication/authentication.interceptor';
-import {GraphQLModule} from './graphql/graphql.module';
-import {AuthenticationService} from './services/authentication/authentication.service';
+import {SNACKBAR_CONFIG} from '@constants/snackbar';
+import {SharedModule} from '@shared/shared.module';
+import {AuthenticationInterceptor} from '@interceptors/authentication/authentication.interceptor';
+import {GraphQLModule} from '@graphql/graphql.module';
+import {AuthenticationService} from '@services/authentication/authentication.service';
 import {first} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
-import {DIALOG_CONFIG} from './constants/dialog';
+import {DIALOG_CONFIG} from '@constants/dialog';
 
 @NgModule({
   declarations: [
