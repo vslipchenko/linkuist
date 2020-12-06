@@ -148,7 +148,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     if (this.chipLetterValidator && chips.length) {
       const chip = chips.pop();
       // return chips.map(chip => {
-      let chipText = chip.text ? chip.text : chip;
+      let chipText = chip.text || chip;
       let words = chipText.split(this.chipSeparator).filter(word => !!word);
       // debugger;
       words = words.map(word => {
@@ -159,9 +159,9 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
             return this.areChipsLowerCased ? letter.toLowerCase() : letter;
           }
         }).join('');
-      });
+      }).filter(word => word.length);
       // remove separator duplicates
-      chipText = words.length && words.join(this.chipSeparator).replace(new RegExp(`${this.chipSeparator}{2,}`), this.chipSeparator);
+      chipText = words.join(this.chipSeparator);
       // debugger;
       // debugger;
       if (chipText) {

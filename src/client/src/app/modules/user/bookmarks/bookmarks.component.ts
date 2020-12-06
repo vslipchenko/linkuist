@@ -90,7 +90,7 @@ export class BookmarksComponent implements OnInit {
   addBookmark(): void {
     this.dialogService.open({
       type: DialogTypes.ADD,
-      title: 'Bookmark',
+      title: 'Add bookmark',
       contentTemplateRef: this.addBookmarkContent,
       data: {form: this.addBookmarkForm},
       config: {
