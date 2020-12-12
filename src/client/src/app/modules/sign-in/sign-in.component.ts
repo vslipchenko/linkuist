@@ -7,7 +7,7 @@ import {combineLatest} from 'rxjs';
 import {AuthenticationService} from '@services/authentication/authentication.service';
 import {SnackbarService} from '@shared/services/snackbar/snackbar.service';
 import {ApolloError} from '@apollo/client/core';
-import {shapeGraphQLErrors} from '@utilities/graphql/graphql.utilities';
+import {shapeGraphQLErrors} from '@utilities/graphql';
 import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
 import {Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';

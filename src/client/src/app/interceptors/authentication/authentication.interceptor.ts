@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
 import {Observable, of, Subject, throwError} from 'rxjs';
-import {AuthenticationService} from '../../services/authentication/authentication.service';
+import {AuthenticationService} from '@services/authentication/authentication.service';
 import {catchError, finalize, first, retry, switchMap, tap} from 'rxjs/operators';
-import {shapeGraphQLErrors} from '../../utilities/graphql/graphql.utilities';
-import {SnackbarService} from '../../shared/services/snackbar/snackbar.service';
+import {shapeGraphQLErrors} from '@utilities/graphql';
+import {SnackbarService} from '@shared/services/snackbar/snackbar.service';
 import {Router} from '@angular/router';
 
 @Injectable()

@@ -3,7 +3,7 @@ import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.ser
 import {AuthenticationService} from '@services/authentication/authentication.service';
 import {finalize, first} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {extractUsername} from '@utilities/url/url.utilities';
+import {extractUsername} from '@utilities/url';
 import {UserService} from '@services/user/user.service';
 
 enum UserComponentToRender {

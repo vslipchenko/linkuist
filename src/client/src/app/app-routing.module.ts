@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {urlMatcher} from '@utilities/url/url.utilities';
+import {urlMatcher} from '@utilities/url';
 import {PageNotFoundComponent} from '@shared/components/page-not-found/page-not-found.component';
 import {AuthenticationCanActivateGuard} from '@guards/authentication/can-activate/authentication.guard';
 import {AuthenticationCanLoadGuard} from '@guards/authentication/can-load/authentication.guard';
