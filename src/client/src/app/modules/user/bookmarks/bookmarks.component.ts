@@ -7,7 +7,9 @@ import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
 import {BookmarkType} from '@@types/bookmark/bookmark.enums';
 import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/validation';
 import {Chip} from '@@types/chips/chips.interfaces';
+import {UntilDestroy, untilDestroyed} from '@utilities/until-destroy';
 
+@UntilDestroy()
 @Component({
   templateUrl: './bookmarks.component.html',
   styleUrls: ['./bookmarks.component.scss']
@@ -24,13 +26,13 @@ export class BookmarksComponent implements OnInit {
   constructor(private dialogService: DialogService,
     private formBuilder: FormBuilder
   ) {
-
   }
 
   ngOnInit(): void {
     this.initAddBookmarkForm();
     this.handlePrivateFieldValueChanges();
   }
+
 
   private initAddBookmarkForm(): void {
     // this.kek = 'awdwd';
@@ -75,6 +77,7 @@ export class BookmarksComponent implements OnInit {
 
   private handlePrivateFieldValueChanges(): void {
     this.privateField.valueChanges
+      .pipe(untilDestroyed(this))
       .subscribe((hasPrivateAccess) => {
         const tags = this.tagsField.value;
         tags.forEach((tag) => {
