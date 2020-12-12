@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '@@types/navigation/navigation';
+import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {
   EMAIL_MAXLENGTH,

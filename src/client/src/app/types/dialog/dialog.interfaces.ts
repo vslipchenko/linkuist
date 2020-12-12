@@ -3,13 +3,9 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '@shared/components/dialog/dialog.component';
 import {Observable} from 'rxjs';
 import {TemplateRef} from '@angular/core';
+import {DialogTypes} from '@@types/dialog/dialog.enums';
 
-export enum DialogTypes {
-  ADD = 'add',
-  CONFIRM = 'confirm'
-}
-
-export interface Dialog {
+export interface DialogInterfaces {
   dialogRef: MatDialogRef<DialogComponent>;
   dialogAfterClosed$: Observable<unknown>;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '@shared/components/dialog/dialog.component';
-import {Dialog, DialogConfig, DialogData} from '@@types/dialog/dialog';
+import {DialogInterfaces, DialogConfig, DialogData} from '@@types/dialog/dialog.interfaces';
 import {finalize} from 'rxjs/operators';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class DialogService {
 
   constructor(private dialog: MatDialog) { }
 
-  open(dialogConfig: DialogConfig): Dialog {
+  open(dialogConfig: DialogConfig): DialogInterfaces {
     this.dialogRef = this.dialog.open(DialogComponent, {
       ...dialogConfig.config,
       panelClass: dialogConfig.config?.panelClass // set default custom class

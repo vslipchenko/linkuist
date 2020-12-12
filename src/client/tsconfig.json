@@ -22,7 +22,7 @@
       "@graphql/*": ["app/graphql/*"],
       "@guards/*": ["app/guards/*"],
       "@interceptors/*": ["app/interceptors/*"],
-      "@@types/*": ["app/types/*"], // prevent reserved @types path conflict
+      "@@types/*": ["app/types/*"], // prevent reserved @types namespace conflict
       "@modules/*": ["app/modules/*"],
       "@services/*": ["app/services/*"],
       "@shared/*": ["app/shared/*"],
