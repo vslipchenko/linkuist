@@ -1,4 +1,4 @@
-const {ACCESS_JWT_SECRET, ACCESS_JWT_EXPIRES_IN, REFRESH_JWT_SECRET_FRAGMENT, REFRESH_JWT_EXPIRES_IN} = require('../../../constants/app');
+import {ACCESS_JWT_SECRET, ACCESS_JWT_EXPIRES_IN, REFRESH_JWT_SECRET_FRAGMENT, REFRESH_JWT_EXPIRES_IN} from '../../../constants/app';
 const {gql, ApolloError, UserInputError} = require('apollo-server-express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');

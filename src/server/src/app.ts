@@ -1,7 +1,7 @@
 // TODO post (client) data validation
 import schema from './graphql/schema';
 
-const {APP_PORT, MONGODB_URI} = require('./constants/app');
+import {APP_PORT, MONGODB_URI} from './constants/app';
 // External imports
 const mongoose = require('mongoose');
 const express = require('express');

@@ -1,8 +1,11 @@
-const {ApolloError} = require('apollo-server-express');
-const {ACCESS_JWT_SECRET} = require('../constants/app');
-const jwt = require('jsonwebtoken');
+import {ACCESS_JWT_SECRET} from '../constants/app';
+import {ApolloError} from 'apollo-server-express';
+import jwt from 'jsonwebtoken';
 
-const authenticationHandler = (accessToken, successCallback) => {
+export const authenticationHandler = (
+  accessToken: string,
+  successCallback: (tokenData: string | object) => unknown
+) => {
   if (!accessToken) {
     return new ApolloError('', 'ACCESS_TOKEN_EMPTY');
   }
@@ -23,8 +26,4 @@ const authenticationHandler = (accessToken, successCallback) => {
 
     return resolve(successCallback(tokenData));
   });
-};
-
-module.exports = {
-  authenticationHandler
 };

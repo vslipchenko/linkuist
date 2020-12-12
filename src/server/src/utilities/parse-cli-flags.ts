@@ -1,4 +1,4 @@
-exports.parseCliFlagValue = (flagName) => {
+export const parseCliFlagValue = (flagName: string): string | undefined => {
     const flag = process.argv.find(argument => argument.indexOf(`-${flagName}=`) > -1);
 
     if (flag) {

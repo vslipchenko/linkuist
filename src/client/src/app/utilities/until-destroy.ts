@@ -3,6 +3,8 @@ import {takeUntil} from 'rxjs/operators';
 import {ComponentType} from '@angular/cdk/overlay';
 import {ɵComponentType} from '@angular/core';
 
+// Reference https://github.com/ngneat/until-destroy
+
 const SYMBOL: unique symbol = Symbol('__destroy');
 const DECORATOR_APPLIED: unique symbol = Symbol('__untilDestroyApplied');
 
