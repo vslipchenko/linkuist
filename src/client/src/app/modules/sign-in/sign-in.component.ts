@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '@app-types/components/navigation';
+import {NavigationMainActionType} from '@@types/navigation/navigation';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms';
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from '@constants/validation';
 import {ErrorStateMatcher} from '@angular/material/core';

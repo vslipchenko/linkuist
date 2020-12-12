@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '@app-types/components/navigation';
+import {NavigationMainActionType} from '@@types/navigation/navigation';
 import {AuthenticationService} from '@services/authentication/authentication.service';
 
 @Component({

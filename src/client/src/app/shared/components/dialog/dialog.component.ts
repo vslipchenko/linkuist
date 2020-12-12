@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, TemplateRef} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {DialogData, DialogTypes} from '@app-types/components/dialog';
+import {DialogData, DialogTypes} from '@@types/dialog/dialog';
 
 @Component({
   templateUrl: './dialog.component.html',

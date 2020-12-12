@@ -1,12 +1,12 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {NavigationMainActionType} from '@app-types/components/navigation';
+import {NavigationMainActionType} from '@@types/navigation/navigation';
 import {DialogService} from '@shared/services/dialog/dialog.service';
-import {DialogTypes} from '@app-types/components/dialog';
+import {DialogTypes} from '@@types/dialog/dialog';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
-import {BookmarkType} from '@app-types/bookmark';
+import {BookmarkType} from '@@types/bookmark/bookmark';
 import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/validation';
-import {Chip} from '@app-types/components/chips';
+import {Chip} from '@@types/chips/chips';
 
 @Component({
   templateUrl: './bookmarks.component.html',

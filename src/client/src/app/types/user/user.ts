@@ -1,4 +1,4 @@
-import {RecordId} from "./graphql";
+import {RecordId} from "../graphql/graphql";
 // TODO refactor gql specific interfaces
 interface UserByEmail<T = RecordId> {
   userByEmail: T

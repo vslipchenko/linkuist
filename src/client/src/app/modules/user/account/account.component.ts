@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '@services/authentication/authentication.service';
-import {NavigationMainActionType} from '@app-types/components/navigation';
+import {NavigationMainActionType} from '@@types/navigation/navigation';
 import {DialogService} from '@shared/services/dialog/dialog.service';
-import {DialogTypes} from '@app-types/components/dialog';
+import {DialogTypes} from '@@types/dialog/dialog';
 
 @Component({
   selector: 'app-account',
