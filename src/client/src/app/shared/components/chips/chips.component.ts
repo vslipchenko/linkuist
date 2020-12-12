@@ -4,7 +4,7 @@ import {MatChipEvent} from '@angular/material/chips/chip';
 import {MatChipInputEvent} from '@angular/material/chips/chip-input';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autocomplete';
 import {Observable} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {first, startWith} from 'rxjs/operators';
 import {has as _has} from 'lodash';
 
 // TODO remove chip color directive logic once autocomplete issue fixed
@@ -130,14 +130,12 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  private removeChipDuplicates(chips: Array<any>) {
+  private removeChipDuplicates(chips: Array<any>): Array<any> {
     return chips.reduce(
       (previousValue, currentValue) => {
         if (!previousValue.length || !previousValue.find(chip => chip.text ? chip.text === currentValue || chip.text === currentValue.text : chip === currentValue || chip === currentValue.text)) {
-          // debugger;
           return previousValue.concat(currentValue);
         }
-        // debugger;
         return previousValue;
       },
       []
@@ -181,5 +179,9 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
 
   get chips(): Array<any> {
     return this.formControl.value;
+  }
+
+  get chips$(): Observable<Array<any>> {
+    return this.formControl.valueChanges.pipe(startWith(this.chips));
   }
 }

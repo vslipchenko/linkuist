@@ -1,7 +1,7 @@
 <mat-form-field [appWrapIf]="isInputAvailable">
   <mat-chip-list #chipList [attr.aria-label]="label">
     <mat-chip #chipItem="matChip"
-      *ngFor="let chip of chips"
+      *ngFor="let chip of chips$ | async"
       [selectable]="getExactValueOrUseDefault(chip, 'isSelectable', areChipsSelectable)"
       [removable]="getExactValueOrUseDefault(chip, 'isRemovable', areChipsRemovable)"
       (removed)="chip.onRemove ? chip.onRemove($event) : removeChip($event)"

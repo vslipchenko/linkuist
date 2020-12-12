@@ -22,10 +22,6 @@
       <mat-label>Description</mat-label>
       <textarea type="text" matInput formControlName="description"></textarea>
     </mat-form-field>
-<!--    <mat-form-field>-->
-<!--      <mat-label>Thumbnail</mat-label>-->
-<!--      <input type="text" matInput formControlName="title" placeholder="Custom bookmark thumbnail" />-->
-<!--    </mat-form-field>-->
      <app-chips formControlName="tags"
                 label="Tags"
                 [areChipsRemovable]="true"
@@ -36,5 +32,6 @@
                 [chipLetterValidator]="tagRegExp"
                 [areChipsLowerCased]="true"
      ></app-chips>
+    <mat-slide-toggle formControlName="private" labelPosition="before">Private access</mat-slide-toggle>
   </form>
 </ng-template>
