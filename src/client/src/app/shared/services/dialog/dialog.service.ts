@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '@shared/components/dialog/dialog.component';
-import {Dialog, DialogConfig, DialogData} from '@models/components/dialog';
+import {Dialog, DialogConfig, DialogData} from '@app-types/components/dialog';
 import {finalize} from 'rxjs/operators';
 
 @Injectable({

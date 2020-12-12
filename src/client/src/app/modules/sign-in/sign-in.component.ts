@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '@models/components/navigation';
+import {NavigationMainActionType} from '@app-types/components/navigation';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms';
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from '@constants/validation';
 import {ErrorStateMatcher} from '@angular/material/core';
@@ -121,9 +121,8 @@ export class SignInComponent implements OnInit {
   private get isInvalidUserData(): boolean {
     const invalidPasswordPattern = !PASSWORD_REGEXP.test(this.passwordField.value);
     const invalidEmailPattern = !EMAIL_REGEXP.test(this.emailField.value);
-    const invalidPattern = invalidPasswordPattern || invalidEmailPattern;
 
-    return invalidPattern;
+    return invalidPasswordPattern || invalidEmailPattern;
   }
 
   get hasRequiredError(): boolean | undefined {

@@ -22,7 +22,7 @@
       "@graphql/*": ["app/graphql/*"],
       "@guards/*": ["app/guards/*"],
       "@interceptors/*": ["app/interceptors/*"],
-      "@models/*": ["app/models/*"],
+      "@app-types/*": ["app/types/*"],
       "@modules/*": ["app/modules/*"],
       "@services/*": ["app/services/*"],
       "@shared/*": ["app/shared/*"],
