@@ -8,6 +8,7 @@ dotenv.config({path: `src/environments/.env.${environment}`});
 interface ProcessEnvConstants {
   [key: string]: unknown;
   ACCESS_JWT_SECRET: Secret;
+  REFRESH_JWT_SECRET_FRAGMENT: Secret;
 }
 
 export const {

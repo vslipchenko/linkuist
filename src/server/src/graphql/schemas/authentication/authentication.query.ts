@@ -1,20 +1,24 @@
-import {ACCESS_JWT_SECRET, ACCESS_JWT_EXPIRES_IN, REFRESH_JWT_SECRET_FRAGMENT, REFRESH_JWT_EXPIRES_IN} from '../../../constants/app';
-const {gql, ApolloError, UserInputError} = require('apollo-server-express');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const {User} = require('../../../models/user');
+import {ACCESS_JWT_EXPIRES_IN, ACCESS_JWT_SECRET, REFRESH_JWT_EXPIRES_IN, REFRESH_JWT_SECRET_FRAGMENT} from '../../../constants/app';
+import {ApolloError, gql, UserInputError} from 'apollo-server-express';
+import jwt, {SignOptions} from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import {User} from '../../../models/user';
+import {UserDocument, UserModel} from '../../../types/user/user.interfaces';
+import {QueryResult} from '../../../types/mongoose/mongoose.types';
+import {UserJwtPayload} from '../../../types/jwt/jwt.interfaces';
 
-const signIn = (_, {input}) => {
+const signIn = (_: unknown, {input}: { input: UserModel }) => {
   if (!input.email) { // TODO OR invalid format
     return new UserInputError('Invalid user data');
   }
 
   return new Promise((resolve, reject) => {
     User.findOne({email: input.email})
-      .then(user => {
+      .then((user: QueryResult<UserDocument>) => {
         if (!user) {
           return reject(new UserInputError('Invalid user data'));
         }
+
         // User account is blocked
         if (!user.accessKey) {
           return reject(new ApolloError('User access is restricted', 'USER_BLOCKED'));
@@ -29,7 +33,7 @@ const signIn = (_, {input}) => {
         const accessToken = jwt.sign(
           {userId: user._id, username: user.username},
           ACCESS_JWT_SECRET,
-          {expiresIn: ACCESS_JWT_EXPIRES_IN}
+          {expiresIn: ACCESS_JWT_EXPIRES_IN} as SignOptions
         );
 
         const REFRESH_JWT_SECRET = `${REFRESH_JWT_SECRET_FRAGMENT}${user.accessKey}`;
@@ -37,7 +41,7 @@ const signIn = (_, {input}) => {
         const refreshToken = jwt.sign(
           {userId: user._id},
           REFRESH_JWT_SECRET,
-          {expiresIn: REFRESH_JWT_EXPIRES_IN}
+          {expiresIn: REFRESH_JWT_EXPIRES_IN} as SignOptions
         );
         // OK send back tokens
         return resolve({accessToken, refreshToken});
@@ -46,13 +50,13 @@ const signIn = (_, {input}) => {
   });
 };
 
-const accessTokenByRefreshToken = (_, {refreshToken}) => {
+const accessTokenByRefreshToken = (_: unknown, {refreshToken}: { refreshToken: string }) => {
   // console.log('refresh token is ', userId);
   if (!refreshToken) {
     return new ApolloError('', 'REFRESH_TOKEN_EMPTY');
   }
 
-  const userId = (jwt.decode(refreshToken) || {}).userId;
+  const userId = (<UserJwtPayload>jwt.decode(refreshToken))?.userId;
 
   if (!userId) {
     return new ApolloError('', 'REFRESH_TOKEN_INVALID');
@@ -60,7 +64,7 @@ const accessTokenByRefreshToken = (_, {refreshToken}) => {
 
   return new Promise((resolve, reject) => {
     User.findOne({_id: userId})
-      .then(user => {
+      .then((user: QueryResult<UserDocument>) => {
         if (!user) {
           return reject(new ApolloError('', 'REFRESH_TOKEN_INVALID'));
         }
@@ -80,7 +84,7 @@ const accessTokenByRefreshToken = (_, {refreshToken}) => {
         const accessToken = jwt.sign(
           {userId: user._id, username: user.username},
           ACCESS_JWT_SECRET,
-          {expiresIn: ACCESS_JWT_EXPIRES_IN}
+          {expiresIn: ACCESS_JWT_EXPIRES_IN} as SignOptions
         );
 
         return resolve(accessToken);
@@ -89,21 +93,16 @@ const accessTokenByRefreshToken = (_, {refreshToken}) => {
   });
 };
 
-const authenticationQueryTypeDefinitions = gql`
+export const authenticationQueryTypeDefinitions = gql`
     extend type Query {
       signIn(input: SignInQueryInput!): JwtTokens
       accessTokenByRefreshToken(refreshToken: String!): String
     }
 `;
 
-const authenticationQueryResolvers = {
+export const authenticationQueryResolvers = {
   Query: {
     signIn,
     accessTokenByRefreshToken
   }
-};
-
-module.exports = {
-  authenticationQueryTypeDefinitions,
-  authenticationQueryResolvers
 };

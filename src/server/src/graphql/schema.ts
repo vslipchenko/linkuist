@@ -1,7 +1,7 @@
-const merge = require('lodash/merge');
-const {makeExecutableSchema, gql} = require('apollo-server-express');
-const {scalarTypeDefinitions, scalarResolvers} = require('./scalars/scalars');
-const {authenticationTypeDefinitions, authenticationResolvers} = require("./schemas/authentication/authentication.schema");
+import {merge as _merge} from 'lodash';
+import {makeExecutableSchema, gql} from 'apollo-server-express';
+import {scalarTypeDefinitions, scalarResolvers} from './scalars/scalars';
+import {authenticationTypeDefinitions, authenticationResolvers} from './schemas/authentication/authentication.schema';
 const {userTypeDefinitions, userResolvers} = require("./schemas/user/user.schema");
 
 // TODO remove as soon as extend of empty types is available
@@ -22,7 +22,8 @@ export default makeExecutableSchema({
       ...authenticationTypeDefinitions,
       ...userTypeDefinitions
     ],
-    resolvers: merge(
+    resolvers: _merge(
+      {},
       ...scalarResolvers,
       ...authenticationResolvers,
       ...userResolvers

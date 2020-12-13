@@ -1,5 +1,5 @@
 const {gql} = require('apollo-server-express');
-const {User} = require('../../../models/user');
+import {User} from '../../../models/user';
 const bcrypt = require('bcrypt');
 const {v4: uuidv4} = require('uuid');
 

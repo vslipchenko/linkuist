@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx ts-node-dev src/app.ts --env=dev --debug",
     "prod": "npx ts-node-dev src/app.ts --env=prod",
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "check-lint": "npx eslint src"
   },
   "author": "",
   "license": "ISC",
