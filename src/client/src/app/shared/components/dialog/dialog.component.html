@@ -1,23 +1,24 @@
-<ng-template [ngIf]="dialogType === dialogTypes.CONFIRM">
-  <h2 mat-dialog-title>{{confirmTypeTitle}}</h2>
-  <mat-dialog-content>
-    This will delete all elements that are currently on this page and cannot be undone.
-  </mat-dialog-content>
-  <mat-dialog-actions class="dialog-actions">
-    <button mat-dialog-close mat-stroked-button>Cancel</button>
-    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-    <button mat-flat-button color="primary" [mat-dialog-close]="true">OK</button>
-  </mat-dialog-actions>
-</ng-template>
+<!--<ng-template [ngIf]="dialogType === dialogTypes.CONFIRM">-->
+<!--  <h2 mat-dialog-title>{{confirmTypeTitle}}</h2>-->
+<!--  <mat-dialog-content>-->
+<!--    This will delete all elements that are currently on this page and cannot be undone.-->
+<!--  </mat-dialog-content>-->
+<!--  <mat-dialog-actions class="dialog-actions">-->
+<!--    <button mat-dialog-close mat-stroked-button>Cancel</button>-->
+<!--    &lt;!&ndash; The mat-dialog-close directive optionally accepts a value as a result for the dialog. &ndash;&gt;-->
+<!--    <button mat-flat-button color="primary" [mat-dialog-close]="true">OK</button>-->
+<!--  </mat-dialog-actions>-->
+<!--</ng-template>-->
 
-<ng-template [ngIf]="dialogType === dialogTypes.ADD">
-  <h2 mat-dialog-title>{{addTypeTitle}}</h2>
+<!--<ng-template>-->
+  <h2 mat-dialog-title>{{title}}</h2>
   <mat-dialog-content>
     <ng-container [ngTemplateOutlet]="contentTemplateRef"></ng-container>
   </mat-dialog-content>
   <mat-dialog-actions class="dialog-actions">
-    <button mat-dialog-close mat-stroked-button>Close</button>
-    <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-    <button mat-flat-button color="primary" [mat-dialog-close]="true">Add</button>
+<!--    <button mat-dialog-close mat-stroked-button>Close</button>-->
+<!--    &lt;!&ndash; The mat-dialog-close directive optionally accepts a value as a result for the dialog. &ndash;&gt;-->
+<!--    <button mat-flat-button color="primary" [mat-dialog-close]="true">Add</button>-->
+    <ng-container [ngTemplateOutlet]="actionsTemplateRef"></ng-container>
   </mat-dialog-actions>
-</ng-template>
+<!--</ng-template>-->

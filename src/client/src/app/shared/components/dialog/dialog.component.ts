@@ -1,38 +1,38 @@
-import {Component, Inject, OnInit, TemplateRef} from '@angular/core';
+import {Component, Inject, TemplateRef} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {DialogData} from '@@types/dialog/dialog.interfaces';
-import {DialogTypes} from '@@types/dialog/dialog.enums';
+
+// import {DialogTypes} from '@@types/dialog/dialog.enums';
 
 @Component({
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss']
 })
-export class DialogComponent implements OnInit {
-
-
+export class DialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) private data: DialogData) {
   }
 
-  ngOnInit(): void {
-  }
+  // get dialogType(): DialogTypes {
+  //   return this.data.dialogType;
+  // }
 
-  get dialogType(): DialogTypes {
-    return this.data.dialogType;
-  }
+  // get dialogTypes(): typeof DialogTypes {
+  //   return DialogTypes;
+  // }
 
-  get dialogTypes(): typeof DialogTypes {
-    return DialogTypes;
-  }
+  // get confirmTypeTitle(): string {
+  //   return this.data?.dialogTitle ?? 'Confirmation';
+  // }
 
-  get confirmTypeTitle(): string {
-    return this.data?.dialogTitle ?? 'Confirmation';
-  }
-
-  get addTypeTitle(): string {
-    return this.data?.dialogTitle ?? 'Add';
+  get title(): string {
+    return this.data?.title;
   }
 
   get contentTemplateRef(): TemplateRef<unknown> {
-    return this.data?.dialogContentTemplateRef;
+    return this.data?.contentTemplateRef;
+  }
+
+  get actionsTemplateRef(): TemplateRef<unknown> {
+    return this.data?.actionsTemplateRef;
   }
 }

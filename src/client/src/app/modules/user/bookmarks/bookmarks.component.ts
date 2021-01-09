@@ -1,7 +1,7 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
 import {DialogService} from '@shared/services/dialog/dialog.service';
-import {DialogTypes} from '@@types/dialog/dialog.enums';
+// import {DialogTypes} from '@@types/dialog/dialog.enums';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
 import {BookmarkType} from '@@types/bookmark/bookmark.enums';
@@ -20,6 +20,7 @@ export class BookmarksComponent implements OnInit {
   readonly tagRegExp = BOOKMARK_TAG_LETTER_REGEXP;
 
   @ViewChild('addBookmarkContent') addBookmarkContent: TemplateRef<unknown>;
+  @ViewChild('addBookmarkActions') addBookmarkActions: TemplateRef<unknown>;
 
   addBookmarkForm: FormGroup;
 
@@ -65,14 +66,18 @@ export class BookmarksComponent implements OnInit {
 
   addBookmark(): void {
     this.dialogService.open({
-      type: DialogTypes.ADD,
-      title: 'Add bookmark',
-      contentTemplateRef: this.addBookmarkContent,
-      data: {form: this.addBookmarkForm},
-      config: {
-        panelClass: 'bookmark-dialog'
+      panelClass: 'bookmark-dialog',
+      data: {
+        title: 'Add bookmark',
+        contentTemplateRef: this.addBookmarkContent,
+        actionsTemplateRef: this.addBookmarkActions,
+        form: this.addBookmarkForm
       }
     });
+  }
+
+  saveBookmark(): void {
+
   }
 
   private handlePrivateFieldValueChanges(): void {
