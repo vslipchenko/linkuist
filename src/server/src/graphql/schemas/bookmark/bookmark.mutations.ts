@@ -1,9 +1,9 @@
 import {gql} from 'apollo-server-express';
-import {BookmarkInterface} from '../../../types/bookmark/bookmark.interfaces';
+// import {BookmarkInterface} from '../../../types/bookmark/bookmark.interfaces';
 
-const createBookmark = (_: unknown, {input}: {input: Omit<BookmarkInterface, 'userId'>}) => {
-
-};
+// const createBookmark = (_: unknown, {input}: {input: Omit<BookmarkInterface, 'userId'>}) => {
+//
+// };
 
 // TODO server side validation
 export const bookmarkMutationTypeDefinitions = gql`
@@ -14,6 +14,6 @@ export const bookmarkMutationTypeDefinitions = gql`
 
 export const bookmarkMutationResolvers = {
   Mutation: {
-    createBookmark
+    createBookmark: () => {}
   }
 };

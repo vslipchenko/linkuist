@@ -16,7 +16,7 @@ const bookmarkSchema = new mongoose.Schema({
   },
   thumbnailUrl: {type: String, trim: true},
   description: {type: String, trim: true},
-  tags: {type: String, trim: true}
+  tags: {type: String, required: true, trim: true} // private or public tag must be presented
 } as KeysAndValues<BookmarkInterface, SchemaTypeOpts<any>>);
 
 export const Bookmark = mongoose.model<BookmarkDocument>('Bookmark', bookmarkSchema, 'users.bookmarks');
