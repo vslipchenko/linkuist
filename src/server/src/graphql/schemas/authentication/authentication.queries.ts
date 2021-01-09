@@ -3,11 +3,11 @@ import {ApolloError, gql, UserInputError} from 'apollo-server-express';
 import jwt, {SignOptions} from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {User} from '../../../models/user';
-import {UserDocument, UserModel} from '../../../types/user/user.interfaces';
+import {UserDocument, UserInterface} from '../../../types/user/user.interfaces';
 import {QueryResult} from '../../../types/mongoose/mongoose.types';
 import {UserJwtPayload} from '../../../types/jwt/jwt.interfaces';
 
-const signIn = (_: unknown, {input}: { input: UserModel }) => {
+const signIn = (_: unknown, {input}: { input: UserInterface }) => {
   if (!input.email) { // TODO OR invalid format
     return new UserInputError('Invalid user data');
   }
