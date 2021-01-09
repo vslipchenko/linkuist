@@ -1,6 +1,6 @@
-const {gql} = require('apollo-server-express');
+import {gql} from 'apollo-server-express';
 
-module.exports.userInputs = gql`
+export const userInputs = gql`
     input CreateUserMutationInput {
         email: String!
         username: String!
