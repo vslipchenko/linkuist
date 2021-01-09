@@ -2,7 +2,7 @@ import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
 import {DialogService} from '@shared/services/dialog/dialog.service';
 // import {DialogTypes} from '@@types/dialog/dialog.enums';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
 import {BookmarkType} from '@@types/bookmark/bookmark.enums';
 import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/validation';
@@ -38,7 +38,7 @@ export class BookmarksComponent implements OnInit {
   private initAddBookmarkForm(): void {
     // this.kek = 'awdwd';
     this.addBookmarkForm = this.formBuilder.group({
-      link: [null, [Validators.required]],
+      link: [null, [Validators.required, BookmarksComponent.linkValidator]],
       title: [null],
       thumbnail: [null],
       description: [null],
@@ -93,6 +93,23 @@ export class BookmarksComponent implements OnInit {
 
         this.tagsField.setValue(tags);
       });
+  }
+
+  private static linkValidator(control: AbstractControl): null | ValidationErrors {
+    const link = control.value;
+    if (link?.length) {
+      try {
+        new URL(link);
+        return null;
+        // this.linkField.setValue(url);
+      } catch {
+        return {pattern: true};
+      }
+    }
+  }
+
+  get linkField(): AbstractControl {
+    return this.addBookmarkForm.get('link');
   }
 
   private get privateField(): AbstractControl {

@@ -4,6 +4,7 @@ import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
 import {DialogService} from '@shared/services/dialog/dialog.service';
 // import {DialogTypes} from '@@types/dialog/dialog.enums';
 
+// TODO Consider visitor instead of profile and member instead of account
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
