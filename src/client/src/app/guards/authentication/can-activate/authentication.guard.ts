@@ -13,6 +13,7 @@ export class AuthenticationCanActivateGuard implements CanActivate {
   canActivate(): boolean {
     const data = this.authenticationService.accessTokenData;
     const username = extractUsername(window.location.pathname);
+    // TODO redirect not signed in visitor while navigating @username/bookmarks to the homepage
     return data?.username === username;
   }
 }

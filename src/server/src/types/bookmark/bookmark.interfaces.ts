@@ -1,7 +1,7 @@
 import {Document} from 'mongoose';
 
 export interface BookmarkInterface {
-  id: string;
+  id: string; // = new Date().getTime()
   userId: string;
   link: string;
   title: string;

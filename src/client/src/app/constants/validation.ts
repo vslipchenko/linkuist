@@ -1,4 +1,4 @@
-export const USERNAME_MAXLENGTH = 33;
+export const USERNAME_MAXLENGTH = 33; // excluding @ char
 export const EMAIL_MAXLENGTH = 254;
 export const PASSWORD_MINLENGTH = 8;
 export const PASSWORD_MAXLENGTH = 50;

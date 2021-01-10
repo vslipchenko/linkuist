@@ -1,6 +1,6 @@
 import mongoose, {SchemaTypeOpts} from 'mongoose';
 import {UserDocument, UserInterface} from '../types/user/user.interfaces';
-import {KeysAndValues} from '../types/app/app.types';
+import {ObjectKeysOfAndValues} from '../types/utility/utility.types';
 
 const userSchema = new mongoose.Schema({
   email: {type: String, required: true, unique: true, trim: true},
@@ -12,6 +12,6 @@ const userSchema = new mongoose.Schema({
       partialFilterExpression: {accessKey: {$type: 'string'}}
     }
   }
-} as KeysAndValues<UserInterface, SchemaTypeOpts<any>>);
+} as ObjectKeysOfAndValues<UserInterface, SchemaTypeOpts<any>>);
 
 export const User = mongoose.model<UserDocument>('User', userSchema, 'users');

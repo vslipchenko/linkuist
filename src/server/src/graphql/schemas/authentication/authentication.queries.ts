@@ -6,10 +6,17 @@ import {User} from '../../../models/user';
 import {UserDocument, UserInterface} from '../../../types/user/user.interfaces';
 import {QueryResult} from '../../../types/mongoose/mongoose.types';
 import {UserJwtPayload} from '../../../types/jwt/jwt.interfaces';
+import {checkDataValidity} from '../../../utilities/validators';
+import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../../constants/validation';
 
 const signIn = (_: unknown, {input}: { input: UserInterface }) => {
-  if (!input.email) { // TODO OR invalid format
-    return new UserInputError('Invalid user data');
+  const isValidData = checkDataValidity({input, pattern: {
+    'email': EMAIL_REGEXP,
+    'password': PASSWORD_REGEXP
+  }});
+
+  if (!isValidData) {
+    return null;
   }
 
   return new Promise((resolve, reject) => {
@@ -50,7 +57,7 @@ const signIn = (_: unknown, {input}: { input: UserInterface }) => {
   });
 };
 
-const accessTokenByRefreshToken = (_: unknown, {refreshToken}: { refreshToken: string }) => {
+const accessTokenByRefreshToken = (_: unknown, {refreshToken}: { refreshToken: UserJwtPayload['refreshToken'] }) => {
   // console.log('refresh token is ', userId);
   if (!refreshToken) {
     return new ApolloError('', 'REFRESH_TOKEN_EMPTY');

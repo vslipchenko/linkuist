@@ -1,13 +1,15 @@
+import {ObjectValuesAndKeys} from '../types/utility/utility.types';
+
 interface CheckDataValidityOptions {
-  payload: any;
-  pattern: RegExp | { [key: string]: RegExp };
+  input: unknown;
+  pattern: RegExp | ObjectValuesAndKeys<RegExp, string>;
   pathsToCheck?: string[];
   outputInvalidPaths?: boolean;
 }
 
 type CheckDataValidityResult = boolean | [boolean, string[]];
 
-export const checkDataValidity = ({payload, pattern, pathsToCheck = [], outputInvalidPaths = false}: CheckDataValidityOptions): CheckDataValidityResult => {
+export const checkDataValidity = ({input, pattern, pathsToCheck = [], outputInvalidPaths = false}: CheckDataValidityOptions): CheckDataValidityResult => {
   const invalidPaths: string[] = [];
 
   const validateRecursively = (value: any, path: string[] = []): void => {
@@ -26,13 +28,12 @@ export const checkDataValidity = ({payload, pattern, pathsToCheck = [], outputIn
       const fullPath = path.join('.');
       if (!pathsToCheck.length || pathsToCheck.includes(fullPath)) {
         // if its a distinct entry & standalone pattern or path patterns are provided & value is invalid
-        // @ts-ignore
-        !invalidPaths.includes(fullPath) && (pattern.constructor === RegExp ? !pattern.test(value) : pattern[fullPath] && !pattern[fullPath].test(value)) && invalidPaths.push(fullPath);
+        !invalidPaths.includes(fullPath) && (pattern instanceof RegExp ? !pattern.test(value) : pattern.hasOwnProperty(fullPath) && !pattern[fullPath].test(value)) && invalidPaths.push(fullPath);
       }
     }
   };
 
-  validateRecursively(payload);
+  validateRecursively(input);
 
   return invalidPaths.length
     ? outputInvalidPaths
