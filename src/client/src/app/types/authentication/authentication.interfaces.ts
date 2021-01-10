@@ -8,9 +8,10 @@ export interface SignInQueryResult {
 }
 
 export interface AccessTokenData {
+  userId: string;
+  username: string;
   iat: number;
   exp: number;
-  username: string;
 }
 
 export interface AccessTokenQueryResult {

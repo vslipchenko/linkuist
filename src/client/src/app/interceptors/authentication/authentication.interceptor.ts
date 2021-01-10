@@ -90,7 +90,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   private static attachAccessToken(request: HttpRequest<unknown>, accessToken: string): HttpRequest<unknown> {
     return request.clone({
       setHeaders: {
-        Authorization: accessToken,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
   }

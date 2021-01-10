@@ -1,5 +1,5 @@
 import mongoose, {SchemaTypeOpts} from 'mongoose';
-import {UserDocument, UserInterface} from '../types/user/user.interfaces';
+import {UserDocument, IUser} from '../types/user/user.interfaces';
 import {ObjectKeysOfAndValues} from '../types/utility/utility.types';
 
 const userSchema = new mongoose.Schema({
@@ -12,6 +12,6 @@ const userSchema = new mongoose.Schema({
       partialFilterExpression: {accessKey: {$type: 'string'}}
     }
   }
-} as ObjectKeysOfAndValues<UserInterface, SchemaTypeOpts<any>>);
+} as ObjectKeysOfAndValues<IUser, SchemaTypeOpts<any>>);
 
 export const User = mongoose.model<UserDocument>('User', userSchema, 'users');

@@ -2,12 +2,12 @@ import {gql} from 'apollo-server-express';
 import {User} from '../../../models/user';
 import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
-import {UserInterface} from '../../../types/user/user.interfaces';
+import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {EMAIL_REGEXP, PASSWORD_REGEXP, USERNAME_REGEXP} from '../../../constants/validation';
 
 /* Resolver declarations */
-const createUser = (_: unknown, {input}: {input: UserInterface}) => {
+const createUser = (_: unknown, {input}: {input: IUser}) => {
     const isValidData = checkDataValidity({input, pattern: {
         email: EMAIL_REGEXP,
         username: USERNAME_REGEXP,

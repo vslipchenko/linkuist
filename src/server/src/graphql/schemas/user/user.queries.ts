@@ -1,16 +1,16 @@
 import {gql} from 'apollo-server-express';
 import {User} from '../../../models/user';
-import {UserInterface} from '../../../types/user/user.interfaces';
+import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {EMAIL_REGEXP, USERNAME_REGEXP} from '../../../constants/validation';
 
-const userByEmail = (_: unknown, {email}: {email: UserInterface['email']}) => {
+const userByEmail = (_: unknown, {email}: {email: IUser['email']}) => {
   if (checkDataValidity({input: email, pattern: EMAIL_REGEXP})) {
     return User.findOne({email});
   }
 };
 
-const userByUsername = (_: unknown, {username}: {username: UserInterface['username']}) => {
+const userByUsername = (_: unknown, {username}: {username: IUser['username']}) => {
   if (checkDataValidity({input: username, pattern: USERNAME_REGEXP})) {
     return User.findOne({username});
   }

@@ -1,6 +1,6 @@
 import {Document} from 'mongoose';
 
-export interface BookmarkInterface {
+export interface IBookmark {
   id: string; // = new Date().getTime()
   userId: string;
   link: string;
@@ -10,4 +10,4 @@ export interface BookmarkInterface {
   tags: string;
 }
 
-export interface BookmarkDocument extends BookmarkInterface, Document {}
+export interface BookmarkDocument extends IBookmark, Document {}

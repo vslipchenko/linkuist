@@ -1,11 +1,12 @@
 import {ACCESS_JWT_SECRET} from '../constants/app';
 import {ApolloError} from 'apollo-server-express';
 import jwt from 'jsonwebtoken';
+import {AccessTokenData} from '../types/jwt/jwt.interfaces';
 
-export const authenticationHandler = (
+export const authenticationInterceptor = <C = unknown>(
   accessToken: string,
-  successCallback: (tokenData: string | object) => unknown
-) => {
+  successCallback: (tokenData: AccessTokenData) => C
+): ApolloError | Promise<ApolloError | C> => {
   if (!accessToken) {
     return new ApolloError('', 'ACCESS_TOKEN_EMPTY');
   }
@@ -14,7 +15,7 @@ export const authenticationHandler = (
     let tokenData;
 
     try {
-      tokenData = jwt.verify(accessToken, ACCESS_JWT_SECRET);
+      tokenData = jwt.verify(accessToken, ACCESS_JWT_SECRET) as AccessTokenData;
     } catch (error) {
       // The only legit error
       if (error.name === 'TokenExpiredError') {

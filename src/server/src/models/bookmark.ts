@@ -1,7 +1,7 @@
 import mongoose, {SchemaTypeOpts} from 'mongoose';
-// import {UserDocument, UserInterface} from '../types/user/user.interfaces';
+// import {UserDocument, IUser} from '../types/user/user.interfaces';
 import {ObjectKeysOfAndValues} from '../types/utility/utility.types';
-import {BookmarkDocument, BookmarkInterface} from '../types/bookmark/bookmark.interfaces';
+import {BookmarkDocument, IBookmark} from '../types/bookmark/bookmark.interfaces';
 
 const bookmarkSchema = new mongoose.Schema({
   id: {type: String, required: true, unique: true},
@@ -17,6 +17,6 @@ const bookmarkSchema = new mongoose.Schema({
   thumbnailUrl: {type: String, trim: true},
   description: {type: String, trim: true},
   tags: {type: String, required: true, trim: true} // private or public tag must be presented
-} as ObjectKeysOfAndValues<BookmarkInterface, SchemaTypeOpts<any>>);
+} as ObjectKeysOfAndValues<IBookmark, SchemaTypeOpts<any>>);
 
 export const Bookmark = mongoose.model<BookmarkDocument>('Bookmark', bookmarkSchema, 'users.bookmarks');

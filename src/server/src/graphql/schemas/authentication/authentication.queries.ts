@@ -3,13 +3,13 @@ import {ApolloError, gql, UserInputError} from 'apollo-server-express';
 import jwt, {SignOptions} from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {User} from '../../../models/user';
-import {UserDocument, UserInterface} from '../../../types/user/user.interfaces';
+import {UserDocument, IUser} from '../../../types/user/user.interfaces';
 import {QueryResult} from '../../../types/mongoose/mongoose.types';
-import {UserJwtPayload} from '../../../types/jwt/jwt.interfaces';
+import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../../constants/validation';
 
-const signIn = (_: unknown, {input}: { input: UserInterface }) => {
+const signIn = (_: unknown, {input}: { input: IUser }) => {
   const isValidData = checkDataValidity({input, pattern: {
     'email': EMAIL_REGEXP,
     'password': PASSWORD_REGEXP
@@ -57,13 +57,13 @@ const signIn = (_: unknown, {input}: { input: UserInterface }) => {
   });
 };
 
-const accessTokenByRefreshToken = (_: unknown, {refreshToken}: { refreshToken: UserJwtPayload['refreshToken'] }) => {
+const accessTokenByRefreshToken = (_: unknown, {refreshToken}: { refreshToken: string }) => {
   // console.log('refresh token is ', userId);
   if (!refreshToken) {
     return new ApolloError('', 'REFRESH_TOKEN_EMPTY');
   }
 
-  const userId = (<UserJwtPayload>jwt.decode(refreshToken))?.userId;
+  const userId = (<RefreshAccessTokenPayload>jwt.decode(refreshToken))?.userId;
 
   if (!userId) {
     return new ApolloError('', 'REFRESH_TOKEN_INVALID');
