@@ -41,3 +41,12 @@ export const checkDataValidity = ({input, pattern, pathsToCheck = [], outputInva
       : false
     : true;
 };
+
+// TODO move to parsers.ts;
+export const parseUrl = (url: string): URL | null => {
+  try {
+    return new URL(url);
+  } catch {
+    return null;
+  }
+};
