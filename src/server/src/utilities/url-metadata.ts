@@ -4,6 +4,7 @@ import {parseUrl} from './validators';
 
 enum MetadataElements {
   'hostname',
+  'icon',
   'title',
   'description',
   'image'
@@ -15,7 +16,7 @@ type FetchMetadataOptions = Required<Pick<RequestOptions, 'headers' | 'timeout'>
 
 type FetchedMetadata = Metadata | Partial<Metadata>;
 
-const fetchUrlMetadata = (url: string): Promise<FetchedMetadata> => {
+export const fetchUrlMetadata = (url: string): Promise<FetchedMetadata> => {
   let redirectCounter = 0;
   const metadata: FetchedMetadata = {};
   const requestTimeout = 1000; // Milliseconds
@@ -135,6 +136,6 @@ const fetchUrlMetadata = (url: string): Promise<FetchedMetadata> => {
   });
 };
 
-fetchUrlMetadata('https://www.amazon.com')
-  .then(v => console.log('FS ', v))
-  .catch(e => console.error('FE ', e));
+// fetchUrlMetadata('https://www.amazon.com')
+//   .then(v => console.log('FS ', v))
+//   .catch(e => console.error('FE ', e));
