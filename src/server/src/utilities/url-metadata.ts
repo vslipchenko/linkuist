@@ -16,9 +16,10 @@ type FetchMetadataOptions = Required<Pick<RequestOptions, 'headers' | 'timeout'>
 
 type FetchedMetadata = Metadata | Partial<Metadata>;
 
-export const fetchUrlMetadata = (url: string): Promise<FetchedMetadata> => {
+export const fetchUrlMetadata = (url: string): Promise<FetchedMetadata> => { // possible return values: {} | {hostname} | Metadata
   let redirectCounter = 0;
   const metadata: FetchedMetadata = {};
+  const responseResults: string[] = [];
   const requestTimeout = 1000; // Milliseconds
   const responseTimeout = 1000; // Milliseconds
   const userAgents = [
@@ -29,13 +30,9 @@ export const fetchUrlMetadata = (url: string): Promise<FetchedMetadata> => {
   ];
   const maxRedirectCount = userAgents.length * 20; // 20 redirects per UA https://stackoverflow.com/questions/9384474/in-chrome-how-many-redirects-are-too-many
 
-  const fulfillMetadata = (data: string) => {
+  const fulfillMetadata = (chunks: string[]): FetchedMetadata => {
     // TODO implement meta parser
     console.log('parse ', data.length);
-  };
-
-  const isMetadataFulfilled = (metadata: FetchedMetadata): boolean => {
-    return Object.keys(metadata).length === Object.keys(MetadataElements).length;
   };
 
   const isSupportedProtocol = (protocol: string): boolean => {
@@ -59,21 +56,21 @@ export const fetchUrlMetadata = (url: string): Promise<FetchedMetadata> => {
   };
 
   const fetchMetadata = (url: string, options: FetchMetadataOptions, resolve: (value: FetchedMetadata) => void, recentUserAgent?: string): void => {
-    let Url = parseUrl(url);
+    const Url = parseUrl(url);
+    const userAgent = recentUserAgent || userAgents.pop();
 
-    if (!isValidRequest(Url as URL)) return resolve(metadata); // Might be validated on the client
+    if (!isValidRequest(Url as URL) || !userAgent) return resolve(fulfillMetadata(responseResults)); // Might be validated on the client
 
     if (Url?.hostname) metadata.hostname = removeW3(Url.hostname); // Prettify
 
-    const userAgent = recentUserAgent || userAgents.pop();
-
-    if (!userAgent) return resolve(metadata); // Out of user agents
+    //if (!userAgent) return resolve(fulfillMetadata(responseData)); // Out of user agents
 
     options.headers['Host'] = Url?.host;
     options.headers['User-Agent'] = userAgent;
 
-    let responseData: string;
     const get = Url?.protocol === 'http:' ? httpGet : httpsGet;
+
+    let responseData = '';
 
     const request = get(url, options, (response: IncomingMessage): void => {
       response.on('error', () => {}); // delegate further instructions to request 'close' event
@@ -103,7 +100,7 @@ export const fetchUrlMetadata = (url: string): Promise<FetchedMetadata> => {
       response.on('data', (chunk: string) => {
         responseData += chunk;
 
-        if (responseData.indexOf('</head>') > -1) {
+        if (chunk.indexOf('</head>') > -1) {
           return response.destroy(); // force close once <head> is fetched
         }
       });
@@ -112,17 +109,13 @@ export const fetchUrlMetadata = (url: string): Promise<FetchedMetadata> => {
     request
       .on('error', () => {}) // delegate further instructions to 'close' event
       .on('timeout', () => request.destroy())
-      .on('close', () => { // closed before connection established or request is fulfilled
+      .on('close', () => {
         if (responseData) {
-          fulfillMetadata(responseData);
+          responseResults.push(responseData);
         }
 
-        if (!isMetadataFulfilled(metadata)) {
-          return fetchMetadata(url, options, resolve);
-        }
-
-        return resolve(metadata);
-      });
+        fetchMetadata(url, options, resolve);
+      }); // try to fetch recursively; close event can be emitted before connection established or request was fulfilled
   };
 
   return new Promise<FetchedMetadata>((resolve) => {

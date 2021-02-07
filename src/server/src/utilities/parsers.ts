@@ -7,3 +7,11 @@ export const parseCliFlagValue = (flagName: string): string | undefined => {
 
     return undefined;
 };
+
+export const parseUrl = (url: string): URL | null => {
+    try {
+        return new URL(url);
+    } catch {
+        return null;
+    }
+};

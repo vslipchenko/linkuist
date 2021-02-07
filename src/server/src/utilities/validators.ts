@@ -42,11 +42,6 @@ export const checkDataValidity = ({input, pattern, pathsToCheck = [], outputInva
     : true;
 };
 
-// TODO move to parsers.ts;
-export const parseUrl = (url: string): URL | null => {
-  try {
-    return new URL(url);
-  } catch {
-    return null;
-  }
-};
+// export const getComposedRegExp = (regExps: RegExp[], flags?: string): RegExp => {
+//   return RegExp(regExps.map(regExp => regExp.source).join("|"), flags);
+// };

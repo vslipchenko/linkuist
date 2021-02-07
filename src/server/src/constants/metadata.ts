@@ -1,10 +1,12 @@
-// Sandbox https://regex101.com/r/NBX4JK/1
-export const META_TITLE_REGEXP = /((?<=<title[^>]*>).+(?=<\/title>))|((?<=<meta(?=.*((property="(og|twitter):(title|site_name)")|name="title")).*)(?<=content=")[^"]+)/;
-// export const HTML_FAVICON_TAG = /(?=.*?<link)(?=.*rel=".*icon.*")(?=.*?href=".+")[^>]*>/;
-// export const META_ICON = /(?<=<link(?=.*rel=".*icon.*").*)(?<=href=")[^"]+/;
-// export const META_ICON_REGEXP = /(?<=<link(?=.*rel="(?:.*\W)?icon(?:\W.*)?").*)(?<=href=")[^"]+/;
-// export const META_ICON_REGEXP = /(?<=<link(?=.*rel="(?:.*\W)?icon|apple-touch-icon-precomposed(?:\W.*)?").*)(?<=href=")[^"]+/;
-export const META_ICON_REGEXP = /(?<=<link(?=.*rel="(.*\W)?icon(\W.*)?").*)(?<=href=")[^"]+/;
-export const META_IMAGE_REGEXP = /(?<=<meta(?=.*property="(og|twitter):image").*)(?<=content=")[^"]+/;
-export const META_DESCRIPTION_REGEXP = /(?<=<meta(?=.*((property="(og|twitter):description")|name="description")).*)(?<=content=")[^"]+/;
-// export const META_DESCRIPTION_REGEXP = /(?<=<meta(?=.*(property="og:description"|name="description")).*)(?<=content=")[^"]+/;
+// Following describes what tags are used to fetch [metadata]
+// [title] - meta name="title" | meta property="og/twitter:site_name" | meta itemprop="name"
+// [description] - meta name="description" | meta property="og/twitter:description" | meta itemprop="description"
+// [image] - meta property="og/twitter:image" | meta itemprop="image"
+// [icon] - link rel="shortcut icon / icon / apple-touch-icon"
+export const META_TITLE_REGEXP = /(<title[^>]*>((?!<\/title>).)*<\/title>)|(<meta[^>]*(?=(property=["']((og)|(twitter)):site_name['"])|(name=["']title['"])|(itemprop=["']name['"]))[^>]*)/;
+export const META_DESCRIPTION_REGEXP = /<meta[^>]*(?=(property=["']((og)|(twitter)):description['"])|(((itemprop)|(name))=["']description['"]))[^>]*/;
+export const META_IMAGE_REGEXP = /<meta[^>]*(?=(property=["']((og)|(twitter)):image['"])|(itemprop=["']image['"]))[^>]*/;
+export const META_ICON_REGEXP = /<link[^>]*(?=rel=["'][^"']*icon[^'"]*['"])[^>]*/; // [rel] contains 'icon' phrase
+// export const META_ICON_REGEXP = /<link[^>]*(?=rel=["']((shortcut\s*)?(apple-touch-)?icon(-precomposed)?(\s*shortcut)?)['"])[^>]*/;
+// export const META_CONTENT_REGEXP = /(?<=content=["'])([^'"]+)(?=['"])/;
+// export const META_TITLE_TAG_CONTENT_REGEXP = /(?<=<title[^>]*>).+(?=<\/title>)/;

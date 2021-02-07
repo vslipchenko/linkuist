@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import {parseCliFlagValue} from '../utilities/parse-cli-flags';
+import {parseCliFlagValue} from '../utilities/parsers';
 import {Secret} from 'jsonwebtoken';
 const environment = parseCliFlagValue('env');
 // Include dev or prod env variables file dynamically
