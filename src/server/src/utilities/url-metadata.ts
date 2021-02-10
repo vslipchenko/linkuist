@@ -1,13 +1,24 @@
 import {get as httpsGet, RequestOptions} from 'https';
 import {get as httpGet, IncomingMessage} from 'http';
-import {parseUrl} from './validators';
+import {parseUrl} from './parsers';
+import {
+  BASE_TAG_REGEXP,
+  META_DESCRIPTION_REGEXP,
+  META_ICON_REGEXP,
+  META_IMAGE_REGEXP,
+  META_SITE_NAME_REGEXP,
+  META_TITLE_REGEXP
+} from '../constants/regexps';
+import {forEachMatch, replaceExcessiveIndents} from './processors';
+
 
 enum MetadataElements {
   'hostname',
-  'icon',
+  'siteName',
   'title',
   'description',
-  'image'
+  'image',
+  'icon',
 }
 
 type Metadata = Record<keyof typeof MetadataElements, string>;
@@ -284,7 +295,15 @@ export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> =>
     );
   });
 };
-
-// fetchUrlMetadata('https://www.amazon.com')
-//   .then(v => console.log('FS ', v))
-//   .catch(e => console.error('FE ', e));
+// TODO
+// decode html chars, e.g. take a look at response https://stackoverflow.com/questions/11592033/regex-match-text-between-tags
+// x make collections instead of the flat array, finally resolve the most complete one
+// !x provide simple html decoding technique for self-descriptive html entities and most common ones / try to replace unknown with emoji
+// x improve <base tag url resolution strategy for relative urls resolveUrl()
+// x improve regexes to check content integrity as well
+// !x push images and icons into array -> leave the first one that responds 200 OK
+// !x cut off everything after the </head> tag
+// x check with encoded uris
+fetchUrlMetadata('http://twitter.com/Twitter?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor')
+  .then(v => console.log('FS ', v))
+  .catch(e => console.error('FE ', e));
