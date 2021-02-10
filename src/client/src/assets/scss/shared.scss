@@ -72,6 +72,15 @@
   background-image: url('/assets/images/account/background.jpg');
   background-size: contain;
 }
+@mixin user-page-content-first-block-media {
+  @include media.zero-small {
+    margin-top: var.$unit-4;
+  }
+
+  @include media.above-small {
+    margin-top: var.$unit-2;
+  }
+}
 @mixin user-page-content-block-media {
   @include media.zero-small {
     width: var.$common-user-page-content-block-width-1;
@@ -220,13 +229,7 @@
         @include user-page-content-block-media;
 
         &:first-child {
-          @include media.zero-small {
-            margin-top: var.$unit-4;
-          }
-
-          @include media.above-small {
-            margin-top: var.$unit-2;
-          }
+          @include user-page-content-first-block-media;
         }
 
         &:not(:last-child) {

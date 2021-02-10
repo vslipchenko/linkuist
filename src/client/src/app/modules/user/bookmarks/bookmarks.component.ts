@@ -5,7 +5,7 @@ import {DialogService} from '@shared/services/dialog/dialog.service';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
 import {BookmarkType} from '@@types/bookmark/bookmark.enums';
-import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/validation';
+import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/regexps';
 import {Chip} from '@@types/chips/chips.interfaces';
 import {UntilDestroy, untilDestroyed} from '@utilities/until-destroy';
 
@@ -99,13 +99,15 @@ export class BookmarksComponent implements OnInit {
     const link = control.value;
     if (link?.length) {
       try {
-        new URL(link);
-        return null;
+        const url = new URL(link);
+        const isSupportedProtocol = url.protocol === 'http:' || url.protocol === 'https:';
+        return isSupportedProtocol ? null : {pattern: true};
         // this.linkField.setValue(url);
       } catch {
         return {pattern: true};
       }
     }
+    return null;
   }
 
   get linkField(): AbstractControl {

@@ -18,20 +18,20 @@ type FetchedMetadata = Metadata | Partial<Metadata>;
 
 type ResponseResults = Array<{url: URL, data: string}>;
 
-export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> => { // possible return values: {} | {hostname} | Metadata
+export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> => { // possible return values: {} | {hostname} | Metadata; can contain broken image links as well (validated on the client)
   let redirectCounter = 0;
   // const metadata: FetchedMetadata = {};
   const rawMetadata: FetchedMetadata[] = [];
   const responseResults: ResponseResults = [];
-  const requestTimeout = 1000; // Milliseconds
-  const responseTimeout = 1000; // Milliseconds
+  const requestTimeout = 1500; // Milliseconds
+  const responseTimeout = 1500; // Milliseconds
   const userAgents = [
     'Twitterbot/1.0', // https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started
     'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)', // https://developers.facebook.com/docs/sharing/webmasters/crawler/
     'PostmanRuntime/7.26.8', // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent#library_and_net_tool_ua_strings
     'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', // https://developers.google.com/search/docs/advanced/crawling/overview-google-crawlers
   ];
-  const maxRedirectCount = userAgents.length * 20; // 20 redirects per UA https://stackoverflow.com/questions/9384474/in-chrome-how-many-redirects-are-too-many
+  const maxRedirectCountPerUserAgent = 20; // 20 redirects per UA https://stackoverflow.com/questions/9384474/in-chrome-how-many-redirects-are-too-many
 
   const resolveAmbiguousHref = (url: string, origin: string | undefined): URL['href'] => {
     return new URL(url, origin).href;
@@ -67,7 +67,7 @@ export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> =>
 
       if (isTitleTag) {
         const sliceStartIndex = match.indexOf('>') + 1;
-        const sliceEndIndex = match.lastIndexOf('<');
+        const sliceEndIndex = match.indexOf('</title>');
 
         if (isCompleteContent(sliceEndIndex)) {
           title = match.slice(sliceStartIndex, sliceEndIndex).trim();
@@ -235,8 +235,8 @@ export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> =>
 
         request.removeAllListeners(); // dont want request 'close' event emission at this point;
         response.destroy();
-        // TODO implement personal redirect counter per each UA (up to 20)
-        if (redirectCounter > maxRedirectCount) {
+
+        if (redirectCounter > maxRedirectCountPerUserAgent) {
           return fetchMetadata(sourceUrl, options, resolve); // try to fetch with another user agent
         }
 
@@ -245,6 +245,8 @@ export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> =>
 
         return fetchMetadata(redirectLocation, options, resolve, userAgent); // no need to switch user agent on redirect
       }
+      // reset counter
+      redirectCounter = 0;
 
       response.socket.setTimeout(responseTimeout); // response timeout
       response.socket.on('timeout', () => response.destroy());

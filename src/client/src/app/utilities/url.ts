@@ -1,5 +1,5 @@
 import {UrlMatchResult, UrlSegment} from '@angular/router';
-import {URL_USERNAME_REGEXP} from '@constants/validation';
+import {URL_USERNAME_REGEXP} from '@constants/regexps';
 
 // export const userPageUrlMatcher = (segments: UrlSegment[]): UrlMatchResult | null => {
 //   const hasOnlyOneSegment = segments.length === 1;
@@ -12,7 +12,7 @@ export const urlMatcher = (pathMatches: Array<string | RegExp>)
   : (segments: UrlSegment[]) => null | UrlMatchResult => {
   return (segments: UrlSegment[]) => {
     if (segments.length === pathMatches.length) {
-      let result = {consumed: segments};
+      let result: UrlMatchResult | null = {consumed: segments};
 
       pathMatches.forEach((item, index) => {
         const matchAgainst = segments[index]?.path;

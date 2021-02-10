@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms';
-import {EMAIL_REGEXP, PASSWORD_REGEXP} from '@constants/validation';
+import {EMAIL_REGEXP, PASSWORD_REGEXP} from '@constants/regexps';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {combineLatest} from 'rxjs';
 import {AuthenticationService} from '@services/authentication/authentication.service';

@@ -10,7 +10,7 @@ import {
   USERNAME_MAXLENGTH,
   USERNAME_REGEXP,
   USERNAME_SEPARATORS
-} from '@constants/validation';
+} from '@constants/regexps';
 import {generatePassword} from '@utilities/password';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {SnackbarService} from '@shared/services/snackbar/snackbar.service';

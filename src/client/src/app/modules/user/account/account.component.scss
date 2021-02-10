@@ -8,24 +8,25 @@
   .notes-add {
     display: flex;
     flex-direction: column;
-    height: 35%;
+    //height: 35%;
     min-height: var.$common-user-page-content-block-min-height;
-    position: fixed;
-    bottom: -35%;
+    //position: fixed;
+    //bottom: -35%;
     //box-shadow: 0 -10px 10px 0 var.$theme-light-darker;
     box-shadow: 0 -10px 10px 0 var.$theme-light-darker;
-    //margin: var.$unit-2 0;
+    //margin-top: var.$unit-2;
     background-color: var.$theme-light;
-    border-color: var.$theme-light-darkest;
-    border-style: solid;
-    border-width: 1px 1px 0;
+    //border-color: var.$theme-light-darkest;
+    //border-style: solid;
+    border: 1px solid var.$theme-light-darkest;
     transition: 0.5s bottom;
 
+    @include shared.user-page-content-first-block-media;
     @include shared.user-page-content-block-media;
 
-    &.show {
-      bottom: var.$common-navigation-height;
-    }
+    //&.show {
+    //  bottom: var.$common-navigation-height;
+    //}
 
     .input {
       flex: 1;

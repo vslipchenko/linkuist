@@ -1,4 +1,4 @@
-import {gql} from 'apollo-server-express';
+import {ApolloError, gql} from 'apollo-server-express';
 import {BookmarkDocument, IBookmark} from '../../../types/bookmark/bookmark.interfaces';
 import {authenticationInterceptor} from '../../../utilities/interceptors';
 import {Bookmark} from '../../../models/bookmark';
@@ -12,8 +12,14 @@ const createBookmark = (
   {input}: {input: Omit<IBookmark, 'userId'>},
   {accessToken}: {accessToken: string}
 ) => {
-  return authenticationInterceptor<Promise<BookmarkDocument>>(accessToken, ({userId}: AccessTokenData) => {
+  return authenticationInterceptor<Promise<BookmarkDocument> | ApolloError>(accessToken, ({userId}: AccessTokenData) => {
     // TODO Bookmark input validation
+    // try {
+    //   new URL(input.link);
+    // } catch (error) {
+    //   return new ApolloError(''); // Pre-validates on the client
+    // }
+
     return Bookmark.create({
       ...input,
       userId

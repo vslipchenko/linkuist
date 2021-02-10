@@ -7,7 +7,7 @@ import {UserDocument, IUser} from '../../../types/user/user.interfaces';
 import {QueryResult} from '../../../types/mongoose/mongoose.types';
 import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
-import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../../constants/validation';
+import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../../constants/regexps';
 
 const signIn = (_: unknown, {input}: { input: IUser }) => {
   const isValidData = checkDataValidity({input, pattern: {

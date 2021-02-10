@@ -3,12 +3,16 @@
   "compilerOptions": {
     "baseUrl": "src",
     "outDir": "./dist/out-tsc",
+//    "strict": true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
     "importHelpers": true,
+    "moduleResolution": "node",
     "target": "es2015",
     "module": "es2020",
     "lib": [

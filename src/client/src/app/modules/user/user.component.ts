@@ -36,6 +36,7 @@ export class UserComponent implements OnInit {
     if (!username) {
       // 404
       this.router.navigate(['**'], {skipLocationChange: true});
+      return;
     }
 
     if (refreshToken && accessToken) {
@@ -48,7 +49,7 @@ export class UserComponent implements OnInit {
   private tryRenderAccount(username: string): void {
     const data = this.authenticationService.accessTokenData;
 
-    if (data.username === username) {
+    if (data?.username === username) {
       this.progressBarService.hide();
       this.componentToRender = UserComponentToRender.ACCOUNT;
     } else {

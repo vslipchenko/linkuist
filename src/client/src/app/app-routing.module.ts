@@ -4,8 +4,8 @@ import {urlMatcher} from '@utilities/url';
 import {PageNotFoundComponent} from '@shared/components/page-not-found/page-not-found.component';
 import {AuthenticationCanActivateGuard} from '@guards/authentication/can-activate/authentication.guard';
 import {AuthenticationCanLoadGuard} from '@guards/authentication/can-load/authentication.guard';
-import {URL_USERNAME_REGEXP} from '@constants/validation';
-// TODO 404 page
+import {URL_USERNAME_REGEXP} from '@constants/regexps';
+
 const routes: Routes = [
   {
     path: '',

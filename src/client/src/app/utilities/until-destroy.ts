@@ -20,7 +20,7 @@ function missingDecorator<T>(type: ɵComponentType<T>): boolean {
 
 function ensureClassIsDecorated(instance: any): never | void {
   if (missingDecorator(instance.constructor)) {
-    throw new Error(
+    throw Error(
       `untilDestroyed operator cannot be used inside
       components that are not decorated with UntilDestroy decorator`
     );

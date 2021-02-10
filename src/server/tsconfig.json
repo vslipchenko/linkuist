@@ -1,15 +1,29 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+//    "baseUrl": "src",
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "module": "commonjs",
-    "target": "es2015",
+    "target": "es2020",
     "sourceMap": true,
     "rootDir": "src",
     "outDir": "dist",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "removeComments": true,
+    "importHelpers": true
+//    "paths": {
+//      "@constants/*": ["constants/*"],
+//      "@graphql/*": ["graphql/*"],
+//      "@models/*": ["models/*"],
+//      "@@types/*": ["types/*"], // prevent reserved @types namespace conflict
+//      "@environments/*": ["environments/*"],
+//      "@utilities/*": ["utilities/*"]
+//    }
   },
   "exclude": [
     "node_modules",
