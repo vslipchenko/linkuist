@@ -1,13 +1,14 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
-import {DialogService} from '@shared/services/dialog/dialog.service';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { NavigationMainActionType } from '@@types/navigation/navigation.enums';
+import { DialogService } from '@shared/services/dialog/dialog.service';
 // import {DialogTypes} from '@@types/dialog/dialog.enums';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
-import {COMMA, ENTER, SPACE} from '@angular/cdk/keycodes';
-import {BookmarkType} from '@@types/bookmark/bookmark.enums';
-import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/regexps';
-import {Chip} from '@@types/chips/chips.interfaces';
-import {UntilDestroy, untilDestroyed} from '@utilities/until-destroy';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { ENTER } from '@angular/cdk/keycodes';
+import { BookmarkType } from '@@types/bookmark/bookmark.enums';
+import { BOOKMARK_TAG_LETTER_REGEXP } from '@constants/regexps';
+import { Chip } from '@@types/chips/chips.interfaces';
+import { UntilDestroy, untilDestroyed } from '@utilities/until-destroy';
+import { BookmarkService } from '@services/bookmark/bookmark.service';
 
 @UntilDestroy()
 @Component({
@@ -15,17 +16,19 @@ import {UntilDestroy, untilDestroyed} from '@utilities/until-destroy';
   styleUrls: ['./bookmarks.component.scss']
 })
 export class BookmarksComponent implements OnInit {
-  readonly tagsSeparatorKeysCodes = [SPACE, COMMA, ENTER];
+  readonly tagsSeparatorKeysCodes = [ENTER];
   readonly tagSeparator = '-';
-  readonly tagRegExp = BOOKMARK_TAG_LETTER_REGEXP;
+  readonly tagLetterValidator = BOOKMARK_TAG_LETTER_REGEXP;
+  readonly tagSplitWordBy = /[-\s]/;
 
   @ViewChild('addBookmarkContent') addBookmarkContent: TemplateRef<unknown>;
   @ViewChild('addBookmarkActions') addBookmarkActions: TemplateRef<unknown>;
 
   addBookmarkForm: FormGroup;
 
-  constructor(private dialogService: DialogService,
-    private formBuilder: FormBuilder
+  constructor(private readonly dialogService: DialogService,
+    private readonly bookmarkService: BookmarkService,
+    private readonly formBuilder: FormBuilder,
   ) {
   }
 
@@ -42,13 +45,15 @@ export class BookmarksComponent implements OnInit {
       image: [null],
       icon: [null],
       description: [null],
-      private: [false],
-      tags: [[{
-        text: BookmarkType.PUBLIC,
-        isSelected: true,
-        isRemovable: false,
-        color: 'accent'
-      } as Chip]]
+      isPrivate: [false],
+      tags: [
+        [{
+          text: BookmarkType.PUBLIC,
+          isSelected: true,
+          isRemovable: false,
+          color: 'accent'
+        } as Chip]
+      ]
     });
 
     // this.addBookmarkForm.next(
@@ -64,26 +69,43 @@ export class BookmarksComponent implements OnInit {
     // this.addBookmarkForm = new FormGroup({});
   }
 
-  addBookmark(): void {
+  openAddBookmarkDialog(): void {
+    this.initAddBookmarkForm();
+    this.handlePrivateFieldValueChanges();
+
     this.dialogService.open({
       panelClass: 'bookmark-dialog',
       data: {
         title: 'Add bookmark',
+        form: this.addBookmarkForm,
         contentTemplateRef: this.addBookmarkContent,
         actionsTemplateRef: this.addBookmarkActions,
-        form: this.addBookmarkForm
       }
     });
   }
 
-  saveBookmark(): void {
-
+  addBookmark(): void {
+    this.addBookmarkForm.markAllAsTouched();
+    if (this.addBookmarkForm.valid) {
+      console.log('Add bookmark value ', this.addBookmarkForm.value);
+      const tags = this.tagsField.value;
+      tags[0] = this.privateField.value ? BookmarkType.PRIVATE : BookmarkType.PUBLIC; // simplify first element in order to match [String!]! constraint
+      // debugger;
+      // return;
+      this.bookmarkService
+        .create({
+          id: new Date().getTime(),
+          ...this.addBookmarkForm.value,
+          tags
+        })
+        .pipe(untilDestroyed(this)).subscribe();
+    }
   }
 
   private handlePrivateFieldValueChanges(): void {
     this.privateField.valueChanges
       .pipe(untilDestroyed(this))
-      .subscribe((hasPrivateAccess) => {
+      .subscribe((hasPrivateAccess: boolean) => {
         const tags = this.tagsField.value;
         tags.forEach((tag) => {
           if (tag.text === (hasPrivateAccess ? BookmarkType.PUBLIC : BookmarkType.PRIVATE)) {
@@ -101,10 +123,10 @@ export class BookmarksComponent implements OnInit {
       try {
         const url = new URL(link);
         const isSupportedProtocol = url.protocol === 'http:' || url.protocol === 'https:';
-        return isSupportedProtocol ? null : {pattern: true};
+        return isSupportedProtocol ? null : { pattern: true };
         // this.linkField.setValue(url);
       } catch {
-        return {pattern: true};
+        return { pattern: true };
       }
     }
     return null;
@@ -115,7 +137,7 @@ export class BookmarksComponent implements OnInit {
   }
 
   private get privateField(): AbstractControl {
-    return this.addBookmarkForm.get('private');
+    return this.addBookmarkForm.get('isPrivate');
   }
 
   private get tagsField(): AbstractControl {

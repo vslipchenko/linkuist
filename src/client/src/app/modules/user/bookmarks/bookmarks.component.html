@@ -1,5 +1,5 @@
 <app-navigation [mainActionType]="navigationMainActionType">
-  <button matTooltip="Add bookmark" matTooltipPosition="above" mat-icon-button (click)="addBookmark()">
+  <button matTooltip="Add bookmark" matTooltipPosition="above" mat-icon-button (click)="openAddBookmarkDialog()">
     <mat-icon svgIcon="bookmark-plus"></mat-icon>
   </button>
 </app-navigation>
@@ -30,19 +30,21 @@
     </mat-form-field>
      <app-chips formControlName="tags"
                 label="Tags"
+                [areChipsLowerCased]="true"
                 [areChipsRemovable]="true"
                 [isInputAvailable]="true"
                 [isAddOnBlurAvailable]="true"
                 [chipsSeparatorKeyCodes]="tagsSeparatorKeysCodes"
                 [chipSeparator]="tagSeparator"
-                [chipLetterValidator]="tagRegExp"
-                [areChipsLowerCased]="true"
+                [chipLetterValidator]="tagLetterValidator"
+                [chipSplitWordBy]="tagSplitWordBy"
      ></app-chips>
-    <mat-slide-toggle formControlName="private" labelPosition="before">Private</mat-slide-toggle>
+    <label for="" class="mat-form-field-label">Options</label>
+    <mat-slide-toggle formControlName="isPrivate" labelPosition="before">Private</mat-slide-toggle>
   </form>
 </ng-template>
 <ng-template #addBookmarkActions>
   <button mat-dialog-close mat-stroked-button>Close</button>
   <!--    &lt;!&ndash; The mat-dialog-close directive optionally accepts a value as a result for the dialog. &ndash;&gt;-->
-  <button mat-flat-button color="primary" [mat-dialog-close]="true">Add</button>
+  <button mat-flat-button color="primary" [mat-dialog-close]="true" (click)="addBookmark()">Add</button>
 </ng-template>
