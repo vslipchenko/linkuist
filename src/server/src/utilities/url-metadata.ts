@@ -14,14 +14,16 @@ import {forEachMatch, replaceExcessiveIndents} from './processors';
 
 enum MetadataElements {
   'hostname',
-  'siteName',
+  'sitename',
   'title',
   'description',
   'image',
   'icon',
 }
 
-type Metadata = Record<keyof typeof MetadataElements, string>;
+type Metadata = Record<keyof typeof MetadataElements, Array<string> | string>;
+
+export type IgnoreMetadataProperties = Array<keyof typeof MetadataElements>;
 
 type FetchMetadataOptions = Required<Pick<RequestOptions, 'headers' | 'timeout'>>;
 
@@ -29,7 +31,7 @@ type FetchedMetadata = Metadata | Partial<Metadata>;
 
 type ResponseResults = Array<{url: URL, data: string}>;
 
-export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> => { // possible return values: {} | {hostname} | Metadata; can contain broken image links as well (validated on the client)
+export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: IgnoreMetadataProperties, grabAllMediadata?: boolean): Promise<FetchedMetadata> => { // possible return values: {} | {hostname} | Metadata; can contain broken image links as well (validated on the client)
   let redirectCounter = 0;
   // const metadata: FetchedMetadata = {};
   const rawMetadata: FetchedMetadata[] = [];
@@ -121,74 +123,108 @@ export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> =>
       const data = replaceExcessiveIndents(result.data, ' ');
       let baseUrl = fetchBaseUrl(data);
 
-      rawMetadataItem.hostname = url.hostname;
+      if (!ignoreMetadataProperties?.includes('hostname')) {
+        rawMetadataItem.hostname = url.hostname;
+      }
 
       if (baseUrl) {
         baseUrl = resolveAmbiguousHref(baseUrl, url.href);
       }
       // fetch titles
       // if (!metadata.title) {
+      if (!ignoreMetadataProperties?.includes('title')) {
         forEachMatch(data, META_TITLE_REGEXP, (match) => {
-          const title = fetchTitle(match);
+          if (!rawMetadataItem.title) {
+            const title = fetchTitle(match);
 
-          if (title) {
-            rawMetadataItem.title = title;
-            return false; // break loop
+            if (title) {
+              rawMetadataItem.title = title;
+              return false; // break loop
+            }
           }
         });
+      }
+
       // }
 
       // parse site_name
-      // if (!metadata.siteName) {
+      // if (!metadata.sitename) {
+      if (!ignoreMetadataProperties?.includes('sitename')) {
         forEachMatch(data, META_SITE_NAME_REGEXP, (match) => {
-            const siteName = getAttributeContent('content', match);
+          if (!rawMetadataItem.sitename) {
+            const sitename = getAttributeContent('content', match);
 
-            if (siteName) {
-              rawMetadataItem.siteName = siteName;
+            if (sitename) {
+              rawMetadataItem.sitename = sitename;
               return false; // break loop
             }
+          }
         });
+      }
       // }
 
       // fetch descriptions
       // if (!metadata.description) {
+      if (!ignoreMetadataProperties?.includes('description')) {
         forEachMatch(data, META_DESCRIPTION_REGEXP, (match) => {
+          if (!rawMetadataItem.description) {
+            const description = getAttributeContent('content', match);
 
-          const description = getAttributeContent('content', match);
-
-          if (description) {
-            rawMetadataItem.description = description;
-            return false; // break loop
+            if (description) {
+              rawMetadataItem.description = description;
+              return false; // break loop
+            }
           }
         });
+      }
       // }
 
       // fetch images
       // if (!metadata.image) {
+      if (!ignoreMetadataProperties?.includes('image')) {
         forEachMatch(data, META_IMAGE_REGEXP, (match) => {
-          let imageUrl: string | null = getAttributeContent('content', match);
-          imageUrl = resolveAmbiguousHref(imageUrl, baseUrl || url.href);
+          if (!rawMetadataItem.image || grabAllMediadata) {
+            let imageUrl: string | null = getAttributeContent('content', match);
+            imageUrl = resolveAmbiguousHref(imageUrl, baseUrl || url.href);
 
-          if (imageUrl) {
-            rawMetadataItem.image = imageUrl; // !!! can be broken link; let client to handle it in order to save resources
-            return false;
+            if (imageUrl) {
+              if (grabAllMediadata) {
+                if (!rawMetadataItem.image) rawMetadataItem.image = [];
+
+                (rawMetadataItem.image as Array<string>).push(imageUrl);
+              } else {
+                rawMetadataItem.image = imageUrl; // !!! can be broken link; let client to handle it in order to save resources
+                return false;
+              }
+            }
           }
         });
+      }
       // }
 
       // fetch icons
       // if (!metadata.icon) {
+      if (!ignoreMetadataProperties?.includes('icon')) {
         forEachMatch(data, META_ICON_REGEXP, (match) => {
-          let iconUrl: string | null = getAttributeContent('href', match);
-          iconUrl = resolveAmbiguousHref(iconUrl, baseUrl || url.href);
+          if (!rawMetadataItem.icon || grabAllMediadata) {
+            let iconUrl: string | null = getAttributeContent('href', match);
+            iconUrl = resolveAmbiguousHref(iconUrl, baseUrl || url.href);
 
-          if (iconUrl) {
-            rawMetadataItem.icon = iconUrl; // !!! can be broken link;
-            return false;
+            if (iconUrl) {
+              if (grabAllMediadata) {
+                if (!rawMetadataItem.icon) rawMetadataItem.icon = [];
+
+                (rawMetadataItem.icon as Array<string>).push(iconUrl);
+              } else {
+                rawMetadataItem.icon = iconUrl; // !!! can be broken link;
+                return false;
+              }
+            }
           }
         });
+      }
 
-        rawMetadata.push(rawMetadataItem);
+      if (Object.keys(rawMetadataItem).length) rawMetadata.push(rawMetadataItem);
       // }
     }
 
@@ -305,5 +341,5 @@ export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> =>
 // !x cut off everything after the </head> tag
 // x check with encoded uris
 fetchUrlMetadata('http://twitter.com/Twitter?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor')
-  .then(v => console.log('FS ', v))
-  .catch(e => console.error('FE ', e));
+  .then((v) => console.log('FS ', v))
+  .catch((e) => console.error('FE ', e));

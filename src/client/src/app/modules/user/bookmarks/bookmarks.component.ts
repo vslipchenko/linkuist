@@ -30,8 +30,7 @@ export class BookmarksComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initAddBookmarkForm();
-    this.handlePrivateFieldValueChanges();
+
   }
 
 
@@ -40,7 +39,8 @@ export class BookmarksComponent implements OnInit {
     this.addBookmarkForm = this.formBuilder.group({
       link: [null, [Validators.required, BookmarksComponent.linkValidator]],
       title: [null],
-      thumbnail: [null],
+      image: [null],
+      icon: [null],
       description: [null],
       private: [false],
       tags: [[{

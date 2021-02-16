@@ -53,7 +53,7 @@ const signIn = (_: unknown, {input}: { input: IUser }) => {
         // OK send back tokens
         return resolve({accessToken, refreshToken});
       }) // Technical error
-      .catch(error => reject(error));
+      .catch((error) => reject(error));
   });
 };
 
@@ -96,7 +96,7 @@ const accessTokenByRefreshToken = (_: unknown, {refreshToken}: { refreshToken: s
 
         return resolve(accessToken);
       })
-      .catch(error => reject(error));
+      .catch((error) => reject(new ApolloError(error)));
   });
 };
 

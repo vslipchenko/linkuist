@@ -6,8 +6,10 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autoc
 import {Observable} from 'rxjs';
 import {first, startWith} from 'rxjs/operators';
 import {has as _has} from 'lodash';
+import { UntilDestroy, untilDestroyed } from '@utilities/until-destroy';
 
 // TODO remove chip color directive logic once autocomplete issue fixed
+@UntilDestroy()
 @Component({
   selector: 'app-chips',
   templateUrl: './chips.component.html',
@@ -32,6 +34,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   @Input() chipsSeparatorKeyCodes: Array<number>;
   @Input() chipSeparator: string;
   @Input() chipLetterValidator: RegExp;
+  @Input() chipSplitWordBy: RegExp;
   // States
   @Input() areChipsSelectable: boolean;
   @Input() areChipsRemovable: boolean;
@@ -52,7 +55,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
 
   areAutocompleteOptionsLoading: boolean;
 
-  constructor(private controlContainer: ControlContainer) {
+  constructor(private readonly controlContainer: ControlContainer) {
   }
 
   ngOnInit(): void {
@@ -71,19 +74,19 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     console.log(this.chips);
   }
 
-  registerOnChange(fn: unknown): void {
+  registerOnChange(_: unknown): void {
   }
 
-  registerOnTouched(fn: unknown): void {
+  registerOnTouched(_: unknown): void {
   }
 
   removeChip(event: MatChipEvent): void {
     const text = event.chip.value.trim();
     this.writeValue(this.chips.filter(
-      chip => {
+      chip =>
         // debugger;
-        return chip.text ? chip.text !== text : chip !== text;
-      }
+         chip.text ? chip.text !== text : chip !== text
+
     ));
     // this.();
   }
@@ -106,7 +109,10 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
       if (!this.autocompleteOptions.length) {
         this.areAutocompleteOptionsLoading = true;
         this.autocompleteOptions$()
-          .pipe(first())
+          .pipe(
+            first(),
+            untilDestroyed(this)
+          )
           .subscribe((options) => {
             this.areAutocompleteOptionsLoading = false;
             this.autocompleteOptions = options;
@@ -115,6 +121,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     } else if (this.autocompleteOptions$) {
       this.areAutocompleteOptionsLoading = true;
       this.autocompleteOptions$()
+        .pipe(untilDestroyed(this))
         .subscribe((options) => {
           this.areAutocompleteOptionsLoading = false;
           this.autocompleteOptions = options;
@@ -147,7 +154,8 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
       const chip = chips.pop();
       // return chips.map(chip => {
       let chipText = chip.text || chip;
-      let words = chipText.split(this.chipSeparator).filter(word => !!word);
+      let words = chipText.split(this.chipSplitWordBy).filter(word => Boolean(word));
+      // debugger;
       // debugger;
       words = words.map(word => {
         const letters = [...word];

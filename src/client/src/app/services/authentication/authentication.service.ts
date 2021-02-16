@@ -18,8 +18,8 @@ export class AuthenticationService {
   // isRefreshingAccessToken
   private readonly isRefreshing$ = new BehaviorSubject(false);
 
-  constructor(private apollo: Apollo,
-              private router: Router) {
+  constructor(private readonly apollo: Apollo,
+              private readonly router: Router) {
   }
 
   signIn(input: UserSignInData): Observable<ApolloQueryResult<SignInQueryResult>> {

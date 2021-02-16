@@ -1,15 +1,12 @@
-import {RecordId} from "../graphql/graphql.interfaces";
+import {RecordId} from '../graphql/graphql.interfaces';
 // TODO refactor gql specific interfaces
-interface UserByEmail<T = RecordId> {
-  userByEmail: T
+export interface UserIdByEmail {
+  userByEmail: RecordId;
 }
 
-interface UserByUsername<T = RecordId> {
-  userByUsername: T
+export interface UserIdByUsername {
+  userByUsername: RecordId;
 }
-
-export interface UserIdByEmail extends UserByEmail {}
-export interface UserIdByUsername extends UserByUsername {}
 
 export interface UserSignUpData {
   email: string;

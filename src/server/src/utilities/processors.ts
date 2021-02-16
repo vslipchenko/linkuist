@@ -14,4 +14,3 @@ export const forEachMatch = (input: string, regexp: RegExp, callback: (match: st
     }
   }
 };
-

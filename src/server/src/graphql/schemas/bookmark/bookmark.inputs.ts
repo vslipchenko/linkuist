@@ -2,11 +2,12 @@ import {gql} from 'apollo-server-express';
 
 export const bookmarkInputs = gql`
     input CreateBookmarkMutationInput {
-        id: String!
+        id: Float!
         link: String!
         title: String
-        thumbnailUrl: String
+        image: String
+        icon: String
         description: String
-        tags: String
+        tags: [String!]!
     }
 `;

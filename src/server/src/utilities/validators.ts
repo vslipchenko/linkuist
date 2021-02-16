@@ -1,8 +1,6 @@
-import {ObjectValuesAndKeys} from '../types/utility/utility.types';
-
 interface CheckDataValidityOptions {
   input: unknown;
-  pattern: RegExp | ObjectValuesAndKeys<RegExp, string>;
+  pattern: RegExp | Record<string, RegExp>;
   pathsToCheck?: string[];
   outputInvalidPaths?: boolean;
 }

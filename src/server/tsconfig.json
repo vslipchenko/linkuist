@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+//    "allowJs": true,
 //    "baseUrl": "src",
     "lib": [
       "es2020",
