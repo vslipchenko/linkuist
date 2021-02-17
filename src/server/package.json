@@ -17,9 +17,7 @@
     }
   },
   "lint-staged": {
-    "*": [
-      "npx eslint src/ --fix"
-    ]
+    "*": "npx eslint src/ --fix"
   },
   "dependencies": {
     "apollo-server-express": "^2.21.0",

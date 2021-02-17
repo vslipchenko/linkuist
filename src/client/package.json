@@ -16,9 +16,7 @@
     }
   },
   "lint-staged": {
-    "*": [
-      "npx eslint src/ --fix"
-    ]
+    "*": "npx eslint src/ --fix"
   },
   "dependencies": {
     "@angular/animations": "~11.2.0",
