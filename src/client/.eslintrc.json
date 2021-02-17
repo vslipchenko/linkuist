@@ -1,4 +1,4 @@
-{
+{ // https://dev.to/gsarciotto/migrating-and-configuring-eslint-with-angular-11-3fg1
   "root": true,
   "ignorePatterns": [
     "projects/**/*"
@@ -16,9 +16,13 @@
         "createDefaultProgram": true
       },
       "extends": [
-        "plugin:@angular-eslint/ng-cli-compat",
-        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "prettier/@typescript-eslint",
+        "plugin:prettier/recommended"
       ],
       "rules": {
         "@angular-eslint/component-selector": [
@@ -36,17 +40,21 @@
             "prefix": "app",
             "style": "camelCase"
           }
-        ]
+        ],
+        "@typescript-eslint/prefer-readonly": "error",
+        "@typescript-eslint/no-useless-constructor": "error"
       }
     },
     {
       "files": [
-        "*.html"
+        "*.component.html"
       ],
       "extends": [
         "plugin:@angular-eslint/template/recommended"
       ],
-      "rules": {}
+      "rules": {
+        "max-len": ["error", { "code": 100 }]
+      }
     }
   ]
 }

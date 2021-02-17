@@ -1,14 +1,20 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { NavigationMainActionType } from '@@types/navigation/navigation.enums';
-import { DialogService } from '@shared/services/dialog/dialog.service';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
+import {DialogService} from '@shared/services/dialog/dialog.service';
 // import {DialogTypes} from '@@types/dialog/dialog.enums';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { ENTER } from '@angular/cdk/keycodes';
-import { BookmarkType } from '@@types/bookmark/bookmark.enums';
-import { BOOKMARK_TAG_LETTER_REGEXP } from '@constants/regexps';
-import { Chip } from '@@types/chips/chips.interfaces';
-import { UntilDestroy, untilDestroyed } from '@utilities/until-destroy';
-import { BookmarkService } from '@services/bookmark/bookmark.service';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
+import {ENTER} from '@angular/cdk/keycodes';
+import {BookmarkType} from '@@types/bookmark/bookmark.enums';
+import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/regexps';
+import {Chip} from '@@types/chips/chips.interfaces';
+import {UntilDestroy, untilDestroyed} from '@utilities/until-destroy';
+import {BookmarkService} from '@services/bookmark/bookmark.service';
 
 @UntilDestroy()
 @Component({
@@ -26,16 +32,13 @@ export class BookmarksComponent implements OnInit {
 
   addBookmarkForm: FormGroup;
 
-  constructor(private readonly dialogService: DialogService,
+  constructor(
+    private readonly dialogService: DialogService,
     private readonly bookmarkService: BookmarkService,
-    private readonly formBuilder: FormBuilder,
-  ) {
-  }
+    private readonly formBuilder: FormBuilder
+  ) {}
 
-  ngOnInit(): void {
-
-  }
-
+  ngOnInit(): void {}
 
   private initAddBookmarkForm(): void {
     // this.kek = 'awdwd';
@@ -47,12 +50,14 @@ export class BookmarksComponent implements OnInit {
       description: [null],
       isPrivate: [false],
       tags: [
-        [{
-          text: BookmarkType.PUBLIC,
-          isSelected: true,
-          isRemovable: false,
-          color: 'accent'
-        } as Chip]
+        [
+          {
+            text: BookmarkType.PUBLIC,
+            isSelected: true,
+            isRemovable: false,
+            color: 'accent'
+          } as Chip
+        ]
       ]
     });
 
@@ -79,7 +84,7 @@ export class BookmarksComponent implements OnInit {
         title: 'Add bookmark',
         form: this.addBookmarkForm,
         contentTemplateRef: this.addBookmarkContent,
-        actionsTemplateRef: this.addBookmarkActions,
+        actionsTemplateRef: this.addBookmarkActions
       }
     });
   }
@@ -98,7 +103,8 @@ export class BookmarksComponent implements OnInit {
           ...this.addBookmarkForm.value,
           tags
         })
-        .pipe(untilDestroyed(this)).subscribe();
+        .pipe(untilDestroyed(this))
+        .subscribe();
     }
   }
 
@@ -123,10 +129,10 @@ export class BookmarksComponent implements OnInit {
       try {
         const url = new URL(link);
         const isSupportedProtocol = url.protocol === 'http:' || url.protocol === 'https:';
-        return isSupportedProtocol ? null : { pattern: true };
+        return isSupportedProtocol ? null : {pattern: true};
         // this.linkField.setValue(url);
       } catch {
-        return { pattern: true };
+        return {pattern: true};
       }
     }
     return null;
