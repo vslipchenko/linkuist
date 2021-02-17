@@ -16,9 +16,9 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts}": [
+    "src/**/*.{ts,html}": [
       "prettier --write",
-      "eslint --fix src/"
+      "eslint --fix"
     ]
   },
   "dependencies": {
