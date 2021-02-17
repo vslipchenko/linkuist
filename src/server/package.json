@@ -2,6 +2,8 @@
   "name": "linkuist-server",
   "version": "0.0.1",
   "description": "",
+  "author": "",
+  "license": "ISC",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx ts-node-dev src/app.ts --env=dev --debug",
@@ -9,8 +11,16 @@
     "build": "npx tsc",
     "check-lint": "npx eslint src"
   },
-  "author": "",
-  "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,html}": [
+      "eslint --fix"
+    ]
+  },
   "dependencies": {
     "apollo-server-express": "^2.21.0",
     "bcrypt": "^5.0.0",
@@ -35,6 +45,8 @@
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "husky": "^5.0.9",
+    "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "ts-node-dev": "^1.1.1",
     "typescript": "^4.1.5"
