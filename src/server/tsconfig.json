@@ -1,31 +1,32 @@
 {
   "compilerOptions": {
-//    "allowJs": true,
-//    "baseUrl": "src",
+    //    "allowJs": true,
+    //    "baseUrl": "src",
+    "strict": true,
     "lib": [
       "es2020",
       "dom"
     ],
     "module": "commonjs",
-    "target": "es2020",
+    "target": "es2019",
     "sourceMap": true,
     "rootDir": "src",
     "outDir": "dist",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "esModuleInterop": true,
     "removeComments": true,
     "importHelpers": true
-//    "paths": {
-//      "@constants/*": ["constants/*"],
-//      "@graphql/*": ["graphql/*"],
-//      "@models/*": ["models/*"],
-//      "@@types/*": ["types/*"], // prevent reserved @types namespace conflict
-//      "@environments/*": ["environments/*"],
-//      "@utilities/*": ["utilities/*"]
-//    }
+    //    "paths": {
+    //      "@constants/*": ["constants/*"],
+    //      "@graphql/*": ["graphql/*"],
+    //      "@models/*": ["models/*"],
+    //      "@@types/*": ["types/*"], // prevent reserved @types namespace conflict
+    //      "@environments/*": ["environments/*"],
+    //      "@utilities/*": ["utilities/*"]
+    //    }
   },
+  "include": [
+    "src/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
     "src/**/*.spec.ts"

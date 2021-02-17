@@ -1,29 +1,31 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "strict": true,
     "baseUrl": "src",
     "outDir": "./dist/out-tsc",
-//    "strict": true,
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "removeComments": true,
     "importHelpers": true,
     "moduleResolution": "node",
-    "target": "es2015",
+    "target": "es2019",
     "module": "es2020",
     "lib": [
-      "es2018",
+      "es2020",
       "dom",
       "esnext.asynciterable"
     ],
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@constants/*": ["app/constants/*"],
-      "@graphql/*": ["app/graphql/*"],
+      "@constants/*": [
+        "app/constants/*"
+      ],
+      "@graphql/*": [
+        "app/graphql/*"
+      ],
       "@guards/*": ["app/guards/*"],
       "@interceptors/*": ["app/interceptors/*"],
       "@@types/*": ["app/types/*"], // prevent reserved @types namespace conflict
