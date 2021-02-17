@@ -11,7 +11,7 @@
     "target": "es2019",
     "sourceMap": true,
     "rootDir": "src",
-    "outDir": "dist",
+    "outDir": "dist/out-tsc",
     "esModuleInterop": true,
     "removeComments": true,
     "importHelpers": true
@@ -23,12 +23,5 @@
     //      "@environments/*": ["environments/*"],
     //      "@utilities/*": ["utilities/*"]
     //    }
-  },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/**/*.spec.ts"
-  ]
+  }
 }
