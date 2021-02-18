@@ -20,16 +20,28 @@
     ],
     "allowSyntheticDefaultImports": true,
     "paths": {
+      "@environments/*": [
+        "environments/*"
+      ],
       "@constants/*": [
         "app/constants/*"
       ],
       "@graphql/*": [
         "app/graphql/*"
       ],
-      "@guards/*": ["app/guards/*"],
-      "@interceptors/*": ["app/interceptors/*"],
-      "@@types/*": ["app/types/*"], // prevent reserved @types namespace conflict
-      "@modules/*": ["app/modules/*"],
+      "@guards/*": [
+        "app/guards/*"
+      ],
+      "@interceptors/*": [
+        "app/interceptors/*"
+      ],
+      "@@types/*": [
+        "app/types/*"
+      ],
+      // prevent reserved @types namespace conflict
+      "@modules/*": [
+        "app/modules/*"
+      ],
       "@services/*": ["app/services/*"],
       "@shared/*": ["app/shared/*"],
       "@utilities/*": ["app/utilities/*"]
