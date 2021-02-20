@@ -10,7 +10,7 @@ const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
 // Internal imports
 /* Main */
-const server = new ApolloServer(<ApolloServerExpressConfig> {
+const server = new ApolloServer(<ApolloServerExpressConfig>{
   schema,
   context: ({req}: ExpressContext) => {
     // 'context' is a third argument of a resolver function
