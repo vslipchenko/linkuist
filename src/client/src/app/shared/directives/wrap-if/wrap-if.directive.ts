@@ -1,13 +1,12 @@
 import {AfterViewInit, Directive, ElementRef, Input} from '@angular/core';
 
 @Directive({
-  selector: '[appWrapIf]'
+  selector: '[appWrapIf]',
 })
 export class WrapIfDirective implements AfterViewInit {
   private wrap: boolean;
 
-  constructor(private templateRef: ElementRef) {
-  }
+  constructor(private readonly templateRef: ElementRef) {}
 
   ngAfterViewInit(): void {
     if (!this.wrap) {

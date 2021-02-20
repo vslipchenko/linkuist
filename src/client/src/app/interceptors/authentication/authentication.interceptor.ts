@@ -1,5 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
+} from '@angular/common/http';
 import {Observable, of, Subject, throwError} from 'rxjs';
 import {AuthenticationService} from '@services/authentication/authentication.service';
 import {catchError, finalize, first, retry, switchMap, tap} from 'rxjs/operators';
@@ -14,9 +20,21 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   // to persist fulfilled state
   private readonly freshAccessToken$ = new Subject<string>();
 
-  constructor(private authenticationService: AuthenticationService,
-              private snackbarService: SnackbarService,
-              private router: Router) {
+  constructor(
+    private authenticationService: AuthenticationService,
+    private readonly snackbarService: SnackbarService,
+    private readonly router: Router,
+  ) {}
+
+  private static attachAccessToken(
+    request: HttpRequest<unknown>,
+    accessToken: string,
+  ): HttpRequest<unknown> {
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -26,10 +44,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       // if token is refreshing wait for a new value
       // proceed request chain if token was refreshed
       return this.freshAccessToken$.pipe(
-        first(value => !!value), // complete after first emit of truthy value
-        switchMap(accessToken => {
+        first((value) => !!value), // complete after first emit of truthy value
+        switchMap((accessToken) => {
           return next.handle(AuthenticationInterceptor.attachAccessToken(request, accessToken));
-        })
+        }),
       );
     }
 
@@ -50,20 +68,21 @@ export class AuthenticationInterceptor implements HttpInterceptor {
                 this.freshAccessToken$.next(null);
                 // start token refresh process
                 this.authenticationService.isRefreshingAccessToken = true;
-                this.authenticationService.refreshAccessToken()
-                  .pipe( // set new token value and attach it to next request (process further request)
-                    first(),
-                    tap(({data: {accessTokenByRefreshToken}}) => {
-                      this.freshAccessToken$.next(accessTokenByRefreshToken);
-                      this.authenticationService.accessToken = accessTokenByRefreshToken;
-                    }),
-                    retry(2), // retry twice on fail
-                    catchError(error => { // new token was not received
-                      this.router.navigate(['/sign-in']);
-                      return throwError(error);
-                    }), // always finish refresh token process
-                    finalize(() => this.authenticationService.isRefreshingAccessToken = false)
-                  );
+                this.authenticationService.refreshAccessToken().pipe(
+                  // set new token value and attach it to next request (process further request)
+                  first(),
+                  tap(({data: {accessTokenByRefreshToken}}) => {
+                    this.freshAccessToken$.next(accessTokenByRefreshToken);
+                    this.authenticationService.accessToken = accessTokenByRefreshToken;
+                  }),
+                  retry(2), // retry twice on fail
+                  catchError((error) => {
+                    // new token was not received
+                    this.router.navigate(['/sign-in']);
+                    return throwError(error);
+                  }), // always finish refresh token process
+                  finalize(() => (this.authenticationService.isRefreshingAccessToken = false)),
+                );
                 break;
               case 'REFRESH_TOKEN_EMPTY':
               case 'REFRESH_TOKEN_INVALID':
@@ -83,15 +102,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         }
         // release stream
         return of(response);
-      })
+      }),
     );
-  }
-
-  private static attachAccessToken(request: HttpRequest<unknown>, accessToken: string): HttpRequest<unknown> {
-    return request.clone({
-      setHeaders: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
   }
 }

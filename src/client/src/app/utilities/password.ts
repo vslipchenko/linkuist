@@ -11,13 +11,16 @@ function getRandomCharacter(characters: string): string {
   return characters.charAt(Math.floor(Math.random() * charactersLength));
 }
 
-export function generatePassword(minLength = PASSWORD_MINLENGTH, maxLength = PASSWORD_MINLENGTH): string {
+export function generatePassword(
+  minLength = PASSWORD_MINLENGTH,
+  maxLength = PASSWORD_MINLENGTH,
+): string {
   const numbersPool = '0123456789';
   const lettersPool = 'abcdefghijklmnopqrstuvwxyz';
   const specialCharsPool = PASSWORD_SPECIAL_CHARS_POOL;
   const lowerToUpperCaseCoefficient = 0.75;
   const passwordLength = getRandomInt(minLength, maxLength);
-  let pool: string | string[] = [numbersPool, lettersPool, specialCharsPool];
+  let pool: string | Array<string> = [numbersPool, lettersPool, specialCharsPool];
   let password = '';
   // Password should have at least one number, letter and special character
   for (let i = pool.length; i; i--) {

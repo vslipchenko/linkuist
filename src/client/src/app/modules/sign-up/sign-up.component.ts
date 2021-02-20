@@ -1,6 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import {
   EMAIL_MAXLENGTH,
   EMAIL_REGEXP,
@@ -9,7 +15,7 @@ import {
   PASSWORD_REGEXP,
   USERNAME_MAXLENGTH,
   USERNAME_REGEXP,
-  USERNAME_SEPARATORS
+  USERNAME_SEPARATORS,
 } from '@constants/regexps';
 import {generatePassword} from '@utilities/password';
 import {Clipboard} from '@angular/cdk/clipboard';
@@ -23,47 +29,78 @@ import {AuthenticationService} from '@services/authentication/authentication.ser
 // TODO unsubscribe decorator
 @Component({
   templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.scss']
+  styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
   signUpForm: FormGroup;
   hidePassword = true;
   isSubmitting = false;
 
-  constructor(private formBuilder: FormBuilder,
-              private clipboard: Clipboard,
-              private snackbarService: SnackbarService,
-              private userService: UserService,
-              private router: Router,
-              private progressBarService: ProgressBarService,
-              private authenticationService: AuthenticationService) {
-  }
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly clipboard: Clipboard,
+    private readonly snackbarService: SnackbarService,
+    private readonly userService: UserService,
+    private readonly router: Router,
+    private readonly progressBarService: ProgressBarService,
+    private readonly authenticationService: AuthenticationService,
+  ) {}
 
   ngOnInit(): void {
     this.initSignUpForm();
   }
 
+  signUp(): void {
+    this.signUpForm.markAllAsTouched();
+    if (this.signUpForm.valid) {
+      this.isSubmitting = true;
+      // const snackbar = this.snackbarService.showInfinite('Creating account...');
+      this.progressBarService.show();
+      this.userService
+        .create(this.signUpForm.value)
+        .pipe(
+          finalize(() => {
+            this.isSubmitting = false;
+            this.progressBarService.hide();
+          }),
+        )
+        .subscribe(
+          () => {
+            // TODO add form reset button that dismisses infinite snackbar as well
+            this.snackbarService
+              .showInfinite('Successfully signed up!', {action: 'Sign in'})
+              .afterDismissed()
+              .subscribe(() => {
+                this.router.navigate(['/sign-in']);
+              });
+          },
+          () => {
+            this.snackbarService.showError();
+          },
+        );
+    }
+  }
+
   private initSignUpForm(): void {
     this.signUpForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.pattern(EMAIL_REGEXP)], this.emailValidator.bind(this)],
+      email: [
+        '',
+        [Validators.required, Validators.pattern(EMAIL_REGEXP)],
+        this.emailValidator.bind(this),
+      ],
       username: ['', [SignUpComponent.usernameValidator], this.usernameValidator.bind(this)],
       password: ['', [SignUpComponent.passwordValidator]],
-      repeatPassword: ['', [this.repeatPasswordValidator.bind(this)]]
+      repeatPassword: ['', [this.repeatPasswordValidator.bind(this)]],
     });
   }
 
   private emailValidator(control: AbstractControl): null | ValidationErrors {
     const email = control.value;
-    return this.userService.getIdByEmail(email).pipe(map(({data}) => {
-      return data.userByEmail?._id ? {isUsed: true} : null;
-    }));
-  }
-
-  private usernameValidator(control: AbstractControl): null | ValidationErrors {
-    const username = control.value;
-    return this.userService.getIdByUsername(username).pipe(map(({data}) => {
-      return data.userByUsername?._id ? {isUsed: true} : null;
-    }));
+    return this.userService.getIdByEmail(email).pipe(
+      map(({data}) => {
+        return data.userByEmail?._id ? {isUsed: true} : null;
+      }),
+    );
   }
 
   private static usernameValidator(control: AbstractControl): null | ValidationErrors {
@@ -128,32 +165,13 @@ export class SignUpComponent implements OnInit {
     this.hidePassword = false;
   }
 
-  signUp(): void {
-    this.signUpForm.markAllAsTouched();
-    if (this.signUpForm.valid) {
-      this.isSubmitting = true;
-      // const snackbar = this.snackbarService.showInfinite('Creating account...');
-      this.progressBarService.show();
-      this.userService.create(this.signUpForm.value)
-        .pipe(finalize(() => {
-          this.isSubmitting = false;
-          this.progressBarService.hide();
-        }))
-        .subscribe(
-          () => {
-            // TODO add form reset button that dismisses infinite snackbar as well
-            this.snackbarService
-              .showInfinite('Successfully signed up!', {action: 'Sign in'})
-              .afterDismissed()
-              .subscribe(() => {
-                this.router.navigate(['/sign-in']);
-              });
-          },
-          () => {
-            this.snackbarService.showError();
-          }
-        );
-    }
+  private usernameValidator(control: AbstractControl): null | ValidationErrors {
+    const username = control.value;
+    return this.userService.getIdByUsername(username).pipe(
+      map(({data}) => {
+        return data.userByUsername?._id ? {isUsed: true} : null;
+      }),
+    );
   }
 
   get emailField(): AbstractControl {

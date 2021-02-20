@@ -4,12 +4,7 @@ import {ProfileComponent} from './profile.component';
 
 @NgModule({
   declarations: [ProfileComponent],
-  exports: [
-    ProfileComponent
-  ],
-  imports: [
-    CommonModule
-  ]
+  exports: [ProfileComponent],
+  imports: [CommonModule],
 })
-export class ProfileModule {
-}
+export class ProfileModule {}

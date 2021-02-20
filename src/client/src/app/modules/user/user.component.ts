@@ -8,21 +8,22 @@ import {UserService} from '@services/user/user.service';
 
 enum UserComponentToRender {
   ACCOUNT = 'account',
-  PROFILE = 'profile'
+  PROFILE = 'profile',
 }
 
 @Component({
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit {
   componentToRender: UserComponentToRender;
 
-  constructor(private progressBarService: ProgressBarService,
-              private authenticationService: AuthenticationService,
-              private userService: UserService,
-              private router: Router) {
-  }
+  constructor(
+    private readonly progressBarService: ProgressBarService,
+    private readonly authenticationService: AuthenticationService,
+    private readonly userService: UserService,
+    private readonly router: Router,
+  ) {}
 
   // define component to render
   ngOnInit(): void {
@@ -58,24 +59,26 @@ export class UserComponent implements OnInit {
   }
 
   private tryRenderProfile(username: string): void {
-    this.userService.getIdByUsername(username)
+    this.userService
+      .getIdByUsername(username)
       .pipe(
         first(),
-        finalize(() => this.progressBarService.hide())
-      ).subscribe(
-      ({data}) => {
-        if (!data.userByUsername?._id) {
-          this.router.navigate(['**'], {skipLocationChange: true});
-        } else {
-          this.componentToRender = UserComponentToRender.PROFILE;
-        }
-      },
-      () => {
-        // can't fulfill any of requests
-        // TODO redirect to specific error page (service unavailable)
-        this.router.navigate(['/']);
-      }
-    );
+        finalize(() => this.progressBarService.hide()),
+      )
+      .subscribe(
+        ({data}) => {
+          if (!data.userByUsername?._id) {
+            this.router.navigate(['**'], {skipLocationChange: true});
+          } else {
+            this.componentToRender = UserComponentToRender.PROFILE;
+          }
+        },
+        () => {
+          // can't fulfill any of requests
+          // TODO redirect to specific error page (service unavailable)
+          this.router.navigate(['/']);
+        },
+      );
   }
 
   get userComponentToRender() {

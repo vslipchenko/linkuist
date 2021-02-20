@@ -14,19 +14,20 @@ import {finalize} from 'rxjs/operators';
 
 @Component({
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+  styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
   signInForm: FormGroup;
   hidePassword = true;
   isSubmitting = false;
 
-  constructor(private formBuilder: FormBuilder,
-              private authenticationService: AuthenticationService,
-              private snackbarService: SnackbarService,
-              private progressBarService: ProgressBarService,
-              private router: Router) {
-  }
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private authenticationService: AuthenticationService,
+    private readonly snackbarService: SnackbarService,
+    private readonly progressBarService: ProgressBarService,
+    private readonly router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.initSignInForm();
@@ -49,26 +50,15 @@ export class SignInComponent implements OnInit {
     return isEmpty ? {required: true} : null;
   }
 
-  private initSignInForm(): void {
-    this.signInForm = this.formBuilder.group({
-      email: ['', [SignInComponent.emailValidator]],
-      password: ['', [SignInComponent.passwordValidator]]
-    });
-  }
-
-  private resetPatternErrorOnInput(): void {
-    combineLatest([this.emailField.valueChanges, this.passwordField.valueChanges]).subscribe(
-      () => {
-        if (this.hasPatternError) {
-          this.dispatchErrors(null);
-        }
-      }
-    );
-  }
-
-  private dispatchErrors(error: ValidationErrors | null): void {
-    this.emailField.setErrors(error);
-    this.passwordField.setErrors(error);
+  get customErrorStateMatcher(): ErrorStateMatcher {
+    return {
+      // email or password field touched and is empty OR one of them has pattern error
+      isErrorState: (control) =>
+        (control.touched && control.hasError('required')) ||
+        (this.passwordField.touched && this.passwordField.hasError('required')) ||
+        control.hasError('pattern') ||
+        this.passwordField.hasError('pattern'),
+    } as ErrorStateMatcher;
   }
 
   signIn(): void {
@@ -82,11 +72,14 @@ export class SignInComponent implements OnInit {
       // const snackbar = this.snackbarService.showInfinite('Loading...');
       this.progressBarService.show();
 
-      this.authenticationService.signIn(this.signInForm.value)
-        .pipe(finalize(() => {
-          this.isSubmitting = false;
-          this.progressBarService.hide();
-        }))
+      this.authenticationService
+        .signIn(this.signInForm.value)
+        .pipe(
+          finalize(() => {
+            this.isSubmitting = false;
+            this.progressBarService.hide();
+          }),
+        )
         .subscribe(
           ({data}) => {
             this.authenticationService.tokens = data.signIn;
@@ -97,17 +90,30 @@ export class SignInComponent implements OnInit {
           ({graphQLErrors}: ApolloError) => {
             const errors = shapeGraphQLErrors(graphQLErrors);
 
-            errors.forEach(error => {
+            errors.forEach((error) => {
               switch (error.code) {
                 case 'BAD_USER_INPUT':
                   return this.dispatchErrors({pattern: true});
-                default: // 'INTERNAL_SERVER_ERROR'
+                default:
+                  // 'INTERNAL_SERVER_ERROR'
                   this.snackbarService.showError();
               }
             });
-          }
+          },
         );
     }
+  }
+
+  private dispatchErrors(error: ValidationErrors | null): void {
+    this.emailField.setErrors(error);
+    this.passwordField.setErrors(error);
+  }
+
+  private initSignInForm(): void {
+    this.signInForm = this.formBuilder.group({
+      email: ['', [SignInComponent.emailValidator]],
+      password: ['', [SignInComponent.passwordValidator]],
+    });
   }
 
   private get emailField(): AbstractControl {
@@ -133,13 +139,12 @@ export class SignInComponent implements OnInit {
     return this.emailField.hasError('pattern') || this.passwordField.hasError('pattern');
   }
 
-  get customErrorStateMatcher(): ErrorStateMatcher {
-    return { // email or password field touched and is empty OR one of them has pattern error
-      isErrorState: (control) =>
-        (control.touched && control.hasError('required'))
-        || (this.passwordField.touched && this.passwordField.hasError('required'))
-        || (control.hasError('pattern') || this.passwordField.hasError('pattern'))
-    } as ErrorStateMatcher;
+  private resetPatternErrorOnInput(): void {
+    combineLatest([this.emailField.valueChanges, this.passwordField.valueChanges]).subscribe(() => {
+      if (this.hasPatternError) {
+        this.dispatchErrors(null);
+      }
+    });
   }
 
   get navigationMainActionType(): NavigationMainActionType {

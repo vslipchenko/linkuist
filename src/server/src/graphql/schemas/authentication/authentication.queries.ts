@@ -1,19 +1,27 @@
-import {ACCESS_JWT_EXPIRES_IN, ACCESS_JWT_SECRET, REFRESH_JWT_EXPIRES_IN, REFRESH_JWT_SECRET_FRAGMENT} from '../../../constants/app';
+import {
+  ACCESS_JWT_EXPIRES_IN,
+  ACCESS_JWT_SECRET,
+  REFRESH_JWT_EXPIRES_IN,
+  REFRESH_JWT_SECRET_FRAGMENT,
+} from '../../../constants/app';
 import {ApolloError, gql, UserInputError} from 'apollo-server-express';
 import jwt, {SignOptions} from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {User} from '../../../models/user';
-import {UserDocument, IUser} from '../../../types/user/user.interfaces';
+import {IUser, UserDocument} from '../../../types/user/user.interfaces';
 import {QueryResult} from '../../../types/mongoose/mongoose.types';
 import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../../constants/regexps';
 
-const signIn = (_: unknown, {input}: { input: IUser }) => {
-  const isValidData = checkDataValidity({input, pattern: {
-    'email': EMAIL_REGEXP,
-    'password': PASSWORD_REGEXP
-  }});
+const signIn = (_: unknown, {input}: {input: IUser}) => {
+  const isValidData = checkDataValidity({
+    input,
+    pattern: {
+      email: EMAIL_REGEXP,
+      password: PASSWORD_REGEXP,
+    },
+  });
 
   if (!isValidData) {
     return null;
@@ -40,16 +48,14 @@ const signIn = (_: unknown, {input}: { input: IUser }) => {
         const accessToken = jwt.sign(
           {userId: user._id, username: user.username},
           ACCESS_JWT_SECRET,
-          {expiresIn: ACCESS_JWT_EXPIRES_IN} as SignOptions
+          {expiresIn: ACCESS_JWT_EXPIRES_IN} as SignOptions,
         );
 
         const REFRESH_JWT_SECRET = `${REFRESH_JWT_SECRET_FRAGMENT}${user.accessKey}`;
 
-        const refreshToken = jwt.sign(
-          {userId: user._id},
-          REFRESH_JWT_SECRET,
-          {expiresIn: REFRESH_JWT_EXPIRES_IN} as SignOptions
-        );
+        const refreshToken = jwt.sign({userId: user._id}, REFRESH_JWT_SECRET, {
+          expiresIn: REFRESH_JWT_EXPIRES_IN,
+        } as SignOptions);
         // OK send back tokens
         return resolve({accessToken, refreshToken});
       }) // Technical error
@@ -57,7 +63,7 @@ const signIn = (_: unknown, {input}: { input: IUser }) => {
   });
 };
 
-const accessTokenByRefreshToken = (_: unknown, {refreshToken}: { refreshToken: string }) => {
+const accessTokenByRefreshToken = (_: unknown, {refreshToken}: {refreshToken: string}) => {
   // console.log('refresh token is ', userId);
   if (!refreshToken) {
     return new ApolloError('', 'REFRESH_TOKEN_EMPTY');
@@ -84,32 +90,33 @@ const accessTokenByRefreshToken = (_: unknown, {refreshToken}: { refreshToken: s
 
         try {
           jwt.verify(refreshToken, REFRESH_JWT_SECRET);
-        } catch { // Token is forged or expired
+        } catch {
+          // Token is forged or expired
           return reject(new ApolloError('', 'REFRESH_TOKEN_INVALID'));
         }
         // Token is valid
         const accessToken = jwt.sign(
           {userId: user._id, username: user.username},
           ACCESS_JWT_SECRET,
-          {expiresIn: ACCESS_JWT_EXPIRES_IN} as SignOptions
+          {expiresIn: ACCESS_JWT_EXPIRES_IN} as SignOptions,
         );
 
         return resolve(accessToken);
-      })
+      };)
       .catch((error) => reject(new ApolloError(error)));
   });
 };
 
 export const authenticationQueryTypeDefinitions = gql`
-    extend type Query {
-      signIn(input: SignInQueryInput!): JwtTokens
-      accessTokenByRefreshToken(refreshToken: String!): String
-    }
+  extend type Query {
+    signIn(input: SignInQueryInput!): JwtTokens
+    accessTokenByRefreshToken(refreshToken: String!): String
+  }
 `;
 
 export const authenticationQueryResolvers = {
   Query: {
     signIn,
-    accessTokenByRefreshToken
-  }
+    accessTokenByRefreshToken,
+  },
 };

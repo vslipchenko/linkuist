@@ -7,7 +7,7 @@ import {
   FormBuilder,
   FormGroup,
   ValidationErrors,
-  Validators
+  Validators,
 } from '@angular/forms';
 import {ENTER} from '@angular/cdk/keycodes';
 import {BookmarkType} from '@@types/bookmark/bookmark.enums';
@@ -19,7 +19,7 @@ import {BookmarkService} from '@services/bookmark/bookmark.service';
 @UntilDestroy()
 @Component({
   templateUrl: './bookmarks.component.html',
-  styleUrls: ['./bookmarks.component.scss']
+  styleUrls: ['./bookmarks.component.scss'],
 })
 export class BookmarksComponent implements OnInit {
   readonly tagsSeparatorKeysCodes = [ENTER];
@@ -35,10 +35,44 @@ export class BookmarksComponent implements OnInit {
   constructor(
     private readonly dialogService: DialogService,
     private readonly bookmarkService: BookmarkService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
   ) {}
 
   ngOnInit(): void {}
+
+  openAddBookmarkDialog(): void {
+    this.initAddBookmarkForm();
+    this.handlePrivateFieldValueChanges();
+
+    this.dialogService.open({
+      panelClass: 'bookmark-dialog',
+      data: {
+        title: 'Add bookmark',
+        form: this.addBookmarkForm,
+        contentTemplateRef: this.addBookmarkContent,
+        actionsTemplateRef: this.addBookmarkActions,
+      },
+    });
+  }
+
+  addBookmark(): void {
+    this.addBookmarkForm.markAllAsTouched();
+    if (this.addBookmarkForm.valid) {
+      console.log('Add bookmark value ', this.addBookmarkForm.value);
+      const tags = this.tagsField.value;
+      tags[0] = this.privateField.value ? BookmarkType.PRIVATE : BookmarkType.PUBLIC; // simplify first element in order to match [String!]! constraint
+      // debugger;
+      // return;
+      this.bookmarkService
+        .create({
+          id: new Date().getTime(),
+          ...this.addBookmarkForm.value,
+          tags,
+        })
+        .pipe(untilDestroyed(this))
+        .subscribe();
+    }
+  }
 
   private initAddBookmarkForm(): void {
     // this.kek = 'awdwd';
@@ -55,10 +89,10 @@ export class BookmarksComponent implements OnInit {
             text: BookmarkType.PUBLIC,
             isSelected: true,
             isRemovable: false,
-            color: 'accent'
-          } as Chip
-        ]
-      ]
+            color: 'accent',
+          } as Chip,
+        ],
+      ],
     });
 
     // this.addBookmarkForm.next(
@@ -72,40 +106,6 @@ export class BookmarksComponent implements OnInit {
     //     })
     // );
     // this.addBookmarkForm = new FormGroup({});
-  }
-
-  openAddBookmarkDialog(): void {
-    this.initAddBookmarkForm();
-    this.handlePrivateFieldValueChanges();
-
-    this.dialogService.open({
-      panelClass: 'bookmark-dialog',
-      data: {
-        title: 'Add bookmark',
-        form: this.addBookmarkForm,
-        contentTemplateRef: this.addBookmarkContent,
-        actionsTemplateRef: this.addBookmarkActions
-      }
-    });
-  }
-
-  addBookmark(): void {
-    this.addBookmarkForm.markAllAsTouched();
-    if (this.addBookmarkForm.valid) {
-      console.log('Add bookmark value ', this.addBookmarkForm.value);
-      const tags = this.tagsField.value;
-      tags[0] = this.privateField.value ? BookmarkType.PRIVATE : BookmarkType.PUBLIC; // simplify first element in order to match [String!]! constraint
-      // debugger;
-      // return;
-      this.bookmarkService
-        .create({
-          id: new Date().getTime(),
-          ...this.addBookmarkForm.value,
-          tags
-        })
-        .pipe(untilDestroyed(this))
-        .subscribe();
-    }
   }
 
   private handlePrivateFieldValueChanges(): void {

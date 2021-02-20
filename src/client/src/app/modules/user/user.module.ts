@@ -11,8 +11,7 @@ import {RouterModule} from '@angular/router';
     RouterModule.forChild([{path: '', component: UserComponent}]),
     CommonModule,
     AccountModule,
-    ProfileModule
-  ]
+    ProfileModule,
+  ],
 })
-export class UserModule {
-}
+export class UserModule {}

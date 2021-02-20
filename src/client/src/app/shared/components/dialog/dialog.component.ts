@@ -6,11 +6,10 @@ import {DialogData} from '@@types/dialog/dialog.interfaces';
 
 @Component({
   templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss']
+  styleUrls: ['./dialog.component.scss'],
 })
 export class DialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) private data: DialogData) {
-  }
+  constructor(@Inject(MAT_DIALOG_DATA) private readonly data: DialogData) {}
 
   // get dialogType(): DialogTypes {
   //   return this.data.dialogType;

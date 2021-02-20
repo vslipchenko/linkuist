@@ -1,4 +1,5 @@
 import {RecordId} from '../graphql/graphql.interfaces';
+
 // TODO refactor gql specific interfaces
 export interface UserIdByEmail {
   userByEmail: RecordId;

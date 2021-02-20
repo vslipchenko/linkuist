@@ -10,7 +10,6 @@ import {MatInputModule} from '@angular/material/input';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {RouterModule} from '@angular/router';
 
-
 @NgModule({
   declarations: [SignUpComponent],
   imports: [
@@ -22,8 +21,7 @@ import {RouterModule} from '@angular/router';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTooltipModule
-  ]
+    MatTooltipModule,
+  ],
 })
-export class SignUpModule {
-}
+export class SignUpModule {}

@@ -6,24 +6,29 @@ import {TextOnlySnackBar} from '@angular/material/snack-bar/simple-snack-bar';
 
 // TODO implement multiple snackbars
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SnackbarService {
-
-  constructor(private snackbar: MatSnackBar) {
+  constructor(private readonly snackbar: MatSnackBar) {
     // this.snackbar._openedSnackBarRef.instance.data;
   }
 
-  private show(message: string, {action, config}: SnackbarConfig = {}): MatSnackBarRef<TextOnlySnackBar> {
-    return this.snackbar.open(message, action, config);
+  showInfinite(
+    message: string,
+    {action, config}: SnackbarConfig = {},
+  ): MatSnackBarRef<TextOnlySnackBar> {
+    return this.show(message, {action, config: {duration: undefined, ...config}});
   }
 
   showWithDismiss(message: string, config?: MatSnackBarConfig): MatSnackBarRef<TextOnlySnackBar> {
     return this.show(message, {action: 'Dismiss', config});
   }
 
-  showInfinite(message: string, {action, config}: SnackbarConfig = {}): MatSnackBarRef<TextOnlySnackBar> {
-    return this.show(message, {action, config: {duration: undefined, ...config}});
+  private show(
+    message: string,
+    {action, config}: SnackbarConfig = {},
+  ): MatSnackBarRef<TextOnlySnackBar> {
+    return this.snackbar.open(message, action, config);
   }
 
   showSuccess(message = 'Success!'): void {

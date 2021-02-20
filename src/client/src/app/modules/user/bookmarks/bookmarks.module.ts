@@ -25,8 +25,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatFormFieldModule,
     MatInputModule,
     MatSlideToggleModule,
-    MatDialogModule
-  ]
+    MatDialogModule,
+  ],
 })
-export class BookmarksModule {
-}
+export class BookmarksModule {}

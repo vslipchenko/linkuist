@@ -8,31 +8,29 @@ import {RecordId} from '@@types/graphql/graphql.interfaces';
 import {USER_ID_BY_EMAIL, USER_ID_BY_USERNAME} from '@graphql/user/user.queries';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-
-  constructor(private readonly apollo: Apollo) {
-  }
+  constructor(private readonly apollo: Apollo) {}
 
   create({email, username, password}: UserSignUpData): Observable<FetchResult<RecordId>> {
     return this.apollo.mutate({
       mutation: CREATE_USER,
-      variables: {input: {email, username, password}}
+      variables: {input: {email, username, password}},
     });
   }
 
   getIdByEmail(email: string): Observable<ApolloQueryResult<UserIdByEmail>> {
     return this.apollo.query({
       query: USER_ID_BY_EMAIL,
-      variables: {email}
+      variables: {email},
     });
   }
 
   getIdByUsername(username: string): Observable<ApolloQueryResult<UserIdByUsername>> {
     return this.apollo.query({
       query: USER_ID_BY_USERNAME,
-      variables: {username}
+      variables: {username},
     });
   }
 }

@@ -4,11 +4,10 @@ import {AuthenticationService} from '@services/authentication/authentication.ser
 import {extractUsername} from '@utilities/url';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticationCanActivateGuard implements CanActivate {
-  constructor(private authenticationService: AuthenticationService) {
-  }
+  constructor(private readonly authenticationService: AuthenticationService) {}
 
   canActivate(): boolean {
     const data = this.authenticationService.accessTokenData;

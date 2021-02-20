@@ -19,12 +19,15 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
-  declarations: [NavigationComponent, WrapIfDirective, ProgressBarComponent, PageNotFoundComponent, DialogComponent, ChipsComponent],
-  exports: [
+  declarations: [
     NavigationComponent,
+    WrapIfDirective,
     ProgressBarComponent,
-    ChipsComponent
+    PageNotFoundComponent,
+    DialogComponent,
+    ChipsComponent,
   ],
+  exports: [NavigationComponent, ProgressBarComponent, ChipsComponent],
   imports: [
     CommonModule,
     MatIconModule,
@@ -37,8 +40,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatChipsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatProgressSpinnerModule
-  ]
+    MatProgressSpinnerModule,
+  ],
 })
-export class SharedModule {
-}
+export class SharedModule {}

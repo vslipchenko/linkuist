@@ -9,32 +9,32 @@ import {URL_USERNAME_REGEXP} from '@constants/regexps';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('@modules/home/home.module').then(m => m.HomeModule)
+    loadChildren: () => import('@modules/home/home.module').then((m) => m.HomeModule),
   },
   {
     path: 'sign-in',
-    loadChildren: () => import('@modules/sign-in/sign-in.module').then(m => m.SignInModule)
+    loadChildren: () => import('@modules/sign-in/sign-in.module').then((m) => m.SignInModule),
   },
   {
     path: 'sign-up',
-    loadChildren: () => import('@modules/sign-up/sign-up.module').then(m => m.SignUpModule)
+    loadChildren: () => import('@modules/sign-up/sign-up.module').then((m) => m.SignUpModule),
   },
   {
     matcher: urlMatcher([URL_USERNAME_REGEXP]),
-    loadChildren: () => import('@modules/user/user.module').then(m => m.UserModule)
+    loadChildren: () => import('@modules/user/user.module').then((m) => m.UserModule),
   },
   {
     matcher: urlMatcher([URL_USERNAME_REGEXP, 'bookmarks']),
     canActivate: [AuthenticationCanActivateGuard],
     canLoad: [AuthenticationCanLoadGuard],
-    loadChildren: () => import('@modules/user/bookmarks/bookmarks.module').then(m => m.BookmarksModule)
+    loadChildren: () =>
+      import('@modules/user/bookmarks/bookmarks.module').then((m) => m.BookmarksModule),
   },
-  {path: '**', component: PageNotFoundComponent}
+  {path: '**', component: PageNotFoundComponent},
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'})],
+  exports: [RouterModule],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}

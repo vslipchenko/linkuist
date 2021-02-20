@@ -18,9 +18,7 @@ import {MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
 import {DIALOG_CONFIG} from '@constants/dialog';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -29,50 +27,59 @@ import {DIALOG_CONFIG} from '@constants/dialog';
       loader: {
         provide: TranslateLoader,
         useFactory: TranslateLoaderFactory,
-        deps: [HttpClient]
-      }
+        deps: [HttpClient],
+      },
     }),
     AppRoutingModule,
     GraphQLModule,
     MatSnackBarModule,
-    SharedModule
+    SharedModule,
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: SNACKBAR_CONFIG},
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: DIALOG_CONFIG},
     {provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true},
-    {provide: APP_INITIALIZER, useFactory: AuthenticationFactory, deps: [AuthenticationService, Router], multi: true}
+    {
+      provide: APP_INITIALIZER,
+      useFactory: AuthenticationFactory,
+      deps: [AuthenticationService, Router],
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}
 
 // TODO create & move to specific folder
 function TranslateLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
 }
 
-function AuthenticationFactory(authenticationService: AuthenticationService, router: Router): () => Promise<boolean> {
-  return () => new Promise((resolve) => {
-    const refreshToken = authenticationService.refreshToken;
+function AuthenticationFactory(
+  authenticationService: AuthenticationService,
+  router: Router,
+): () => Promise<boolean> {
+  return () =>
+    new Promise((resolve) => {
+      const refreshToken = authenticationService.refreshToken;
 
-    if (refreshToken) {
-      authenticationService.refreshAccessToken().pipe(
-        first()
-      ).subscribe(
-        ({data: {accessTokenByRefreshToken}}) => {
-          authenticationService.accessToken = accessTokenByRefreshToken;
-          return resolve(true);
-        },
-        () => {
-          authenticationService.resetTokens();
-          router.navigate(['/']);
-          return resolve(true);
-        }
-      );
-    } else {
-      return resolve(true);
-    }
-  });
+      if (refreshToken) {
+        authenticationService
+          .refreshAccessToken()
+          .pipe(first())
+          .subscribe(
+            ({data: {accessTokenByRefreshToken}}) => {
+              authenticationService.accessToken = accessTokenByRefreshToken;
+              return resolve(true);
+            },
+            () => {
+              authenticationService.resetTokens();
+              router.navigate(['/']);
+              return resolve(true);
+            },
+          );
+      } else {
+        return resolve(true);
+      }
+    });
 }

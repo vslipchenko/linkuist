@@ -17,8 +17,7 @@ import {RouterModule} from '@angular/router';
     TranslateModule,
     SharedModule,
     MatButtonModule,
-    MatTooltipModule
-  ]
+    MatTooltipModule,
+  ],
 })
-export class HomeModule {
-}
+export class HomeModule {}

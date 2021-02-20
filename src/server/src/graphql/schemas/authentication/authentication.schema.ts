@@ -1,10 +1,13 @@
 import {authenticationInputs} from './authentication.inputs';
 import {authenticationTypes} from './authentication.types';
-import {authenticationQueryTypeDefinitions, authenticationQueryResolvers} from './authentication.queries';
+import {
+  authenticationQueryResolvers,
+  authenticationQueryTypeDefinitions,
+} from './authentication.queries';
 
 export const authenticationTypeDefinitions = [
   authenticationTypes,
   authenticationInputs,
-  authenticationQueryTypeDefinitions
+  authenticationQueryTypeDefinitions,
 ];
 export const authenticationResolvers = [authenticationQueryResolvers];

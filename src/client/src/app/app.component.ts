@@ -22,20 +22,19 @@ interface IconInfo {
   template: `
     <app-progress-bar></app-progress-bar>
     <router-outlet></router-outlet>
-  `
+  `,
 })
 export class AppComponent implements OnInit {
-
   private readonly defaultLanguage = 'en';
   private readonly supportedLanguages = ['en'];
 
   constructor(
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
-    private translateService: TranslateService,
-    private titleService: Title,
-    @Inject(DOCUMENT) private document: Document) {
-  }
+    private readonly matIconRegistry: MatIconRegistry,
+    private readonly domSanitizer: DomSanitizer,
+    private readonly translateService: TranslateService,
+    private readonly titleService: Title,
+    @Inject(DOCUMENT) private readonly document: Document,
+  ) {}
 
   ngOnInit(): void {
     const selectedLanguage = this.initTranslation();
@@ -62,17 +61,19 @@ export class AppComponent implements OnInit {
   }
 
   private setDocumentTitle(): void {
-    this.translateService.get('APP.TITLE').subscribe(title => this.titleService.setTitle(title));
+    this.translateService.get('APP.TITLE').subscribe((title) => this.titleService.setTitle(title));
   }
 
   private registerMaterialIcons(): void {
-    const registerIcons = (icons: IconInfo[]) => {
-      icons.forEach(icon => {
+    const registerIcons = (icons: Array<IconInfo>) => {
+      icons.forEach((icon) => {
         this.matIconRegistry.addSvgIcon(
           icon.name,
           this.domSanitizer.bypassSecurityTrustResourceUrl(
-            `${icon.isMaterial ? MATERIAL_ICONS_FOLDER : CUSTOM_ICONS_FOLDER}${(icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''}${icon.fileName}.svg`
-          )
+            `${icon.isMaterial ? MATERIAL_ICONS_FOLDER : CUSTOM_ICONS_FOLDER}${
+              (icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''
+            }${icon.fileName}.svg`,
+          ),
         );
       });
     };
@@ -86,13 +87,23 @@ export class AppComponent implements OnInit {
       {name: 'support', fileName: 'support-24px', isMaterial: true, isOutlined: true},
       {name: 'visibility', fileName: 'visibility-24px', isMaterial: true, isFilled: true},
       {name: 'visibility-off', fileName: 'visibility_off-24px', isMaterial: true, isFilled: true},
-      {name: 'account-settings', fileName: 'account_settings-24px', isMaterial: true, isFilled: true},
+      {
+        name: 'account-settings',
+        fileName: 'account_settings-24px',
+        isMaterial: true,
+        isFilled: true,
+      },
       {name: 'add', fileName: 'add-24px', isMaterial: true, isOutlined: true},
       {name: 'linkuist', fileName: 'linkuist_bold-24px', isMaterial: false, isOutlined: true},
       {name: 'home', fileName: 'home-24px', isMaterial: true, isFilled: true},
       {name: 'exit-to-app', fileName: 'exit_to_app-24px', isMaterial: true, isOutlined: true},
       {name: 'pencil-plus', fileName: 'pencil_plus-24px', isMaterial: true, isFilled: true},
-      {name: 'bookmark-collection', fileName: 'collections_bookmark-24px', isMaterial: true, isFilled: true},
+      {
+        name: 'bookmark-collection',
+        fileName: 'collections_bookmark-24px',
+        isMaterial: true,
+        isFilled: true,
+      },
       {name: 'bookmark-plus', fileName: 'book_plus-24px', isMaterial: true, isFilled: true},
       {name: 'cancel', fileName: 'cancel-24px', isMaterial: true, isFilled: true},
       // {name: 'google', fileName: 'google-24px', isOutlined: true},

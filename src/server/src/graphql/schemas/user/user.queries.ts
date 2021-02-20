@@ -17,15 +17,15 @@ const userByUsername = (_: unknown, {username}: {username: IUser['username']}) =
 };
 
 export const userQueryTypeDefinitions = gql`
-    extend type Query {
-      userByEmail(email: String!): User
-      userByUsername(username: String!): User
-    }
+  extend type Query {
+    userByEmail(email: String!): User
+    userByUsername(username: String!): User
+  }
 `;
 
 export const userQueryResolvers = {
   Query: {
     userByEmail,
-    userByUsername
-  }
+    userByUsername,
+  },
 };

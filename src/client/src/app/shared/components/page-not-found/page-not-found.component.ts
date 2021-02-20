@@ -4,14 +4,12 @@ import {AuthenticationService} from '@services/authentication/authentication.ser
 
 @Component({
   templateUrl: './page-not-found.component.html',
-  styleUrls: ['./page-not-found.component.scss']
+  styleUrls: ['./page-not-found.component.scss'],
 })
 export class PageNotFoundComponent implements OnInit {
-  constructor(private authenticationService: AuthenticationService) {
-  }
+  constructor(private readonly authenticationService: AuthenticationService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   get navigationMainActionType(): NavigationMainActionType {
     return this.authenticationService.isUserAuthenticated

@@ -4,15 +4,12 @@ import {AuthenticationService} from '@services/authentication/authentication.ser
 
 @Component({
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  constructor(private readonly authenticationService: AuthenticationService) {}
 
-  constructor(private authenticationService: AuthenticationService) {
-  }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   get navigationMainActionType(): NavigationMainActionType {
     return this.authenticationService.isUserAuthenticated

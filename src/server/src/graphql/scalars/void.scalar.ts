@@ -11,14 +11,14 @@ export const VoidResolver = new GraphQLScalarType({
   description: 'Represents VOID return type',
 
   serialize() {
-    return null
+    return null;
   },
 
   parseValue() {
-    return null
+    return null;
   },
 
   parseLiteral() {
-    return null
-  }
+    return null;
+  },
 });

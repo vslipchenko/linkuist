@@ -1,16 +1,24 @@
 import {Injectable} from '@angular/core';
 import {UserSignInData} from '@@types/user/user.interfaces';
 import {Apollo} from 'apollo-angular';
-import {ACCESS_TOKEN_BY_REFRESH_TOKEN, SIGN_IN} from '@graphql/authentication/authentication.queries';
+import {
+  ACCESS_TOKEN_BY_REFRESH_TOKEN,
+  SIGN_IN,
+} from '@graphql/authentication/authentication.queries';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {ApolloQueryResult} from '@apollo/client/core';
-import {AccessTokenData, AccessTokenQueryResult, JwtTokens, SignInQueryResult} from '@@types/authentication/authentication.interfaces';
+import {
+  AccessTokenData,
+  AccessTokenQueryResult,
+  JwtTokens,
+  SignInQueryResult,
+} from '@@types/authentication/authentication.interfaces';
 import jwt_decode from 'jwt-decode';
 import {map} from 'rxjs/operators';
 import {Router} from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticationService {
   // accessToken
@@ -18,24 +26,28 @@ export class AuthenticationService {
   // isRefreshingAccessToken
   private readonly isRefreshing$ = new BehaviorSubject(false);
 
-  constructor(private readonly apollo: Apollo,
-              private readonly router: Router) {
+  constructor(private readonly apollo: Apollo, private readonly router: Router) {}
+
+  get accessTokenData(): AccessTokenData | null {
+    try {
+      return jwt_decode(this.accessToken);
+    } catch {
+      // ignore error
+      return null;
+    }
   }
 
-  signIn(input: UserSignInData): Observable<ApolloQueryResult<SignInQueryResult>> {
-    return this.apollo.query({
-      query: SIGN_IN,
-      variables: {input}
-    });
-  }
-
-  refreshAccessToken(): Observable<ApolloQueryResult<AccessTokenQueryResult>> {
-    return this.refreshToken
-      ? this.apollo.query({
-        query: ACCESS_TOKEN_BY_REFRESH_TOKEN,
-        variables: {refreshToken: this.refreshToken}
-      })
-      : throwError('REFRESH_TOKEN_EMPTY');
+  private get accessTokenData$(): Observable<AccessTokenData | null> {
+    return this.accessToken$.pipe(
+      map((accessToken) => {
+        try {
+          return jwt_decode(accessToken);
+        } catch {
+          // ignore error
+          return null;
+        }
+      }),
+    );
   }
 
   signOut(): void {
@@ -61,16 +73,11 @@ export class AuthenticationService {
     this.isRefreshing$.next(isRefreshing);
   }
 
-  private get accessTokenData$(): Observable<AccessTokenData | null> {
-    return this.accessToken$.pipe(
-      map((accessToken) => {
-        try {
-          return jwt_decode(accessToken);
-        } catch { // ignore error
-          return null;
-        }
-      })
-    );
+  signIn(input: UserSignInData): Observable<ApolloQueryResult<SignInQueryResult>> {
+    return this.apollo.query({
+      query: SIGN_IN,
+      variables: {input},
+    });
   }
 
   private get isRefreshingAccessToken$(): Observable<boolean> {
@@ -85,12 +92,13 @@ export class AuthenticationService {
     return this.token$.asObservable();
   }
 
-  get accessTokenData(): AccessTokenData | null {
-    try {
-      return jwt_decode(this.accessToken);
-    } catch { // ignore error
-      return null;
-    }
+  refreshAccessToken(): Observable<ApolloQueryResult<AccessTokenQueryResult>> {
+    return this.refreshToken
+      ? this.apollo.query({
+          query: ACCESS_TOKEN_BY_REFRESH_TOKEN,
+          variables: {refreshToken: this.refreshToken},
+        })
+      : throwError('REFRESH_TOKEN_EMPTY');
   }
 
   get refreshToken(): string {

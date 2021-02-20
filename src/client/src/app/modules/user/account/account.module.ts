@@ -10,9 +10,7 @@ import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [AccountComponent],
-  exports: [
-    AccountComponent
-  ],
+  exports: [AccountComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -20,8 +18,7 @@ import {RouterModule} from '@angular/router';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-    RouterModule
-  ]
+    RouterModule,
+  ],
 })
-export class AccountModule {
-}
+export class AccountModule {}

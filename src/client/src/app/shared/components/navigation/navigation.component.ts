@@ -5,7 +5,7 @@ import {AuthenticationService} from '@services/authentication/authentication.ser
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
   // private readonly defaultConfiguration: NavigationConfiguration = {
@@ -13,8 +13,7 @@ export class NavigationComponent implements OnInit {
   // };
   @Input() mainActionType: NavigationMainActionType;
 
-  constructor(private authenticationService: AuthenticationService) {
-  }
+  constructor(private readonly authenticationService: AuthenticationService) {}
 
   ngOnInit(): void {
     // console.log('WOW ', this.route.snapshot.pathFromRoot.filter(o => o.url[0]?.path).map(o => o.url[0]?.path));
@@ -53,7 +52,9 @@ export class NavigationComponent implements OnInit {
   }
 
   get isHomeTextMainAction(): boolean {
-    return !this.isUserAuthenticated
-      && (this.isHomeMainAction || this.mainActionType === NavigationMainActionType.NONE);
+    return (
+      !this.isUserAuthenticated &&
+      (this.isHomeMainAction || this.mainActionType === NavigationMainActionType.NONE)
+    );
   }
 }

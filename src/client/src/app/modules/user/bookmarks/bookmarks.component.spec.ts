@@ -1,17 +1,18 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
-import { BookmarksComponent } from './bookmarks.component';
+import {BookmarksComponent} from './bookmarks.component';
 
 describe('BookmarksComponent', () => {
   let component: BookmarksComponent;
   let fixture: ComponentFixture<BookmarksComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ BookmarksComponent ]
-    })
-    .compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [BookmarksComponent],
+      }).compileComponents();
+    }),
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BookmarksComponent);
