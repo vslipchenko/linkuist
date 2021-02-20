@@ -5,9 +5,9 @@ import {APP_PORT, MONGODB_URI} from './constants/app';
 //
 import {ApolloServerExpressConfig, ExpressContext} from 'apollo-server-express/dist/ApolloServer';
 // External imports
-const mongoose = require('mongoose');
-const express = require('express');
-const {ApolloServer} = require('apollo-server-express');
+import mongoose from 'mongoose';
+import express from 'express';
+import {ApolloServer} from 'apollo-server-express';
 // Internal imports
 /* Main */
 const server = new ApolloServer(<ApolloServerExpressConfig>{
@@ -47,14 +47,10 @@ const app = express();
 server.applyMiddleware({app});
 // Start app only on successful DB connection
 mongoose.set('debug', true);
-mongoose.connect(
-  MONGODB_URI,
-  {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true},
-  (error: unknown) => {
-    if (error) {
-      return console.error(error);
-    }
+mongoose
+  .connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+  .then(() => {
     console.log('Port:', APP_PORT);
     app.listen(APP_PORT);
-  },
-);
+  })
+  .catch((error) => console.log(error));

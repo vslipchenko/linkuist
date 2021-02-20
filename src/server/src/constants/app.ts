@@ -8,6 +8,7 @@ dotenv.config({path: `src/environments/.env.${environment}`});
 
 interface ProcessEnvConstants {
   [key: string]: unknown;
+  MONGODB_URI: string;
   ACCESS_JWT_SECRET: Secret;
   REFRESH_JWT_SECRET_FRAGMENT: Secret;
 }
@@ -19,4 +20,4 @@ export const {
   ACCESS_JWT_EXPIRES_IN,
   REFRESH_JWT_SECRET_FRAGMENT,
   REFRESH_JWT_EXPIRES_IN,
-} = process.env as ProcessEnvConstants;
+} = <ProcessEnvConstants>process.env;

@@ -102,7 +102,7 @@ const accessTokenByRefreshToken = (_: unknown, {refreshToken}: {refreshToken: st
         );
 
         return resolve(accessToken);
-      };)
+      })
       .catch((error) => reject(new ApolloError(error)));
   });
 };
