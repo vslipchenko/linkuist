@@ -1,6 +1,5 @@
 import {Observable, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {ComponentType} from '@angular/cdk/overlay';
 import {ɵComponentType} from '@angular/core';
 
 // Reference https://github.com/ngneat/until-destroy
@@ -22,7 +21,7 @@ function ensureClassIsDecorated(instance: any): never | void {
   if (missingDecorator(instance.constructor)) {
     throw Error(
       `untilDestroyed operator cannot be used inside
-      components that are not decorated with UntilDestroy decorator`
+      components that are not decorated with UntilDestroy decorator`,
     );
   }
 }
@@ -43,10 +42,8 @@ function completeSubjectOnTheInstance(instance: any): void {
   }
 }
 
-function decorateNgOnDestroy(
-  ngOnDestroy: (() => void) | null | undefined
-) {
-  return function(this: any) {
+function decorateNgOnDestroy(ngOnDestroy: (() => void) | null | undefined) {
+  return function (this: any): void {
     // Invoke the original `ngOnDestroy` if it exists
     ngOnDestroy && ngOnDestroy.call(this);
     // It's important to use `this` instead of caching instance
@@ -55,12 +52,12 @@ function decorateNgOnDestroy(
   };
 }
 
-function decorateComponent<T>(type: ComponentType<T>): void {
+function decorateComponent<T>(type: ɵComponentType<T>): void {
   type.prototype.ngOnDestroy = decorateNgOnDestroy(type.prototype.ngOnDestroy);
 }
 
 export function UntilDestroy(): ClassDecorator {
-  return (type: any) => {
+  return (type: any): void => {
     decorateComponent(type);
     markAsDecorated(type);
   };
@@ -71,6 +68,7 @@ export function untilDestroyed<T>(instance: T) {
     ensureClassIsDecorated(instance);
     createSubjectOnTheInstance(instance);
 
-    return source.pipe(takeUntil<U>((instance)[SYMBOL]));
+    // @ts-expect-error
+    return source.pipe(takeUntil<U>(instance[SYMBOL]));
   };
 }

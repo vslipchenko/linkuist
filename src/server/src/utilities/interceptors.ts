@@ -5,7 +5,7 @@ import {AccessTokenData} from '../types/jwt/jwt.interfaces';
 
 export const authenticationInterceptor = <C = unknown>(
   accessToken: string,
-  successCallback: (tokenData: AccessTokenData) => C
+  successCallback: (tokenData: AccessTokenData) => C,
 ): ApolloError | Promise<ApolloError | C> => {
   if (!accessToken) {
     return new ApolloError('', 'ACCESS_TOKEN_EMPTY');

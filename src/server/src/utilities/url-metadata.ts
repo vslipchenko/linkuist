@@ -7,10 +7,9 @@ import {
   META_ICON_REGEXP,
   META_IMAGE_REGEXP,
   META_SITE_NAME_REGEXP,
-  META_TITLE_REGEXP
+  META_TITLE_REGEXP,
 } from '../constants/regexps';
 import {forEachMatch, replaceExcessiveIndents} from './processors';
-
 
 enum MetadataElements {
   'hostname',
@@ -29,12 +28,17 @@ type FetchMetadataOptions = Required<Pick<RequestOptions, 'headers' | 'timeout'>
 
 type FetchedMetadata = Metadata | Partial<Metadata>;
 
-type ResponseResults = Array<{url: URL, data: string}>;
+type ResponseResults = Array<{url: URL; data: string}>;
 
-export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: IgnoreMetadataProperties, grabAllMediadata?: boolean): Promise<FetchedMetadata> => { // possible return values: {} | {hostname} | Metadata; can contain broken image links as well (validated on the client)
+export const fetchUrlMetadata = (
+  sourceUrl: string,
+  ignoreMetadataProperties?: IgnoreMetadataProperties,
+  grabAllMediadata?: boolean,
+): Promise<FetchedMetadata> => {
+  // possible return values: {} | {hostname} | Metadata; can contain broken image links as well (validated on the client)
   let redirectCounter = 0;
   // const metadata: FetchedMetadata = {};
-  const rawMetadata: FetchedMetadata[] = [];
+  const rawMetadata: Array<FetchedMetadata> = [];
   const responseResults: ResponseResults = [];
   const requestTimeout = 1500; // Milliseconds
   const responseTimeout = 1500; // Milliseconds
@@ -87,7 +91,8 @@ export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: I
         } else {
           title = '';
         }
-      } else { // <meta> tag otherwise
+      } else {
+        // <meta> tag otherwise
         title = getAttributeContent('content', match);
       }
 
@@ -95,15 +100,15 @@ export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: I
     };
 
     const fetchBaseUrl = (match: string): string | null => {
-      const baseMatch = match.match(BASE_TAG_REGEXP);
+      const baseMatch = BASE_TAG_REGEXP.exec(match);
       return baseMatch ? getAttributeContent('href', baseMatch[0]) : null;
     };
 
-    const pickMostCompleteMetadata = (rawMetadata: FetchedMetadata[]): FetchedMetadata => {
+    const pickMostCompleteMetadata = (rawMetadata: Array<FetchedMetadata>): FetchedMetadata => {
       let maxPropertyCount = 0;
       let metadata: FetchedMetadata = {};
 
-      for (let i = rawMetadata.length - 1; (i > - 1); i--) {
+      for (let i = rawMetadata.length - 1; i > -1; i--) {
         const rawMetadataItem = rawMetadata[i];
         const propertyCount = Object.keys(rawMetadata).length;
 
@@ -116,7 +121,7 @@ export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: I
       return metadata;
     };
 
-    for (let i = results.length - 1; (i > - 1); i--) {
+    for (let i = results.length - 1; i > -1; i--) {
       const rawMetadataItem: FetchedMetadata = {};
       const result = results[i];
       const {url} = result;
@@ -189,7 +194,9 @@ export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: I
 
             if (imageUrl) {
               if (grabAllMediadata) {
-                if (!rawMetadataItem.image) rawMetadataItem.image = [];
+                if (!rawMetadataItem.image) {
+                  rawMetadataItem.image = [];
+                }
 
                 (rawMetadataItem.image as Array<string>).push(imageUrl);
               } else {
@@ -212,7 +219,9 @@ export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: I
 
             if (iconUrl) {
               if (grabAllMediadata) {
-                if (!rawMetadataItem.icon) rawMetadataItem.icon = [];
+                if (!rawMetadataItem.icon) {
+                  rawMetadataItem.icon = [];
+                }
 
                 (rawMetadataItem.icon as Array<string>).push(iconUrl);
               } else {
@@ -224,7 +233,9 @@ export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: I
         });
       }
 
-      if (Object.keys(rawMetadataItem).length) rawMetadata.push(rawMetadataItem);
+      if (Object.keys(rawMetadataItem).length) {
+        rawMetadata.push(rawMetadataItem);
+      }
       // }
     }
 
@@ -252,14 +263,21 @@ export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: I
   //   return hostname;
   // };
 
-  const fetchMetadata = (url: string, options: FetchMetadataOptions, resolve: (_: FetchedMetadata) => void, recentUserAgent?: string): void => {
+  const fetchMetadata = (
+    url: string,
+    options: FetchMetadataOptions,
+    resolve: (_: FetchedMetadata) => void,
+    recentUserAgent?: string,
+  ): void => {
     const Url = parseUrl(url);
     const userAgent = recentUserAgent || userAgents.pop();
 
     // at this point hostname can be set already, therefore metadata.hostname
     // can contain stale data; omit it with {} return value
     // looks like malicious request and UI validation was ignored
-    if (!isValidRequest(Url as URL) || !userAgent)  return resolve(fulfillMetadata(responseResults));
+    if (!isValidRequest(Url as URL) || !userAgent) {
+      return resolve(fulfillMetadata(responseResults));
+    }
 
     // if (Url?.hostname) metadata.hostname = Url.hostname; // Prettify
 
@@ -322,12 +340,13 @@ export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: I
   };
 
   return new Promise<FetchedMetadata>((resolve) => {
-    return fetchMetadata(sourceUrl,
+    return fetchMetadata(
+      sourceUrl,
       {
-        headers: {'Accept': 'text/html, text/plain'},
-        timeout: requestTimeout // connection timeout
+        headers: {Accept: 'text/html, text/plain'},
+        timeout: requestTimeout, // connection timeout
       },
-      resolve
+      resolve,
     );
   });
 };
@@ -340,6 +359,8 @@ export const fetchUrlMetadata = (sourceUrl: string, ignoreMetadataProperties?: I
 // !x push images and icons into array -> leave the first one that responds 200 OK
 // !x cut off everything after the </head> tag
 // x check with encoded uris
-fetchUrlMetadata('http://twitter.com/Twitter?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor')
+fetchUrlMetadata(
+  'http://twitter.com/Twitter?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor',
+)
   .then((v) => console.log('FS ', v))
   .catch((e) => console.error('FE ', e));

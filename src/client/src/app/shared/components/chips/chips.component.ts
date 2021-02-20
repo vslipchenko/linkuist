@@ -1,12 +1,24 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {ControlContainer, ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  ControlContainer,
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import {MatChipEvent} from '@angular/material/chips/chip';
 import {MatChipInputEvent} from '@angular/material/chips/chip-input';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autocomplete';
 import {Observable} from 'rxjs';
 import {first, startWith} from 'rxjs/operators';
 import {has as _has} from 'lodash';
-import { UntilDestroy, untilDestroyed } from '@utilities/until-destroy';
+import {UntilDestroy, untilDestroyed} from '@utilities/until-destroy';
 
 // TODO remove chip color directive logic once autocomplete issue fixed
 @UntilDestroy()
@@ -18,12 +30,14 @@ import { UntilDestroy, untilDestroyed } from '@utilities/until-destroy';
   //   provide: ControlContainer,
   //   useExisting: FormGroupDirective
   // }],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: ChipsComponent,
-    multi: true
-  }],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: ChipsComponent,
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChipsComponent implements OnInit, ControlValueAccessor {
   // General
@@ -55,8 +69,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
 
   areAutocompleteOptionsLoading: boolean;
 
-  constructor(private readonly controlContainer: ControlContainer) {
-  }
+  constructor(private readonly controlContainer: ControlContainer) {}
 
   ngOnInit(): void {
     // get control by name if not control itself passed
@@ -74,20 +87,18 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     console.log(this.chips);
   }
 
-  registerOnChange(_: unknown): void {
-  }
+  registerOnChange(): void {}
 
-  registerOnTouched(_: unknown): void {
-  }
+  registerOnTouched(): void {}
 
   removeChip(event: MatChipEvent): void {
     const text = event.chip.value.trim();
-    this.writeValue(this.chips.filter(
-      chip =>
+    this.writeValue(
+      this.chips.filter((chip) =>
         // debugger;
-         chip.text ? chip.text !== text : chip !== text
-
-    ));
+        chip.text ? chip.text !== text : chip !== text,
+      ),
+    );
     // this.();
   }
 
@@ -109,10 +120,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
       if (!this.autocompleteOptions.length) {
         this.areAutocompleteOptionsLoading = true;
         this.autocompleteOptions$()
-          .pipe(
-            first(),
-            untilDestroyed(this)
-          )
+          .pipe(first(), untilDestroyed(this))
           .subscribe((options) => {
             this.areAutocompleteOptionsLoading = false;
             this.autocompleteOptions = options;
@@ -138,15 +146,19 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   }
 
   private removeChipDuplicates(chips: Array<any>): Array<any> {
-    return chips.reduce(
-      (previousValue, currentValue) => {
-        if (!previousValue.length || !previousValue.find(chip => chip.text ? chip.text === currentValue || chip.text === currentValue.text : chip === currentValue || chip === currentValue.text)) {
-          return previousValue.concat(currentValue);
-        }
-        return previousValue;
-      },
-      []
-    );
+    return chips.reduce((previousValue, currentValue) => {
+      if (
+        !previousValue.length ||
+        !previousValue.find((chip) =>
+          chip.text
+            ? chip.text === currentValue || chip.text === currentValue.text
+            : chip === currentValue || chip === currentValue.text,
+        )
+      ) {
+        return previousValue.concat(currentValue);
+      }
+      return previousValue;
+    }, []);
   }
 
   private tuneRecentChip(chips: Array<any>): Array<any> {
@@ -154,18 +166,22 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
       const chip = chips.pop();
       // return chips.map(chip => {
       let chipText = chip.text || chip;
-      let words = chipText.split(this.chipSplitWordBy).filter(word => Boolean(word));
+      let words = chipText.split(this.chipSplitWordBy).filter((word) => Boolean(word));
       // debugger;
       // debugger;
-      words = words.map(word => {
-        const letters = [...word];
-        // filter letters
-        return letters.map(letter => {
-          if (this.chipLetterValidator.test(letter)) {
-            return this.areChipsLowerCased ? letter.toLowerCase() : letter;
-          }
-        }).join('');
-      }).filter(word => word.length);
+      words = words
+        .map((word) => {
+          const letters = [...word];
+          // filter letters
+          return letters
+            .map((letter) => {
+              if (this.chipLetterValidator.test(letter)) {
+                return this.areChipsLowerCased ? letter.toLowerCase() : letter;
+              }
+            })
+            .join('');
+        })
+        .filter((word) => word.length);
       // remove separator duplicates
       chipText = words.join(this.chipSeparator);
       // debugger;

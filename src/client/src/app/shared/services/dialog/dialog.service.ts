@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '@shared/components/dialog/dialog.component';
-import {DialogData, Dialog} from '@@types/dialog/dialog.interfaces';
+import {Dialog, DialogData} from '@@types/dialog/dialog.interfaces';
 import {finalize} from 'rxjs/operators';
 import {MatDialogConfig} from '@angular/material/dialog/dialog-config';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DialogService {
-  private dialogRef: MatDialogRef<DialogComponent>;
+  private dialogRef: MatDialogRef<DialogComponent> | null | undefined;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private readonly dialog: MatDialog) {}
 
   open(dialogConfig: MatDialogConfig<DialogData>): Dialog {
     this.dialogRef = this.dialog.open(DialogComponent, {
@@ -22,12 +22,13 @@ export class DialogService {
       // data: dialogConfig.data
     });
 
-    const dialogAfterClosed$ = this.dialogRef.afterClosed()
-      .pipe(finalize(() => this.dialogRef = null));
+    const dialogAfterClosed$ = this.dialogRef
+      .afterClosed()
+      .pipe(finalize(() => (this.dialogRef = null)));
 
     return {
       dialogRef: this.dialogRef,
-      dialogAfterClosed$
+      dialogAfterClosed$,
     };
   }
 }
