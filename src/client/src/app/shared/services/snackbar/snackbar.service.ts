@@ -44,6 +44,6 @@ export class SnackbarService {
   }
 
   get isOpened(): boolean {
-    return !!this.snackbar._openedSnackBarRef;
+    return Boolean(this.snackbar._openedSnackBarRef);
   }
 }

@@ -117,6 +117,6 @@ export class AuthenticationService {
   }
 
   get isUserAuthenticated(): boolean {
-    return !!(this.accessToken && this.refreshToken);
+    return Boolean(this.accessToken && this.refreshToken);
   }
 }

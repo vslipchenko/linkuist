@@ -27,6 +27,6 @@ export class WrapIfDirective implements AfterViewInit {
   }
 
   @Input() set appWrapIf(condition: unknown) {
-    this.wrap = !!condition;
+    this.wrap = Boolean(condition);
   }
 }

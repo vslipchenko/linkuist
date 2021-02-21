@@ -44,7 +44,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       // if token is refreshing wait for a new value
       // proceed request chain if token was refreshed
       return this.freshAccessToken$.pipe(
-        first((value) => !!value), // complete after first emit of truthy value
+        first((value) => Boolean(value)), // complete after first emit of truthy value
         switchMap((accessToken) => {
           return next.handle(AuthenticationInterceptor.attachAccessToken(request, accessToken));
         }),
