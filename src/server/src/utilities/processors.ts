@@ -1,8 +1,3 @@
-export const replaceExcessiveIndents = (input: string, replaceValue: string): string => {
-  // leave only singular whitespaces
-  return input.replace(/[\r\n\t]|(\s\s+)/g, replaceValue);
-};
-
 export const forEachMatch = (
   input: string,
   regexp: RegExp,

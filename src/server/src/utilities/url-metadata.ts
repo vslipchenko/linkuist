@@ -9,7 +9,7 @@ import {
   META_SITE_NAME_REGEXP,
   META_TITLE_REGEXP,
 } from '../constants/regexps';
-import {forEachMatch, replaceExcessiveIndents} from './processors';
+import {forEachMatch} from './processors';
 
 enum MetadataElements {
   'hostname',
@@ -20,7 +20,7 @@ enum MetadataElements {
   'icon',
 }
 
-type Metadata = Record<keyof typeof MetadataElements, Array<string> | string>;
+type Metadata = Record<keyof typeof MetadataElements, string>;
 
 export type IgnoreMetadataProperties = Array<keyof typeof MetadataElements>;
 
@@ -30,11 +30,7 @@ type FetchedMetadata = Metadata | Partial<Metadata>;
 
 type ResponseResults = Array<{url: URL; data: string}>;
 
-export const fetchUrlMetadata = (
-  sourceUrl: string,
-  ignoreMetadataProperties?: IgnoreMetadataProperties,
-  grabAllMediadata?: boolean,
-): Promise<FetchedMetadata> => {
+export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> => {
   // possible return values: {} | {hostname} | Metadata; can contain broken image links as well (validated on the client)
   let redirectCounter = 0;
   // const metadata: FetchedMetadata = {};
@@ -43,8 +39,8 @@ export const fetchUrlMetadata = (
   const requestTimeout = 1500; // Milliseconds
   const responseTimeout = 1500; // Milliseconds
   const userAgents = [
-    'Twitterbot/1.0', // https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started
-    'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)', // https://developers.facebook.com/docs/sharing/webmasters/crawler/
+    // 'Twitterbot/1.0', // https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started
+    // 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)', // https://developers.facebook.com/docs/sharing/webmasters/crawler/
     'PostmanRuntime/7.26.8', // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent#library_and_net_tool_ua_strings
     'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', // https://developers.google.com/search/docs/advanced/crawling/overview-google-crawlers
   ];
@@ -111,6 +107,7 @@ export const fetchUrlMetadata = (
       for (let i = rawMetadata.length - 1; i > -1; i--) {
         const rawMetadataItem = rawMetadata[i];
         const propertyCount = Object.keys(rawMetadata).length;
+        // console.log('rawMetadataItem ', rawMetadataItem);
 
         if (propertyCount > maxPropertyCount) {
           maxPropertyCount = propertyCount;
@@ -121,117 +118,115 @@ export const fetchUrlMetadata = (
       return metadata;
     };
 
+    const replaceExcessiveIndents = (input: string): string => {
+      return input.replace(/[\r\n\t]|(\s\s+)/g, ' ');
+    };
+
     for (let i = results.length - 1; i > -1; i--) {
       const rawMetadataItem: FetchedMetadata = {};
       const result = results[i];
       const {url} = result;
-      const data = replaceExcessiveIndents(result.data, ' ');
+      const data = replaceExcessiveIndents(result.data);
       let baseUrl = fetchBaseUrl(data);
 
-      if (!ignoreMetadataProperties?.includes('hostname')) {
-        rawMetadataItem.hostname = url.hostname;
-      }
+      // if (!ignoreMetadataProperties?.includes('hostname')) {
+      rawMetadataItem.hostname = url.hostname;
+      // }
 
       if (baseUrl) {
         baseUrl = resolveAmbiguousHref(baseUrl, url.href);
       }
       // fetch titles
       // if (!metadata.title) {
-      if (!ignoreMetadataProperties?.includes('title')) {
-        forEachMatch(data, META_TITLE_REGEXP, (match) => {
-          if (!rawMetadataItem.title) {
-            const title = fetchTitle(match);
+      // if (!ignoreMetadataProperties?.includes('title')) {
+      forEachMatch(data, META_TITLE_REGEXP, (match) => {
+        if (rawMetadataItem.title) {
+          return false;
+        } else {
+          const title = fetchTitle(match);
 
-            if (title) {
-              rawMetadataItem.title = title;
-              return false; // break loop
-            }
+          if (title) {
+            rawMetadataItem.title = title;
+            return false; // break loop
           }
-        });
-      }
+        }
+      });
+      // }
 
       // }
 
       // parse site_name
       // if (!metadata.sitename) {
-      if (!ignoreMetadataProperties?.includes('sitename')) {
-        forEachMatch(data, META_SITE_NAME_REGEXP, (match) => {
-          if (!rawMetadataItem.sitename) {
-            const sitename = getAttributeContent('content', match);
+      // if (!ignoreMetadataProperties?.includes('sitename')) {
+      forEachMatch(data, META_SITE_NAME_REGEXP, (match) => {
+        if (rawMetadataItem.sitename) {
+          return false;
+        } else {
+          const sitename = getAttributeContent('content', match);
 
-            if (sitename) {
-              rawMetadataItem.sitename = sitename;
-              return false; // break loop
-            }
+          if (sitename) {
+            rawMetadataItem.sitename = sitename;
+            return false; // break loop
           }
-        });
-      }
+        }
+      });
+      // }
       // }
 
       // fetch descriptions
       // if (!metadata.description) {
-      if (!ignoreMetadataProperties?.includes('description')) {
-        forEachMatch(data, META_DESCRIPTION_REGEXP, (match) => {
-          if (!rawMetadataItem.description) {
-            const description = getAttributeContent('content', match);
+      // if (!ignoreMetadataProperties?.includes('description')) {
+      forEachMatch(data, META_DESCRIPTION_REGEXP, (match) => {
+        if (rawMetadataItem.description) {
+          return false;
+        } else {
+          const description = getAttributeContent('content', match);
 
-            if (description) {
-              rawMetadataItem.description = description;
-              return false; // break loop
-            }
+          if (description) {
+            rawMetadataItem.description = description;
+            return false; // break loop
           }
-        });
-      }
+        }
+      });
+      // }
       // }
 
       // fetch images
       // if (!metadata.image) {
-      if (!ignoreMetadataProperties?.includes('image')) {
-        forEachMatch(data, META_IMAGE_REGEXP, (match) => {
-          if (!rawMetadataItem.image || grabAllMediadata) {
-            let imageUrl: string | null = getAttributeContent('content', match);
-            imageUrl = resolveAmbiguousHref(imageUrl, baseUrl || url.href);
+      // if (!ignoreMetadataProperties?.includes('image')) {
+      forEachMatch(data, META_IMAGE_REGEXP, (match) => {
+        if (rawMetadataItem.image) {
+          return false;
+        } else {
+          let imageUrl: string | null = getAttributeContent('content', match);
+          imageUrl = resolveAmbiguousHref(imageUrl, baseUrl || url.href);
 
-            if (imageUrl) {
-              if (grabAllMediadata) {
-                if (!rawMetadataItem.image) {
-                  rawMetadataItem.image = [];
-                }
-
-                (rawMetadataItem.image as Array<string>).push(imageUrl);
-              } else {
-                rawMetadataItem.image = imageUrl; // !!! can be broken link; let client to handle it in order to save resources
-                return false;
-              }
-            }
+          if (imageUrl) {
+            rawMetadataItem.image = imageUrl; // !!! can be broken link; let client to handle it in order to save resources
+            return false;
           }
-        });
-      }
+        }
+      });
+      // }
       // }
 
       // fetch icons
       // if (!metadata.icon) {
-      if (!ignoreMetadataProperties?.includes('icon')) {
-        forEachMatch(data, META_ICON_REGEXP, (match) => {
-          if (!rawMetadataItem.icon || grabAllMediadata) {
-            let iconUrl: string | null = getAttributeContent('href', match);
-            iconUrl = resolveAmbiguousHref(iconUrl, baseUrl || url.href);
+      // if (!ignoreMetadataProperties?.includes('icon')) {
+      forEachMatch(data, META_ICON_REGEXP, (match) => {
+        if (rawMetadataItem.icon) {
+          return false;
+        } else {
+          let iconUrl: string | null = getAttributeContent('href', match);
+          iconUrl = resolveAmbiguousHref(iconUrl, baseUrl || url.href);
 
-            if (iconUrl) {
-              if (grabAllMediadata) {
-                if (!rawMetadataItem.icon) {
-                  rawMetadataItem.icon = [];
-                }
-
-                (rawMetadataItem.icon as Array<string>).push(iconUrl);
-              } else {
-                rawMetadataItem.icon = iconUrl; // !!! can be broken link;
-                return false;
-              }
-            }
+          if (iconUrl) {
+            rawMetadataItem.icon = iconUrl; // !!! can be broken link;
+            return false;
           }
-        });
-      }
+        }
+      });
+      // }
 
       if (Object.keys(rawMetadataItem).length) {
         rawMetadata.push(rawMetadataItem);

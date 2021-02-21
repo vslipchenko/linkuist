@@ -8,13 +8,13 @@ import {ApolloError, gql, UserInputError} from 'apollo-server-express';
 import jwt, {SignOptions} from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {User} from '../../../models/user';
-import {IUser, UserDocument} from '../../../types/user/user.interfaces';
-import {QueryResult} from '../../../types/mongoose/mongoose.types';
+import {IUser} from '../../../types/user/user.interfaces';
+import {MongooseDocument, MongooseQueryResult} from '../../../types/mongoose/mongoose.types';
 import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../../constants/regexps';
 
-const signIn = (_: unknown, {input}: {input: IUser}) => {
+const signIn = (_: unknown, {input}: {input: IUser}): any => {
   const isValidData = checkDataValidity({
     input,
     pattern: {
@@ -29,7 +29,7 @@ const signIn = (_: unknown, {input}: {input: IUser}) => {
 
   return new Promise((resolve, reject) => {
     User.findOne({email: input.email})
-      .then((user: QueryResult<UserDocument>) => {
+      .then((user: MongooseQueryResult<MongooseDocument<IUser>>) => {
         if (!user) {
           return reject(new UserInputError('Invalid user data'));
         }
@@ -63,7 +63,7 @@ const signIn = (_: unknown, {input}: {input: IUser}) => {
   });
 };
 
-const accessTokenByRefreshToken = (_: unknown, {refreshToken}: {refreshToken: string}) => {
+const accessTokenByRefreshToken = (_: unknown, {refreshToken}: {refreshToken: string}): any => {
   // console.log('refresh token is ', userId);
   if (!refreshToken) {
     return new ApolloError('', 'REFRESH_TOKEN_EMPTY');
@@ -77,7 +77,7 @@ const accessTokenByRefreshToken = (_: unknown, {refreshToken}: {refreshToken: st
 
   return new Promise((resolve, reject) => {
     User.findOne({_id: userId})
-      .then((user: QueryResult<UserDocument>) => {
+      .then((user: MongooseQueryResult<MongooseDocument<IUser>>) => {
         if (!user) {
           return reject(new ApolloError('', 'REFRESH_TOKEN_INVALID'));
         }

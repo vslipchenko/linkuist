@@ -14,7 +14,7 @@ const createBookmark = (
   _: unknown,
   {input}: {input: Omit<IBookmark, 'userId'>},
   {accessToken}: {accessToken: string},
-) => {
+): any => {
   return authenticationInterceptor<Promise<any> | ApolloError>(
     accessToken,
     async ({userId}: AccessTokenData) => {

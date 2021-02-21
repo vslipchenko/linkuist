@@ -6,8 +6,7 @@ import {
   authenticationTypeDefinitions,
 } from './schemas/authentication/authentication.schema';
 import {bookmarkResolvers, bookmarkTypeDefinitions} from './schemas/bookmark/bookmark.schema';
-
-const {userTypeDefinitions, userResolvers} = require('./schemas/user/user.schema');
+import {userTypeDefinitions, userResolvers} from './schemas/user/user.schema';
 
 // TODO remove as soon as extend of empty types is available
 const rootTypeDefs = gql`
