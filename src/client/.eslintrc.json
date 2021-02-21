@@ -1,4 +1,5 @@
-{ // https://dev.to/gsarciotto/migrating-and-configuring-eslint-with-angular-11-3fg1
+{
+  // https://dev.to/gsarciotto/migrating-and-configuring-eslint-with-angular-11-3fg1
   "root": true,
   "ignorePatterns": [
     "projects/**/*"
@@ -44,8 +45,7 @@
         "@typescript-eslint/array-type": [
           "error",
           {
-            "default": "generic",
-            "readonly": "generic"
+            "default": "generic"
           }
         ],
         "@typescript-eslint/prefer-ts-expect-error": "error",
@@ -53,6 +53,7 @@
         "@typescript-eslint/no-useless-constructor": "error",
         "@typescript-eslint/explicit-member-accessibility": "error",
         "@typescript-eslint/explicit-function-return-type": "error",
+        "no-implicit-coercion": "error",
         "@typescript-eslint/prefer-regexp-exec": "warn",
         "@typescript-eslint/no-unsafe-member-access": "warn",
         "@typescript-eslint/no-unsafe-assignment": "warn",
@@ -72,7 +73,12 @@
         "plugin:@angular-eslint/template/recommended"
       ],
       "rules": {
-        "max-len": ["error", { "code": 100 }]
+        "max-len": [
+          "error",
+          {
+            "code": 100
+          }
+        ]
       }
     }
   ]

@@ -13,3 +13,5 @@ export const forEachMatch = (
     }
   }
 };
+
+const kek = Boolean(0);
