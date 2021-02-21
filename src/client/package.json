@@ -7,7 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "prettier --write \"src/**/*.{ts,html,scss}\" && eslint --fix src/ && stylelint --fix \"src/**/*.scss\"",
     "e2e": "ng e2e"
   },
   "husky": {
@@ -16,8 +16,14 @@
     }
   },
   "lint-staged": {
-    "*.{ts,html}": "eslint --fix",
-    "*.scss": "stylelint --fix"
+    "*.{ts,html}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.scss": [
+      "stylelint --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@angular/animations": "~11.2.0",

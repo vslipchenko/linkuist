@@ -9,7 +9,7 @@
     "dev": "npx ts-node-dev src/app.ts --env=dev --debug",
     "prod": "npx ts-node-dev src/app.ts --env=prod",
     "build": "npx tsc",
-    "check-lint": "npx eslint src"
+    "lint": "prettier --write \"src/**/*.{ts,html}\" && eslint --fix src/"
   },
   "husky": {
     "hooks": {
@@ -17,7 +17,7 @@
     }
   },
   "lint-staged": {
-    "*.{ts,html}": "eslint --fix"
+    "*.ts": ["eslint --fix", "prettier --write"]
   },
   "dependencies": {
     "apollo-server-express": "^2.21.0",
