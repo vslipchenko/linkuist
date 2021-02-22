@@ -11,14 +11,14 @@
 <!--</ng-template>-->
 
 <!--<ng-template>-->
-  <h2 mat-dialog-title>{{title}}</h2>
-  <mat-dialog-content>
-    <ng-container [ngTemplateOutlet]="contentTemplateRef"></ng-container>
-  </mat-dialog-content>
-  <mat-dialog-actions class="dialog-actions">
-<!--    <button mat-dialog-close mat-stroked-button>Close</button>-->
-<!--    &lt;!&ndash; The mat-dialog-close directive optionally accepts a value as a result for the dialog. &ndash;&gt;-->
-<!--    <button mat-flat-button color="primary" [mat-dialog-close]="true">Add</button>-->
-    <ng-container [ngTemplateOutlet]="actionsTemplateRef"></ng-container>
-  </mat-dialog-actions>
+<h2 mat-dialog-title>{{ title }}</h2>
+<mat-dialog-content>
+  <ng-container [ngTemplateOutlet]="contentTemplateRef"></ng-container>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <!--    <button mat-dialog-close mat-stroked-button>Close</button>-->
+  <!--    &lt;!&ndash; The mat-dialog-close directive optionally accepts a value as a result for the dialog. &ndash;&gt;-->
+  <!--    <button mat-flat-button color="primary" [mat-dialog-close]="true">Add</button>-->
+  <ng-container [ngTemplateOutlet]="actionsTemplateRef"></ng-container>
+</mat-dialog-actions>
 <!--</ng-template>-->

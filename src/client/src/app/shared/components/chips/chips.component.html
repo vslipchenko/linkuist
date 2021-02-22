@@ -1,48 +1,58 @@
 <mat-form-field [appWrapIf]="isInputAvailable">
   <mat-chip-list #chipList [attr.aria-label]="label">
-    <mat-chip #chipItem="matChip"
+    <mat-chip
+      #chipItem="matChip"
       *ngFor="let chip of chips$ | async"
       [selectable]="getExactValueOrUseDefault(chip, 'isSelectable', areChipsSelectable)"
       [removable]="getExactValueOrUseDefault(chip, 'isRemovable', areChipsRemovable)"
       (removed)="chip.onRemove ? chip.onRemove($event) : removeChip($event)"
       [color]="
         chip.isSelected
-        ? chipItem.selected
-          ? chip.color
-          : chipItem.toggleSelected() && chip.color
-        : null
+          ? chipItem.selected
+            ? chip.color
+            : chipItem.toggleSelected() && chip.color
+          : null
       "
     >
-      {{chip.text || chip}}
-      <mat-icon *ngIf="getExactValueOrUseDefault(chip, 'isRemovable', areChipsRemovable)"
-                matChipRemove
-                svgIcon="cancel"
+      {{ chip.text || chip }}
+      <mat-icon
+        *ngIf="getExactValueOrUseDefault(chip, 'isRemovable', areChipsRemovable)"
+        matChipRemove
+        svgIcon="cancel"
       ></mat-icon>
     </mat-chip>
-    <input *ngIf="isInputAvailable"
+    <input
+      *ngIf="isInputAvailable"
       #chipInput
       [placeholder]="label"
       [matAutocomplete]="autocomplete"
       [matChipInputFor]="chipList"
       [matChipInputSeparatorKeyCodes]="chipsSeparatorKeyCodes"
       [matChipInputAddOnBlur]="isAddOnBlurAvailable"
-      (matChipInputTokenEnd)="appendChip($event)"/>
+      (matChipInputTokenEnd)="appendChip($event)"
+    />
   </mat-chip-list>
-  <mat-autocomplete #autocomplete
-                    (opened)="serveAutocompleteOptions()"
-                    (optionSelected)="onAutocompleteOptionSelect($event)">
-    <mat-option *ngIf="areAutocompleteOptionsLoading; else autocompleteOptions?.length && autocompleteOptionsTemplate"
-                class="autocomplete-spinner"
-                disabled=""
+  <mat-autocomplete
+    #autocomplete
+    (opened)="serveAutocompleteOptions()"
+    (optionSelected)="onAutocompleteOptionSelect($event)"
+  >
+    <mat-option
+      *ngIf="
+        areAutocompleteOptionsLoading;
+        else autocompleteOptions?.length && autocompleteOptionsTemplate
+      "
+      class="autocomplete-spinner"
+      disabled=""
     >
       <mat-spinner></mat-spinner>
     </mat-option>
     <ng-template #autocompleteOptionsTemplate>
       <mat-option *ngFor="let option of autocompleteOptions" [value]="option.text || option">
-        {{option.text || option}}
+        {{ option.text || option }}
       </mat-option>
     </ng-template>
   </mat-autocomplete>
-  <mat-hint *ngIf="leftHint" align="start">{{leftHint}}</mat-hint>
-  <mat-hint *ngIf="rightHint" align="end">{{rightHint}}</mat-hint>
+  <mat-hint *ngIf="leftHint" align="start">{{ leftHint }}</mat-hint>
+  <mat-hint *ngIf="rightHint" align="end">{{ rightHint }}</mat-hint>
 </mat-form-field>

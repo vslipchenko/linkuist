@@ -3,8 +3,8 @@
 
 /* theme */
 $theme-primary: map-get(mat.$mat-blue, 500); // #2196f3
-$theme-accent: map-get(mat.$mat-pink, 500);  // #e91e63
-$theme-warn: map-get(mat.$mat-red, 500);  // #f44336
+$theme-accent: map-get(mat.$mat-pink, 500); // #e91e63
+$theme-warn: map-get(mat.$mat-red, 500); // #f44336
 $theme-light: #ffffff;
 $theme-light-darker: #fafafa;
 $theme-light-darkest: #dbdbdb;
@@ -33,10 +33,10 @@ $font-size-medium: 0.7rem;
 $font-size-small: 0.5rem;
 
 /* responsive breakpoints and unit interval */
-$breakpoint-small: 568px;  // < portrait phones, > landscape phones
+$breakpoint-small: 568px; // < portrait phones, > landscape phones
 $breakpoint-medium: 768px; // > tablets
-$breakpoint-large: 992px;  // > laptops, desktops
-$breakpoint-huge: 1200px;  // > large desktops
+$breakpoint-large: 992px; // > laptops, desktops
+$breakpoint-huge: 1200px; // > large desktops
 $unit-interval-px: 1;
 //$unit-interval-em: 0.01;
 //$unit-interval-rem: 0.1;

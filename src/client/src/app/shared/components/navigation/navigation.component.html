@@ -4,8 +4,12 @@
   </div>
   <div class="main-action" [matTooltip]="tooltipContent" matTooltipPosition="above">
     <!-- Profile action -->
-    <a *ngIf="isProfileMainAction" [routerLink]="userAccountPageUrl" mat-icon-button
-       aria-label="Example icon button with a bookmark icon">
+    <a
+      *ngIf="isProfileMainAction"
+      [routerLink]="userAccountPageUrl"
+      mat-icon-button
+      aria-label="Example icon button with a bookmark icon"
+    >
       <mat-icon svgIcon="linkuist"></mat-icon>
     </a>
     <!-- Home icon action -->

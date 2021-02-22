@@ -16,16 +16,24 @@ body {
   line-height: var.$common-line-height;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   font-size: var.$font-size-root;
 }
 
-html, body, ul {
+html,
+body,
+ul {
   padding: 0;
 }
 
-html, body, ul, p, h1, h2 {
+html,
+body,
+ul,
+p,
+h1,
+h2 {
   margin: 0;
 }
 
@@ -43,7 +51,8 @@ a {
   }
 }
 
-h1, .as-h1 {
+h1,
+.as-h1 {
   //font-family: 'Montserrat', sans-serif;
   font-size: var.$font-size-largest;
   line-height: var.$font-size-largest;
@@ -73,7 +82,7 @@ textarea {
 // make mat-hint act like mat-button
 .hint-as-button [mat-button] {
   line-height: unset;
-  margin-left: - var.$unit-2;
+  margin-left: -var.$unit-2;
 }
 
 .background-logo {
@@ -110,7 +119,7 @@ textarea {
   }
 }
 
-.dialog .mat-dialog-actions .mat-button-base+.mat-button-base,
-.dialog .mat-dialog-actions .mat-mdc-button-base+.mat-mdc-button-base {
+.dialog .mat-dialog-actions .mat-button-base + .mat-button-base,
+.dialog .mat-dialog-actions .mat-mdc-button-base + .mat-mdc-button-base {
   margin-left: var.$unit-2;
 }

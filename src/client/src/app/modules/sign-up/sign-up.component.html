@@ -4,9 +4,15 @@
     <form [formGroup]="signUpForm" class="form">
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input type="email" matInput placeholder="Type your email" formControlName="email" [maxlength]="emailMaxLength">
+        <input
+          type="email"
+          matInput
+          placeholder="Type your email"
+          formControlName="email"
+          [maxlength]="emailMaxLength"
+        />
         <mat-hint *ngIf="!emailField.value" align="start">Should be unique</mat-hint>
-        <mat-hint align="end">{{emailField.value.length}} / {{emailMaxLength}}</mat-hint>
+        <mat-hint align="end">{{ emailField.value.length }} / {{ emailMaxLength }}</mat-hint>
 
         <mat-error *ngIf="emailField.hasError('required')">Required field</mat-error>
         <mat-error *ngIf="emailField.hasError('pattern')">Invalid email format</mat-error>
@@ -14,27 +20,51 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Username</mat-label>
-        <input type="text" matInput placeholder="Type your username" formControlName="username" [maxlength]="usernameMaxLength">
+        <input
+          type="text"
+          matInput
+          placeholder="Type your username"
+          formControlName="username"
+          [maxlength]="usernameMaxLength"
+        />
         <mat-hint *ngIf="!usernameField.value" align="start">Should be unique</mat-hint>
-        <mat-hint align="end">{{usernameField.value.length}} / {{usernameMaxLength}}</mat-hint>
+        <mat-hint align="end">{{ usernameField.value.length }} / {{ usernameMaxLength }}</mat-hint>
 
         <mat-error *ngIf="usernameField.hasError('required')">Required field</mat-error>
-<!--        <mat-error *ngIf="usernameField.hasError('maxlength')">Username is too long</mat-error>-->
-        <mat-error *ngIf="usernameField.hasError('pattern')">Invalid format. Use: a-z 0-9 {{usernameSeparators}}</mat-error>
+        <!--        <mat-error *ngIf="usernameField.hasError('maxlength')">Username is too long</mat-error>-->
+        <mat-error *ngIf="usernameField.hasError('pattern')"
+          >Invalid format. Use: a-z 0-9 {{ usernameSeparators }}</mat-error
+        >
         <mat-error *ngIf="usernameField.hasError('isUsed')">Username already in use</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="Type your password" formControlName="password">
-        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          placeholder="Type your password"
+          formControlName="password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hidePassword"
+        >
           <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
         </button>
         <mat-hint align="start" class="hint-as-button">
-          <button mat-button type="button" color="primary" (click)="generatePassword()">Generate password</button>
+          <button mat-button type="button" color="primary" (click)="generatePassword()">
+            Generate password
+          </button>
         </mat-hint>
 
         <mat-error *ngIf="passwordField.hasError('required')">Required field</mat-error>
-        <mat-error *ngIf="passwordField.hasError('minlength')">Minimal length - 8 characters</mat-error>
+        <mat-error *ngIf="passwordField.hasError('minlength')"
+          >Minimal length - 8 characters</mat-error
+        >
         <mat-error *ngIf="passwordField.hasError('maxlength')">Password is too long</mat-error>
         <mat-error *ngIf="passwordField.hasError('hasNoNumber')">Use at least 1 digit</mat-error>
         <mat-error *ngIf="passwordField.hasError('hasNoLetter')">Use at least 1 letter</mat-error>
@@ -43,23 +73,44 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Repeat password</mat-label>
-        <input type="password" matInput placeholder="Repeat your password" formControlName="repeatPassword">
+        <input
+          type="password"
+          matInput
+          placeholder="Repeat your password"
+          formControlName="repeatPassword"
+        />
 
         <mat-error *ngIf="repeatPasswordField.hasError('required')">Required field</mat-error>
         <mat-error *ngIf="repeatPasswordField.hasError('mismatch')">Passwords mismatch</mat-error>
       </mat-form-field>
     </form>
     <div class="primary-actions actions">
-      <button mat-flat-button color="primary" (click)="signUp()" [disabled]="isSubmitting">Sign up</button>
+      <button mat-flat-button color="primary" (click)="signUp()" [disabled]="isSubmitting">
+        Sign up
+      </button>
     </div>
-    <div class="secondary-actions actions" matTooltip="Temporarily unavailable" matTooltipPosition="above">
-      <button mat-flat-button color="accent" disabled><span class="social-icon">G</span>Sign up with Google</button>
-      <button mat-flat-button color="accent" disabled><span class="social-icon">f</span>Sign up with Facebook</button>
+    <div
+      class="secondary-actions actions"
+      matTooltip="Temporarily unavailable"
+      matTooltipPosition="above"
+    >
+      <button mat-flat-button color="accent" disabled>
+        <span class="social-icon">G</span>Sign up with Google
+      </button>
+      <button mat-flat-button color="accent" disabled>
+        <span class="social-icon">f</span>Sign up with Facebook
+      </button>
     </div>
   </div>
 </main>
 <app-navigation [mainActionType]="navigationMainActionType">
-  <a routerLink="/sign-in" matTooltip="Sign in" matTooltipPosition="above" mat-icon-button aria-label="Example icon button with a delete icon">
+  <a
+    routerLink="/sign-in"
+    matTooltip="Sign in"
+    matTooltipPosition="above"
+    mat-icon-button
+    aria-label="Example icon button with a delete icon"
+  >
     <mat-icon svgIcon="login"></mat-icon>
   </a>
 </app-navigation>

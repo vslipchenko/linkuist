@@ -1,6 +1,6 @@
 <main class="home">
   <div class="home-background">
-    <img class="home-background__image" src="/assets/images/home/background.png" alt="">
+    <img class="home-background__image" src="/assets/images/home/background.png" alt="" />
   </div>
   <div class="home-main">
     <div class="home-content">
@@ -38,10 +38,22 @@
   </div>
 </main>
 <app-navigation [mainActionType]="navigationMainActionType">
-  <a routerLink="/sign-in" matTooltip="Sign in" matTooltipPosition="above" mat-icon-button aria-label="Example icon button with a delete icon">
+  <a
+    routerLink="/sign-in"
+    matTooltip="Sign in"
+    matTooltipPosition="above"
+    mat-icon-button
+    aria-label="Example icon button with a delete icon"
+  >
     <mat-icon svgIcon="login"></mat-icon>
   </a>
-  <a routerLink="/sign-up" matTooltip="Sign up" matTooltipPosition="above" mat-icon-button aria-label="Example icon button with a bookmark icon">
+  <a
+    routerLink="/sign-up"
+    matTooltip="Sign up"
+    matTooltipPosition="above"
+    mat-icon-button
+    aria-label="Example icon button with a bookmark icon"
+  >
     <mat-icon svgIcon="person-add"></mat-icon>
   </a>
 </app-navigation>

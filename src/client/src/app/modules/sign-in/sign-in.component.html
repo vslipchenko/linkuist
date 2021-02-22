@@ -4,30 +4,58 @@
     <form [formGroup]="signInForm" class="form">
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input type="email" matInput formControlName="email" [errorStateMatcher]="customErrorStateMatcher" autocomplete="email">
+        <input
+          type="email"
+          matInput
+          formControlName="email"
+          [errorStateMatcher]="customErrorStateMatcher"
+          autocomplete="email"
+        />
 
         <mat-error *ngIf="hasRequiredError">Fill in all fields</mat-error>
         <mat-error *ngIf="hasPatternError">Email or password is invalid</mat-error>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'"
-               formControlName="password" autocomplete="current-password">
-        <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hidePassword">
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+          autocomplete="current-password"
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="hidePassword = !hidePassword"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hidePassword"
+        >
           <mat-icon [svgIcon]="hidePassword ? 'visibility-off' : 'visibility'"></mat-icon>
         </button>
 
-        <mat-hint align="start"><a routerLink="/account-recovery" mat-button color="primary">Forgot password ?</a></mat-hint>
+        <mat-hint align="start"
+          ><a routerLink="/account-recovery" mat-button color="primary"
+            >Forgot password ?</a
+          ></mat-hint
+        >
       </mat-form-field>
     </form>
     <div class="primary-actions actions">
-      <button mat-flat-button color="primary" (click)="signIn()" [disabled]="isSubmitting">Sign in</button>
+      <button mat-flat-button color="primary" (click)="signIn()" [disabled]="isSubmitting">
+        Sign in
+      </button>
     </div>
   </div>
 </main>
 <app-navigation [mainActionType]="navigationMainActionType">
-  <a routerLink="/sign-up" matTooltip="Sign up" matTooltipPosition="above" mat-icon-button aria-label="Example icon button with a bookmark icon">
+  <a
+    routerLink="/sign-up"
+    matTooltip="Sign up"
+    matTooltipPosition="above"
+    mat-icon-button
+    aria-label="Example icon button with a bookmark icon"
+  >
     <mat-icon svgIcon="person-add"></mat-icon>
   </a>
 </app-navigation>

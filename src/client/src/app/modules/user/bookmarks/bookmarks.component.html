@@ -1,5 +1,10 @@
 <app-navigation [mainActionType]="navigationMainActionType">
-  <button matTooltip="Add bookmark" matTooltipPosition="above" mat-icon-button (click)="openAddBookmarkDialog()">
+  <button
+    matTooltip="Add bookmark"
+    matTooltipPosition="above"
+    mat-icon-button
+    (click)="openAddBookmarkDialog()"
+  >
     <mat-icon svgIcon="bookmark-plus"></mat-icon>
   </button>
 </app-navigation>
@@ -10,7 +15,9 @@
       <mat-label>Link</mat-label>
       <textarea type="url" matInput formControlName="link" required></textarea>
       <mat-error *ngIf="linkField.hasError('required')">Required field</mat-error>
-      <mat-error *ngIf="linkField.hasError('pattern')">Invalid format, e.g. http://example.com</mat-error>
+      <mat-error *ngIf="linkField.hasError('pattern')"
+        >Invalid format, e.g. http://example.com</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
       <mat-label>Title</mat-label>
@@ -18,27 +25,43 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Thumbnail url</mat-label>
-      <input type="text" matInput formControlName="image" placeholder="e.g. https://example.com/flower.jpg" />
+      <input
+        type="text"
+        matInput
+        formControlName="image"
+        placeholder="e.g. https://example.com/flower.jpg"
+      />
     </mat-form-field>
     <mat-form-field>
       <mat-label>Icon url</mat-label>
-      <input type="text" matInput formControlName="icon" placeholder="e.g. https://example.com/favicon.ico" />
+      <input
+        type="text"
+        matInput
+        formControlName="icon"
+        placeholder="e.g. https://example.com/favicon.ico"
+      />
     </mat-form-field>
     <mat-form-field>
       <mat-label>Description</mat-label>
-      <textarea type="text" matInput formControlName="description" placeholder="Bookmark content's description"></textarea>
+      <textarea
+        type="text"
+        matInput
+        formControlName="description"
+        placeholder="Bookmark content's description"
+      ></textarea>
     </mat-form-field>
-     <app-chips formControlName="tags"
-                label="Tags"
-                [areChipsLowerCased]="true"
-                [areChipsRemovable]="true"
-                [isInputAvailable]="true"
-                [isAddOnBlurAvailable]="true"
-                [chipsSeparatorKeyCodes]="tagsSeparatorKeysCodes"
-                [chipSeparator]="tagSeparator"
-                [chipLetterValidator]="tagLetterValidator"
-                [chipSplitWordBy]="tagSplitWordBy"
-     ></app-chips>
+    <app-chips
+      formControlName="tags"
+      label="Tags"
+      [areChipsLowerCased]="true"
+      [areChipsRemovable]="true"
+      [isInputAvailable]="true"
+      [isAddOnBlurAvailable]="true"
+      [chipsSeparatorKeyCodes]="tagsSeparatorKeysCodes"
+      [chipSeparator]="tagSeparator"
+      [chipLetterValidator]="tagLetterValidator"
+      [chipSplitWordBy]="tagSplitWordBy"
+    ></app-chips>
     <label for="" class="mat-form-field-label">Options</label>
     <mat-slide-toggle formControlName="isPrivate" labelPosition="before">Private</mat-slide-toggle>
   </form>
@@ -46,5 +69,7 @@
 <ng-template #addBookmarkActions>
   <button mat-dialog-close mat-stroked-button>Close</button>
   <!--    &lt;!&ndash; The mat-dialog-close directive optionally accepts a value as a result for the dialog. &ndash;&gt;-->
-  <button mat-flat-button color="primary" [mat-dialog-close]="true" (click)="addBookmark()">Add</button>
+  <button mat-flat-button color="primary" [mat-dialog-close]="true" (click)="addBookmark()">
+    Add
+  </button>
 </ng-template>
