@@ -12,7 +12,7 @@
   display: flex;
   //}
 
-  &__main {
+  &-main {
     //min-height: 100%;
     background: var.$theme-light;
     border: 1px solid var.$theme-light-darkest;
@@ -51,7 +51,7 @@
     }
   }
 
-  &__title {
+  &-title {
     margin-bottom: var.$unit-2;
     text-align: center;
   }
@@ -171,12 +171,12 @@
     margin-top: var.$unit-4;
   }
 
-  .user-field__label {
+  .user-field-label {
     font-weight: bold;
     margin-right: var.$unit-3;
   }
 
-  .user-field__label::after {
+  .user-field-label::after {
     content: ':';
   }
 

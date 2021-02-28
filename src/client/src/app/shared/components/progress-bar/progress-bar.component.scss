@@ -5,7 +5,7 @@ $progress-bar-selector: '.mat-progress-bar';
   top: 0;
 }
 
-#{$progress-bar-selector}.state--error ::ng-deep {
+#{$progress-bar-selector}.state-error ::ng-deep {
   #{$progress-bar-selector}-primary,
   #{$progress-bar-selector}-secondary,
   #{$progress-bar-selector}-primary:after,

@@ -1,6 +1,6 @@
 @use 'variables' as var;
 
-.snackbar--theme-light {
+.snackbar-theme-light {
   background: var.$theme-light !important;
   color: var.$theme-dark !important;
 }

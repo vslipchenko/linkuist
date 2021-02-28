@@ -5,5 +5,5 @@ export const SNACKBAR_CONFIG: MatSnackBarConfig = {
   duration: 3500,
   verticalPosition: 'top',
   horizontalPosition: 'right',
-  panelClass: ['snackbar--theme-light'],
+  panelClass: ['snackbar-theme-light'],
 };

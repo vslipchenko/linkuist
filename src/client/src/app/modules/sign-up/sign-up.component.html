@@ -1,15 +1,15 @@
-<main class="sign-up">
-  <div class="sign-up__main">
-    <h2 class="sign-up__title as-h1">Sign up</h2>
-    <form [formGroup]="signUpForm" class="form">
-      <mat-form-field appearance="outline">
+<main class='sign-up'>
+  <div class='sign-up-main'>
+    <h2 class='sign-up-title as-h1'>Sign up</h2>
+    <form [formGroup]='signUpForm' class='form'>
+      <mat-form-field appearance='outline'>
         <mat-label>Email</mat-label>
         <input
-          type="email"
+          type='email'
           matInput
-          placeholder="Type your email"
-          formControlName="email"
-          [maxlength]="emailMaxLength"
+          placeholder='Type your email'
+          formControlName='email'
+          [maxlength]='emailMaxLength'
         />
         <mat-hint *ngIf="!emailField?.value" align="start">Should be unique</mat-hint>
         <mat-hint align="end">{{ emailField?.value?.length }} / {{ emailMaxLength }}</mat-hint>

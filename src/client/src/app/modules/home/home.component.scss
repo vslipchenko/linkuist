@@ -69,7 +69,7 @@ $home-section-width: 70%;
   }
 }
 
-.home-pill__text {
+.home-pill-text {
   font-weight: 700;
 
   @include media.above-small {
@@ -77,11 +77,11 @@ $home-section-width: 70%;
   }
 }
 
-.home-pill__icon {
+.home-pill-icon {
   color: mat.mat-color(mat.$mat-pink, 500);
 }
 
-.home-pill__icon .mat-icon {
+.home-pill-icon .mat-icon {
   @include media.zero-small {
     $mat-icon-size: var.$common-default-material-icon-size * 2;
     height: $mat-icon-size;
@@ -99,11 +99,11 @@ $home-section-width: 70%;
   flex-direction: column;
 }
 
-.home-about__title {
+.home-about-title {
   font-size: var.$font-size-largest;
 }
 
-.home-about__text {
+.home-about-text {
   margin-top: $home-section-space;
 }
 
@@ -129,7 +129,7 @@ $home-section-width: 70%;
   }
 }
 
-.home-background__image {
+.home-background-image {
   @include media.zero-small {
     height: 43%;
   }
