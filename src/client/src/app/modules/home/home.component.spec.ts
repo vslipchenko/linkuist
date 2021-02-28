@@ -8,7 +8,7 @@ describe('HomeComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         declarations: [HomeComponent],
       }).compileComponents();
     }),
@@ -21,6 +21,6 @@ describe('HomeComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

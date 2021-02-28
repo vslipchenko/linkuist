@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   private readonly defaultLanguage = 'en';
   private readonly supportedLanguages = ['en'];
 
-  constructor(
+  public constructor(
     private readonly matIconRegistry: MatIconRegistry,
     private readonly domSanitizer: DomSanitizer,
     private readonly translateService: TranslateService,
@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
     @Inject(DOCUMENT) private readonly document: Document,
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const selectedLanguage = this.initTranslation();
     this.setDocumentLanguage(selectedLanguage);
     this.setDocumentTitle();
@@ -65,7 +65,7 @@ export class AppComponent implements OnInit {
   }
 
   private registerMaterialIcons(): void {
-    const registerIcons = (icons: Array<IconInfo>) => {
+    const registerIcons = (icons: Array<IconInfo>): void => {
       icons.forEach((icon) => {
         this.matIconRegistry.addSvgIcon(
           icon.name,

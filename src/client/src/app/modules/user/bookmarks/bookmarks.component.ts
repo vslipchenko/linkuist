@@ -21,26 +21,39 @@ import {BookmarkService} from '@services/bookmark/bookmark.service';
   templateUrl: './bookmarks.component.html',
   styleUrls: ['./bookmarks.component.scss'],
 })
-export class BookmarksComponent implements OnInit {
-  readonly tagsSeparatorKeysCodes = [ENTER];
-  readonly tagSeparator = '-';
-  readonly tagLetterValidator = BOOKMARK_TAG_LETTER_REGEXP;
-  readonly tagSplitWordBy = /[-\s]/;
+export class BookmarksComponent {
+  public readonly tagsSeparatorKeysCodes = [ENTER];
+  public readonly tagSeparator = '-';
+  public readonly tagLetterValidator = BOOKMARK_TAG_LETTER_REGEXP;
+  public readonly tagSplitWordBy = /[-\s]/;
 
-  @ViewChild('addBookmarkContent') addBookmarkContent: TemplateRef<unknown>;
-  @ViewChild('addBookmarkActions') addBookmarkActions: TemplateRef<unknown>;
+  public addBookmarkForm: FormGroup | undefined;
 
-  addBookmarkForm: FormGroup;
+  @ViewChild('addBookmarkContent') public addBookmarkContent: TemplateRef<unknown> | undefined;
+  @ViewChild('addBookmarkActions') public addBookmarkActions: TemplateRef<unknown> | undefined;
 
-  constructor(
+  public constructor(
     private readonly dialogService: DialogService,
     private readonly bookmarkService: BookmarkService,
     private readonly formBuilder: FormBuilder,
   ) {}
 
-  ngOnInit(): void {}
+  private static linkValidator(control: AbstractControl): null | ValidationErrors {
+    const link = control.value;
+    if (link?.length) {
+      try {
+        const url = new URL(link);
+        const isSupportedProtocol = url.protocol === 'http:' || url.protocol === 'https:';
+        return isSupportedProtocol ? null : {pattern: true};
+        // this.linkField.setValue(url);
+      } catch {
+        return {pattern: true};
+      }
+    }
+    return null;
+  }
 
-  openAddBookmarkDialog(): void {
+  public openAddBookmarkDialog(): void {
     this.initAddBookmarkForm();
     this.handlePrivateFieldValueChanges();
 
@@ -55,12 +68,12 @@ export class BookmarksComponent implements OnInit {
     });
   }
 
-  addBookmark(): void {
-    this.addBookmarkForm.markAllAsTouched();
-    if (this.addBookmarkForm.valid) {
+  public addBookmark(): void {
+    this.addBookmarkForm?.markAllAsTouched();
+    if (this.addBookmarkForm?.valid) {
       console.log('Add bookmark value ', this.addBookmarkForm.value);
-      const tags = this.tagsField.value;
-      tags[0] = this.privateField.value ? BookmarkType.PRIVATE : BookmarkType.PUBLIC; // simplify first element in order to match [String!]! constraint
+      const tags = this.tagsField?.value;
+      tags[0] = this.privateField?.value ? BookmarkType.PRIVATE : BookmarkType.PUBLIC; // simplify first element in order to match [String!]! constraint
       // debugger;
       // return;
       this.bookmarkService
@@ -77,7 +90,7 @@ export class BookmarksComponent implements OnInit {
   private initAddBookmarkForm(): void {
     // this.kek = 'awdwd';
     this.addBookmarkForm = this.formBuilder.group({
-      link: [null, [Validators.required, BookmarksComponent.linkValidator]],
+      link: [null, [Validators.required.bind(this), BookmarksComponent.linkValidator.bind(this)]],
       title: [null],
       image: [null],
       icon: [null],
@@ -109,48 +122,33 @@ export class BookmarksComponent implements OnInit {
   }
 
   private handlePrivateFieldValueChanges(): void {
-    this.privateField.valueChanges
+    this.privateField?.valueChanges
       .pipe(untilDestroyed(this))
       .subscribe((hasPrivateAccess: boolean) => {
-        const tags = this.tagsField.value;
-        tags.forEach((tag) => {
+        const tags = this.tagsField?.value;
+        tags.forEach((tag: any) => {
           if (tag.text === (hasPrivateAccess ? BookmarkType.PUBLIC : BookmarkType.PRIVATE)) {
             tag.text = hasPrivateAccess ? BookmarkType.PRIVATE : BookmarkType.PUBLIC;
           }
         });
 
-        this.tagsField.setValue(tags);
+        this.tagsField?.setValue(tags);
       });
   }
 
-  private static linkValidator(control: AbstractControl): null | ValidationErrors {
-    const link = control.value;
-    if (link?.length) {
-      try {
-        const url = new URL(link);
-        const isSupportedProtocol = url.protocol === 'http:' || url.protocol === 'https:';
-        return isSupportedProtocol ? null : {pattern: true};
-        // this.linkField.setValue(url);
-      } catch {
-        return {pattern: true};
-      }
-    }
-    return null;
+  public get linkField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('link');
   }
 
-  get linkField(): AbstractControl {
-    return this.addBookmarkForm.get('link');
+  public get privateField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('isPrivate');
   }
 
-  private get privateField(): AbstractControl {
-    return this.addBookmarkForm.get('isPrivate');
+  public get tagsField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('tags');
   }
 
-  private get tagsField(): AbstractControl {
-    return this.addBookmarkForm.get('tags');
-  }
-
-  get navigationMainActionType(): NavigationMainActionType {
+  public get navigationMainActionType(): NavigationMainActionType {
     return NavigationMainActionType.PROFILE;
   }
 }

@@ -11,9 +11,9 @@ import {MatDialogConfig} from '@angular/material/dialog/dialog-config';
 export class DialogService {
   private dialogRef: MatDialogRef<DialogComponent> | null | undefined;
 
-  constructor(private readonly dialog: MatDialog) {}
+  public constructor(private readonly dialog: MatDialog) {}
 
-  open(dialogConfig: MatDialogConfig<DialogData>): Dialog {
+  public open(dialogConfig: MatDialogConfig<DialogData>): Dialog {
     this.dialogRef = this.dialog.open(DialogComponent, {
       ...dialogConfig,
       panelClass: dialogConfig?.panelClass // set default custom class

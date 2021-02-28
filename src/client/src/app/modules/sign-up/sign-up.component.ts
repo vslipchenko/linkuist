@@ -25,6 +25,7 @@ import {finalize, map} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
 import {AuthenticationService} from '@services/authentication/authentication.service';
+import {Observable} from 'rxjs';
 
 // TODO unsubscribe decorator
 @Component({
@@ -32,11 +33,11 @@ import {AuthenticationService} from '@services/authentication/authentication.ser
   styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
-  signUpForm: FormGroup;
-  hidePassword = true;
-  isSubmitting = false;
+  public signUpForm: FormGroup | undefined;
+  public hidePassword = true;
+  public isSubmitting = false;
 
-  constructor(
+  public constructor(
     private readonly formBuilder: FormBuilder,
     private readonly clipboard: Clipboard,
     private readonly snackbarService: SnackbarService,
@@ -45,63 +46,6 @@ export class SignUpComponent implements OnInit {
     private readonly progressBarService: ProgressBarService,
     private readonly authenticationService: AuthenticationService,
   ) {}
-
-  ngOnInit(): void {
-    this.initSignUpForm();
-  }
-
-  signUp(): void {
-    this.signUpForm.markAllAsTouched();
-    if (this.signUpForm.valid) {
-      this.isSubmitting = true;
-      // const snackbar = this.snackbarService.showInfinite('Creating account...');
-      this.progressBarService.show();
-      this.userService
-        .create(this.signUpForm.value)
-        .pipe(
-          finalize(() => {
-            this.isSubmitting = false;
-            this.progressBarService.hide();
-          }),
-        )
-        .subscribe(
-          () => {
-            // TODO add form reset button that dismisses infinite snackbar as well
-            this.snackbarService
-              .showInfinite('Successfully signed up!', {action: 'Sign in'})
-              .afterDismissed()
-              .subscribe(() => {
-                this.router.navigate(['/sign-in']);
-              });
-          },
-          () => {
-            this.snackbarService.showError();
-          },
-        );
-    }
-  }
-
-  private initSignUpForm(): void {
-    this.signUpForm = this.formBuilder.group({
-      email: [
-        '',
-        [Validators.required, Validators.pattern(EMAIL_REGEXP)],
-        this.emailValidator.bind(this),
-      ],
-      username: ['', [SignUpComponent.usernameValidator], this.usernameValidator.bind(this)],
-      password: ['', [SignUpComponent.passwordValidator]],
-      repeatPassword: ['', [this.repeatPasswordValidator.bind(this)]],
-    });
-  }
-
-  private emailValidator(control: AbstractControl): null | ValidationErrors {
-    const email = control.value;
-    return this.userService.getIdByEmail(email).pipe(
-      map(({data}) => {
-        return data.userByEmail?._id ? {isUsed: true} : null;
-      }),
-    );
-  }
 
   private static usernameValidator(control: AbstractControl): null | ValidationErrors {
     const username = control.value;
@@ -138,10 +82,72 @@ export class SignUpComponent implements OnInit {
         return {hasNoNumber: true};
       case !hasLetter:
         return {hasNoLetter: true};
-      default:
+      default: {
         const validFormat = PASSWORD_REGEXP.test(password);
         return validFormat ? null : {pattern: true};
+      }
     }
+  }
+
+  public ngOnInit(): void {
+    this.initSignUpForm();
+  }
+
+  public signUp(): void {
+    this.signUpForm?.markAllAsTouched();
+    if (this.signUpForm?.valid) {
+      this.isSubmitting = true;
+      // const snackbar = this.snackbarService.showInfinite('Creating account...');
+      this.progressBarService.show();
+      this.userService
+        .create(this.signUpForm.value)
+        .pipe(
+          finalize(() => {
+            this.isSubmitting = false;
+            this.progressBarService.hide();
+          }),
+        )
+        .subscribe(
+          () => {
+            // TODO add form reset button that dismisses infinite snackbar as well
+            this.snackbarService
+              .showInfinite('Successfully signed up!', {action: 'Sign in'})
+              .afterDismissed()
+              .subscribe(() => {
+                void this.router.navigate(['/sign-in']);
+              });
+          },
+          () => {
+            this.snackbarService.showError();
+          },
+        );
+    }
+  }
+
+  private initSignUpForm(): void {
+    this.signUpForm = this.formBuilder.group({
+      email: [
+        '',
+        [Validators.required.bind(this), Validators.pattern(EMAIL_REGEXP)],
+        this.emailValidator.bind(this),
+      ],
+      username: [
+        '',
+        [SignUpComponent.usernameValidator.bind(this)],
+        this.usernameValidator.bind(this),
+      ],
+      password: ['', [SignUpComponent.passwordValidator.bind(this)]],
+      repeatPassword: ['', [this.repeatPasswordValidator.bind(this)]],
+    });
+  }
+
+  private emailValidator(control: AbstractControl): null | ValidationErrors {
+    const email = control.value;
+    return this.userService.getIdByEmail(email).pipe(
+      map(({data}) => {
+        return data.userByEmail?._id ? {isUsed: true} : null;
+      }),
+    );
   }
 
   private repeatPasswordValidator(control: AbstractControl): null | ValidationErrors {
@@ -157,15 +163,15 @@ export class SignUpComponent implements OnInit {
     return arePasswordsEqual ? null : {mismatch: true};
   }
 
-  generatePassword(): void {
+  public generatePassword(): void {
     const password = generatePassword(PASSWORD_MINLENGTH, 16);
-    this.signUpForm.patchValue({password});
+    this.signUpForm?.patchValue({password});
     this.clipboard.copy(password);
     this.snackbarService.showWithDismiss('Copied to the clipboard');
     this.hidePassword = false;
   }
 
-  private usernameValidator(control: AbstractControl): null | ValidationErrors {
+  private usernameValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     const username = control.value;
     return this.userService.getIdByUsername(username).pipe(
       map(({data}) => {
@@ -174,11 +180,11 @@ export class SignUpComponent implements OnInit {
     );
   }
 
-  get emailField(): AbstractControl {
-    return this.signUpForm.get('email');
+  public get emailField(): AbstractControl | null | undefined {
+    return this.signUpForm?.get('email');
   }
 
-  get emailMaxLength(): number {
+  public get emailMaxLength(): number {
     return EMAIL_MAXLENGTH;
   }
 
@@ -186,11 +192,11 @@ export class SignUpComponent implements OnInit {
   //   return this.emailField.value.length > EMAIL_MAXLENGTH;
   // }
 
-  get usernameField(): AbstractControl {
-    return this.signUpForm.get('username');
+  public get usernameField(): AbstractControl | null | undefined {
+    return this.signUpForm?.get('username');
   }
 
-  get usernameMaxLength(): number {
+  public get usernameMaxLength(): number {
     return USERNAME_MAXLENGTH;
   }
 
@@ -198,19 +204,19 @@ export class SignUpComponent implements OnInit {
   //   return this.usernameField.value.length > USERNAME_MAXLENGTH;
   // }
 
-  get usernameSeparators(): string {
+  public get usernameSeparators(): string {
     return USERNAME_SEPARATORS;
   }
 
-  get passwordField(): AbstractControl {
+  public get passwordField(): AbstractControl | null | undefined {
     return this.signUpForm?.get('password');
   }
 
-  get repeatPasswordField(): AbstractControl {
-    return this.signUpForm.get('repeatPassword');
+  public get repeatPasswordField(): AbstractControl | null | undefined {
+    return this.signUpForm?.get('repeatPassword');
   }
 
-  get navigationMainActionType(): NavigationMainActionType {
+  public get navigationMainActionType(): NavigationMainActionType {
     return this.authenticationService.isUserAuthenticated
       ? NavigationMainActionType.PROFILE
       : NavigationMainActionType.HOME;

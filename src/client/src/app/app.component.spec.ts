@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 describe('AppComponent', () => {
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         imports: [RouterTestingModule],
         declarations: [AppComponent],
       }).compileComponents();
@@ -15,7 +15,7 @@ describe('AppComponent', () => {
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    void expect(app).toBeTruthy();
   });
 
   it(`should have as title 'client'`, () => {
@@ -28,6 +28,8 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('client app is running!');
+    void expect(compiled.querySelector('.content span').textContent).toContain(
+      'client app is running!',
+    );
   });
 });

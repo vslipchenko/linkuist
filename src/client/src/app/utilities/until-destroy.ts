@@ -64,7 +64,7 @@ export function UntilDestroy(): ClassDecorator {
 }
 
 export function untilDestroyed<T>(instance: T) {
-  return <U>(source: Observable<U>) => {
+  return <U>(source: Observable<U>): Observable<U> => {
     ensureClassIsDecorated(instance);
     createSubjectOnTheInstance(instance);
 

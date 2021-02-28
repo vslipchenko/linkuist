@@ -16,8 +16,8 @@
       <textarea type="url" matInput formControlName="link" required></textarea>
       <mat-error *ngIf="linkField.hasError('required')">Required field</mat-error>
       <mat-error *ngIf="linkField.hasError('pattern')"
-        >Invalid format, e.g. http://example.com</mat-error
-      >
+        >Invalid format, e.g. http://example.com
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Title</mat-label>

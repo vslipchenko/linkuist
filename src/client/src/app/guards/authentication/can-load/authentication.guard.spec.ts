@@ -10,6 +10,6 @@ describe('AuthenticationGuard', () => {
   });
 
   it('should be created', () => {
-    expect(guard).toBeTruthy();
+    void expect(guard).toBeTruthy();
   });
 });

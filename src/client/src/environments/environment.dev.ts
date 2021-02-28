@@ -3,9 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export class Environment {
-  static readonly production = false;
-  static readonly apiHost = 'http://localhost:4300';
-  static readonly graphqlUri = Environment.apiHost + '/graphql';
+  public static readonly production = false;
+  public static readonly apiHost = 'http://localhost:4300';
+  public static readonly graphqlUri = Environment.apiHost + '/graphql';
 }
 
 /*

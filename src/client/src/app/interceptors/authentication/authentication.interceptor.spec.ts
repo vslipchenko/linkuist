@@ -11,6 +11,6 @@ describe('AuthenticationInterceptor', () => {
 
   it('should be created', () => {
     const interceptor: AuthenticationInterceptor = TestBed.inject(AuthenticationInterceptor);
-    expect(interceptor).toBeTruthy();
+    void expect(interceptor).toBeTruthy();
   });
 });

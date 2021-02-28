@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {
+  Event,
   NavigationCancel,
   NavigationEnd,
   NavigationError,
@@ -19,13 +20,13 @@ import {DOCUMENT} from '@angular/common';
   templateUrl: './progress-bar.component.html',
   styleUrls: ['./progress-bar.component.scss'],
 })
-export class ProgressBarComponent implements OnInit {
-  mode: ProgressBarMode = 'indeterminate';
-  color: ThemePalette = 'primary';
-  errorState = false;
-  show: boolean;
+export class ProgressBarComponent {
+  public mode: ProgressBarMode = 'indeterminate';
+  public color: ThemePalette = 'primary';
+  public errorState = false;
+  public show = false;
 
-  constructor(
+  public constructor(
     private readonly router: Router,
     private readonly progressBarService: ProgressBarService,
     private readonly snackbarService: SnackbarService,
@@ -34,14 +35,12 @@ export class ProgressBarComponent implements OnInit {
     this.progressBarService.showProgressBar$.subscribe(
       (showProgress) => (this.show = showProgress),
     );
-    this.router.events.subscribe((event: RouterEvent) => {
+    this.router.events.subscribe((event: Event) => {
       this.handleNavigationProgress(event);
     });
   }
 
-  ngOnInit(): void {}
-
-  private handleNavigationProgress(event: RouterEvent): void {
+  private handleNavigationProgress(event: Event): void {
     switch (true) {
       case event instanceof NavigationStart:
         this.errorState = false;
@@ -70,7 +69,7 @@ export class ProgressBarComponent implements OnInit {
       if (this.errorState) {
         this.show = false;
       } // actual duration + ~fadeout
-    }, SNACKBAR_CONFIG.duration + 200);
+    }, (SNACKBAR_CONFIG.duration as number) + 200);
   }
 
   private removeSnackbar(): void {

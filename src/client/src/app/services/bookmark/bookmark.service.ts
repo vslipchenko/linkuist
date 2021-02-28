@@ -10,9 +10,9 @@ import {BookmarkCreateData} from '@@types/bookmark/bookmark.interfaces';
   providedIn: 'root',
 })
 export class BookmarkService {
-  constructor(private readonly apollo: Apollo) {}
+  public constructor(private readonly apollo: Apollo) {}
 
-  create({
+  public create({
     id,
     link,
     title,

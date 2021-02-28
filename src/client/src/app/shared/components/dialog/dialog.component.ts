@@ -9,7 +9,7 @@ import {DialogData} from '@@types/dialog/dialog.interfaces';
   styleUrls: ['./dialog.component.scss'],
 })
 export class DialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) private readonly data: DialogData) {}
+  public constructor(@Inject(MAT_DIALOG_DATA) private readonly data: DialogData) {}
 
   // get dialogType(): DialogTypes {
   //   return this.data.dialogType;
@@ -23,15 +23,15 @@ export class DialogComponent {
   //   return this.data?.dialogTitle ?? 'Confirmation';
   // }
 
-  get title(): string {
+  public get title(): string | undefined {
     return this.data?.title;
   }
 
-  get contentTemplateRef(): TemplateRef<unknown> {
+  public get contentTemplateRef(): TemplateRef<unknown> | undefined {
     return this.data?.contentTemplateRef;
   }
 
-  get actionsTemplateRef(): TemplateRef<unknown> {
+  public get actionsTemplateRef(): TemplateRef<unknown> | undefined {
     return this.data?.actionsTemplateRef;
   }
 }

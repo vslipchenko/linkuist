@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
 import {AuthenticationService} from '@services/authentication/authentication.service';
 
@@ -6,12 +6,10 @@ import {AuthenticationService} from '@services/authentication/authentication.ser
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
-  constructor(private readonly authenticationService: AuthenticationService) {}
+export class HomeComponent {
+  public constructor(private readonly authenticationService: AuthenticationService) {}
 
-  ngOnInit(): void {}
-
-  get navigationMainActionType(): NavigationMainActionType {
+  public get navigationMainActionType(): NavigationMainActionType {
     return this.authenticationService.isUserAuthenticated
       ? NavigationMainActionType.PROFILE
       : NavigationMainActionType.NONE;

@@ -7,9 +7,9 @@ import {extractUsername} from '@utilities/url';
   providedIn: 'root',
 })
 export class AuthenticationCanLoadGuard implements CanLoad {
-  constructor(private readonly authenticationService: AuthenticationService) {}
+  public constructor(private readonly authenticationService: AuthenticationService) {}
 
-  canLoad(): boolean {
+  public canLoad(): boolean {
     const data = this.authenticationService.accessTokenData;
     const username = extractUsername(window.location.pathname);
     return data?.username === username;

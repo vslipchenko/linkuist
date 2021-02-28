@@ -8,7 +8,7 @@ describe('SignUpComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         declarations: [SignUpComponent],
       }).compileComponents();
     }),
@@ -21,6 +21,6 @@ describe('SignUpComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

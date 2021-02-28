@@ -8,7 +8,7 @@ describe('ChipsComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         declarations: [ChipsComponent],
       }).compileComponents();
     }),
@@ -21,6 +21,6 @@ describe('ChipsComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

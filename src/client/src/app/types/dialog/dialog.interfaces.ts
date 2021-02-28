@@ -23,7 +23,7 @@ export interface Dialog {
 export interface DialogData {
   // dialogType: DialogTypes;
   title: string;
-  contentTemplateRef: TemplateRef<unknown>;
-  actionsTemplateRef: TemplateRef<unknown>;
+  contentTemplateRef?: TemplateRef<unknown>;
+  actionsTemplateRef?: TemplateRef<unknown>;
   [key: string]: unknown;
 }

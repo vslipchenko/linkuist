@@ -26,15 +26,58 @@ export class AuthenticationService {
   // isRefreshingAccessToken
   private readonly isRefreshing$ = new BehaviorSubject(false);
 
-  constructor(private readonly apollo: Apollo, private readonly router: Router) {}
+  public constructor(private readonly apollo: Apollo, private readonly router: Router) {}
 
-  get accessTokenData(): AccessTokenData | null {
+  public refreshAccessToken(): Observable<ApolloQueryResult<AccessTokenQueryResult>> {
+    return this.refreshToken
+      ? this.apollo.query({
+          query: ACCESS_TOKEN_BY_REFRESH_TOKEN,
+          variables: {refreshToken: this.refreshToken},
+        })
+      : throwError('REFRESH_TOKEN_EMPTY');
+  }
+
+  public signIn(input: UserSignInData): Observable<ApolloQueryResult<SignInQueryResult>> {
+    return this.apollo.query({
+      query: SIGN_IN,
+      variables: {input},
+    });
+  }
+
+  public signOut(): void {
+    this.resetTokens();
+    void this.router.navigate(['/sign-in']);
+  }
+
+  public resetTokens(): void {
+    this.accessToken = '';
+    this.refreshToken = '';
+  }
+
+  public set tokens({accessToken, refreshToken}: JwtTokens) {
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+  }
+
+  public set accessToken(accessToken: string) {
+    this.token$.next(accessToken);
+  }
+
+  public get accessToken(): string {
+    return this.token$.getValue();
+  }
+
+  public get accessTokenData(): AccessTokenData | null {
     try {
       return jwt_decode(this.accessToken);
     } catch {
       // ignore error
       return null;
     }
+  }
+
+  public get accessToken$(): Observable<string> {
+    return this.token$.asObservable();
   }
 
   private get accessTokenData$(): Observable<AccessTokenData | null> {
@@ -50,73 +93,29 @@ export class AuthenticationService {
     );
   }
 
-  signOut(): void {
-    this.resetTokens();
-    this.router.navigate(['/sign-in']);
-  }
-
-  resetTokens(): void {
-    this.accessToken = '';
-    this.refreshToken = '';
-  }
-
-  set tokens({accessToken, refreshToken}: JwtTokens) {
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
-  }
-
-  set accessToken(accessToken: string) {
-    this.token$.next(accessToken);
-  }
-
-  set isRefreshingAccessToken(isRefreshing) {
+  public set isRefreshingAccessToken(isRefreshing: boolean) {
     this.isRefreshing$.next(isRefreshing);
   }
-
-  signIn(input: UserSignInData): Observable<ApolloQueryResult<SignInQueryResult>> {
-    return this.apollo.query({
-      query: SIGN_IN,
-      variables: {input},
-    });
+  public get isRefreshingAccessToken(): boolean {
+    return this.isRefreshing$.getValue();
   }
 
   private get isRefreshingAccessToken$(): Observable<boolean> {
     return this.isRefreshing$.asObservable();
   }
 
-  get accessToken(): string {
-    return this.token$.getValue();
-  }
-
-  get accessToken$(): Observable<string> {
-    return this.token$.asObservable();
-  }
-
-  refreshAccessToken(): Observable<ApolloQueryResult<AccessTokenQueryResult>> {
-    return this.refreshToken
-      ? this.apollo.query({
-          query: ACCESS_TOKEN_BY_REFRESH_TOKEN,
-          variables: {refreshToken: this.refreshToken},
-        })
-      : throwError('REFRESH_TOKEN_EMPTY');
-  }
-
-  get refreshToken(): string {
+  public get refreshToken(): string {
     return localStorage.getItem('token') || '';
   }
 
-  set refreshToken(refreshToken) {
+  public set refreshToken(refreshToken: string) {
     if (!refreshToken) {
       localStorage.removeItem('token');
     }
     localStorage.setItem('token', refreshToken);
   }
 
-  get isRefreshingAccessToken(): boolean {
-    return this.isRefreshing$.getValue();
-  }
-
-  get isUserAuthenticated(): boolean {
+  public get isUserAuthenticated(): boolean {
     return Boolean(this.accessToken && this.refreshToken);
   }
 }

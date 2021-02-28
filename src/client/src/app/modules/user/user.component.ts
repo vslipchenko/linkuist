@@ -16,9 +16,9 @@ enum UserComponentToRender {
   styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit {
-  componentToRender: UserComponentToRender;
+  public componentToRender: UserComponentToRender | undefined;
 
-  constructor(
+  public constructor(
     private readonly progressBarService: ProgressBarService,
     private readonly authenticationService: AuthenticationService,
     private readonly userService: UserService,
@@ -26,7 +26,7 @@ export class UserComponent implements OnInit {
   ) {}
 
   // define component to render
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.progressBarService.show();
 
     const accessToken = this.authenticationService.accessToken;
@@ -36,7 +36,7 @@ export class UserComponent implements OnInit {
 
     if (!username) {
       // 404
-      this.router.navigate(['**'], {skipLocationChange: true});
+      void this.router.navigate(['**'], {skipLocationChange: true});
       return;
     }
 
@@ -68,7 +68,7 @@ export class UserComponent implements OnInit {
       .subscribe(
         ({data}) => {
           if (!data.userByUsername?._id) {
-            this.router.navigate(['**'], {skipLocationChange: true});
+            void this.router.navigate(['**'], {skipLocationChange: true});
           } else {
             this.componentToRender = UserComponentToRender.PROFILE;
           }
@@ -76,12 +76,12 @@ export class UserComponent implements OnInit {
         () => {
           // can't fulfill any of requests
           // TODO redirect to specific error page (service unavailable)
-          this.router.navigate(['/']);
+          void this.router.navigate(['/']);
         },
       );
   }
 
-  get userComponentToRender() {
+  public get userComponentToRender(): typeof UserComponentToRender {
     return UserComponentToRender;
   }
 }

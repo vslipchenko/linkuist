@@ -8,7 +8,7 @@ describe('UserComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         declarations: [UserComponent],
       }).compileComponents();
     }),
@@ -21,6 +21,6 @@ describe('UserComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

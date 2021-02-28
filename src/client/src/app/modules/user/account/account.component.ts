@@ -11,16 +11,16 @@ import {DialogService} from '@shared/services/dialog/dialog.service';
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit {
-  constructor(
+  public constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly dialogService: DialogService,
   ) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     console.log('account access tokenData is ', this.authenticationService.accessTokenData);
   }
 
-  confirmLogout(): void {
+  public confirmLogout(): void {
     // this.dialogService.open({type: DialogTypes.CONFIRM});
     // console.log('account access token is ', this.dialogService.gs());
   }
@@ -29,7 +29,7 @@ export class AccountComponent implements OnInit {
   //   element.classList.toggle('show');
   // }
 
-  get navigationMainActionType(): NavigationMainActionType {
+  public get navigationMainActionType(): NavigationMainActionType {
     return NavigationMainActionType.HOME;
   }
 }

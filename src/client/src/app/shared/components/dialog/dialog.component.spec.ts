@@ -8,7 +8,7 @@ describe('DialogComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         declarations: [DialogComponent],
       }).compileComponents();
     }),
@@ -21,6 +21,6 @@ describe('DialogComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

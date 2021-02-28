@@ -8,7 +8,7 @@ describe('PageNotFoundComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         declarations: [PageNotFoundComponent],
       }).compileComponents();
     }),
@@ -21,6 +21,6 @@ describe('PageNotFoundComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

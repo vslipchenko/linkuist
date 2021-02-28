@@ -7,20 +7,15 @@ import {AuthenticationService} from '@services/authentication/authentication.ser
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent {
   // private readonly defaultConfiguration: NavigationConfiguration = {
   //   mainActionHref: NavigationMainActionHref.NONE
   // };
-  @Input() mainActionType: NavigationMainActionType;
+  @Input() public mainActionType: NavigationMainActionType | undefined;
 
-  constructor(private readonly authenticationService: AuthenticationService) {}
+  public constructor(private readonly authenticationService: AuthenticationService) {}
 
-  ngOnInit(): void {
-    // console.log('WOW ', this.route.snapshot.pathFromRoot.filter(o => o.url[0]?.path).map(o => o.url[0]?.path));
-    // console.log('WOW ', extractUsername('/wad/ahah'));
-  }
-
-  get tooltipContent(): string {
+  public get tooltipContent(): string {
     switch (this.mainActionType) {
       case NavigationMainActionType.NONE:
         return NavigationMainActionType.NONE;
@@ -28,30 +23,33 @@ export class NavigationComponent implements OnInit {
         return NavigationMainActionType.HOME;
       case NavigationMainActionType.PROFILE:
         return NavigationMainActionType.PROFILE;
+      default:
+        return '';
     }
   }
 
-  get isUserAuthenticated(): boolean {
+  public get isUserAuthenticated(): boolean {
     return this.authenticationService.isUserAuthenticated;
   }
 
-  get userAccountPageUrl(): string {
-    return `/@${this.authenticationService.accessTokenData.username}`;
+  public get userAccountPageUrl(): string {
+    const username = this.authenticationService.accessTokenData?.username;
+    return username ? `/@${username}` : '';
   }
 
-  get isProfileMainAction(): boolean {
+  public get isProfileMainAction(): boolean {
     return this.isUserAuthenticated && this.mainActionType === NavigationMainActionType.PROFILE;
   }
 
-  get isHomeMainAction(): boolean {
+  public get isHomeMainAction(): boolean {
     return this.mainActionType === NavigationMainActionType.HOME;
   }
 
-  get isHomeIconMainAction(): boolean {
+  public get isHomeIconMainAction(): boolean {
     return this.isUserAuthenticated && this.isHomeMainAction;
   }
 
-  get isHomeTextMainAction(): boolean {
+  public get isHomeTextMainAction(): boolean {
     return (
       !this.isUserAuthenticated &&
       (this.isHomeMainAction || this.mainActionType === NavigationMainActionType.NONE)

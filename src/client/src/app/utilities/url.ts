@@ -11,7 +11,7 @@ import {URL_USERNAME_REGEXP} from '@constants/regexps';
 export const urlMatcher = (
   pathMatches: Array<string | RegExp>,
 ): ((segments: Array<UrlSegment>) => null | UrlMatchResult) => {
-  return (segments: Array<UrlSegment>) => {
+  return (segments: Array<UrlSegment>): null | UrlMatchResult => {
     if (segments.length === pathMatches.length) {
       let result: UrlMatchResult | null = {consumed: segments};
 

@@ -5,19 +5,17 @@ import {BehaviorSubject, Observable} from 'rxjs';
   providedIn: 'root',
 })
 export class ProgressBarService {
-  #showProgressBar$ = new BehaviorSubject(false);
+  private readonly _showProgressBar$ = new BehaviorSubject(false);
 
-  constructor() {}
-
-  show(): void {
-    this.#showProgressBar$.next(true);
+  public show(): void {
+    this._showProgressBar$.next(true);
   }
 
-  hide(): void {
-    this.#showProgressBar$.next(false);
+  public hide(): void {
+    this._showProgressBar$.next(false);
   }
 
-  get showProgressBar$(): Observable<boolean> {
-    return this.#showProgressBar$.asObservable();
+  public get showProgressBar$(): Observable<boolean> {
+    return this._showProgressBar$.asObservable();
   }
 }

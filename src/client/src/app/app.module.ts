@@ -59,7 +59,7 @@ function AuthenticationFactory(
   authenticationService: AuthenticationService,
   router: Router,
 ): () => Promise<boolean> {
-  return () =>
+  return (): Promise<boolean> =>
     new Promise((resolve) => {
       const refreshToken = authenticationService.refreshToken;
 
@@ -74,7 +74,7 @@ function AuthenticationFactory(
             },
             () => {
               authenticationService.resetTokens();
-              router.navigate(['/']);
+              void router.navigate(['/']);
               return resolve(true);
             },
           );

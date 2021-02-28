@@ -8,7 +8,7 @@ describe('ProgressBarComponent', () => {
 
   beforeEach(
     waitForAsync(() => {
-      TestBed.configureTestingModule({
+      void TestBed.configureTestingModule({
         declarations: [ProgressBarComponent],
       }).compileComponents();
     }),
@@ -21,6 +21,6 @@ describe('ProgressBarComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

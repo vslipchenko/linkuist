@@ -20,7 +20,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   // to persist fulfilled state
   private readonly freshAccessToken$ = new Subject<string>();
 
-  constructor(
+  public constructor(
     private authenticationService: AuthenticationService,
     private readonly snackbarService: SnackbarService,
     private readonly router: Router,
@@ -37,7 +37,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     });
   }
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  public intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<unknown>> {
     const isRefreshingAccessToken = this.authenticationService.isRefreshingAccessToken;
     console.log('is refreshing ', isRefreshingAccessToken);
     if (isRefreshingAccessToken) {
@@ -65,7 +68,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
               case 'ACCESS_TOKEN_EMPTY':
               case 'ACCESS_TOKEN_EXPIRED':
                 // subsequent API calls will wait until the new token has been retrieved
-                this.freshAccessToken$.next(null);
+                this.freshAccessToken$.next('');
                 // start token refresh process
                 this.authenticationService.isRefreshingAccessToken = true;
                 this.authenticationService.refreshAccessToken().pipe(
@@ -78,7 +81,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
                   retry(2), // retry twice on fail
                   catchError((error) => {
                     // new token was not received
-                    this.router.navigate(['/sign-in']);
+                    void this.router.navigate(['/sign-in']);
                     return throwError(error);
                   }), // always finish refresh token process
                   finalize(() => (this.authenticationService.isRefreshingAccessToken = false)),
