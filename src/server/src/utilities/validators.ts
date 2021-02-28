@@ -19,7 +19,7 @@ export const checkDataValidity = ({
     if (value instanceof Object) {
       // allows to validate arrays and objects with non-numeric keys
       for (const key in value) {
-        if (value.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(value, key)) {
           const currentPath: Array<string> = [...path];
           // omit numeric keys in path, e.g., instead of pathsToCheck = ['key.0', 'key.1'] it would be pathsToCheck = ['key']
           isNaN(Number(key)) && currentPath.push(key);
@@ -34,7 +34,8 @@ export const checkDataValidity = ({
         !invalidPaths.includes(fullPath) &&
           (pattern instanceof RegExp
             ? !pattern.test(value)
-            : pattern.hasOwnProperty(fullPath) && !pattern[fullPath].test(value)) &&
+            : Object.prototype.hasOwnProperty.call(pattern, fullPath) &&
+              !pattern[fullPath].test(value)) &&
           invalidPaths.push(fullPath);
       }
     }

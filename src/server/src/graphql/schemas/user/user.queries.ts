@@ -4,13 +4,13 @@ import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {EMAIL_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
 
-const userByEmail = (_: unknown, {email}: {email: IUser['email']}) => {
+const userByEmail = (_: unknown, {email}: {email: IUser['email']}): unknown => {
   if (checkDataValidity({input: email, pattern: EMAIL_REGEXP})) {
     return User.findOne({email});
   }
 };
 
-const userByUsername = (_: unknown, {username}: {username: IUser['username']}) => {
+const userByUsername = (_: unknown, {username}: {username: IUser['username']}): unknown => {
   if (checkDataValidity({input: username, pattern: USERNAME_REGEXP})) {
     return User.findOne({username});
   }
