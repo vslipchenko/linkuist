@@ -1,0 +1,19 @@
+@use 'variables' as var;
+@use 'media';
+
+.dialog {
+  @include media.zero-small {
+    min-width: calc(100vw - #{var.$unit-3 * 2});
+  }
+}
+
+.dialog-medium {
+  @include media.above-small {
+    min-width: 50vw;
+  }
+}
+
+.dialog .mat-dialog-actions .mat-button-base + .mat-button-base,
+.dialog .mat-dialog-actions .mat-mdc-button-base + .mat-mdc-button-base {
+  margin-left: var.$unit-2;
+}

@@ -58,7 +58,7 @@ export class BookmarksComponent {
     this.handlePrivateFieldValueChanges();
 
     this.dialogService.open({
-      panelClass: 'bookmark-dialog',
+      panelClass: 'dialog-medium',
       data: {
         title: 'Add bookmark',
         form: this.addBookmarkForm,

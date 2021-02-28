@@ -1,4 +1,7 @@
 //@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @forward 'fonts';
 @forward 'global';
+
+@forward 'components/bookmarks';
+@forward 'components/dialog';
 @forward 'components/snackbar';

@@ -1,0 +1,10 @@
+@use 'variables' as var;
+
+.add-bookmark {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-bookmark .link-field {
+  margin-bottom: var.$unit-2;
+}

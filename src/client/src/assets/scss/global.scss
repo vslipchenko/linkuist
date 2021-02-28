@@ -113,13 +113,3 @@ textarea {
 //}
 
 // force dialog always take whole width on small devices
-.dialog {
-  @include media.zero-small {
-    min-width: calc(100vw - #{var.$unit-3 * 2});
-  }
-}
-
-.dialog .mat-dialog-actions .mat-button-base + .mat-button-base,
-.dialog .mat-dialog-actions .mat-mdc-button-base + .mat-mdc-button-base {
-  margin-left: var.$unit-2;
-}
