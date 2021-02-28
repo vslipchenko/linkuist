@@ -67,11 +67,13 @@
     margin-right: auto;
   }
 }
+
 // account; profile
 @mixin user-page-content-background {
-  background-image: url('/assets/images/account/background.jpg');
+  background-image: url('~assets/images/account/background.jpg');
   background-size: contain;
 }
+
 @mixin user-page-content-first-block-media {
   @include media.zero-small {
     margin-top: var.$unit-4;
@@ -81,6 +83,7 @@
     margin-top: var.$unit-2;
   }
 }
+
 @mixin user-page-content-block-media {
   @include media.zero-small {
     width: var.$common-user-page-content-block-width-1;
@@ -94,6 +97,7 @@
     width: var.$common-user-page-content-block-width-3;
   }
 }
+
 @mixin user-page-styles() {
   @include media.zero-small {
     @include user-page-content-background;
@@ -103,6 +107,7 @@
     display: flex;
   }
 
+  /* User */
   .user {
     background-color: var.$theme-light;
     border-color: var.$theme-light-darkest;
@@ -120,61 +125,62 @@
       border-width: 0 1px 0 0;
       width: 35%;
     }
-
-    &-background {
-      background-position: center;
-      //margin-right: -1px;
-      background-repeat: no-repeat;
-      background-size: cover;
-      height: 150px;
-    }
-
-    &-avatar {
-      background-position: center;
-      background-size: cover;
-      border: 3px solid var.$theme-light;
-      border-radius: 50%;
-      height: 150px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: -75px;
-      width: 150px;
-    }
-
-    &-info {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      padding: var.$unit-4 var.$unit-3 0;
-    }
-
-    &-names {
-      text-align: center;
-
-      .full-name {
-        margin-bottom: var.$unit-half;
-      }
-
-      .username {
-        font-weight: bold;
-      }
-    }
-
-    &-field {
-      display: flex;
-      margin-top: var.$unit-4;
-
-      &__label {
-        font-weight: bold;
-        margin-right: var.$unit-3;
-
-        &::after {
-          content: ':';
-        }
-      }
-    }
   }
 
+  .user-background {
+    background-position: center;
+    //margin-right: -1px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 150px;
+  }
+
+  .user-avatar {
+    background-position: center;
+    background-size: cover;
+    border: 3px solid var.$theme-light;
+    border-radius: 50%;
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -75px;
+    width: 150px;
+  }
+
+  .user-info {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: var.$unit-4 var.$unit-3 0;
+  }
+
+  .user-names {
+    text-align: center;
+  }
+
+  .user .full-name {
+    margin-bottom: var.$unit-half;
+  }
+
+  .user .username {
+    font-weight: bold;
+  }
+
+  .user-field {
+    display: flex;
+    margin-top: var.$unit-4;
+  }
+
+  .user-field__label {
+    font-weight: bold;
+    margin-right: var.$unit-3;
+  }
+
+  .user-field__label::after {
+    content: ':';
+  }
+
+  /* Notes */
   .notes {
     align-items: center;
     display: flex;
@@ -186,65 +192,60 @@
       overflow-y: auto;
       @include user-page-content-background;
     }
-    //&__item {
-    //  width: 60%;
-    //}
+  }
 
-    &-content {
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      width: 100%;
-      //overflow-y: auto;
-      //border-width: 0 1px 1px;
+  .notes-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+  }
 
-      &:empty {
-        justify-content: center;
+  .notes-content:empty {
+    justify-content: center;
+  }
 
-        &::after {
-          align-items: center;
-          background-color: var.$theme-light;
-          border: 1.5px dashed var.$theme-light-darkest;
-          content: attr(data-empty-notes);
-          display: flex;
-          height: 100%;
-          justify-content: center;
-          //margin-top: 50px;
-          margin: var.$unit-2 auto;
-          max-height: var.$common-user-page-content-block-width-3;
-          min-height: var.$common-user-page-content-block-min-height;
-          width: var.$common-user-page-content-block-width-3;
-        }
-      }
+  .notes-content:empty::after {
+    align-items: center;
+    background-color: var.$theme-light;
+    border: 1.5px dashed var.$theme-light-darkest;
+    content: attr(data-empty-notes);
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    //margin-top: 50px;
+    margin: var.$unit-2 auto;
+    max-height: var.$common-user-page-content-block-width-3;
+    min-height: var.$common-user-page-content-block-min-height;
+    width: var.$common-user-page-content-block-width-3;
+  }
 
-      .note {
-        background-color: var.$theme-light;
-        border: 1px solid var.$theme-light-darkest;
-        height: max-content;
-        margin-left: auto;
-        margin-right: auto;
-        padding: var.$unit-2;
+  .notes .note {
+    background-color: var.$theme-light;
+    border: 1px solid var.$theme-light-darkest;
+    height: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: var.$unit-2;
 
-        @include user-page-content-block-media;
+    @include user-page-content-block-media;
+  }
 
-        &:first-child {
-          @include user-page-content-first-block-media;
-        }
+  .notes .note:first-child {
+    @include user-page-content-first-block-media;
+  }
 
-        &:not(:last-child) {
-          margin-bottom: var.$unit-4;
-        }
+  .notes .note:not(:last-child) {
+    margin-bottom: var.$unit-4;
+  }
 
-        &:last-child {
-          @include media.zero-small {
-            margin-bottom: var.$unit-4;
-          }
+  .notes .note:last-child {
+    @include media.zero-small {
+      margin-bottom: var.$unit-4;
+    }
 
-          @include media.above-small {
-            margin-bottom: var.$unit-2;
-          }
-        }
-      }
+    @include media.above-small {
+      margin-bottom: var.$unit-2;
     }
   }
 }

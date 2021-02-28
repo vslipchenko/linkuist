@@ -2,6 +2,21 @@
 @use 'variables' as var;
 @use 'media';
 
+.navigation {
+  align-items: center;
+  background-color: var.$theme-light;
+  border-top: 1px solid var.$theme-light-darkest;
+  bottom: 0;
+  display: flex;
+  height: var.$common-navigation-height;
+  justify-content: space-between;
+  //box-shadow: $home-shadow;
+  padding: 0 var.$unit-2;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+
 .secondary-actions {
   display: flex;
 }

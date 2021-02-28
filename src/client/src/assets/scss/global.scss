@@ -82,12 +82,12 @@ textarea {
 // make mat-hint act like mat-button
 .hint-as-button [mat-button] {
   line-height: unset;
-  margin-left: -var.$unit-2;
+  margin-left: -(var.$unit-2);
 }
 
 .background-logo {
   // visible until components views are loaded, will be overlapped by them
-  background-image: url('../icons/custom/outlined/linkuist-24px.svg');
+  background-image: url('~assets/icons/custom/outlined/linkuist-24px.svg');
   background-position: center;
   background-repeat: no-repeat;
 

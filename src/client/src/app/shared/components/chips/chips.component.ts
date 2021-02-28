@@ -59,9 +59,6 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   @Input() public autocompleteOptions$: (() => Observable<Array<unknown>>) | undefined;
   @Input() public autocompleteOptions: Array<unknown> | undefined;
   @Input() public cacheAutocompleteOptions: boolean | undefined;
-  @Input() public onAutocompleteOptionSelect:
-    | ((event: MatAutocompleteSelectedEvent) => unknown)
-    | undefined;
   // Hints
   @Input() public leftHint: string | undefined;
   @Input() public rightHint: string | undefined;
@@ -69,6 +66,10 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   @ViewChild('chipInput') public inputElementRef: ElementRef<HTMLInputElement> | undefined;
 
   public areAutocompleteOptionsLoading: boolean | undefined;
+
+  @Input() public onAutocompleteOptionSelect: (
+    event: MatAutocompleteSelectedEvent,
+  ) => unknown = () => {};
 
   public constructor(private readonly controlContainer: ControlContainer) {}
 
