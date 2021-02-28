@@ -1,15 +1,15 @@
-<main class='sign-in'>
-  <div class='sign-in-main'>
-    <h2 class='sign-in-title as-h1'>Sign in</h2>
-    <form [formGroup]='signInForm' class='form'>
-      <mat-form-field appearance='outline'>
+<main class="sign-in">
+  <div class="sign-in-main">
+    <h2 class="sign-in-title as-h1">Sign in</h2>
+    <form [formGroup]="signInForm" class="form">
+      <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
         <input
-          type='email'
+          [errorStateMatcher]="customErrorStateMatcher"
           matInput
-          formControlName='email'
-          [errorStateMatcher]='customErrorStateMatcher'
-          autocomplete='email'
+          autocomplete="email"
+          formControlName="email"
+          type="email"
         />
 
         <mat-error *ngIf="hasRequiredError">Fill in all fields</mat-error>
