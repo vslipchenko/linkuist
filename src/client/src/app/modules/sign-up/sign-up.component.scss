@@ -7,26 +7,25 @@
   //@include media.above-small {
   //}
   @include shared.auth-page-styles($background-url: '/assets/images/sign-up/background.jpg');
+}
 
-  .primary-actions {
-    margin-bottom: var.$unit-3;
-  }
+.primary-actions {
+  margin-bottom: var.$unit-3;
+}
 
-  .secondary-actions {
-    //@include media.zero-large {
-    display: flex;
-    flex-direction: column;
-    //}
+.secondary-actions {
+  //@include media.zero-large {
+  display: flex;
+  flex-direction: column;
+}
 
-    button {
-      margin: var.$unit-half;
-      text-align: left;
-    }
+.secondary-actions button {
+  margin: var.$unit-half;
+  text-align: left;
+}
 
-    .social-icon {
-      margin-right: var.$unit;
-      font-size: var.$font-size-large;
-      font-weight: 700;
-    }
-  }
+.secondary-actions .social-icon {
+  font-size: var.$font-size-large;
+  font-weight: 700;
+  margin-right: var.$unit;
 }

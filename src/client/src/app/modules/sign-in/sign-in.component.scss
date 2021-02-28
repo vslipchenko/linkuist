@@ -6,26 +6,8 @@
   //@include media.above-small {
   //}
   @include shared.auth-page-styles($background-url: '/assets/images/sign-in/background.jpg');
+}
 
-  &__main {
-    //@include media.zero-small {
-    //  width: 100%;
-    //  padding: var.$unit-6;
-    //}
-    //padding: var.$unit-6;
-  }
-
-  .form {
-    margin-bottom: var.$unit-2;
-  }
-
-  //.primary-actions {
-  //  margin-bottom: var.$unit;
-  //}
-  //.account-recovery {
-  //  color: var.$theme-primary;
-  //}
-  //mat-hint.account-recovery {
-  //  margin-left: - var.$unit-2;
-  //}
+.sign-in .form {
+  margin-bottom: var.$unit-2;
 }

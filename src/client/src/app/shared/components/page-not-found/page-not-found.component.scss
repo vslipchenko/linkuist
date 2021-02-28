@@ -1,20 +1,18 @@
 @use 'variables' as var;
 
 .not-found {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+}
 
-  .error {
-    &-code {
-      color: var.$theme-accent;
-      font-size: 5rem;
-      font-weight: bold;
-    }
+.error-code {
+  color: var.$theme-accent;
+  font-size: 5rem;
+  font-weight: bold;
+}
 
-    &-label {
-      text-transform: uppercase;
-    }
-  }
+.error-label {
+  text-transform: uppercase;
 }
