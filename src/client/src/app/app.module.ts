@@ -2,9 +2,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {TranslateModule} from '@ngx-translate/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
 import {SNACKBAR_CONFIG} from '@constants/snackbar';
@@ -23,17 +22,19 @@ import {DIALOG_CONFIG} from '@constants/dialog';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: TranslateLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
     AppRoutingModule,
     GraphQLModule,
     MatSnackBarModule,
     SharedModule,
+    TranslateModule.forRoot(),
+    // TranslateModule.forRoot({
+    //   loader: {
+    //     provide: TranslateLoader,
+    //     useFactory: translateLoaderFactory('app'),
+    //     deps: [HttpClient],
+    //   },
+    //   isolate: true,
+    // }),
   ],
   providers: [
     {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: SNACKBAR_CONFIG},
@@ -41,7 +42,7 @@ import {DIALOG_CONFIG} from '@constants/dialog';
     {provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true},
     {
       provide: APP_INITIALIZER,
-      useFactory: AuthenticationFactory,
+      useFactory: authenticationFactory,
       deps: [AuthenticationService, Router],
       multi: true,
     },
@@ -50,12 +51,7 @@ import {DIALOG_CONFIG} from '@constants/dialog';
 })
 export class AppModule {}
 
-// TODO create & move to specific folder
-function TranslateLoaderFactory(http: HttpClient): TranslateHttpLoader {
-  return new TranslateHttpLoader(http);
-}
-
-function AuthenticationFactory(
+function authenticationFactory(
   authenticationService: AuthenticationService,
   router: Router,
 ): () => Promise<boolean> {

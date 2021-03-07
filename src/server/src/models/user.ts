@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import {IUser} from '../types/user/user.interfaces';
-import {MongooseDocument, MongooseSchema} from '../types/mongoose/mongoose.types';
+import {IUser} from '@@types/user/user.interfaces';
+import {MongooseDocument, MongooseSchema} from '@@types/mongoose/mongoose.types';
 
 const userSchema = new mongoose.Schema({
   email: {type: String, required: true, unique: true, trim: true},

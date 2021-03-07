@@ -11,6 +11,8 @@ import {shapeGraphQLErrors} from '@utilities/graphql';
 import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
 import {Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
+import {AppTranslateService} from '@shared/services/app-translate/app-translate.service';
 
 @Component({
   templateUrl: './sign-in.component.html',
@@ -27,6 +29,8 @@ export class SignInComponent implements OnInit {
     private readonly snackbarService: SnackbarService,
     private readonly progressBarService: ProgressBarService,
     private readonly router: Router,
+    private readonly translateService: TranslateService,
+    private readonly appTranslateService: AppTranslateService,
   ) {}
 
   private static emailValidator(control: AbstractControl): null | ValidationErrors {
@@ -44,6 +48,7 @@ export class SignInComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.appTranslateService.setupTranslate(this.translateService);
     this.initSignInForm();
     this.resetPatternErrorOnInput();
     // this.authenticationService.mock().subscribe();

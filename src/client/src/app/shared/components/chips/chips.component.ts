@@ -64,14 +64,13 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   @Input() public rightHint: string | undefined;
 
   @ViewChild('chipInput') public inputElementRef: ElementRef<HTMLInputElement> | undefined;
-
   public areAutocompleteOptionsLoading: boolean | undefined;
+
+  public constructor(private readonly controlContainer: ControlContainer) {}
 
   @Input() public onAutocompleteOptionSelect: (
     event: MatAutocompleteSelectedEvent,
   ) => unknown = () => {};
-
-  public constructor(private readonly controlContainer: ControlContainer) {}
 
   public ngOnInit(): void {
     // get control by name if not control itself passed

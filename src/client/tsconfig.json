@@ -38,7 +38,7 @@
       "@@types/*": [
         "app/types/*"
       ],
-      // prevent reserved @types namespace conflict
+      // extra @ prevents reserved @types namespace conflict
       "@modules/*": [
         "app/modules/*"
       ],

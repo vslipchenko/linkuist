@@ -9,6 +9,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {RouterModule} from '@angular/router';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {translateLoaderFactory} from '@shared/factories/translate-loader';
+import {HttpClient} from '@angular/common/http';
 
 @NgModule({
   declarations: [SignUpComponent],
@@ -22,6 +25,14 @@ import {RouterModule} from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: translateLoaderFactory('sign-up'),
+        deps: [HttpClient],
+      },
+      isolate: true,
+    }),
   ],
 })
 export class SignUpModule {}

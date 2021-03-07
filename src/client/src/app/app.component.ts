@@ -1,21 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {DomSanitizer, Title} from '@angular/platform-browser';
-import {DOCUMENT} from '@angular/common';
+import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material/icon';
-// TODO replace private keyword with # notation throughout project + prepend underscore to an external private members
-// #example - private inner members, _example - private external members, $example - protected members
-const ICONS_FOLDER = 'assets/icons/';
-const CUSTOM_ICONS_FOLDER = `${ICONS_FOLDER}custom/`;
-const MATERIAL_ICONS_FOLDER = `${ICONS_FOLDER}material/`;
-
-interface IconInfo {
-  name: string;
-  fileName: string;
-  isMaterial?: boolean;
-  isFilled?: boolean;
-  isOutlined?: boolean;
-}
+import {AppTranslateService} from '@shared/services/app-translate/app-translate.service';
+import {CUSTOM_ICONS_FOLDER, ICONS, MATERIAL_ICONS_FOLDER} from '@constants/assets';
+import {Icon} from '@@types/assets/assets.interfaces';
 
 @Component({
   selector: 'app-root',
@@ -25,89 +14,60 @@ interface IconInfo {
   `,
 })
 export class AppComponent implements OnInit {
-  private readonly defaultLanguage = 'en';
-  private readonly supportedLanguages = ['en'];
-
   public constructor(
     private readonly matIconRegistry: MatIconRegistry,
     private readonly domSanitizer: DomSanitizer,
     private readonly translateService: TranslateService,
-    private readonly titleService: Title,
-    @Inject(DOCUMENT) private readonly document: Document,
+    private readonly appTranslateService: AppTranslateService, // private readonly titleService: Title, // @Inject(DOCUMENT) private readonly document: Document,
   ) {}
 
   public ngOnInit(): void {
-    const selectedLanguage = this.initTranslation();
-    this.setDocumentLanguage(selectedLanguage);
-    this.setDocumentTitle();
+    // const selectedLanguage = this.initTranslation();
+    // this.setDocumentLanguage(selectedLanguage);
+    this.appTranslateService.setupTranslate(this.translateService);
+    // this.setDocumentTitle();
     this.registerMaterialIcons();
   }
 
-  private initTranslation(): string {
-    const browserLanguage = this.translateService.getBrowserLang();
-    const selectedLanguage = this.supportedLanguages.includes(browserLanguage)
-      ? browserLanguage
-      : this.defaultLanguage;
+  // private initTranslation(): string {
+  //   // const browserLanguage = this.translateService.getBrowserLang();
+  //   // const selectedLanguage = this.supportedLanguages.includes(browserLanguage)
+  //   //   ? browserLanguage
+  //   //   : this.defaultLanguage;
+  //   //
+  //   // this.translateService.addLangs(this.supportedLanguages);
+  //   // this.translateService.setDefaultLang(this.defaultLanguage);
+  //   // this.translateService.use(selectedLanguage);
+  //   // // console.log('default app is ', this.translateService.langs);
+  //   //
+  //   // return selectedLanguage;
+  // }
 
-    this.translateService.addLangs(this.supportedLanguages);
-    this.translateService.setDefaultLang(this.defaultLanguage);
-    this.translateService.use(selectedLanguage);
+  // private setDocumentLanguage(selectedLanguage: string): void {
+  //   this.document.documentElement.lang = selectedLanguage;
+  // }
 
-    return selectedLanguage;
-  }
-
-  private setDocumentLanguage(selectedLanguage: string): void {
-    this.document.documentElement.lang = selectedLanguage;
-  }
-
-  private setDocumentTitle(): void {
-    this.translateService.get('APP.TITLE').subscribe((title) => this.titleService.setTitle(title));
-  }
+  // private setDocumentTitle(): void {
+  //   this.translateService.get('APP.TITLE').subscribe((title) => this.titleService.setTitle(title));
+  //   //this.titleService.setTitle(this.translateService.instant('APP.TITLE'));
+  // }
 
   private registerMaterialIcons(): void {
-    const registerIcons = (icons: Array<IconInfo>): void => {
+    const registerIcons = (icons: Array<Icon>): void => {
       icons.forEach((icon) => {
         this.matIconRegistry.addSvgIcon(
           icon.name,
           this.domSanitizer.bypassSecurityTrustResourceUrl(
-            `${icon.isMaterial ? MATERIAL_ICONS_FOLDER : CUSTOM_ICONS_FOLDER}${
-              (icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''
-            }${icon.fileName}.svg`,
+            `${
+              (icon.isMaterial && MATERIAL_ICONS_FOLDER) || (icon.isCustom && CUSTOM_ICONS_FOLDER)
+            }${(icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''}${
+              icon.fileName
+            }.svg`,
           ),
         );
       });
     };
 
-    registerIcons([
-      {name: 'login', fileName: 'login-24px', isMaterial: true, isOutlined: true},
-      {name: 'person-add', fileName: 'person_add-24px', isMaterial: true, isFilled: true},
-      {name: 'explore', fileName: 'explore-24px', isMaterial: true, isOutlined: true},
-      {name: 'architecture', fileName: 'architecture-24px', isMaterial: true, isOutlined: true},
-      {name: 'share', fileName: 'share-24px', isMaterial: true, isOutlined: true},
-      {name: 'support', fileName: 'support-24px', isMaterial: true, isOutlined: true},
-      {name: 'visibility', fileName: 'visibility-24px', isMaterial: true, isFilled: true},
-      {name: 'visibility-off', fileName: 'visibility_off-24px', isMaterial: true, isFilled: true},
-      {
-        name: 'account-settings',
-        fileName: 'account_settings-24px',
-        isMaterial: true,
-        isFilled: true,
-      },
-      {name: 'add', fileName: 'add-24px', isMaterial: true, isOutlined: true},
-      {name: 'linkuist', fileName: 'linkuist_bold-24px', isMaterial: false, isOutlined: true},
-      {name: 'home', fileName: 'home-24px', isMaterial: true, isFilled: true},
-      {name: 'exit-to-app', fileName: 'exit_to_app-24px', isMaterial: true, isOutlined: true},
-      {name: 'pencil-plus', fileName: 'pencil_plus-24px', isMaterial: true, isFilled: true},
-      {
-        name: 'bookmark-collection',
-        fileName: 'collections_bookmark-24px',
-        isMaterial: true,
-        isFilled: true,
-      },
-      {name: 'bookmark-plus', fileName: 'book_plus-24px', isMaterial: true, isFilled: true},
-      {name: 'cancel', fileName: 'cancel-24px', isMaterial: true, isFilled: true},
-      // {name: 'google', fileName: 'google-24px', isOutlined: true},
-      // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
-    ]);
+    registerIcons(ICONS);
   }
 }

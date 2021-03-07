@@ -26,6 +26,8 @@ import {Router} from '@angular/router';
 import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
 import {AuthenticationService} from '@services/authentication/authentication.service';
 import {Observable} from 'rxjs';
+import {TranslateService} from '@ngx-translate/core';
+import {AppTranslateService} from '@shared/services/app-translate/app-translate.service';
 
 // TODO unsubscribe decorator
 @Component({
@@ -45,6 +47,8 @@ export class SignUpComponent implements OnInit {
     private readonly router: Router,
     private readonly progressBarService: ProgressBarService,
     private readonly authenticationService: AuthenticationService,
+    private readonly translateService: TranslateService,
+    private readonly appTranslateService: AppTranslateService,
   ) {}
 
   private static usernameValidator(control: AbstractControl): null | ValidationErrors {
@@ -90,6 +94,7 @@ export class SignUpComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.appTranslateService.setupTranslate(this.translateService);
     this.initSignUpForm();
   }
 
