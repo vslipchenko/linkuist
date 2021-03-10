@@ -32,12 +32,12 @@ export class SignInComponent implements OnInit {
   public get customErrorStateMatcher(): ErrorStateMatcher {
     return {
       // email or password field touched and is empty OR one of them has pattern error
-      isErrorState: (control) =>
+      isErrorState: (control: AbstractControl) =>
         (control?.touched && control.hasError('required')) ||
         (this.passwordField?.touched && this.passwordField.hasError('required')) ||
         control?.hasError('pattern') ||
         this.passwordField?.hasError('pattern'),
-    } as ErrorStateMatcher;
+    } as any; // TODO replace with ErrorStateMatcher
   }
 
   public get hasRequiredError(): boolean | undefined {
