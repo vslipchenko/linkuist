@@ -22,6 +22,9 @@ import {BookmarkService} from '@services/bookmark/bookmark.service';
   styleUrls: ['./bookmarks.component.scss'],
 })
 export class BookmarksComponent {
+  @ViewChild('addBookmarkContent') public addBookmarkContent: TemplateRef<unknown> | undefined;
+  @ViewChild('addBookmarkActions') public addBookmarkActions: TemplateRef<unknown> | undefined;
+
   public readonly tagsSeparatorKeysCodes = [ENTER];
   public readonly tagSeparator = '-';
   public readonly tagLetterValidator = BOOKMARK_TAG_LETTER_REGEXP;
@@ -29,14 +32,27 @@ export class BookmarksComponent {
 
   public addBookmarkForm: FormGroup | undefined;
 
-  @ViewChild('addBookmarkContent') public addBookmarkContent: TemplateRef<unknown> | undefined;
-  @ViewChild('addBookmarkActions') public addBookmarkActions: TemplateRef<unknown> | undefined;
-
   public constructor(
     private readonly dialogService: DialogService,
     private readonly bookmarkService: BookmarkService,
     private readonly formBuilder: FormBuilder,
   ) {}
+
+  public get linkField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('link');
+  }
+
+  public get privateField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('isPrivate');
+  }
+
+  public get tagsField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('tags');
+  }
+
+  public get navigationMainActionType(): NavigationMainActionType {
+    return NavigationMainActionType.PROFILE;
+  }
 
   private static linkValidator(control: AbstractControl): null | ValidationErrors {
     const link = control.value;
@@ -134,21 +150,5 @@ export class BookmarksComponent {
 
         this.tagsField?.setValue(tags);
       });
-  }
-
-  public get linkField(): AbstractControl | null | undefined {
-    return this.addBookmarkForm?.get('link');
-  }
-
-  public get privateField(): AbstractControl | null | undefined {
-    return this.addBookmarkForm?.get('isPrivate');
-  }
-
-  public get tagsField(): AbstractControl | null | undefined {
-    return this.addBookmarkForm?.get('tags');
-  }
-
-  public get navigationMainActionType(): NavigationMainActionType {
-    return NavigationMainActionType.PROFILE;
   }
 }

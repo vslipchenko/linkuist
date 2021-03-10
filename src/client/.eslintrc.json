@@ -91,8 +91,7 @@
                 "public-abstract-method",
                 "protected-abstract-method",
                 "private-abstract-method"
-              ],
-              "order": "alphabetically"
+              ]
             }
           }
         ],
@@ -102,6 +101,7 @@
             "default": "generic"
           }
         ],
+        "arrow-parens": "error",
         "no-unused-vars": "off", // avoid rule conflict
         "no-implicit-coercion": "error",
         "no-case-declarations": "error",
