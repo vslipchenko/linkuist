@@ -9,8 +9,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {RouterModule} from '@angular/router';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {translateLoaderFactory} from '@shared/factories/translate-loader';
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {setupTranslate, translateLoaderFactory} from '@utilities/translate';
 import {HttpClient} from '@angular/common/http';
 
 @NgModule({
@@ -35,4 +35,8 @@ import {HttpClient} from '@angular/common/http';
     }),
   ],
 })
-export class SignUpModule {}
+export class SignUpModule {
+  public constructor(private readonly translateService: TranslateService) {
+    setupTranslate(translateService);
+  }
+}

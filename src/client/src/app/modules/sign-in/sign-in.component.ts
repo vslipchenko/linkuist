@@ -11,8 +11,6 @@ import {shapeGraphQLErrors} from '@utilities/graphql';
 import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
 import {Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
-import {TranslateService} from '@ngx-translate/core';
-import {AppTranslateService} from '@shared/services/app-translate/app-translate.service';
 
 @Component({
   templateUrl: './sign-in.component.html',
@@ -28,10 +26,48 @@ export class SignInComponent implements OnInit {
     private readonly authenticationService: AuthenticationService,
     private readonly snackbarService: SnackbarService,
     private readonly progressBarService: ProgressBarService,
-    private readonly router: Router,
-    private readonly translateService: TranslateService,
-    private readonly appTranslateService: AppTranslateService,
+    private readonly router: Router, // private readonly translateService: TranslateService, // private readonly appTranslateService: AppTranslateService,
   ) {}
+
+  public get customErrorStateMatcher(): ErrorStateMatcher {
+    return {
+      // email or password field touched and is empty OR one of them has pattern error
+      isErrorState: (control) =>
+        (control?.touched && control.hasError('required')) ||
+        (this.passwordField?.touched && this.passwordField.hasError('required')) ||
+        control?.hasError('pattern') ||
+        this.passwordField?.hasError('pattern'),
+    } as ErrorStateMatcher;
+  }
+
+  public get hasRequiredError(): boolean | undefined {
+    return this.emailField?.hasError('required') || this.passwordField?.hasError('required');
+  }
+
+  public get hasPatternError(): boolean | undefined {
+    return this.emailField?.hasError('pattern') || this.passwordField?.hasError('pattern');
+  }
+
+  public get navigationMainActionType(): NavigationMainActionType {
+    return this.authenticationService.isUserAuthenticated
+      ? NavigationMainActionType.PROFILE
+      : NavigationMainActionType.HOME;
+  }
+
+  private get emailField(): AbstractControl | null | undefined {
+    return this.signInForm?.get('email');
+  }
+
+  private get passwordField(): AbstractControl | null | undefined {
+    return this.signInForm?.get('password');
+  }
+
+  private get isInvalidUserData(): boolean {
+    const invalidPasswordPattern = !PASSWORD_REGEXP.test(this.passwordField?.value);
+    const invalidEmailPattern = !EMAIL_REGEXP.test(this.emailField?.value);
+
+    return invalidPasswordPattern || invalidEmailPattern;
+  }
 
   private static emailValidator(control: AbstractControl): null | ValidationErrors {
     const email = control.value;
@@ -48,22 +84,11 @@ export class SignInComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.appTranslateService.setupTranslate(this.translateService);
+    // this.appTranslateService.setupTranslate(this.translateService);
     this.initSignInForm();
     this.resetPatternErrorOnInput();
     // this.authenticationService.mock().subscribe();
     // console.log(this.authenticationService.accessTokenData);
-  }
-
-  public get customErrorStateMatcher(): ErrorStateMatcher {
-    return {
-      // email or password field touched and is empty OR one of them has pattern error
-      isErrorState: (control) =>
-        (control?.touched && control.hasError('required')) ||
-        (this.passwordField?.touched && this.passwordField.hasError('required')) ||
-        control?.hasError('pattern') ||
-        this.passwordField?.hasError('pattern'),
-    } as ErrorStateMatcher;
   }
 
   public signIn(): void {
@@ -123,29 +148,6 @@ export class SignInComponent implements OnInit {
     });
   }
 
-  private get emailField(): AbstractControl | null | undefined {
-    return this.signInForm?.get('email');
-  }
-
-  private get passwordField(): AbstractControl | null | undefined {
-    return this.signInForm?.get('password');
-  }
-
-  private get isInvalidUserData(): boolean {
-    const invalidPasswordPattern = !PASSWORD_REGEXP.test(this.passwordField?.value);
-    const invalidEmailPattern = !EMAIL_REGEXP.test(this.emailField?.value);
-
-    return invalidPasswordPattern || invalidEmailPattern;
-  }
-
-  public get hasRequiredError(): boolean | undefined {
-    return this.emailField?.hasError('required') || this.passwordField?.hasError('required');
-  }
-
-  public get hasPatternError(): boolean | undefined {
-    return this.emailField?.hasError('pattern') || this.passwordField?.hasError('pattern');
-  }
-
   private resetPatternErrorOnInput(): void {
     combineLatest([this.emailField?.valueChanges, this.passwordField?.valueChanges]).subscribe(
       () => {
@@ -154,11 +156,5 @@ export class SignInComponent implements OnInit {
         }
       },
     );
-  }
-
-  public get navigationMainActionType(): NavigationMainActionType {
-    return this.authenticationService.isUserAuthenticated
-      ? NavigationMainActionType.PROFILE
-      : NavigationMainActionType.HOME;
   }
 }

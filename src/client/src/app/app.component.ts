@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material/icon';
-import {AppTranslateService} from '@shared/services/app-translate/app-translate.service';
 import {CUSTOM_ICONS_FOLDER, ICONS, MATERIAL_ICONS_FOLDER} from '@constants/assets';
 import {Icon} from '@@types/assets/assets.interfaces';
 
@@ -16,15 +14,13 @@ import {Icon} from '@@types/assets/assets.interfaces';
 export class AppComponent implements OnInit {
   public constructor(
     private readonly matIconRegistry: MatIconRegistry,
-    private readonly domSanitizer: DomSanitizer,
-    private readonly translateService: TranslateService,
-    private readonly appTranslateService: AppTranslateService, // private readonly titleService: Title, // @Inject(DOCUMENT) private readonly document: Document,
+    private readonly domSanitizer: DomSanitizer, // private readonly translateService: TranslateService, // private readonly appTranslateService: AppTranslateService, // private readonly titleService: Title, // @Inject(DOCUMENT) private readonly document: Document,
   ) {}
 
   public ngOnInit(): void {
     // const selectedLanguage = this.initTranslation();
     // this.setDocumentLanguage(selectedLanguage);
-    this.appTranslateService.setupTranslate(this.translateService);
+    // this.appTranslateService.setupTranslate(this.translateService);
     // this.setDocumentTitle();
     this.registerMaterialIcons();
   }

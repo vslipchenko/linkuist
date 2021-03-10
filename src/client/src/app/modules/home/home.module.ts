@@ -1,14 +1,14 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HomeComponent} from './home.component';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {SharedModule} from '@shared/shared.module';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {RouterModule} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
-import {translateLoaderFactory} from '@shared/factories/translate-loader';
+import {translateLoaderFactory, setupTranslate} from '@utilities/translate';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -29,4 +29,8 @@ import {translateLoaderFactory} from '@shared/factories/translate-loader';
     }),
   ],
 })
-export class HomeModule {}
+export class HomeModule {
+  public constructor(private readonly translateService: TranslateService) {
+    setupTranslate(translateService);
+  }
+}

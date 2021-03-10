@@ -26,8 +26,6 @@ import {Router} from '@angular/router';
 import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
 import {AuthenticationService} from '@services/authentication/authentication.service';
 import {Observable} from 'rxjs';
-import {TranslateService} from '@ngx-translate/core';
-import {AppTranslateService} from '@shared/services/app-translate/app-translate.service';
 
 // TODO unsubscribe decorator
 @Component({
@@ -35,9 +33,9 @@ import {AppTranslateService} from '@shared/services/app-translate/app-translate.
   styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
-  public signUpForm: FormGroup | undefined;
   public hidePassword = true;
   public isSubmitting = false;
+  public signUpForm: FormGroup | undefined;
 
   public constructor(
     private readonly formBuilder: FormBuilder,
@@ -46,10 +44,42 @@ export class SignUpComponent implements OnInit {
     private readonly userService: UserService,
     private readonly router: Router,
     private readonly progressBarService: ProgressBarService,
-    private readonly authenticationService: AuthenticationService,
-    private readonly translateService: TranslateService,
-    private readonly appTranslateService: AppTranslateService,
+    private readonly authenticationService: AuthenticationService, // private readonly translateService: TranslateService, // private readonly appTranslateService: AppTranslateService,
   ) {}
+
+  public get emailField(): AbstractControl | null | undefined {
+    return this.signUpForm?.get('email');
+  }
+
+  public get emailMaxLength(): number {
+    return EMAIL_MAXLENGTH;
+  }
+
+  public get usernameField(): AbstractControl | null | undefined {
+    return this.signUpForm?.get('username');
+  }
+
+  public get usernameMaxLength(): number {
+    return USERNAME_MAXLENGTH;
+  }
+
+  public get usernameSeparators(): string {
+    return USERNAME_SEPARATORS;
+  }
+
+  public get passwordField(): AbstractControl | null | undefined {
+    return this.signUpForm?.get('password');
+  }
+
+  public get repeatPasswordField(): AbstractControl | null | undefined {
+    return this.signUpForm?.get('repeatPassword');
+  }
+
+  public get navigationMainActionType(): NavigationMainActionType {
+    return this.authenticationService.isUserAuthenticated
+      ? NavigationMainActionType.PROFILE
+      : NavigationMainActionType.HOME;
+  }
 
   private static usernameValidator(control: AbstractControl): null | ValidationErrors {
     const username = control.value;
@@ -94,9 +124,13 @@ export class SignUpComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.appTranslateService.setupTranslate(this.translateService);
+    // this.appTranslateService.setupTranslate(this.translateService);
     this.initSignUpForm();
   }
+
+  // get isEmailLengthExceeded(): boolean {
+  //   return this.emailField.value.length > EMAIL_MAXLENGTH;
+  // }
 
   public signUp(): void {
     this.signUpForm?.markAllAsTouched();
@@ -128,6 +162,18 @@ export class SignUpComponent implements OnInit {
         );
     }
   }
+
+  public generatePassword(): void {
+    const password = generatePassword(PASSWORD_MINLENGTH, 16);
+    this.signUpForm?.patchValue({password});
+    this.clipboard.copy(password);
+    this.snackbarService.showWithDismiss('Copied to the clipboard');
+    this.hidePassword = false;
+  }
+
+  // get isUsernameLengthExceeded(): boolean {
+  //   return this.usernameField.value.length > USERNAME_MAXLENGTH;
+  // }
 
   private initSignUpForm(): void {
     this.signUpForm = this.formBuilder.group({
@@ -168,14 +214,6 @@ export class SignUpComponent implements OnInit {
     return arePasswordsEqual ? null : {mismatch: true};
   }
 
-  public generatePassword(): void {
-    const password = generatePassword(PASSWORD_MINLENGTH, 16);
-    this.signUpForm?.patchValue({password});
-    this.clipboard.copy(password);
-    this.snackbarService.showWithDismiss('Copied to the clipboard');
-    this.hidePassword = false;
-  }
-
   private usernameValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     const username = control.value;
     return this.userService.getIdByUsername(username).pipe(
@@ -183,47 +221,5 @@ export class SignUpComponent implements OnInit {
         return data.userByUsername?._id ? {isUsed: true} : null;
       }),
     );
-  }
-
-  public get emailField(): AbstractControl | null | undefined {
-    return this.signUpForm?.get('email');
-  }
-
-  public get emailMaxLength(): number {
-    return EMAIL_MAXLENGTH;
-  }
-
-  // get isEmailLengthExceeded(): boolean {
-  //   return this.emailField.value.length > EMAIL_MAXLENGTH;
-  // }
-
-  public get usernameField(): AbstractControl | null | undefined {
-    return this.signUpForm?.get('username');
-  }
-
-  public get usernameMaxLength(): number {
-    return USERNAME_MAXLENGTH;
-  }
-
-  // get isUsernameLengthExceeded(): boolean {
-  //   return this.usernameField.value.length > USERNAME_MAXLENGTH;
-  // }
-
-  public get usernameSeparators(): string {
-    return USERNAME_SEPARATORS;
-  }
-
-  public get passwordField(): AbstractControl | null | undefined {
-    return this.signUpForm?.get('password');
-  }
-
-  public get repeatPasswordField(): AbstractControl | null | undefined {
-    return this.signUpForm?.get('repeatPassword');
-  }
-
-  public get navigationMainActionType(): NavigationMainActionType {
-    return this.authenticationService.isUserAuthenticated
-      ? NavigationMainActionType.PROFILE
-      : NavigationMainActionType.HOME;
   }
 }
