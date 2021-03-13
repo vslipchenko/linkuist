@@ -1,15 +1,14 @@
 import {gql} from 'apollo-server-express';
 
-export const bookmarkTypes = gql`
-  type Bookmark {
+export const linkardTypes = gql`
+  type Linkard {
     _id: ID!
     id: Float!
     userId: String!
     link: String!
-    title: String
-    image: String
-    icon: String
-    description: String
+    isPrivate: Boolean!
+    isPaid: Boolean!
+    note: String
     tags: [String!]!
   }
 `;

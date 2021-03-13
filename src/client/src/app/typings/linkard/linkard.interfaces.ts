@@ -1,4 +1,4 @@
-export interface BookmarkCreateData {
+export interface LinkardCreateData {
   id: number;
   link: string;
   note: string;

@@ -1,4 +1,4 @@
-import {Icon} from '@@types/assets/assets.interfaces';
+import {Icon} from '@typings/assets/assets.interfaces';
 
 const ASSETS_FOLDER = 'assets/';
 

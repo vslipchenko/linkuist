@@ -3,16 +3,16 @@ import {
   ACCESS_JWT_SECRET,
   REFRESH_JWT_EXPIRES_IN,
   REFRESH_JWT_SECRET_FRAGMENT,
-} from '../../../constants/app';
+} from '@constants/app';
 import {ApolloError, gql, UserInputError} from 'apollo-server-express';
 import jwt, {SignOptions} from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import {User} from '../../../models/user';
-import {IUser} from '../../../types/user/user.interfaces';
-import {MongooseDocument, MongooseQueryResult} from '../../../types/mongoose/mongoose.types';
-import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
-import {checkDataValidity} from '../../../utilities/validators';
-import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../../constants/regexps';
+import {User} from '@models/user';
+import {IUser} from '@typings/user/user.interfaces';
+import {MongooseDocument, MongooseQueryResult} from '@typings/mongoose/mongoose.types';
+import {RefreshAccessTokenPayload} from '@typings/jwt/jwt.interfaces';
+import {checkDataValidity} from '@utilities/validators';
+import {EMAIL_REGEXP, PASSWORD_REGEXP} from '@constants/regexps';
 
 const signIn = (_: unknown, {input}: {input: IUser}): any => {
   const isValidData = checkDataValidity({
@@ -69,7 +69,7 @@ const accessTokenByRefreshToken = (_: unknown, {refreshToken}: {refreshToken: st
     return new ApolloError('', 'REFRESH_TOKEN_EMPTY');
   }
 
-  const userId = (<RefreshAccessTokenPayload>jwt.decode(refreshToken))?.userId;
+  const userId = (jwt.decode(refreshToken) as RefreshAccessTokenPayload)?.userId;
 
   if (!userId) {
     return new ApolloError('', 'REFRESH_TOKEN_INVALID');

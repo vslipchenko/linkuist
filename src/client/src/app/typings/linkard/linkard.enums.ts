@@ -1,9 +1,9 @@
-export enum BookmarkPrivacy {
+export enum LinkardPrivacy {
   PUBLIC = 'public',
   PRIVATE = 'private',
 }
 
-export enum BookmarkPrice {
+export enum LinkardPrice {
   FREE = 'free',
   PAID = 'paid',
 }

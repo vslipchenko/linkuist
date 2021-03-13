@@ -2,23 +2,39 @@
   "compilerOptions": {
     //    "allowJs": true,
     "baseUrl": "src",
+    "rootDir": "src",
+    "outDir": "dist/out-tsc",
     "strict": true,
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "module": "commonjs",
     "target": "es2019",
     "sourceMap": true,
-    "rootDir": "src",
-    "outDir": "dist/out-tsc",
     "esModuleInterop": true,
     "removeComments": true,
     "importHelpers": true,
     "paths": {
-      "@constants/*": ["constants/*"],
-      "@graphql/*": ["graphql/*"],
-      "@models/*": ["models/*"],
-      "@@types/*": ["types/*"], // extra @ prevents reserved @types namespace conflict
-      "@environments/*": ["environments/*"],
-      "@utilities/*": ["utilities/*"]
-    }
+      "@constants/*": [
+        "constants/*"
+      ],
+      "@graphql/*": [
+        "graphql/*"
+      ],
+      "@models/*": [
+        "models/*"
+      ],
+      "@typings/*": [
+        "typings/*"
+      ],
+      // extra @ prevents reserved @types namespace conflict
+      "@environments/*": [
+        "environments/*"
+      ],
+      "@utilities/*": [
+        "utilities/*"
+      ]
+    },
   }
 }

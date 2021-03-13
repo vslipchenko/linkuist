@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
+import {NavigationMainActionType} from '@typings/navigation/navigation.enums';
 import {
   AbstractControl,
   FormBuilder,

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
-import {SnackbarConfig} from '@@types/snackbar/snackbar.interfaces';
+import {SnackbarConfig} from '@typings/snackbar/snackbar.interfaces';
 import {MatSnackBarRef} from '@angular/material/snack-bar/snack-bar-ref';
 import {TextOnlySnackBar} from '@angular/material/snack-bar/simple-snack-bar';
 
@@ -11,6 +11,10 @@ import {TextOnlySnackBar} from '@angular/material/snack-bar/simple-snack-bar';
 export class SnackbarService {
   public constructor(private readonly snackbar: MatSnackBar) {
     // this.snackbar._openedSnackBarRef.instance.data;
+  }
+
+  public get isOpened(): boolean {
+    return Boolean(this.snackbar._openedSnackBarRef);
   }
 
   public showInfinite(
@@ -27,13 +31,6 @@ export class SnackbarService {
     return this.show(message, {action: 'Dismiss', config});
   }
 
-  private show(
-    message: string,
-    {action, config}: SnackbarConfig = {},
-  ): MatSnackBarRef<TextOnlySnackBar> {
-    return this.snackbar.open(message, action, config);
-  }
-
   public showSuccess(message = 'Success!'): void {
     this.show(`✔ ${message}`);
   }
@@ -46,7 +43,10 @@ export class SnackbarService {
     this.snackbar.dismiss();
   }
 
-  public get isOpened(): boolean {
-    return Boolean(this.snackbar._openedSnackBarRef);
+  private show(
+    message: string,
+    {action, config}: SnackbarConfig = {},
+  ): MatSnackBarRef<TextOnlySnackBar> {
+    return this.snackbar.open(message, action, config);
   }
 }

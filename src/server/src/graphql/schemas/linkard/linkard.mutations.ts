@@ -1,18 +1,18 @@
 import {ApolloError, gql} from 'apollo-server-express';
-import {IBookmark} from '../../../types/bookmark/bookmark.interfaces';
-import {authenticationInterceptor} from '../../../utilities/interceptors';
-import {AccessTokenData} from '../../../types/jwt/jwt.interfaces';
+import {ILinkard} from '@typings/linkard/linkard.interfaces';
+import {authenticationInterceptor} from '@utilities/interceptors';
+import {AccessTokenData} from '@typings/jwt/jwt.interfaces';
 // import { checkDataValidity } from '../../../utilities/validators';
-import {Bookmark} from '../../../models/bookmark';
+import {Linkard} from '@models/linkard';
 // import { getNullishProperties } from '../../../utilities/getters';
 // import { fetchUrlMetadata, IgnoreMetadataProperties } from '../../../utilities/url-metadata';
 // import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
 // import {ExpressContext} from 'apollo-server-express/dist/ApolloServer';
-// import {IBookmark} from '../../../types/bookmark/bookmark.interfaces';
+// import {IBookmark} from '../../../types/linkard/linkard.interfaces';
 
-const createBookmark = (
+const createLinkard = (
   _: unknown,
-  {input}: {input: Omit<IBookmark, 'userId'>},
+  {input}: {input: Omit<ILinkard, 'userId'>},
   {accessToken}: {accessToken: string},
 ): any => {
   return authenticationInterceptor<Promise<any> | ApolloError>(
@@ -24,7 +24,7 @@ const createBookmark = (
       // } catch (error) {
       //   return new ApolloError(''); // Pre-validates on the client
       // }
-      console.log('create bookmark input ', userId, input);
+      console.log('create linkard input ', userId, input);
 
       // const isValidBookmark = checkDataValidity({input, pattern: /wa/});
       //
@@ -37,7 +37,7 @@ const createBookmark = (
       // const metadata = await fetchUrlMetadata(input.link, nullishProperties);
 
       // return new Promise((resolve) => resolve);
-      return Bookmark.create({
+      return Linkard.create({
         ...input,
         // ...metadata,
         userId,
@@ -46,14 +46,14 @@ const createBookmark = (
   );
 };
 
-export const bookmarkMutationTypeDefinitions = gql`
+export const linkardMutationTypeDefinitions = gql`
   extend type Mutation {
-    createBookmark(input: CreateBookmarkMutationInput!): Bookmark
+    createLinkard(input: CreateLinkardMutationInput!): Linkard
   }
 `;
 
-export const bookmarkMutationResolvers = {
+export const linkardMutationResolvers = {
   Mutation: {
-    createBookmark,
+    createLinkard,
   },
 };

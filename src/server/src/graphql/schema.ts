@@ -5,7 +5,7 @@ import {
   authenticationResolvers,
   authenticationTypeDefinitions,
 } from './schemas/authentication/authentication.schema';
-import {bookmarkResolvers, bookmarkTypeDefinitions} from './schemas/bookmark/bookmark.schema';
+import {linkardResolvers, linkardTypeDefinitions} from './schemas/linkard/linkard.schema';
 import {userTypeDefinitions, userResolvers} from './schemas/user/user.schema';
 
 // TODO remove as soon as extend of empty types is available
@@ -25,13 +25,13 @@ export default makeExecutableSchema({
     ...scalarTypeDefinitions,
     ...authenticationTypeDefinitions,
     ...userTypeDefinitions,
-    ...bookmarkTypeDefinitions,
+    ...linkardTypeDefinitions,
   ],
   resolvers: _merge(
     {},
     ...scalarResolvers,
     ...authenticationResolvers,
     ...userResolvers,
-    ...bookmarkResolvers,
+    ...linkardResolvers,
   ),
 });

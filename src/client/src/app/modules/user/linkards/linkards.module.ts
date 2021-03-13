@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BookmarksComponent} from './bookmarks.component';
+import {LinkardsComponent} from './linkards.component';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '@shared/shared.module';
 import {MatIconModule} from '@angular/material/icon';
@@ -13,9 +13,9 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [BookmarksComponent],
+  declarations: [LinkardsComponent],
   imports: [
-    RouterModule.forChild([{path: '', component: BookmarksComponent}]),
+    RouterModule.forChild([{path: '', component: LinkardsComponent}]),
     CommonModule,
     SharedModule,
     MatIconModule,
@@ -28,4 +28,4 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatDialogModule,
   ],
 })
-export class BookmarksModule {}
+export class LinkardsModule {}

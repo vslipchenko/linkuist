@@ -1,7 +1,7 @@
-import {ACCESS_JWT_SECRET} from '../constants/app';
+import {ACCESS_JWT_SECRET} from '@constants/app';
 import {ApolloError} from 'apollo-server-express';
 import jwt from 'jsonwebtoken';
-import {AccessTokenData} from '../types/jwt/jwt.interfaces';
+import {AccessTokenData} from '@typings/jwt/jwt.interfaces';
 
 export const authenticationInterceptor = <C = unknown>(
   accessToken: string,

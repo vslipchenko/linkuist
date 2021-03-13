@@ -4,7 +4,7 @@ import {DialogComponent} from '@shared/components/dialog/dialog.component';
 import {Observable} from 'rxjs';
 import {TemplateRef} from '@angular/core';
 
-// import {DialogTypes} from '@@types/dialog/dialog.enums';
+// import {DialogTypes} from '@typings/dialog/dialog.enums';
 
 export interface Dialog {
   dialogRef: MatDialogRef<DialogComponent>;

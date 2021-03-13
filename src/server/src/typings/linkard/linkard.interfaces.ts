@@ -1,4 +1,4 @@
-export interface IBookmark {
+export interface ILinkard {
   id: number; // = new Date().getTime()
   userId: string;
   link: string;

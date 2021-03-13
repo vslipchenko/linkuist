@@ -35,8 +35,8 @@
       "@interceptors/*": [
         "app/interceptors/*"
       ],
-      "@@types/*": [
-        "app/types/*"
+      "@typings/*": [
+        "app/typings/*"
       ],
       // extra @ prevents reserved @types namespace conflict
       "@modules/*": [

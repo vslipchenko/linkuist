@@ -9,7 +9,7 @@ import {HomeModule} from '@modules/home/home.module';
 import {SignInModule} from '@modules/sign-in/sign-in.module';
 import {SignUpModule} from '@modules/sign-up/sign-up.module';
 import {UserModule} from '@modules/user/user.module';
-import {BookmarksModule} from '@modules/user/bookmarks/bookmarks.module';
+import {LinkardsModule} from '@modules/user/linkards/linkards.module';
 
 const routes: Routes = [
   {
@@ -21,8 +21,8 @@ const routes: Routes = [
     matcher: urlMatcher([URL_USERNAME_REGEXP, 'bookmarks']),
     canActivate: [AuthenticationCanActivateGuard],
     canLoad: [AuthenticationCanLoadGuard],
-    loadChildren: (): Promise<string | typeof BookmarksModule> =>
-      import('@modules/user/bookmarks/bookmarks.module').then((m) => m.BookmarksModule),
+    loadChildren: (): Promise<string | typeof LinkardsModule> =>
+      import('@modules/user/linkards/linkards.module').then((m) => m.LinkardsModule),
   },
   {
     path: 'sign-in',

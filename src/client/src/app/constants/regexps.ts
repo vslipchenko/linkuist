@@ -16,4 +16,4 @@ export const PASSWORD_SPECIAL_CHARS_POOL = '&$#!@_^%+-';
 export const PASSWORD_REGEXP = RegExp(
   `^(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z${PASSWORD_SPECIAL_CHARS_POOL}]*$`,
 );
-export const BOOKMARK_TAG_LETTER_REGEXP = /[a-zA-Z0-9]/; // TODO russian tags
+export const LINKARD_TAG_LETTER_REGEXP = /[a-zA-Z0-9]/; // TODO russian tags

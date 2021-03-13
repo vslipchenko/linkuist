@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import {parseCliFlagValue} from '../utilities/parsers';
+import {parseCliFlagValue} from '@utilities/parsers';
 import {Secret} from 'jsonwebtoken';
 
 const environment = parseCliFlagValue('env');
@@ -20,4 +20,4 @@ export const {
   ACCESS_JWT_EXPIRES_IN,
   REFRESH_JWT_SECRET_FRAGMENT,
   REFRESH_JWT_EXPIRES_IN,
-} = <ProcessEnvConstants>process.env;
+} = process.env as ProcessEnvConstants;

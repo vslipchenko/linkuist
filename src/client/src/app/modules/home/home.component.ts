@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavigationMainActionType} from '@@types/navigation/navigation.enums';
+import {NavigationMainActionType} from '@typings/navigation/navigation.enums';
 import {AuthenticationService} from '@services/authentication/authentication.service';
 
 @Component({

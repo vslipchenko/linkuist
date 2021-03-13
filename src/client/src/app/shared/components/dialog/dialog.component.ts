@@ -1,8 +1,8 @@
 import {Component, Inject, TemplateRef} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {DialogData} from '@@types/dialog/dialog.interfaces';
+import {DialogData} from '@typings/dialog/dialog.interfaces';
 
-// import {DialogTypes} from '@@types/dialog/dialog.enums';
+// import {DialogTypes} from '@typings/dialog/dialog.enums';
 
 @Component({
   templateUrl: './dialog.component.html',

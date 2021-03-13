@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material/icon';
 import {CUSTOM_ICONS_FOLDER, ICONS, MATERIAL_ICONS_FOLDER} from '@constants/assets';
-import {Icon} from '@@types/assets/assets.interfaces';
+import {Icon} from '@typings/assets/assets.interfaces';
 
 @Component({
   selector: 'app-root',

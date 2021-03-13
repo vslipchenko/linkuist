@@ -5,7 +5,7 @@ export const USERNAME_REGEXP = /^(?=.{1,33}$)[a-z0-9]+([.-]?[a-z0-9]+)*$/;
 // Should have at least one number and one letter
 export const PASSWORD_REGEXP = /^(?=.{8,50}$)(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z&$#!@_^%+-]*$/;
 // export const EMAIL_MAXLENGTH = 254;
-export const BOOKMARK_TAG_LETTER_REGEXP = /[a-zA-Z0-9]/; // TODO russian tags
+export const LINKARD_TAG_LETTER_REGEXP = /[a-zA-Z0-9]/;
 
 // Following describes what tags are used to fetch [metadata]
 // [title] - meta name="title" | meta property="og/twitter:site_name" | meta itemprop="name"

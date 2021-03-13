@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '@shared/components/dialog/dialog.component';
-import {Dialog, DialogData} from '@@types/dialog/dialog.interfaces';
+import {Dialog, DialogData} from '@typings/dialog/dialog.interfaces';
 import {finalize} from 'rxjs/operators';
 import {MatDialogConfig} from '@angular/material/dialog/dialog-config';
 
