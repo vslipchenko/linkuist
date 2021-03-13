@@ -108,8 +108,7 @@
         "@typescript-eslint/consistent-type-assertions": [
           "error",
           {
-            "assertionStyle": "as",
-            "objectLiteralTypeAssertions": "allow-as-parameter"
+            "assertionStyle": "as"
           }
         ],
         "@typescript-eslint/prefer-ts-expect-error": "error",

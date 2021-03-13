@@ -7,6 +7,12 @@
   }
 }
 
+.dialog-small {
+  @include media.above-small {
+    min-width: 30vw;
+  }
+}
+
 .dialog-medium {
   @include media.above-small {
     min-width: 50vw;

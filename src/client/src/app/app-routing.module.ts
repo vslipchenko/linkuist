@@ -13,9 +13,16 @@ import {BookmarksModule} from '@modules/user/bookmarks/bookmarks.module';
 
 const routes: Routes = [
   {
-    path: '',
-    loadChildren: (): Promise<string | typeof HomeModule> =>
-      import('@modules/home/home.module').then((m) => m.HomeModule),
+    matcher: urlMatcher([URL_USERNAME_REGEXP]),
+    loadChildren: (): Promise<string | typeof UserModule> =>
+      import('@modules/user/user.module').then((m) => m.UserModule),
+  },
+  {
+    matcher: urlMatcher([URL_USERNAME_REGEXP, 'bookmarks']),
+    canActivate: [AuthenticationCanActivateGuard],
+    canLoad: [AuthenticationCanLoadGuard],
+    loadChildren: (): Promise<string | typeof BookmarksModule> =>
+      import('@modules/user/bookmarks/bookmarks.module').then((m) => m.BookmarksModule),
   },
   {
     path: 'sign-in',
@@ -28,16 +35,9 @@ const routes: Routes = [
       import('@modules/sign-up/sign-up.module').then((m) => m.SignUpModule),
   },
   {
-    matcher: urlMatcher([URL_USERNAME_REGEXP]),
-    loadChildren: (): Promise<string | typeof UserModule> =>
-      import('@modules/user/user.module').then((m) => m.UserModule),
-  },
-  {
-    matcher: urlMatcher([URL_USERNAME_REGEXP, 'bookmarks']),
-    canActivate: [AuthenticationCanActivateGuard],
-    canLoad: [AuthenticationCanLoadGuard],
-    loadChildren: (): Promise<string | typeof BookmarksModule> =>
-      import('@modules/user/bookmarks/bookmarks.module').then((m) => m.BookmarksModule),
+    path: '',
+    loadChildren: (): Promise<string | typeof HomeModule> =>
+      import('@modules/home/home.module').then((m) => m.HomeModule),
   },
   {path: '**', component: PageNotFoundComponent},
 ];

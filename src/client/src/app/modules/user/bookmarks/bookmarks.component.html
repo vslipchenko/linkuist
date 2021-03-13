@@ -11,7 +11,7 @@
 
 <ng-template #addBookmarkContent>
   <form [formGroup]="addBookmarkForm" class="add-bookmark">
-    <mat-form-field class="link-field">
+    <mat-form-field class="link">
       <mat-label>Link</mat-label>
       <textarea type="url" matInput formControlName="link" required></textarea>
       <mat-error *ngIf="linkField.hasError('required')">Required field</mat-error>
@@ -19,37 +19,42 @@
         >Invalid format, e.g. http://example.com
       </mat-error>
     </mat-form-field>
+    <!--    <mat-form-field>-->
+    <!--      <mat-label>Title</mat-label>-->
+    <!--      <input type="text" matInput formControlName="title" />-->
+    <!--    </mat-form-field>-->
+    <!--    <mat-form-field>-->
+    <!--      <mat-label>Thumbnail url</mat-label>-->
+    <!--      <input-->
+    <!--        type="text"-->
+    <!--        matInput-->
+    <!--        formControlName="image"-->
+    <!--        placeholder="e.g. https://example.com/flower.jpg"-->
+    <!--      />-->
+    <!--    </mat-form-field>-->
+    <!--    <mat-form-field>-->
+    <!--      <mat-label>Icon url</mat-label>-->
+    <!--      <input-->
+    <!--        type="text"-->
+    <!--        matInput-->
+    <!--        formControlName="icon"-->
+    <!--        placeholder="e.g. https://example.com/favicon.ico"-->
+    <!--      />-->
+    <!--    </mat-form-field>-->
     <mat-form-field>
-      <mat-label>Title</mat-label>
-      <input type="text" matInput formControlName="title" />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Thumbnail url</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="image"
-        placeholder="e.g. https://example.com/flower.jpg"
-      />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Icon url</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="icon"
-        placeholder="e.g. https://example.com/favicon.ico"
-      />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Description</mat-label>
+      <mat-label>Note</mat-label>
       <textarea
         type="text"
         matInput
-        formControlName="description"
-        placeholder="Bookmark content's description"
+        formControlName="note"
+        placeholder="Something important..."
       ></textarea>
     </mat-form-field>
+    <!--    <label for="" class="mat-form-field-label">Options</label>-->
+    <div class="options">
+      <mat-slide-toggle formControlName="isPrivate" labelPosition="after">Private</mat-slide-toggle>
+      <mat-slide-toggle formControlName="isPaid" labelPosition="after">Paid</mat-slide-toggle>
+    </div>
     <app-chips
       formControlName="tags"
       label="Tags"
@@ -62,8 +67,6 @@
       [chipLetterValidator]="tagLetterValidator"
       [chipSplitWordBy]="tagSplitWordBy"
     ></app-chips>
-    <label for="" class="mat-form-field-label">Options</label>
-    <mat-slide-toggle formControlName="isPrivate" labelPosition="before">Private</mat-slide-toggle>
   </form>
 </ng-template>
 <ng-template #addBookmarkActions>

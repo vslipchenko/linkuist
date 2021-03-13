@@ -1,6 +1,22 @@
-//@use 'variables' as var;
+@use 'variables' as var;
 //@use 'media';
 
 //mat-dialog-container {
 //  min-width: 50vw;
 //}
+.add-bookmark {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-bookmark .options {
+  margin-bottom: var.$unit-2;
+}
+
+.add-bookmark .options :not(:last-child) {
+  margin-right: var.$unit-2;
+}
+
+.add-bookmark .link {
+  margin-bottom: var.$unit;
+}

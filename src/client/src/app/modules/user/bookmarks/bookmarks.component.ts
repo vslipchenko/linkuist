@@ -10,7 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {ENTER} from '@angular/cdk/keycodes';
-import {BookmarkType} from '@@types/bookmark/bookmark.enums';
+import {BookmarkPrice, BookmarkPrivacy} from '@@types/bookmark/bookmark.enums';
 import {BOOKMARK_TAG_LETTER_REGEXP} from '@constants/regexps';
 import {Chip} from '@@types/chips/chips.interfaces';
 import {UntilDestroy, untilDestroyed} from '@utilities/until-destroy';
@@ -42,8 +42,12 @@ export class BookmarksComponent {
     return this.addBookmarkForm?.get('link');
   }
 
-  public get privateField(): AbstractControl | null | undefined {
+  public get privacyField(): AbstractControl | null | undefined {
     return this.addBookmarkForm?.get('isPrivate');
+  }
+
+  public get priceField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('isPaid');
   }
 
   public get tagsField(): AbstractControl | null | undefined {
@@ -71,10 +75,11 @@ export class BookmarksComponent {
 
   public openAddBookmarkDialog(): void {
     this.initAddBookmarkForm();
-    this.handlePrivateFieldValueChanges();
+    this.handlePrivateFieldValueChange();
+    this.handlePriceFieldValueChange();
 
     this.dialogService.open({
-      panelClass: 'dialog-medium',
+      panelClass: 'dialog-small',
       data: {
         title: 'Add bookmark',
         form: this.addBookmarkForm,
@@ -89,7 +94,7 @@ export class BookmarksComponent {
     if (this.addBookmarkForm?.valid) {
       console.log('Add bookmark value ', this.addBookmarkForm.value);
       const tags = this.tagsField?.value;
-      tags[0] = this.privateField?.value ? BookmarkType.PRIVATE : BookmarkType.PUBLIC; // simplify first element in order to match [String!]! constraint
+      tags[0] = this.privacyField?.value ? BookmarkPrivacy.PRIVATE : BookmarkPrivacy.PUBLIC; // simplify first element in order to match [String!]! constraint
       // debugger;
       // return;
       this.bookmarkService
@@ -107,15 +112,22 @@ export class BookmarksComponent {
     // this.kek = 'awdwd';
     this.addBookmarkForm = this.formBuilder.group({
       link: [null, [Validators.required.bind(this), BookmarksComponent.linkValidator.bind(this)]],
-      title: [null],
-      image: [null],
-      icon: [null],
-      description: [null],
+      // title: [null],
+      // image: [null],
+      // icon: [null],
+      note: [null],
       isPrivate: [false],
+      isPaid: [false],
       tags: [
         [
           {
-            text: BookmarkType.PUBLIC,
+            text: BookmarkPrivacy.PUBLIC,
+            isSelected: true,
+            isRemovable: false,
+            color: 'accent',
+          } as Chip,
+          {
+            text: BookmarkPrice.FREE,
             isSelected: true,
             isRemovable: false,
             color: 'accent',
@@ -137,18 +149,33 @@ export class BookmarksComponent {
     // this.addBookmarkForm = new FormGroup({});
   }
 
-  private handlePrivateFieldValueChanges(): void {
-    this.privateField?.valueChanges
-      .pipe(untilDestroyed(this))
-      .subscribe((hasPrivateAccess: boolean) => {
-        const tags = this.tagsField?.value;
-        tags.forEach((tag: any) => {
-          if (tag.text === (hasPrivateAccess ? BookmarkType.PUBLIC : BookmarkType.PRIVATE)) {
-            tag.text = hasPrivateAccess ? BookmarkType.PRIVATE : BookmarkType.PUBLIC;
-          }
-        });
+  private handlePrivateFieldValueChange(): void {
+    this.privacyField?.valueChanges.pipe(untilDestroyed(this)).subscribe((isPrivate: boolean) => {
+      const tags = this.tagsField?.value;
 
-        this.tagsField?.setValue(tags);
-      });
+      if (isPrivate) {
+        tags[0].text = BookmarkPrivacy.PRIVATE;
+        // reset and disable price field & avoid valueChange trigger
+        tags[1].text = BookmarkPrice.FREE;
+        this.priceField?.setValue(false, {emitEvent: false});
+        this.priceField?.disable({emitEvent: false});
+      } else {
+        tags[0].text = BookmarkPrivacy.PUBLIC;
+        // enable price field & avoid valueChange trigger
+        this.priceField?.enable({emitEvent: false});
+      }
+      tags[0].text = isPrivate ? BookmarkPrivacy.PRIVATE : BookmarkPrivacy.PUBLIC;
+
+      this.tagsField?.setValue(tags);
+    });
+  }
+
+  private handlePriceFieldValueChange(): void {
+    this.priceField?.valueChanges.pipe(untilDestroyed(this)).subscribe((isPaid: boolean) => {
+      const tags = this.tagsField?.value;
+      tags[1].text = isPaid ? BookmarkPrice.PAID : BookmarkPrice.FREE;
+
+      this.tagsField?.setValue(tags);
+    });
   }
 }

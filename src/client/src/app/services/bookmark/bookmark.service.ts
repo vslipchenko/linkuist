@@ -15,15 +15,14 @@ export class BookmarkService {
   public create({
     id,
     link,
-    title,
-    image,
-    icon,
-    description,
+    note,
+    isPrivate,
+    isPaid,
     tags,
   }: BookmarkCreateData): Observable<FetchResult<RecordId>> {
     return this.apollo.mutate({
       mutation: CREATE_BOOKMARK,
-      variables: {input: {id, link, title, image, icon, description, tags}},
+      variables: {input: {id, link, note, isPrivate, isPaid, tags}},
     });
   }
 }
