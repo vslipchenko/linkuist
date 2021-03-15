@@ -1,6 +1,6 @@
 import mongoose, {Schema} from 'mongoose';
-import {ILinkard} from '@typings/linkard/linkard.interfaces';
-import {MongooseDocument, MongooseSchema} from '@typings/mongoose/mongoose.types';
+import {MongooseDocument, MongooseSchema} from '../typings/mongoose/mongoose.types';
+import {ILinkard} from '../typings/linkard/linkard.interfaces';
 
 const linkardSchema = new mongoose.Schema({
   id: {type: Number, required: true, unique: true},

@@ -6,7 +6,7 @@ import express from 'express';
 import {ApolloServer} from 'apollo-server-express';
 
 /* Main */
-const server = new ApolloServer(<ApolloServerExpressConfig>{
+const server = new ApolloServer({
   schema,
   context: ({req}: ExpressContext) => {
     // 'context' is a third argument of a resolver function
@@ -36,7 +36,7 @@ const server = new ApolloServer(<ApolloServerExpressConfig>{
       }
     }
   },
-});
+} as ApolloServerExpressConfig);
 const app = express();
 // Middleware
 //

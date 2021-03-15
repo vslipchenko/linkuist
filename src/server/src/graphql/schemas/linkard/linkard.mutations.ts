@@ -1,14 +1,8 @@
 import {ApolloError, gql} from 'apollo-server-express';
-import {ILinkard} from '@typings/linkard/linkard.interfaces';
-import {authenticationInterceptor} from '@utilities/interceptors';
-import {AccessTokenData} from '@typings/jwt/jwt.interfaces';
-// import { checkDataValidity } from '../../../utilities/validators';
-import {Linkard} from '@models/linkard';
-// import { getNullishProperties } from '../../../utilities/getters';
-// import { fetchUrlMetadata, IgnoreMetadataProperties } from '../../../utilities/url-metadata';
-// import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
-// import {ExpressContext} from 'apollo-server-express/dist/ApolloServer';
-// import {IBookmark} from '../../../types/linkard/linkard.interfaces';
+import {authenticationInterceptor} from '../../../utilities/interceptors';
+import {ILinkard} from '../../../typings/linkard/linkard.interfaces';
+import {AccessTokenData} from '../../../typings/jwt/jwt.interfaces';
+import {Linkard} from '../../../models/linkard';
 
 const createLinkard = (
   _: unknown,

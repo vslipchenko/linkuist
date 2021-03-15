@@ -3,16 +3,16 @@ import {
   ACCESS_JWT_SECRET,
   REFRESH_JWT_EXPIRES_IN,
   REFRESH_JWT_SECRET_FRAGMENT,
-} from '@constants/app';
+} from '../../../constants/app';
 import {ApolloError, gql, UserInputError} from 'apollo-server-express';
 import jwt, {SignOptions} from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import {User} from '@models/user';
-import {IUser} from '@typings/user/user.interfaces';
-import {MongooseDocument, MongooseQueryResult} from '@typings/mongoose/mongoose.types';
-import {RefreshAccessTokenPayload} from '@typings/jwt/jwt.interfaces';
-import {checkDataValidity} from '@utilities/validators';
-import {EMAIL_REGEXP, PASSWORD_REGEXP} from '@constants/regexps';
+import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../../constants/regexps';
+import {User} from '../../../models/user';
+import {IUser} from '../../../typings/user/user.interfaces';
+import {checkDataValidity} from '../../../utilities/validators';
+import {RefreshAccessTokenPayload} from '../../../typings/jwt/jwt.interfaces';
+import {MongooseDocument, MongooseQueryResult} from '../../../typings/mongoose/mongoose.types';
 
 const signIn = (_: unknown, {input}: {input: IUser}): any => {
   const isValidData = checkDataValidity({
