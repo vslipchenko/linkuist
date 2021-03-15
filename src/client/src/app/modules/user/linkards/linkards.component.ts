@@ -1,7 +1,7 @@
 import {Component, TemplateRef, ViewChild} from '@angular/core';
-import {NavigationMainActionType} from '@typings/navigation/navigation.enums';
-import {DialogService} from '@shared/services/dialog/dialog.service';
-// import {DialogTypes} from '@typings/dialog/dialog.enums';
+import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {DialogService} from '~app/shared/services/dialog/dialog.service';
+// import {DialogTypes} from '~app/types/dialog/dialog.enums';
 import {
   AbstractControl,
   FormBuilder,
@@ -10,11 +10,11 @@ import {
   Validators,
 } from '@angular/forms';
 import {ENTER} from '@angular/cdk/keycodes';
-import {LinkardPrice, LinkardPrivacy} from '@typings/linkard/linkard.enums';
-import {LINKARD_TAG_LETTER_REGEXP} from '@constants/regexps';
-import {Chip} from '@typings/chips/chips.interfaces';
-import {UntilDestroy, untilDestroyed} from '@utilities/until-destroy';
-import {LinkardService} from '@services/linkard/linkard.service';
+import {LinkardPrice, LinkardPrivacy} from '~app/types/linkard/linkard.enums';
+import {LINKARD_TAG_LETTER_REGEXP} from '~app/constants/regexps';
+import {Chip} from '~app/types/chips/chips.interfaces';
+import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
+import {LinkardService} from '~app/services/linkard/linkard.service';
 
 @UntilDestroy()
 @Component({

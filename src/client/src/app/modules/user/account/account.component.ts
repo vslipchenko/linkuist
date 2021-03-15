@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from '@services/authentication/authentication.service';
-import {NavigationMainActionType} from '@typings/navigation/navigation.enums';
-import {DialogService} from '@shared/services/dialog/dialog.service';
-// import {DialogTypes} from '@typings/dialog/dialog.enums';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
+import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {DialogService} from '~app/shared/services/dialog/dialog.service';
+// import {DialogTypes} from '~app/types/dialog/dialog.enums';
 
 // TODO Consider visitor instead of profile and member instead of account
 @Component({

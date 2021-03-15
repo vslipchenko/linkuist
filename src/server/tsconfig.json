@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     //    "allowJs": true,
-//    "skipLibCheck": true,
+    //    "skipLibCheck": true,
     "baseUrl": "src",
     "rootDir": "src",
-    "outDir": "dist/out-tsc",
+    "outDir": "dist",
     "strict": true,
     "lib": [
       "es2020",
@@ -15,29 +15,29 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "removeComments": true,
-    "importHelpers": true,
+    "importHelpers": true
     // R.I.P. paths without bundlers https://github.com/TypeStrong/ts-node/issues/138
     // https://github.com/microsoft/TypeScript/issues/10866
 //    "paths": {
-//      "@constants/*": [
-//        "constants/*"
-//      ],
-//      "@graphql/*": [
-//        "graphql/*"
-//      ],
-//      "@models/*": [
-//        "models/*"
-//      ],
-//      "@typings/*": [
-//        "typings/*"
-//      ],
-//      // extra @ prevents reserved @types namespace conflict
-//      "@environments/*": [
-//        "environments/*"
-//      ],
-//      "@utilities/*": [
-//        "utilities/*"
-//      ]
-//    }
+    //      "@constants/*": [
+    //        "constants/*"
+    //      ],
+    //      "@graphql/*": [
+    //        "graphql/*"
+    //      ],
+    //      "@models/*": [
+    //        "models/*"
+    //      ],
+    //      "@types/*": [
+    //        "types/*"
+    //      ],
+    //      // extra @ prevents reserved @types namespace conflict
+    //      "@environments/*": [
+    //        "environments/*"
+    //      ],
+    //      "@utilities/*": [
+    //        "utilities/*"
+    //      ]
+    //    }
   }
 }

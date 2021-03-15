@@ -18,7 +18,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete/autoc
 import {Observable} from 'rxjs';
 import {first, startWith} from 'rxjs/operators';
 import {has as _has} from 'lodash';
-import {UntilDestroy, untilDestroyed} from '@utilities/until-destroy';
+import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 
 // TODO remove chip color directive logic once autocomplete issue fixed
 @UntilDestroy()

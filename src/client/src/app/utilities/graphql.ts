@@ -1,5 +1,5 @@
 import {GraphQLError} from 'graphql';
-import {GraphQLCustomError} from '@typings/graphql/graphql.interfaces';
+import {GraphQLCustomError} from '~app/types/graphql/graphql.interfaces';
 
 export const shapeGraphQLErrors = (
   graphQLErrors: ReadonlyArray<GraphQLError>,

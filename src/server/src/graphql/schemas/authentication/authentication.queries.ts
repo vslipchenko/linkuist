@@ -9,10 +9,10 @@ import jwt, {SignOptions} from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from '../../../constants/regexps';
 import {User} from '../../../models/user';
-import {IUser} from '../../../typings/user/user.interfaces';
+import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
-import {RefreshAccessTokenPayload} from '../../../typings/jwt/jwt.interfaces';
-import {MongooseDocument, MongooseQueryResult} from '../../../typings/mongoose/mongoose.types';
+import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
+import {MongooseDocument, MongooseQueryResult} from '../../../types/mongoose/mongoose.types';
 
 const signIn = (_: unknown, {input}: {input: IUser}): any => {
   const isValidData = checkDataValidity({

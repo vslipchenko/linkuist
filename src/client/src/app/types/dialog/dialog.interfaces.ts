@@ -1,10 +1,10 @@
 // import {MatDialogConfig} from '@angular/material/dialog/dialog-config';
 import {MatDialogRef} from '@angular/material/dialog';
-import {DialogComponent} from '@shared/components/dialog/dialog.component';
+import {DialogComponent} from '~app/shared/components/dialog/dialog.component';
 import {Observable} from 'rxjs';
 import {TemplateRef} from '@angular/core';
 
-// import {DialogTypes} from '@typings/dialog/dialog.enums';
+// import {DialogTypes} from '~app/types/dialog/dialog.enums';
 
 export interface Dialog {
   dialogRef: MatDialogRef<DialogComponent>;

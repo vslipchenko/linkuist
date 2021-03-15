@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '@typings/navigation/navigation.enums';
+import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms';
-import {EMAIL_REGEXP, PASSWORD_REGEXP} from '@constants/regexps';
+import {EMAIL_REGEXP, PASSWORD_REGEXP} from '~app/constants/regexps';
 import {ErrorStateMatcher} from '@angular/material/core';
 import {combineLatest} from 'rxjs';
-import {AuthenticationService} from '@services/authentication/authentication.service';
-import {SnackbarService} from '@shared/services/snackbar/snackbar.service';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
+import {SnackbarService} from '~app/shared/services/snackbar/snackbar.service';
 import {ApolloError} from '@apollo/client/core';
-import {shapeGraphQLErrors} from '@utilities/graphql';
-import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
+import {shapeGraphQLErrors} from '~app/utilities/graphql';
+import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
 

@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {UserSignInData} from '@typings/user/user.interfaces';
+import {UserSignInData} from '~app/types/user/user.interfaces';
 import {Apollo} from 'apollo-angular';
 import {
   ACCESS_TOKEN_BY_REFRESH_TOKEN,
   SIGN_IN,
-} from '@graphql/authentication/authentication.queries';
+} from '~app/graphql/authentication/authentication.queries';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {ApolloQueryResult} from '@apollo/client/core';
 import {
@@ -12,7 +12,7 @@ import {
   AccessTokenQueryResult,
   JwtTokens,
   SignInQueryResult,
-} from '@typings/authentication/authentication.interfaces';
+} from '~app/types/authentication/authentication.interfaces';
 import jwt_decode from 'jwt-decode';
 import {map} from 'rxjs/operators';
 import {Router} from '@angular/router';

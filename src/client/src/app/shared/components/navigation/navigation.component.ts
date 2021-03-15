@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {NavigationMainActionType} from '@typings/navigation/navigation.enums';
-import {AuthenticationService} from '@services/authentication/authentication.service';
+import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
 
 @Component({
   selector: 'app-navigation',

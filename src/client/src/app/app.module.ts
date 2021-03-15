@@ -6,15 +6,15 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {TranslateModule} from '@ngx-translate/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule} from '@angular/material/snack-bar';
-import {SNACKBAR_CONFIG} from '@constants/snackbar';
-import {SharedModule} from '@shared/shared.module';
-import {AuthenticationInterceptor} from '@interceptors/authentication/authentication.interceptor';
-import {GraphQLModule} from '@graphql/graphql.module';
-import {AuthenticationService} from '@services/authentication/authentication.service';
+import {SNACKBAR_CONFIG} from '~app/constants/snackbar';
+import {SharedModule} from '~app/shared/shared.module';
+import {AuthenticationInterceptor} from '~app/interceptors/authentication/authentication.interceptor';
+import {GraphQLModule} from '~app/graphql/graphql.module';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {first} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material/dialog';
-import {DIALOG_CONFIG} from '@constants/dialog';
+import {DIALOG_CONFIG} from '~app/constants/dialog';
 
 @NgModule({
   declarations: [AppComponent],

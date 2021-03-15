@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
-import {AuthenticationService} from '@services/authentication/authentication.service';
+import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {finalize, first} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {extractUsername} from '@utilities/url';
-import {UserService} from '@services/user/user.service';
+import {extractUsername} from '~app/utilities/url';
+import {UserService} from '~app/services/user/user.service';
 
 enum UserComponentToRender {
   ACCOUNT = 'account',

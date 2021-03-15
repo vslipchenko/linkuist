@@ -1,7 +1,7 @@
 import {gql} from 'apollo-server-express';
 import {EMAIL_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
 import {User} from '../../../models/user';
-import {IUser} from '../../../typings/user/user.interfaces';
+import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 
 const userByEmail = (_: unknown, {email}: {email: IUser['email']}): unknown => {

@@ -1,4 +1,4 @@
-import {PASSWORD_MINLENGTH, PASSWORD_SPECIAL_CHARS_POOL} from '@constants/regexps';
+import {PASSWORD_MINLENGTH, PASSWORD_SPECIAL_CHARS_POOL} from '~app/constants/regexps';
 
 function getRandomInt(min: number, max: number): number {
   min = Math.ceil(min);

@@ -1,7 +1,7 @@
 import {ApolloError, gql} from 'apollo-server-express';
 import {authenticationInterceptor} from '../../../utilities/interceptors';
-import {ILinkard} from '../../../typings/linkard/linkard.interfaces';
-import {AccessTokenData} from '../../../typings/jwt/jwt.interfaces';
+import {ILinkard} from '../../../types/linkard/linkard.interfaces';
+import {AccessTokenData} from '../../../types/jwt/jwt.interfaces';
 import {Linkard} from '../../../models/linkard';
 
 const createLinkard = (

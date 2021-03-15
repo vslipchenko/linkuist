@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '@typings/navigation/navigation.enums';
+import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {
   AbstractControl,
   FormBuilder,
@@ -16,15 +16,15 @@ import {
   USERNAME_MAXLENGTH,
   USERNAME_REGEXP,
   USERNAME_SEPARATORS,
-} from '@constants/regexps';
-import {generatePassword} from '@utilities/password';
+} from '~app/constants/regexps';
+import {generatePassword} from '~app/utilities/password';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {SnackbarService} from '@shared/services/snackbar/snackbar.service';
-import {UserService} from '@services/user/user.service';
+import {SnackbarService} from '~app/shared/services/snackbar/snackbar.service';
+import {UserService} from '~app/services/user/user.service';
 import {finalize, map} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
-import {AuthenticationService} from '@services/authentication/authentication.service';
+import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {Observable} from 'rxjs';
 
 // TODO unsubscribe decorator

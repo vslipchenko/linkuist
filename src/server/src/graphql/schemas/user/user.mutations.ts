@@ -3,9 +3,9 @@ import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
 import {EMAIL_REGEXP, PASSWORD_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
 import {User} from '../../../models/user';
-import {IUser} from '../../../typings/user/user.interfaces';
+import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
-import {MongooseDocument} from '../../../typings/mongoose/mongoose.types';
+import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
 
 /* Resolver declarations */
 const createUser = (

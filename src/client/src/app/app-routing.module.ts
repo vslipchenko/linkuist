@@ -1,43 +1,43 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {urlMatcher} from '@utilities/url';
-import {PageNotFoundComponent} from '@shared/components/page-not-found/page-not-found.component';
-import {AuthenticationCanActivateGuard} from '@guards/authentication/can-activate/authentication.guard';
-import {AuthenticationCanLoadGuard} from '@guards/authentication/can-load/authentication.guard';
-import {URL_USERNAME_REGEXP} from '@constants/regexps';
-import {HomeModule} from '@modules/home/home.module';
-import {SignInModule} from '@modules/sign-in/sign-in.module';
-import {SignUpModule} from '@modules/sign-up/sign-up.module';
-import {UserModule} from '@modules/user/user.module';
-import {LinkardsModule} from '@modules/user/linkards/linkards.module';
+import {urlMatcher} from '~app/utilities/url';
+import {PageNotFoundComponent} from '~app/shared/components/page-not-found/page-not-found.component';
+import {AuthenticationCanActivateGuard} from '~app/guards/authentication/can-activate/authentication.guard';
+import {AuthenticationCanLoadGuard} from '~app/guards/authentication/can-load/authentication.guard';
+import {URL_USERNAME_REGEXP} from '~app/constants/regexps';
+import {HomeModule} from '~app/modules/home/home.module';
+import {SignInModule} from '~app/modules/sign-in/sign-in.module';
+import {SignUpModule} from '~app/modules/sign-up/sign-up.module';
+import {UserModule} from '~app/modules/user/user.module';
+import {LinkardsModule} from '~app/modules/user/linkards/linkards.module';
 
 const routes: Routes = [
   {
     matcher: urlMatcher([URL_USERNAME_REGEXP]),
     loadChildren: (): Promise<string | typeof UserModule> =>
-      import('@modules/user/user.module').then((m) => m.UserModule),
+      import('~app/modules/user/user.module').then((m) => m.UserModule),
   },
   {
     matcher: urlMatcher([URL_USERNAME_REGEXP, 'bookmarks']),
     canActivate: [AuthenticationCanActivateGuard],
     canLoad: [AuthenticationCanLoadGuard],
     loadChildren: (): Promise<string | typeof LinkardsModule> =>
-      import('@modules/user/linkards/linkards.module').then((m) => m.LinkardsModule),
+      import('~app/modules/user/linkards/linkards.module').then((m) => m.LinkardsModule),
   },
   {
     path: 'sign-in',
     loadChildren: (): Promise<string | typeof SignInModule> =>
-      import('@modules/sign-in/sign-in.module').then((m) => m.SignInModule),
+      import('~app/modules/sign-in/sign-in.module').then((m) => m.SignInModule),
   },
   {
     path: 'sign-up',
     loadChildren: (): Promise<string | typeof SignUpModule> =>
-      import('@modules/sign-up/sign-up.module').then((m) => m.SignUpModule),
+      import('~app/modules/sign-up/sign-up.module').then((m) => m.SignUpModule),
   },
   {
     path: '',
     loadChildren: (): Promise<string | typeof HomeModule> =>
-      import('@modules/home/home.module').then((m) => m.HomeModule),
+      import('~app/modules/home/home.module').then((m) => m.HomeModule),
   },
   {path: '**', component: PageNotFoundComponent},
 ];

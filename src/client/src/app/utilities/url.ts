@@ -1,5 +1,5 @@
 import {UrlMatchResult, UrlSegment} from '@angular/router';
-import {URL_USERNAME_REGEXP} from '@constants/regexps';
+import {URL_USERNAME_REGEXP} from '~app/constants/regexps';
 
 // export const userPageUrlMatcher = (segments: UrlSegment[]): UrlMatchResult | null => {
 //   const hasOnlyOneSegment = segments.length === 1;

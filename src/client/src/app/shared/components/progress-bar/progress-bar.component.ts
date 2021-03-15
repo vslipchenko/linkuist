@@ -9,10 +9,10 @@ import {
   RouterEvent,
 } from '@angular/router';
 import {ProgressBarMode} from '@angular/material/progress-bar/progress-bar';
-import {ProgressBarService} from '@shared/services/progress-bar/progress-bar.service';
+import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {ThemePalette} from '@angular/material/core/common-behaviors/color';
-import {SnackbarService} from '@shared/services/snackbar/snackbar.service';
-import {SNACKBAR_CONFIG} from '@constants/snackbar';
+import {SnackbarService} from '~app/shared/services/snackbar/snackbar.service';
+import {SNACKBAR_CONFIG} from '~app/constants/snackbar';
 import {DOCUMENT} from '@angular/common';
 
 @Component({

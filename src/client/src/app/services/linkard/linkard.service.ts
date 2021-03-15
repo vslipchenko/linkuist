@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Apollo} from 'apollo-angular';
-import {CREATE_LINKARD} from '@graphql/linkard/linkard.mutations';
+import {CREATE_LINKARD} from '~app/graphql/linkard/linkard.mutations';
 import {Observable} from 'rxjs';
 import {FetchResult} from '@apollo/client/core';
-import {RecordId} from '@typings/graphql/graphql.interfaces';
-import {LinkardCreateData} from '@typings/linkard/linkard.interfaces';
+import {RecordId} from '~app/types/graphql/graphql.interfaces';
+import {LinkardCreateData} from '~app/types/linkard/linkard.interfaces';
 
 @Injectable({
   providedIn: 'root',
