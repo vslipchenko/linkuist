@@ -15,8 +15,8 @@ import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
 import {MongooseDocument, MongooseQueryResult} from '../../../types/mongoose/mongoose.types';
 
 const signIn = (_: unknown, {input}: {input: IUser}): any => {
-  const isValidData = checkDataValidity({
-    input,
+  const [isValidData] = checkDataValidity({
+    data: input,
     pattern: {
       email: EMAIL_REGEXP,
       password: PASSWORD_REGEXP,

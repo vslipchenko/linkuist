@@ -12,8 +12,8 @@ const createUser = (
   _: unknown,
   {input}: {input: IUser},
 ): Promise<MongooseDocument<IUser>> | void => {
-  const isValidData = checkDataValidity({
-    input,
+  const [isValidData] = checkDataValidity({
+    data: input,
     pattern: {
       email: EMAIL_REGEXP,
       username: USERNAME_REGEXP,

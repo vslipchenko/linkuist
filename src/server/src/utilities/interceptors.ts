@@ -1,30 +1,31 @@
 import {ApolloError} from 'apollo-server-express';
 import {ACCESS_JWT_SECRET} from '../constants/app';
-import jwt from 'jsonwebtoken';
+import jwt, {TokenExpiredError} from 'jsonwebtoken';
 import {AccessTokenData} from '../types/jwt/jwt.interfaces';
 
-export const authenticationInterceptor = <C = unknown>(
+interface AuthenticationInterceptorResult {
+  error?: ApolloError;
+  tokenData?: AccessTokenData;
+}
+
+export const authenticationInterceptor = (
   accessToken: string,
-  successCallback: (tokenData: AccessTokenData) => C,
-): ApolloError | Promise<ApolloError | C> => {
-  if (!accessToken) {
-    return new ApolloError('', 'ACCESS_TOKEN_EMPTY');
-  }
-
-  return new Promise((resolve, reject) => {
-    let tokenData;
-
-    try {
-      tokenData = jwt.verify(accessToken, ACCESS_JWT_SECRET) as AccessTokenData;
-    } catch (error) {
-      // The only legit error
-      if (error.name === 'TokenExpiredError') {
-        return reject(new ApolloError('', 'ACCESS_TOKEN_EXPIRED'));
-      } else {
-        return reject(new ApolloError('', 'ACCESS_TOKEN_INVALID'));
-      }
+): Promise<AuthenticationInterceptorResult> => {
+  return new Promise((resolve) => {
+    if (!accessToken) {
+      return resolve({error: new ApolloError('', 'ACCESS_TOKEN_EMPTY')});
     }
 
-    return resolve(successCallback(tokenData));
+    try {
+      const tokenData = jwt.verify(accessToken, ACCESS_JWT_SECRET) as AccessTokenData;
+      resolve({tokenData});
+    } catch (error) {
+      // The only legit error
+      if (error instanceof TokenExpiredError) {
+        return resolve({error: new ApolloError('', 'ACCESS_TOKEN_EXPIRED')});
+      } else {
+        return resolve({error: new ApolloError('', 'ACCESS_TOKEN_INVALID')});
+      }
+    }
   });
 };
