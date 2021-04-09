@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {
   AbstractControl,
@@ -31,6 +31,7 @@ import {Observable} from 'rxjs';
 @Component({
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpComponent implements OnInit {
   public hidePassword = true;

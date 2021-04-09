@@ -1,9 +1,44 @@
 @use 'variables' as var;
-//@use 'media';
+@use 'media';
 
 //mat-dialog-container {
 //  min-width: 50vw;
 //}
+.linkards {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: var.$unit-3;
+
+  @include media.zero-small {
+    justify-content: center;
+  }
+  //padding-top: var.$unit-3;
+}
+
+.linkard {
+  //align-items: flex-start;
+  //display: flex;
+  //justify-content: center;
+  //margin-bottom: var.$unit-3;
+  //margin-left: var.$unit-3;
+  //margin-right: var.$unit-3;
+  margin: 0 var.$unit-3 var.$unit-3;
+
+  //@include media.zero-small {
+  //  margin: var.$unit-3;
+  //}
+
+  @include media.small-huge {
+    width: calc(50% - #{var.$unit-6});
+    //margin: 0 var.$unit-3 var.$unit-3;
+  }
+
+  @include media.above-huge {
+    width: calc(25% - #{var.$unit-6});
+    //margin: 0 var.$unit-3 var.$unit-3;
+  }
+}
+
 .add-bookmark {
   display: flex;
   flex-direction: column;

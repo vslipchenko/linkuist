@@ -1,9 +1,11 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
   OnInit,
+  Optional,
   ViewChild,
 } from '@angular/core';
 import {
@@ -26,10 +28,6 @@ import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
   selector: 'app-chips',
   templateUrl: './chips.component.html',
   styleUrls: ['./chips.component.scss'],
-  // viewProviders: [{
-  //   provide: ControlContainer,
-  //   useExisting: FormGroupDirective
-  // }],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -41,6 +39,7 @@ import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 })
 export class ChipsComponent implements OnInit, ControlValueAccessor {
   // General
+  @Input() public chips: Array<any> | undefined;
   @Input() public formControlName: string | undefined;
   @Input() public formControl: FormControl | undefined;
   @Input() public label: string | undefined;
@@ -60,13 +59,18 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   @Input() public autocompleteOptions: Array<unknown> | undefined;
   @Input() public cacheAutocompleteOptions: boolean | undefined;
   // Hints
-  @Input() public leftHint: string | undefined;
-  @Input() public rightHint: string | undefined;
+  @Input() public leftHint = '';
+  @Input() public rightHint = '';
 
   @ViewChild('chipInput') public inputElementRef: ElementRef<HTMLInputElement> | undefined;
-  public areAutocompleteOptionsLoading: boolean | undefined;
+  // @ViewChild('chipList') public test: MatChipList | undefined;
+  public areAutocompleteOptionsLoading = false;
+  public chips$: Observable<Array<any>> | undefined;
 
-  public constructor(private readonly controlContainer: ControlContainer) {}
+  public constructor(
+    @Optional() private readonly controlContainer: ControlContainer,
+    private readonly changeDetector: ChangeDetectorRef,
+  ) {}
 
   @Input() public onAutocompleteOptionSelect: (
     event: MatAutocompleteSelectedEvent,
@@ -75,8 +79,15 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   public ngOnInit(): void {
     // get control by name if not control itself passed
     if (!this.formControl && this.formControlName) {
+      // debugger;
       this.formControl = this.controlContainer.control?.get(this.formControlName) as FormControl;
+      // return;
+    } else {
+      this.formControl = new FormControl(this.chips);
     }
+
+    this.chips$ = this.formControl.valueChanges.pipe(startWith(this.formControlValue));
+    this.changeDetector.detectChanges();
   }
 
   public writeValue(chips: Array<any> | undefined): void {
@@ -84,8 +95,6 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     chips = this.removeChipDuplicates(this.tuneRecentChip(chips));
     this.formControl?.setValue(chips, {emitModelToViewChange: false});
     this.resetChipInput();
-
-    console.log(this.chips);
   }
 
   public registerOnChange(): void {}
@@ -95,7 +104,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   public removeChip(event: MatChipEvent): void {
     const text = event.chip.value.trim();
     this.writeValue(
-      this.chips?.filter((chip) =>
+      this.formControlValue?.filter((chip) =>
         // debugger;
         chip.text ? chip.text !== text : chip !== text,
       ),
@@ -105,7 +114,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
 
   public appendChip(event: MatChipInputEvent): void {
     // this.updateChips(event.value);
-    const updatedChips = this.chips?.concat(event.value);
+    const updatedChips = this.formControlValue?.concat(event.value);
     // this.formControl.setValue(updatedChips);
     this.writeValue(updatedChips);
   }
@@ -151,11 +160,7 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
     property: string,
     defaultValue: unknown,
   ): unknown {
-    if (_has(source, property)) {
-      return source[property];
-    } else {
-      return defaultValue;
-    }
+    return _has(source, property) ? source[property] : defaultValue;
   }
 
   private removeChipDuplicates(chips: Array<any> | undefined): Array<any> | undefined {
@@ -209,16 +214,15 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   }
 
   private resetChipInput(): void {
-    if (this.inputElementRef) {
-      this.inputElementRef.nativeElement.value = '';
-    }
+    if (this.inputElementRef) this.inputElementRef.nativeElement.value = '';
   }
 
-  public get chips(): Array<any> | undefined {
+  public get formControlValue(): Array<any> | undefined {
     return this.formControl?.value;
   }
 
-  public get chips$(): Observable<Array<any>> | undefined {
-    return this.formControl?.valueChanges?.pipe(startWith(this.chips));
-  }
+  // TODO make a class variable
+  // public get chips$(): Observable<Array<any>> | undefined {
+  //   return this.formControl?.valueChanges?.pipe(startWith(this.chipsControlValue || this.chips));
+  // }
 }

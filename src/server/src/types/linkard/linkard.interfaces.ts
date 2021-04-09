@@ -1,3 +1,5 @@
+import {FetchedMetadata} from '../../utilities/url-metadata';
+
 export interface ILinkard {
   id: number; // = new Date().getTime()
   userId: string;
@@ -6,4 +8,5 @@ export interface ILinkard {
   isPrivate: boolean;
   isPaid: boolean;
   tags: string;
+  metadata: FetchedMetadata;
 }

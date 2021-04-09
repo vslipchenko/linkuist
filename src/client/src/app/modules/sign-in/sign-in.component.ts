@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms';
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from '~app/constants/regexps';
@@ -15,6 +15,7 @@ import {finalize} from 'rxjs/operators';
 @Component({
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInComponent implements OnInit {
   public signInForm: FormGroup | undefined;

@@ -26,7 +26,7 @@ export type IgnoreMetadataProperties = Array<keyof typeof MetadataElements>;
 
 type FetchMetadataOptions = Required<Pick<RequestOptions, 'headers' | 'timeout'>>;
 
-type FetchedMetadata = Metadata | Partial<Metadata>;
+export type FetchedMetadata = Partial<Metadata>;
 
 type ResponseResults = Array<{url: URL; data: string}>;
 
@@ -354,8 +354,8 @@ export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> =>
 // !x push images and icons into array -> leave the first one that responds 200 OK
 // !x cut off everything after the </head> tag
 // x check with encoded uris
-fetchUrlMetadata(
-  'http://twitter.com/Twitter?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor',
-)
-  .then((v) => console.log('FS ', v))
-  .catch((e) => console.error('FE ', e));
+// fetchUrlMetadata(
+//   'http://twitter.com/Twitter?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor',
+// )
+//   .then((v) => console.log('FS ', v))
+//   .catch((e) => console.error('FE ', e));

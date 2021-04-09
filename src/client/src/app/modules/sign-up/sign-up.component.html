@@ -12,7 +12,7 @@
           type="email"
         />
         <mat-hint *ngIf="!emailField?.value" align="start">Should be unique</mat-hint>
-        <mat-hint align="end">{{ emailField?.value?.length }} / {{ emailMaxLength }}</mat-hint>
+        <!--        <mat-hint align="end">{{ emailField?.value?.length }} / {{ emailMaxLength }}</mat-hint>-->
 
         <mat-error *ngIf="emailField?.hasError('required')">Required field</mat-error>
         <mat-error *ngIf="emailField?.hasError('pattern')">Invalid email format</mat-error>

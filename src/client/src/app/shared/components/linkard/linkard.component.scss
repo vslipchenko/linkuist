@@ -1,0 +1,125 @@
+@use 'variables' as var;
+@use 'media';
+
+.linkard-card {
+  background-color: var.$theme-light;
+  border: 1px solid var.$theme-light-darkest;
+  //max-width: 400px;
+  padding: var.$unit-2;
+}
+
+.linkard-card .header {
+  margin-bottom: var.$unit-2;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+}
+
+.favicon {
+  margin-right: var.$unit-2;
+}
+
+.linkard-card .favicon {
+  height: 16px;
+  width: 16px;
+}
+
+.linkard-card .image {
+  margin: 0 -#{var.$unit-2} var.$unit-2; // linter
+  width: calc(100% + #{var.$unit-2} * 2);
+}
+
+.linkard-card .description {
+  margin-bottom: var.$unit-2;
+  max-height: 80px;
+  overflow: hidden;
+  position: relative;
+}
+
+.linkard-card .description.tease::after {
+  box-shadow: inset 0 -30px 30px 0 rgb(255 255 255 / 75%);
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.linkard-card .actions {
+  text-align: center;
+}
+
+// Dialog
+.linkard-dialog {
+  max-height: inherit;
+
+  @include media.zero-huge {
+    overflow: auto;
+  }
+
+  @include media.above-huge {
+    display: flex;
+  }
+}
+
+.linkard-dialog .image {
+  height: inherit;
+  min-width: 45%;
+  width: 45%;
+
+  @include media.zero-huge {
+    min-width: 100%;
+    width: 100%;
+  }
+
+  @include media.above-huge {
+    min-width: 45%;
+    width: 45%;
+  }
+}
+
+.linkard-dialog .favicon {
+  max-height: 32px;
+  max-width: 32px;
+}
+
+.linkard-dialog .header,
+.linkard-dialog .description {
+  //margin-bottom: var.$unit-4;
+
+  @include media.zero-huge {
+    margin-bottom: var.$unit-3;
+  }
+
+  @include media.above-huge {
+    margin-bottom: var.$unit-4;
+  }
+}
+
+.linkard-dialog .content {
+  @include media.zero-huge {
+    padding: var.$unit-3;
+  }
+
+  @include media.above-huge {
+    overflow: auto;
+    padding: var.$unit-4;
+  }
+}
+
+.tags-label {
+  display: block;
+
+  margin-bottom: var.$unit-half;
+}
+
+//.linkard-dialog .content {
+//  display: flex;
+//}
+
+//.linkard-dialog .image {
+//  margin-right: var.$unit-5;
+//}

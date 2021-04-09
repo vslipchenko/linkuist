@@ -38,22 +38,6 @@ export class LinkardsComponent {
     private readonly formBuilder: FormBuilder,
   ) {}
 
-  public get linkField(): AbstractControl | null | undefined {
-    return this.addBookmarkForm?.get('link');
-  }
-
-  public get privacyField(): AbstractControl | null | undefined {
-    return this.addBookmarkForm?.get('isPrivate');
-  }
-
-  public get priceField(): AbstractControl | null | undefined {
-    return this.addBookmarkForm?.get('isPaid');
-  }
-
-  public get tagsField(): AbstractControl | null | undefined {
-    return this.addBookmarkForm?.get('tags');
-  }
-
   public get navigationMainActionType(): NavigationMainActionType {
     return NavigationMainActionType.PROFILE;
   }
@@ -85,6 +69,7 @@ export class LinkardsComponent {
         form: this.addBookmarkForm,
         contentTemplateRef: this.addBookmarkContent,
         actionsTemplateRef: this.addBookmarkActions,
+        // statusChanges$: this.addBookmarkForm?.statusChanges,
       },
     });
   }
@@ -92,9 +77,11 @@ export class LinkardsComponent {
   public addBookmark(): void {
     this.addBookmarkForm?.markAllAsTouched();
     if (this.addBookmarkForm?.valid) {
+      this.dialogService.close();
       console.log('Add linkard value ', this.addBookmarkForm.value);
-      const tags = this.tagsField?.value;
-      tags[0] = this.privacyField?.value ? LinkardPrivacy.PRIVATE : LinkardPrivacy.PUBLIC; // simplify first element in order to match [String!]! constraint
+      const tags = this.tagsField?.value.map((tag: any) => tag.value); // Array<string>
+      tags[0] = tags[0] ? LinkardPrivacy.PRIVATE : LinkardPrivacy.PUBLIC; // simplify first element in order to match [String!]! constraint
+      tags[1] = tags[1] ? LinkardPrice.PAID : LinkardPrice.FREE; // simplify first element in order to match [String!]! constraint
       // debugger;
       // return;
       this.bookmarkService
@@ -177,5 +164,21 @@ export class LinkardsComponent {
 
       this.tagsField?.setValue(tags);
     });
+  }
+
+  public get linkField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('link');
+  }
+
+  public get privacyField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('isPrivate');
+  }
+
+  public get priceField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('isPaid');
+  }
+
+  public get tagsField(): AbstractControl | null | undefined {
+    return this.addBookmarkForm?.get('tags');
   }
 }

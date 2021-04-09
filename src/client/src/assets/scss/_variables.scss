@@ -35,8 +35,8 @@ $font-size-small: 0.5rem;
 /* responsive breakpoints and unit interval */
 $breakpoint-small: 568px; // < portrait phones, > landscape phones
 $breakpoint-medium: 768px; // > tablets
-$breakpoint-large: 992px; // > laptops, desktops
-$breakpoint-huge: 1200px; // > large desktops
+$breakpoint-large: 992px; // > large tablets, laptops, desktops
+$breakpoint-huge: 1200px; // > laptops, desktops
 $unit-interval-px: 1;
 //$unit-interval-em: 0.01;
 //$unit-interval-rem: 0.1;

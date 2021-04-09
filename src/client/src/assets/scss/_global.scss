@@ -18,8 +18,13 @@ body {
 
 html,
 body {
-  font-size: var.$font-size-root;
   height: 100%;
+}
+
+html,
+body,
+.as-text {
+  font-size: var.$font-size-root;
 }
 
 html,

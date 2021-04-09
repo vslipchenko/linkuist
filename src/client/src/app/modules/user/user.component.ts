@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {finalize, first} from 'rxjs/operators';
@@ -14,6 +14,7 @@ enum UserComponentToRender {
 @Component({
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnInit {
   public componentToRender: UserComponentToRender | undefined;

@@ -17,6 +17,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {LinkardComponent} from './components/linkard/linkard.component';
 
 @NgModule({
   declarations: [
@@ -26,8 +27,15 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     PageNotFoundComponent,
     DialogComponent,
     ChipsComponent,
+    LinkardComponent,
   ],
-  exports: [NavigationComponent, ProgressBarComponent, ChipsComponent],
+  exports: [
+    NavigationComponent,
+    ProgressBarComponent,
+    ChipsComponent,
+    LinkardComponent,
+    WrapIfDirective,
+  ],
   imports: [
     CommonModule,
     MatIconModule,

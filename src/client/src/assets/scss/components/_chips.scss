@@ -1,0 +1,15 @@
+.autocomplete-spinner .mat-option-text {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  transform: scale(0.25);
+}
+
+.chips-no-spacing .mat-form-field-infix {
+  border-top: 0;
+  padding: 0;
+}
+
+.chips-no-spacing .mat-form-field-wrapper {
+  padding-bottom: 0;
+}

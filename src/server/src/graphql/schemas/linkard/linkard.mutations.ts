@@ -2,6 +2,7 @@ import {gql} from 'apollo-server-express';
 import {authenticationInterceptor} from '../../../utilities/interceptors';
 import {ILinkard} from '../../../types/linkard/linkard.interfaces';
 import {Linkard} from '../../../models/linkard';
+import {fetchUrlMetadata} from '../../../utilities/url-metadata';
 
 const createLinkard = async (
   _: unknown,
@@ -26,12 +27,12 @@ const createLinkard = async (
 
   // const nullishProperties = getNullishProperties<IgnoreMetadataProperties>(input, ['title', 'description', 'image', 'icon']);
 
-  // const metadata = await fetchUrlMetadata(input.link, nullishProperties);
+  const metadata = await fetchUrlMetadata(input.link);
 
   // return new Promise((resolve) => resolve);
   return Linkard.create({
     ...input,
-    // ...metadata,
+    metadata,
     userId: tokenData.userId,
   });
 };

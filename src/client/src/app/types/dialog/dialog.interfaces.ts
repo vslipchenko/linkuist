@@ -3,6 +3,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '~app/shared/components/dialog/dialog.component';
 import {Observable} from 'rxjs';
 import {TemplateRef} from '@angular/core';
+// import {MatDialogConfig} from '@angular/material/dialog/dialog-config';
 
 // import {DialogTypes} from '~app/types/dialog/dialog.enums';
 
@@ -20,9 +21,10 @@ export interface Dialog {
 //   // [P in keyof MatDialogConfig]: MatDialogConfig[P];
 // }
 
-export interface DialogData {
+export interface DialogConfig {
   // dialogType: DialogTypes;
-  title: string;
+  autoFocus?: boolean;
+  title?: string;
   contentTemplateRef?: TemplateRef<unknown>;
   actionsTemplateRef?: TemplateRef<unknown>;
   [key: string]: unknown;

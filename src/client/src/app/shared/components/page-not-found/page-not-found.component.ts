@@ -1,10 +1,11 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 
 @Component({
   templateUrl: './page-not-found.component.html',
   styleUrls: ['./page-not-found.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageNotFoundComponent {
   public constructor(private readonly authenticationService: AuthenticationService) {}

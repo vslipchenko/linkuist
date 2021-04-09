@@ -18,7 +18,7 @@ const routes: Routes = [
       import('~app/modules/user/user.module').then((m) => m.UserModule),
   },
   {
-    matcher: urlMatcher([URL_USERNAME_REGEXP, 'bookmarks']),
+    matcher: urlMatcher([URL_USERNAME_REGEXP, 'linkards']),
     canActivate: [AuthenticationCanActivateGuard],
     canLoad: [AuthenticationCanLoadGuard],
     loadChildren: (): Promise<string | typeof LinkardsModule> =>

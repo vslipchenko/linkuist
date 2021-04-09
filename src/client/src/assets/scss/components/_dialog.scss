@@ -7,6 +7,13 @@
   }
 }
 
+.dialog-no-spacing .mat-dialog-container,
+.dialog-no-spacing .mat-dialog-content {
+  margin: 0;
+  overflow: visible;
+  padding: 0;
+}
+
 .dialog-small {
   @include media.above-small {
     min-width: 30vw;

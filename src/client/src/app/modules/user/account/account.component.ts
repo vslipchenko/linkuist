@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
-import {DialogService} from '~app/shared/services/dialog/dialog.service';
+// import {DialogService} from '~app/shared/services/dialog/dialog.service';
 // import {DialogTypes} from '~app/types/dialog/dialog.enums';
 
 // TODO Consider visitor instead of profile and member instead of account
@@ -9,11 +9,11 @@ import {DialogService} from '~app/shared/services/dialog/dialog.service';
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent implements OnInit {
   public constructor(
-    private readonly authenticationService: AuthenticationService,
-    private readonly dialogService: DialogService,
+    private readonly authenticationService: AuthenticationService, // private readonly dialogService: DialogService,
   ) {}
 
   public ngOnInit(): void {

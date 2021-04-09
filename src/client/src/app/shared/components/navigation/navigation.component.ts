@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 
@@ -6,6 +6,7 @@ import {AuthenticationService} from '~app/services/authentication/authentication
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent {
   // private readonly defaultConfiguration: NavigationConfiguration = {

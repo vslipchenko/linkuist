@@ -1,0 +1,192 @@
+<article class="linkard-card">
+  <header class="header">
+    <img
+      class="favicon"
+      src="https://res.cloudinary.com/practicaldev/image/fetch/s--E8ak4Hr1--/c_limit,f_auto,fl_progressive,q_auto,w_32/https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico"
+      alt=""
+    />
+    <h2 class="as-text">YouTube</h2>
+  </header>
+  <img class="image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+  <p
+    #description
+    class="description"
+    [class.tease]="description.scrollHeight > description.clientHeight"
+  >
+    The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan. A
+    small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+    bred for hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of
+    dog from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu
+    was originally bred for hunting. The Shiba Inu is the smallest of the six original and distinct
+    spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous
+    terrain, the Shiba Inu was originally bred for hunting.
+  </p>
+  <footer class="actions">
+    <button mat-button color="primary" (click)="openCard()">SHOW</button>
+  </footer>
+</article>
+
+<ng-template #openedCardContent>
+  <article class="linkard-dialog">
+    <!--    <div class="aside">-->
+    <!--    </div>-->
+    <img class="image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+    <div class="content">
+      <header class="header">
+        <img
+          class="favicon"
+          src="https://res.cloudinary.com/practicaldev/image/fetch/s--E8ak4Hr1--/c_limit,f_auto,fl_progressive,q_auto,w_32/https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico"
+          alt=""
+        />
+        <h2>YouTube</h2>
+      </header>
+      <p class="description">
+        <strong>Description:</strong> The Shiba Inu is the smallest of the six original and distinct
+        spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous
+        terrain, the Shiba Inu was originally bred for hunting. The Shiba Inu is the smallest of the
+        six original and distinct spitz breeds of dog from Japan. A small, agile dog that copes very
+        well with mountainous terrain, the Shiba Inu was originally bred for hunting. The Shiba Inu
+        is the smallest of the six original and distinct spitz breeds of dog from Japan. A small,
+        agile dog that copes very well with mountainous terrain, the Shiba Inu was originally bred
+        for hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of
+        dog from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba
+        Inu was originally bred for hunting. The Shiba Inu is the smallest of the six original and
+        distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with
+        mountainous terrain, the Shiba Inu was originally bred for hunting. The Shiba Inu is the
+        smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog
+        that copes very well with mountainous terrain, the Shiba Inu was originally bred for
+        hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog
+        from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu
+        was originally bred for hunting. The Shiba Inu is the smallest of the six original and
+        distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with
+        mountainous terrain, the Shiba Inu was originally bred for hunting. The Shiba Inu is the
+        smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog
+        that copes very well with mountainous terrain, the Shiba Inu was originally bred for
+        hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog
+        from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu
+        was originally bred for hunting. The Shiba Inu is the smallest of the six original and
+        distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with
+        mountainous terrain, the Shiba Inu was originally bred for hunting. The Shiba Inu is the
+        smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog
+        that copes very well with mountainous terrain, the Shiba Inu was originally bred for
+        hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog
+        from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu
+        was originally bred for hunting. The Shiba Inu is the smallest of the six original and
+        distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with
+        mountainous terrain, the Shiba Inu was originally bred for hunting. The Shiba Inu is the
+        smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog
+        that copes very well with mountainous terrain, the Shiba Inu was originally bred for
+        hunting. The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog
+        from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu
+        was originally bred for hunting. The Shiba Inu is the smallest of the six original and
+        distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with
+        mountainous terrain, the Shiba Inu was originally bred for hunting. The Shiba Inu is the
+        smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog
+        that copes very well with mountainous terrain, the Shiba Inu was originally bred for
+        hunting.
+      </p>
+      <div class="tags">
+        <strong class="tags-label">Tags:</strong>
+        <app-chips
+          class="chips-no-spacing"
+          [isInputAvailable]="false"
+          [chips]="[
+            {
+              text: 'test1',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            },
+            {
+              text: 'test2',
+              isSelected: true,
+              isRemovable: false,
+              color: 'accent'
+            }
+          ]"
+        ></app-chips>
+      </div>
+    </div>
+  </article>
+</ng-template>
+<!--<ng-template #openedCardActions>-->
+<!--  <button mat-dialog-close mat-stroked-button>Close</button>-->
+<!--</ng-template>-->
