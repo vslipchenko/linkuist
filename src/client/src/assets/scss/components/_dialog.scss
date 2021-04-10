@@ -15,16 +15,20 @@
 }
 
 .dialog-small {
-  @include media.above-small {
+  @include media.small-huge {
+    min-width: 50vw;
+  }
+
+  @include media.above-huge {
     min-width: 30vw;
   }
 }
 
-.dialog-medium {
-  @include media.above-small {
-    min-width: 50vw;
-  }
-}
+//.dialog-medium {
+//  @include media.above-small {
+//    min-width: 50vw;
+//  }
+//}
 
 .dialog .mat-dialog-actions .mat-button-base + .mat-button-base,
 .dialog .mat-dialog-actions .mat-mdc-button-base + .mat-mdc-button-base {

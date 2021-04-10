@@ -1,2 +1,4 @@
-<app-account *ngIf="componentToRender === userComponentToRender.ACCOUNT"></app-account>
-<app-profile *ngIf="componentToRender === userComponentToRender.PROFILE"></app-profile>
+<app-account
+  *ngIf="componentToRender === userComponentToRender.ACCOUNT; else profile"
+></app-account>
+<ng-template #profile><app-profile></app-profile></ng-template>
