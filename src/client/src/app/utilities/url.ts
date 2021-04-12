@@ -1,33 +1,39 @@
 import {UrlMatchResult, UrlSegment} from '@angular/router';
 import {URL_USERNAME_REGEXP} from '~app/constants/regexps';
 
-// export const userPageUrlMatcher = (segments: UrlSegment[]): UrlMatchResult | null => {
-//   const hasOnlyOneSegment = segments.length === 1;
-//   const isValidUrl = URL_USERNAME_REGEXP.test(segments[0]?.path);
-//
-//   return hasOnlyOneSegment && isValidUrl ? {consumed: segments} : null;
-// };
-
 export const urlMatcher = (
-  pathMatches: Array<string | RegExp>,
+  paths: Array<string | RegExp>,
 ): ((segments: Array<UrlSegment>) => null | UrlMatchResult) => {
   return (segments: Array<UrlSegment>): null | UrlMatchResult => {
-    if (segments.length === pathMatches.length) {
-      let result: UrlMatchResult | null = {consumed: segments};
+    if (segments.length === paths.length) {
+      const result: UrlMatchResult = {consumed: segments};
 
-      pathMatches.forEach((item, index) => {
-        const matchAgainst = segments[index]?.path;
-        if (
-          (typeof item === 'string' && item === matchAgainst) ||
-          (item instanceof RegExp && item.test(matchAgainst))
-        ) {
-          //continue
-        } else {
-          return (result = null);
+      for (let i = 0; i < paths.length; i++) {
+        const matchAgainst = segments[i]?.path;
+        const path = paths[i];
+
+        // @ts-expect-error
+        if (path[0] === ':') {
+          // resolve dynamic parameters, e.g. :id
+          if (!result.posParams) result.posParams = {};
+          // @ts-expect-error
+          result.posParams[path.slice(1)] = new UrlSegment(matchAgainst, {});
+          continue;
         }
-      });
+
+        if (
+          (typeof path === 'string' && path === matchAgainst) ||
+          (path instanceof RegExp && path.test(matchAgainst))
+        ) {
+          continue;
+        }
+
+        return null;
+      }
+
       return result;
     }
+
     return null;
   };
 };
