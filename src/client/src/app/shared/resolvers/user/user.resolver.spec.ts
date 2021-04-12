@@ -1,12 +1,12 @@
 import {TestBed} from '@angular/core/testing';
-import {UserRoleResolver} from './user-role.resolver';
+import {UserResolver} from './user.resolver';
 
-describe('UserRoleResolver', () => {
-  let resolver: UserRoleResolver;
+describe('UserResolver', () => {
+  let resolver: UserResolver;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    resolver = TestBed.inject(UserRoleResolver);
+    resolver = TestBed.inject(UserResolver);
   });
 
   it('should be created', () => {

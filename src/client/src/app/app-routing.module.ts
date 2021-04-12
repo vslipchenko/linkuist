@@ -8,13 +8,13 @@ import {SignInModule} from '~app/modules/sign-in/sign-in.module';
 import {SignUpModule} from '~app/modules/sign-up/sign-up.module';
 import {UserModule} from '~app/modules/user/user.module';
 import {LinkardsModule} from '~app/modules/user/linkards/linkards.module';
-import {UserRoleResolver} from '~app/resolvers/user-role/user-role.resolver';
+import {UserResolver} from '~app/shared/resolvers/user/user.resolver';
 
 const routes: Routes = [
   {
     matcher: urlMatcher([URL_USERNAME_REGEXP]),
     resolve: {
-      userRole: UserRoleResolver,
+      user: UserResolver,
     },
     loadChildren: (): Promise<string | typeof UserModule> =>
       import('~app/modules/user/user.module').then((m) => m.UserModule),
@@ -22,7 +22,7 @@ const routes: Routes = [
   {
     matcher: urlMatcher([URL_USERNAME_REGEXP, 'linkards']),
     resolve: {
-      userRole: UserRoleResolver,
+      user: UserResolver,
     },
     // canActivate: [AuthenticationCanActivateGuard],
     // canLoad: [AuthenticationCanLoadGuard],
