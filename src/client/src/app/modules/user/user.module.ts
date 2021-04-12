@@ -1,17 +1,23 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {UserComponent} from './user.component';
-import {AccountModule} from './account/account.module';
-import {ProfileModule} from './profile/profile.module';
 import {RouterModule} from '@angular/router';
+import {SharedModule} from '~app/shared/shared.module';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [UserComponent],
   imports: [
     RouterModule.forChild([{path: '', component: UserComponent}]),
     CommonModule,
-    AccountModule,
-    ProfileModule,
+    SharedModule,
+    MatMenuModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatButtonModule,
   ],
 })
 export class UserModule {}
