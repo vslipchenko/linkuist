@@ -9,6 +9,8 @@ import {SignUpModule} from '~app/modules/sign-up/sign-up.module';
 import {UserModule} from '~app/modules/user/user.module';
 import {LinkardsModule} from '~app/modules/user/linkards/linkards.module';
 import {UserResolver} from '~app/shared/resolvers/user/user.resolver';
+import {UserCanActivateGuard} from '~app/guards/user/can-activate/user.guard';
+import {UserCanLoadGuard} from '~app/guards/user/can-load/user.guard';
 
 const routes: Routes = [
   {
@@ -16,6 +18,8 @@ const routes: Routes = [
     resolve: {
       user: UserResolver,
     },
+    canActivate: [UserCanActivateGuard],
+    canLoad: [UserCanLoadGuard],
     loadChildren: (): Promise<string | typeof UserModule> =>
       import('~app/modules/user/user.module').then((m) => m.UserModule),
   },

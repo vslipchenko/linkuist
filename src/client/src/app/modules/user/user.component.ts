@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '~app/services/user/user.service';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {UserRole} from '~app/types/user/user.enums';
 
 @Component({
   templateUrl: './user.component.html',
@@ -12,23 +13,24 @@ import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserComponent implements OnInit {
+  public user: ResolvedUser | undefined;
+  public readonly userRole = UserRole;
+
   public constructor(
     private readonly progressBarService: ProgressBarService,
     private readonly authenticationService: AuthenticationService,
     private readonly userService: UserService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-  ) {}
-
-  public get navigationMainActionType(): NavigationMainActionType {
-    return NavigationMainActionType.HOME;
+  ) {
+    this.user = this.route.snapshot.data.user as ResolvedUser;
   }
 
   // define component to render
   public ngOnInit(): void {
     console.log(this.route.snapshot);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const user: ResolvedUser = this.route.snapshot.data.user;
+    // const user: ResolvedUser =
     // this.progressBarService.show();
     //
     // const accessToken = this.authenticationService.accessToken;
@@ -88,4 +90,8 @@ export class UserComponent implements OnInit {
   // public get userComponentToRender(): typeof UserComponentToRender {
   //   return UserComponentToRender;
   // }
+
+  public get navigationMainActionType(): NavigationMainActionType {
+    return NavigationMainActionType.HOME;
+  }
 }

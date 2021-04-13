@@ -1,4 +1,4 @@
-<main class="account">
+<main class="profile">
   <aside class="user">
     <div class="user-images">
       <div
@@ -36,7 +36,7 @@
     </div>
   </aside>
   <section class="notes">
-    <div class="notes-add">
+    <div *ngIf="user?.role === userRole.Owner" class="notes-add">
       <textarea class="input" placeholder="Capture your ideas..."></textarea>
       <div class="panel">
         <button mat-flat-button color="primary" class="button-note">Note</button>
@@ -74,23 +74,19 @@
   </section>
 </main>
 <app-navigation [mainActionType]="navigationMainActionType">
-  <!-- Add note -->
-  <!--  <button matTooltip="Add note" matTooltipPosition="above" mat-icon-button (click)="toggleAddNote(addNote)">-->
-  <!--    <mat-icon svgIcon="pencil-plus"></mat-icon>-->
-  <!--  </button>-->
   <!-- Link collections -->
   <a matTooltip="Linkards" matTooltipPosition="above" mat-icon-button routerLink="linkards">
     <mat-icon svgIcon="bookmark-collection"></mat-icon>
   </a>
-  <!-- Account Settings -->
-  <mat-menu #accountSettings>
+  <!-- Profile Settings -->
+  <mat-menu #profileSettings>
     <button mat-menu-item (click)="confirmLogout()">
       <mat-icon svgIcon="exit-to-app" color="warn"></mat-icon>
       Sign out
     </button>
   </mat-menu>
   <button
-    [matMenuTriggerFor]="accountSettings"
+    [matMenuTriggerFor]="profileSettings"
     matTooltip="Settings"
     matTooltipPosition="above"
     mat-icon-button
