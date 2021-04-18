@@ -67,3 +67,8 @@
     margin-right: auto;
   }
 }
+
+@mixin background {
+  background-image: url('~assets/images/shared/background.jpg');
+  background-size: contain;
+}

@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {UserComponent} from './user.component';
+import {UserProfileComponent} from './user-profile.component';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '~app/shared/shared.module';
 import {MatMenuModule} from '@angular/material/menu';
@@ -9,9 +9,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
-  declarations: [UserComponent],
+  declarations: [UserProfileComponent],
   imports: [
-    RouterModule.forChild([{path: '', component: UserComponent}]),
+    RouterModule.forChild([{path: '', component: UserProfileComponent}]),
     CommonModule,
     SharedModule,
     MatMenuModule,
@@ -20,4 +20,4 @@ import {MatButtonModule} from '@angular/material/button';
     MatButtonModule,
   ],
 })
-export class UserModule {}
+export class UserProfileModule {}

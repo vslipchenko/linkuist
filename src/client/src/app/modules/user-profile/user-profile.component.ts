@@ -8,11 +8,11 @@ import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {UserRole} from '~app/types/user/user.enums';
 
 @Component({
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss'],
+  templateUrl: './user-profile.component.html',
+  styleUrls: ['./user-profile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserComponent implements OnInit {
+export class UserProfileComponent implements OnInit {
   public user: ResolvedUser | undefined;
   public readonly userRole = UserRole;
 
@@ -30,7 +30,7 @@ export class UserComponent implements OnInit {
   public ngOnInit(): void {
     console.log(this.route.snapshot);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const user: ResolvedUser =
+    // const user-profile: ResolvedUser =
     // this.progressBarService.show();
     //
     // const accessToken = this.authenticationService.accessToken;

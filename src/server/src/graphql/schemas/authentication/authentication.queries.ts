@@ -31,7 +31,7 @@ const signIn = (_: unknown, {input}: {input: IUser}): any => {
     User.findOne({email: input.email})
       .then((user: MongooseQueryResult<MongooseDocument<IUser>>) => {
         if (!user) {
-          return reject(new UserInputError('Invalid user data'));
+          return reject(new UserInputError('Invalid user-profile data'));
         }
 
         // User account is blocked
@@ -42,7 +42,7 @@ const signIn = (_: unknown, {input}: {input: IUser}): any => {
         const isCorrectPassword = bcrypt.compareSync(input.password, user.password);
         // Passwords mismatch
         if (!isCorrectPassword) {
-          return reject(new UserInputError('Invalid user data'));
+          return reject(new UserInputError('Invalid user-profile data'));
         }
 
         const accessToken = jwt.sign(

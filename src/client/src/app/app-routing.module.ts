@@ -6,8 +6,8 @@ import {URL_USERNAME_REGEXP} from '~app/constants/regexps';
 import {HomeModule} from '~app/modules/home/home.module';
 import {SignInModule} from '~app/modules/sign-in/sign-in.module';
 import {SignUpModule} from '~app/modules/sign-up/sign-up.module';
-import {UserModule} from '~app/modules/user/user.module';
-import {LinkardsModule} from '~app/modules/user/linkards/linkards.module';
+import {UserProfileModule} from '~app/modules/user-profile/user-profile.module';
+import {LinkardsModule} from '~app/modules/linkards/linkards.module';
 import {UserResolver} from '~app/shared/resolvers/user/user.resolver';
 import {UserCanActivateGuard} from '~app/guards/user/can-activate/user.guard';
 import {UserCanLoadGuard} from '~app/guards/user/can-load/user.guard';
@@ -20,18 +20,18 @@ const routes: Routes = [
     },
     canActivate: [UserCanActivateGuard],
     canLoad: [UserCanLoadGuard],
-    loadChildren: (): Promise<string | typeof UserModule> =>
-      import('~app/modules/user/user.module').then((m) => m.UserModule),
+    loadChildren: (): Promise<string | typeof UserProfileModule> =>
+      import('~app/modules/user-profile/user-profile.module').then((m) => m.UserProfileModule),
   },
   {
     matcher: urlMatcher([URL_USERNAME_REGEXP, 'linkards']),
     resolve: {
       user: UserResolver,
     },
-    // canActivate: [AuthenticationCanActivateGuard],
-    // canLoad: [AuthenticationCanLoadGuard],
+    canActivate: [UserCanActivateGuard],
+    canLoad: [UserCanLoadGuard],
     loadChildren: (): Promise<string | typeof LinkardsModule> =>
-      import('~app/modules/user/linkards/linkards.module').then((m) => m.LinkardsModule),
+      import('~app/modules/linkards/linkards.module').then((m) => m.LinkardsModule),
   },
   {
     path: 'sign-in',

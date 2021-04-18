@@ -2,12 +2,7 @@
 @use 'media';
 @use 'shared';
 
-@mixin user-page-content-background {
-  background-image: url('~assets/images/account/background.jpg');
-  background-size: contain;
-}
-
-@mixin user-page-content-first-block-media {
+@mixin content-first-block-media {
   @include media.zero-small {
     margin-top: var.$unit-4;
   }
@@ -17,7 +12,7 @@
   }
 }
 
-@mixin user-page-content-block-media {
+@mixin content-block-media {
   @include media.zero-small {
     width: var.$common-user-page-content-block-width-1;
   }
@@ -33,7 +28,7 @@
 
 .profile {
   @include media.zero-small {
-    @include user-page-content-background;
+    @include shared.background;
   }
 
   @include media.above-small {
@@ -124,7 +119,7 @@
 
   @include media.above-small {
     overflow-y: auto;
-    @include user-page-content-background;
+    @include shared.background;
   }
 }
 
@@ -162,11 +157,11 @@
   margin-right: auto;
   padding: var.$unit-2;
 
-  @include user-page-content-block-media;
+  @include content-block-media;
 }
 
 .notes .note:first-child {
-  @include user-page-content-first-block-media;
+  @include content-first-block-media;
 }
 
 .notes .note:not(:last-child) {
@@ -199,8 +194,8 @@
   min-height: var.$common-user-page-content-block-min-height;
   transition: 0.5s bottom;
 
-  @include user-page-content-first-block-media;
-  @include user-page-content-block-media;
+  @include content-first-block-media;
+  @include content-block-media;
 }
 
 .notes-add .input {

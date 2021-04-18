@@ -1,13 +1,13 @@
-@use 'variables' as var;
-@use 'media';
+@use 'src/assets/scss/variables' as var;
+@use 'src/assets/scss/media';
+@use 'src/assets/scss/shared';
 
-//mat-dialog-container {
-//  min-width: 50vw;
-//}
 .linkards {
   display: flex;
   flex-wrap: wrap;
   padding-top: var.$unit-3;
+
+  @include shared.background;
 
   @include media.zero-small {
     justify-content: center;

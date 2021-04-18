@@ -8,8 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx ts-node-dev src/app.ts --env=dev --debug",
     "prod": "npx ts-node-dev src/app.ts --env=prod",
-    "build": "npx tsc",
-    "lint": "eslint --fix src/"
+    "build": "npx tsc"
   },
   "husky": {
     "hooks": {
@@ -17,7 +16,7 @@
     }
   },
   "lint-staged": {
-    "*.ts": "eslint --fix"
+    "*.ts": "prettier --write"
   },
   "dependencies": {
     "apollo-server-express": "^2.21.0",

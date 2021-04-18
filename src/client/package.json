@@ -7,7 +7,6 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "stylelint-fix": "stylelint --fix \"src/**/*.scss\"",
     "e2e": "ng e2e"
   },
   "husky": {
@@ -17,7 +16,6 @@
   },
   "lint-staged": {
     "*.{ts,html}": [
-      "eslint --fix",
       "prettier --write"
     ],
     "*.{scss}": [
