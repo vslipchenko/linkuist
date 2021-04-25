@@ -21,7 +21,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   private readonly freshAccessToken$ = new Subject<string>();
 
   public constructor(
-    private authenticationService: AuthenticationService,
+    private readonly authenticationService: AuthenticationService,
     private readonly snackbarService: SnackbarService,
     private readonly router: Router,
   ) {}

@@ -8,7 +8,7 @@ interface AuthenticationInterceptorResult {
   tokenData?: AccessTokenData;
 }
 
-export const authenticationInterceptor = (
+export const authenticationGuard = (
   accessToken: string,
 ): Promise<AuthenticationInterceptorResult> => {
   return new Promise((resolve) => {

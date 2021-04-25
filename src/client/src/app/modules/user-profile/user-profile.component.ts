@@ -13,7 +13,7 @@ import {UserRole} from '~app/types/user/user.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserProfileComponent implements OnInit {
-  public user: ResolvedUser | undefined;
+  public resolvedUser: ResolvedUser | undefined;
   public readonly userRole = UserRole;
 
   public constructor(
@@ -22,12 +22,11 @@ export class UserProfileComponent implements OnInit {
     private readonly userService: UserService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-  ) {
-    this.user = this.route.snapshot.data.user as ResolvedUser;
-  }
+  ) {}
 
   // define component to render
   public ngOnInit(): void {
+    this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
     console.log(this.route.snapshot);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     // const user-profile: ResolvedUser =

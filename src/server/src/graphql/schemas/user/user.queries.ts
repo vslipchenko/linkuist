@@ -5,14 +5,14 @@ import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 
 const userByEmail = (_: unknown, {email}: {email: IUser['email']}): unknown => {
-  const [isValidData] = checkDataValidity({data: email, pattern: EMAIL_REGEXP});
+  const {isValidData} = checkDataValidity({data: email, pattern: EMAIL_REGEXP});
   if (isValidData) {
     return User.findOne({email});
   }
 };
 
 const userByUsername = (_: unknown, {username}: {username: IUser['username']}): unknown => {
-  const [isValidData] = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
+  const {isValidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
   if (isValidData) {
     return User.findOne({username});
   }

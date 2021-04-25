@@ -36,7 +36,7 @@
     </div>
   </aside>
   <section class="notes">
-    <div *ngIf="user?.role === userRole.Owner" class="notes-add">
+    <div *ngIf="resolvedUser?.role === userRole.Owner" class="notes-add">
       <textarea class="input" placeholder="Capture your ideas..."></textarea>
       <div class="panel">
         <button mat-flat-button color="primary" class="button-note">Note</button>

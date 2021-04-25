@@ -15,7 +15,7 @@ import {RefreshAccessTokenPayload} from '../../../types/jwt/jwt.interfaces';
 import {MongooseDocument, MongooseQueryResult} from '../../../types/mongoose/mongoose.types';
 
 const signIn = (_: unknown, {input}: {input: IUser}): any => {
-  const [isValidData] = checkDataValidity({
+  const {isValidData} = checkDataValidity({
     data: input,
     pattern: {
       email: EMAIL_REGEXP,
@@ -31,7 +31,7 @@ const signIn = (_: unknown, {input}: {input: IUser}): any => {
     User.findOne({email: input.email})
       .then((user: MongooseQueryResult<MongooseDocument<IUser>>) => {
         if (!user) {
-          return reject(new UserInputError('Invalid user-profile data'));
+          return reject(new UserInputError('Invalid user credentials'));
         }
 
         // User account is blocked
@@ -42,7 +42,7 @@ const signIn = (_: unknown, {input}: {input: IUser}): any => {
         const isCorrectPassword = bcrypt.compareSync(input.password, user.password);
         // Passwords mismatch
         if (!isCorrectPassword) {
-          return reject(new UserInputError('Invalid user-profile data'));
+          return reject(new UserInputError('Invalid user credentials'));
         }
 
         const accessToken = jwt.sign(

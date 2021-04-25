@@ -1,4 +1,4 @@
-import {Component, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {DialogService} from '~app/shared/services/dialog/dialog.service';
 // import {DialogTypes} from '~app/types/dialog/dialog.enums';
@@ -15,13 +15,16 @@ import {LINKARD_TAG_LETTER_REGEXP} from '~app/constants/regexps';
 import {Chip} from '~app/types/chips/chips.interfaces';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {LinkardService} from '~app/services/linkard/linkard.service';
+import {ActivatedRoute} from '@angular/router';
+import {ResolvedUser} from '~app/types/user/user.interfaces';
+import {first} from 'rxjs/operators';
 
 @UntilDestroy()
 @Component({
   templateUrl: './linkards.component.html',
   styleUrls: ['./linkards.component.scss'],
 })
-export class LinkardsComponent {
+export class LinkardsComponent implements OnInit {
   @ViewChild('addBookmarkContent') public addBookmarkContent: TemplateRef<unknown> | undefined;
   @ViewChild('addBookmarkActions') public addBookmarkActions: TemplateRef<unknown> | undefined;
 
@@ -30,17 +33,16 @@ export class LinkardsComponent {
   public readonly tagLetterValidator = LINKARD_TAG_LETTER_REGEXP;
   public readonly tagSplitWordBy = /[-\s]/;
 
+  public resolvedUser: ResolvedUser | undefined;
   public addBookmarkForm: FormGroup | undefined;
+  public linkards: Array<unknown> = [];
 
   public constructor(
     private readonly dialogService: DialogService,
-    private readonly bookmarkService: LinkardService,
+    private readonly linkardService: LinkardService,
     private readonly formBuilder: FormBuilder,
+    private readonly route: ActivatedRoute,
   ) {}
-
-  public get navigationMainActionType(): NavigationMainActionType {
-    return NavigationMainActionType.PROFILE;
-  }
 
   private static linkValidator(control: AbstractControl): null | ValidationErrors {
     const link = control.value;
@@ -55,6 +57,16 @@ export class LinkardsComponent {
       }
     }
     return null;
+  }
+
+  public ngOnInit(): void {
+    this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
+    this.linkardService
+      .getAllByUsername(this.resolvedUser.urlUsername)
+      .pipe(first())
+      .subscribe(({data}) => {
+        this.linkards = data.linkardsByUsername;
+      });
   }
 
   public openAddBookmarkDialog(): void {
@@ -84,7 +96,7 @@ export class LinkardsComponent {
       tags[1] = tags[1] ? LinkardPrice.PAID : LinkardPrice.FREE; // simplify first element in order to match [String!]! constraint
       // debugger;
       // return;
-      this.bookmarkService
+      this.linkardService
         .create({
           id: new Date().getTime(),
           ...this.addBookmarkForm.value,
@@ -180,5 +192,9 @@ export class LinkardsComponent {
 
   public get tagsField(): AbstractControl | null | undefined {
     return this.addBookmarkForm?.get('tags');
+  }
+
+  public get navigationMainActionType(): NavigationMainActionType {
+    return NavigationMainActionType.PROFILE;
   }
 }

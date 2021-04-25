@@ -1,11 +1,11 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose from 'mongoose';
 import {MongooseDocument, MongooseSchema} from '../types/mongoose/mongoose.types';
 import {ILinkard} from '../types/linkard/linkard.interfaces';
 
 // https://mongoosejs.com/docs/guide.html
 const linkardSchema = new mongoose.Schema({
   id: {type: Number, required: true, unique: true},
-  userId: {type: Schema.Types.ObjectId, required: true},
+  username: {type: String, required: true},
   link: {type: String, required: true, trim: true},
   note: {type: String, trim: true},
   isPrivate: {type: Boolean, required: true},

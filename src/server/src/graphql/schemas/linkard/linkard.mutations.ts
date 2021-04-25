@@ -1,15 +1,15 @@
 import {gql} from 'apollo-server-express';
-import {authenticationInterceptor} from '../../../utilities/interceptors';
+import {authenticationGuard} from '../../../utilities/guards';
 import {ILinkard} from '../../../types/linkard/linkard.interfaces';
 import {Linkard} from '../../../models/linkard';
 import {fetchUrlMetadata} from '../../../utilities/url-metadata';
 
 const createLinkard = async (
   _: unknown,
-  {input}: {input: Omit<ILinkard, 'userId'>},
+  {input}: {input: Omit<ILinkard, 'username'>},
   {accessToken}: {accessToken: string},
 ): Promise<unknown> => {
-  const {tokenData, error} = await authenticationInterceptor(accessToken);
+  const {tokenData, error} = await authenticationGuard(accessToken);
   if (!tokenData) return error;
   // TODO Bookmark input validation
   // try {
@@ -33,7 +33,7 @@ const createLinkard = async (
   return Linkard.create({
     ...input,
     metadata,
-    userId: tokenData.userId,
+    username: tokenData.username,
   });
 };
 

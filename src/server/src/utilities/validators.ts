@@ -1,21 +1,27 @@
 import {Constructable} from '../types/utility/utility.types';
 
-type ComplexPattern = Record<string, RegExp | Constructable>;
+type PatternArrowFunction = (value: any) => boolean;
+type Pattern = RegExp | Constructable | PatternArrowFunction; // e.g. /[a-z]/ | URL | (value: any) => boolean (isValid)
+type ComplexPattern = Record<string, Pattern>;
 
 interface CheckDataValidityOptions {
   data: unknown;
-  pattern: RegExp | Constructable | ComplexPattern;
+  pattern: Pattern | ComplexPattern;
   pathsToCheck?: Array<string>;
   outputInvalidPaths?: boolean;
+  ignoreNumericKeys?: boolean;
 }
 
-type CheckDataValidityResult = [boolean] | [boolean, Array<string>];
+type CheckDataValidityResult =
+  | {isValidData: boolean}
+  | {isValidData: boolean; invalidPaths: Array<string>};
 
 export const checkDataValidity = ({
   data,
-  pattern,
+  pattern, // Expect RegExp | Constructable | PatternArrowFunction OR ComplexPattern
   pathsToCheck = [],
   outputInvalidPaths = false,
+  ignoreNumericKeys = true,
 }: CheckDataValidityOptions): CheckDataValidityResult => {
   const invalidPaths: Array<string> = [];
 
@@ -26,7 +32,14 @@ export const checkDataValidity = ({
         if (Object.prototype.hasOwnProperty.call(value, key)) {
           const currentPath: Array<string> = [...path];
           // Omit numeric keys in path due to ambiguity, e.g., instead of pathsToCheck = ['arrayToCheck.0', 'arrayToCheck.1'] it would be pathsToCheck = ['arrayToCheck']
-          isNaN(Number(key)) && currentPath.push(key);
+          if (ignoreNumericKeys) {
+            if (isNaN(Number(key))) {
+              currentPath.push(key);
+            }
+          } else {
+            currentPath.push(key);
+          }
+          // ignoreIndices && isNaN(Number(key)) && currentPath.push(key);
 
           validateRecursively(value[key], currentPath);
         }
@@ -40,24 +53,39 @@ export const checkDataValidity = ({
         (!pathsToCheck.length || pathsToCheck.includes(fullPath))
       ) {
         // RegExp
+        // Fall-through condition is intentional in order to trap in suitable condition and prevent further conditions check
         if (pattern instanceof RegExp) {
-          if (!pattern.test(value)) {
-            invalidPaths.push(fullPath);
-          }
+          if (!pattern.test(value)) invalidPaths.push(fullPath);
           return;
         }
 
-        // If paths specified, e.g. { name: <RegExp>/[a-z]/, link: <Constructable>URL }
+        // (value: any) => boolean
+        if (pattern instanceof Function && !pattern.prototype) {
+          if (!(pattern as PatternArrowFunction)(value)) invalidPaths.push(fullPath);
+          return;
+        }
+
+        // If paths specified, e.g. { name: <RegExp>/[a-z]/, link: <Constructable>URL, isValidPassword: <Function>(value: any) => boolean }
         if (pattern.constructor === Object) {
           if (Object.prototype.hasOwnProperty.call(pattern, fullPath)) {
-            // Record<string, RegExp>
+            // { name: <RegExp>/[a-z]/ }
             if ((pattern as ComplexPattern)[fullPath] instanceof RegExp) {
-              if (!((pattern as ComplexPattern)[fullPath] as RegExp).test(value)) {
+              if (!((pattern as ComplexPattern)[fullPath] as RegExp).test(value))
                 invalidPaths.push(fullPath);
-              }
               return;
             }
-            // Record<string, Constructable>
+
+            // { isValidPassword: <Function>(value: any) => boolean (isValid) }
+            if (
+              (pattern as ComplexPattern)[fullPath] instanceof Function &&
+              !((pattern as ComplexPattern)[fullPath] as PatternArrowFunction).prototype
+            ) {
+              if (!((pattern as ComplexPattern)[fullPath] as PatternArrowFunction)(value))
+                invalidPaths.push(fullPath);
+              return;
+            }
+
+            // { link: <Constructable>URL }
             try {
               new ((pattern as ComplexPattern)[fullPath] as Constructable)(value);
             } catch {
@@ -79,7 +107,11 @@ export const checkDataValidity = ({
 
   validateRecursively(data);
 
-  return invalidPaths.length ? (outputInvalidPaths ? [false, invalidPaths] : [false]) : [true];
+  return invalidPaths.length
+    ? outputInvalidPaths
+      ? {isValidData: false, invalidPaths}
+      : {isValidData: false}
+    : {isValidData: true};
 };
 
 // console.log(checkDataValidity({
