@@ -6,7 +6,7 @@ import {fetchUrlMetadata} from '../../../utilities/url-metadata';
 
 const createLinkard = async (
   _: unknown,
-  {input}: {input: Omit<ILinkard, 'username'>},
+  {input}: {input: Omit<ILinkard, 'userId'>},
   {accessToken}: {accessToken: string},
 ): Promise<unknown> => {
   const {tokenData, error} = await authenticationGuard(accessToken);
@@ -33,7 +33,7 @@ const createLinkard = async (
   return Linkard.create({
     ...input,
     metadata,
-    username: tokenData.username,
+    userId: tokenData.userId,
   });
 };
 

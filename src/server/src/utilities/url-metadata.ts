@@ -11,18 +11,28 @@ import {
 } from '../constants/regexps';
 import {forEachMatch} from './processors';
 
-enum MetadataElements {
-  'hostname',
-  'sitename',
-  'title',
-  'description',
-  'image',
-  'icon',
+// enum MetadataElements {
+//   'hostname',
+//   'sitename',
+//   'title',
+//   'description',
+//   'image',
+//   'icon',
+// }
+
+interface Metadata {
+  hostname: string;
+  sitename: string;
+  title: string;
+  description: string;
+  image: string;
+  icon: string;
 }
 
-type Metadata = Record<keyof typeof MetadataElements, string>;
+// type Metadata = Record<keyof typeof MetadataElements, string>;
+// type Metadata = MetadataElements;
 
-export type IgnoreMetadataProperties = Array<keyof typeof MetadataElements>;
+// export type IgnoreMetadataProperties = Array<keyof typeof MetadataElements>;
 
 type FetchMetadataOptions = Required<Pick<RequestOptions, 'headers' | 'timeout'>>;
 

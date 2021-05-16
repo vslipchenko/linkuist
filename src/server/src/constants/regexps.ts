@@ -3,7 +3,7 @@ export const EMAIL_REGEXP = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{
 // Alphanumeric with .- separators in between
 export const USERNAME_REGEXP = /^(?=.{1,33}$)[a-z0-9]+([.-]?[a-z0-9]+)*$/;
 // e.g. 5f8e142df79fbc499cc71775
-// export const USER_ID_REGEXP = /^[a-fA-F0-9]{24}$/;
+export const USER_ID_REGEXP = /^[a-fA-F0-9]{24}$/;
 // Should have at least one number and one letter
 export const PASSWORD_REGEXP = /^(?=.{8,50}$)(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z&$#!@_^%+-]*$/;
 // export const EMAIL_MAXLENGTH = 254;

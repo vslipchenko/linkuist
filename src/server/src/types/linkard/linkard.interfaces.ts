@@ -2,7 +2,7 @@ import {FetchedMetadata} from '../../utilities/url-metadata';
 
 export interface ILinkard {
   id: number; // = new Date().getTime()
-  username: string;
+  userId: string;
   link: string;
   note: string;
   isPrivate: boolean;

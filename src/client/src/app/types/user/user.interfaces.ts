@@ -2,21 +2,21 @@ import {RecordId} from '../graphql/graphql.interfaces';
 import {UserRole} from '~app/types/user/user.enums';
 
 // TODO refactor gql specific interfaces
-export interface UserIdByEmail {
+export interface UserIdByEmailQueryResult {
   userByEmail: RecordId;
 }
 
-export interface UserIdByUsername {
+export interface UserIdByUsernameQueryResult {
   userByUsername: RecordId;
 }
 
-export interface UserSignUpData {
+export interface UserSignUpPayload {
   email: string;
   username: string;
   password: string;
 }
 
-export interface UserSignInData {
+export interface UserSignInPayload {
   email: string;
   password: string;
 }

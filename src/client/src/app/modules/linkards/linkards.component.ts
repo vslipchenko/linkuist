@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {DialogService} from '~app/shared/services/dialog/dialog.service';
 // import {DialogTypes} from '~app/types/dialog/dialog.enums';
@@ -18,11 +18,14 @@ import {LinkardService} from '~app/services/linkard/linkard.service';
 import {ActivatedRoute} from '@angular/router';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {first} from 'rxjs/operators';
+import {UserRole} from '~app/types/user/user.enums';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
 
 @UntilDestroy()
 @Component({
   templateUrl: './linkards.component.html',
   styleUrls: ['./linkards.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LinkardsComponent implements OnInit {
   @ViewChild('addBookmarkContent') public addBookmarkContent: TemplateRef<unknown> | undefined;
@@ -42,6 +45,7 @@ export class LinkardsComponent implements OnInit {
     private readonly linkardService: LinkardService,
     private readonly formBuilder: FormBuilder,
     private readonly route: ActivatedRoute,
+    private readonly authenticationService: AuthenticationService,
   ) {}
 
   private static linkValidator(control: AbstractControl): null | ValidationErrors {
@@ -61,12 +65,17 @@ export class LinkardsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
-    this.linkardService
-      .getAllByUsername(this.resolvedUser.urlUsername)
-      .pipe(first())
-      .subscribe(({data}) => {
-        this.linkards = data.linkardsByUsername;
-      });
+    // IF this.resolvedUser.role === Owner -> getUserById, else by username
+    const getAllLinkards =
+      this.resolvedUser.role === UserRole.Owner
+        ? this.linkardService.getAllByUserId(
+            this.authenticationService.accessTokenData?.userId as string,
+          )
+        : this.linkardService.getAllByUsername(this.resolvedUser.urlUsername);
+
+    getAllLinkards.pipe(first(), untilDestroyed(this)).subscribe(({data}) => {
+      this.linkards = data.linkardsByUsername;
+    });
   }
 
   public openAddBookmarkDialog(): void {

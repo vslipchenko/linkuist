@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {UserSignInData} from '~app/types/user/user.interfaces';
+import {UserSignInPayload} from '~app/types/user/user.interfaces';
 import {Apollo} from 'apollo-angular';
 import {
   ACCESS_TOKEN_BY_REFRESH_TOKEN,
@@ -37,7 +37,7 @@ export class AuthenticationService {
       : throwError('REFRESH_TOKEN_EMPTY');
   }
 
-  public signIn(input: UserSignInData): Observable<ApolloQueryResult<SignInQueryResult>> {
+  public signIn(input: UserSignInPayload): Observable<ApolloQueryResult<SignInQueryResult>> {
     return this.apollo.query({
       query: SIGN_IN,
       variables: {input},

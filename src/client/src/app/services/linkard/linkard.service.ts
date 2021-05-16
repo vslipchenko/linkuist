@@ -4,8 +4,15 @@ import {CREATE_LINKARD} from '~app/graphql/linkard/linkard.mutations';
 import {Observable} from 'rxjs';
 import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
 import {RecordId} from '~app/types/graphql/graphql.interfaces';
-import {LinkardCreateData} from '~app/types/linkard/linkard.interfaces';
-import {GET_LINKARDS_BY_USERNAME} from '~app/graphql/linkard/linkard.queries';
+import {
+  LinkardCreatePayload,
+  LinkardsByUserIdQueryResult,
+  LinkardsByUsernameQueryResult,
+} from '~app/types/linkard/linkard.interfaces';
+import {
+  GET_LINKARDS_BY_USER_ID,
+  GET_LINKARDS_BY_USERNAME,
+} from '~app/graphql/linkard/linkard.queries';
 
 @Injectable({
   providedIn: 'root',
@@ -20,14 +27,25 @@ export class LinkardService {
     isPrivate,
     isPaid,
     tags,
-  }: LinkardCreateData): Observable<FetchResult<RecordId>> {
+  }: LinkardCreatePayload): Observable<FetchResult<RecordId>> {
     return this.apollo.mutate({
       mutation: CREATE_LINKARD,
       variables: {input: {id, link, note, isPrivate, isPaid, tags}},
     });
   }
 
-  public getAllByUsername(username: string): Observable<ApolloQueryResult<any>> {
+  public getAllByUserId(
+    userId: string,
+  ): Observable<ApolloQueryResult<LinkardsByUserIdQueryResult>> {
+    return this.apollo.query({
+      query: GET_LINKARDS_BY_USER_ID,
+      variables: {userId},
+    });
+  }
+
+  public getAllByUsername(
+    username: string,
+  ): Observable<ApolloQueryResult<LinkardsByUsernameQueryResult>> {
     return this.apollo.query({
       query: GET_LINKARDS_BY_USERNAME,
       variables: {username},
