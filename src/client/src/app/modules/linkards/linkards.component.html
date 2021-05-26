@@ -17,7 +17,7 @@
   <!--    </ng-template>-->
   <!--  </ng-container>-->
 
-  <app-linkard class="linkard"></app-linkard>
+  <app-linkard *ngFor="let linkard of linkards" [linkard]="linkard"></app-linkard>
   <!--  <app-linkard class="linkard"></app-linkard>-->
   <!--  <app-linkard class="linkard"></app-linkard>-->
   <!--  <app-linkard class="linkard"></app-linkard>-->

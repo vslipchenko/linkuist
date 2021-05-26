@@ -7,6 +7,10 @@ export const linkardInputs = gql`
     isPrivate: Boolean!
     isPaid: Boolean!
     note: String
-    tags: [String!]!
+    tags: [CreateLinkardTagInput!]!
+  }
+
+  input CreateLinkardTagInput {
+    text: String!
   }
 `;

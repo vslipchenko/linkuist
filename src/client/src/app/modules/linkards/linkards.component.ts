@@ -20,6 +20,10 @@ import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {first} from 'rxjs/operators';
 import {UserRole} from '~app/types/user/user.enums';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
+import {
+  LinkardsByUserIdQueryResult,
+  LinkardsByUsernameQueryResult,
+} from '~app/types/linkard/linkard.interfaces';
 
 @UntilDestroy()
 @Component({
@@ -36,7 +40,7 @@ export class LinkardsComponent implements OnInit {
   public readonly tagLetterValidator = LINKARD_TAG_LETTER_REGEXP;
   public readonly tagSplitWordBy = /[-\s]/;
 
-  public resolvedUser: ResolvedUser | undefined;
+  public resolvedUser: ResolvedUser = {role: UserRole.Viewer, urlUsername: ''};
   public addBookmarkForm: FormGroup | undefined;
   public linkards: Array<unknown> = [];
 
@@ -66,23 +70,25 @@ export class LinkardsComponent implements OnInit {
   public ngOnInit(): void {
     this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
     // IF this.resolvedUser.role === Owner -> getUserById, else by username
-    const getAllLinkards =
-      this.resolvedUser.role === UserRole.Owner
-        ? this.linkardService.getAllByUserId(
-            this.authenticationService.accessTokenData?.userId as string,
-          )
-        : this.linkardService.getAllByUsername(this.resolvedUser.urlUsername);
+    // const getAllLinkards =
+    //   this.resolvedUser.role === UserRole.Owner
+    //     ? this.linkardService.getAllByUserId(
+    //         this.authenticationService.accessTokenData?.userId as string,
+    //       )
+    //     : this.linkardService.getAllByUsername(this.resolvedUser.urlUsername);
+    this.loadLinkards();
 
-    getAllLinkards.pipe(first(), untilDestroyed(this)).subscribe(({data}) => {
-      this.linkards = data.linkardsByUsername;
-    });
-  }
-
-  public openAddBookmarkDialog(): void {
     this.initAddBookmarkForm();
     this.handlePrivateFieldValueChange();
     this.handlePriceFieldValueChange();
+    // getAllLinkards
+    //   .pipe(first(), untilDestroyed(this))
+    //   .subscribe(({data}: {data: LinkardsByUserIdQueryResult | LinkardsByUsernameQueryResult}) => {
+    //     // this.linkards = data.linkardsByUserId || data.linkardsByUsername;
+    //   });
+  }
 
+  public openAddBookmarkDialog(): void {
     this.dialogService.open({
       panelClass: 'dialog-small',
       data: {
@@ -100,9 +106,10 @@ export class LinkardsComponent implements OnInit {
     if (this.addBookmarkForm?.valid) {
       this.dialogService.close();
       console.log('Add linkard value ', this.addBookmarkForm.value);
-      const tags = this.tagsField?.value.map((tag: any) => tag.value); // Array<string>
-      tags[0] = tags[0] ? LinkardPrivacy.PRIVATE : LinkardPrivacy.PUBLIC; // simplify first element in order to match [String!]! constraint
-      tags[1] = tags[1] ? LinkardPrice.PAID : LinkardPrice.FREE; // simplify first element in order to match [String!]! constraint
+      const tags = this.tagsField?.value.map((tag: any) => ({text: tag.text})); // Array<string>
+      console.log('tags ', tags);
+      //tags[0] = tags[0] ? LinkardPrivacy.PRIVATE : LinkardPrivacy.PUBLIC; // simplify first element in order to match [String!]! constraint
+      //tags[1] = tags[1] ? LinkardPrice.PAID : LinkardPrice.FREE; // simplify first element in order to match [String!]! constraint
       // debugger;
       // return;
       this.linkardService
@@ -114,6 +121,26 @@ export class LinkardsComponent implements OnInit {
         .pipe(untilDestroyed(this))
         .subscribe();
     }
+  }
+
+  private loadLinkards(): void {
+    if (this.resolvedUser.role === UserRole.Owner) {
+      this.linkardService
+        .getAllByUserId(this.authenticationService.accessTokenData?.userId as string)
+        .pipe(first(), untilDestroyed(this))
+        .subscribe(({data}: {data: LinkardsByUserIdQueryResult}) => {
+          this.linkards = data.linkardsByUserId;
+        });
+
+      return;
+    }
+
+    this.linkardService
+      .getAllByUsername(this.resolvedUser.urlUsername)
+      .pipe(first(), untilDestroyed(this))
+      .subscribe(({data}: {data: LinkardsByUsernameQueryResult}) => {
+        this.linkards = data.linkardsByUsername;
+      });
   }
 
   private initAddBookmarkForm(): void {

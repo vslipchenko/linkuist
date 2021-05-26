@@ -1,25 +1,21 @@
 <article class="linkard-card">
   <header class="header">
     <img
+      *ngIf="faviconSrc"
+      [src]="faviconSrc"
       class="favicon"
-      src="https://res.cloudinary.com/practicaldev/image/fetch/s--E8ak4Hr1--/c_limit,f_auto,fl_progressive,q_auto,w_32/https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico"
-      alt=""
+      alt="Linkard favicon"
+      (error)="handleFaviconError()"
     />
-    <h2 class="as-text">YouTube</h2>
+    <h2 class="as-text">{{ title }}</h2>
   </header>
-  <img class="image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
+  <img class="image" [src]="imageSrc" alt="Linkard thumbnail" (error)="handleImageError()" />
   <p
     #description
     class="description"
     [class.tease]="description.scrollHeight > description.clientHeight"
   >
-    <strong>Description:</strong> The Shiba Inu is the smallest of the six original and distinct
-    spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous
-    terrain, the Shiba Inu was originally bred for hunting. The Shiba Inu is the smallest of the six
-    original and distinct spitz breeds of dog from Japan. A small, agile dog that copes very well
-    with mountainous terrain, the Shiba Inu was originally bred for hunting. The Shiba Inu is the
-    smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog
-    that copes very well with mountainous terrain, the Shiba Inu was originally bred for hunting.
+    <strong>{{ text.label }}: </strong> {{ text.value }}
   </p>
   <footer class="actions">
     <button mat-button color="primary" (click)="openCard()">SHOW</button>
