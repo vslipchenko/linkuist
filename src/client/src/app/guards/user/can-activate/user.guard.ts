@@ -31,7 +31,7 @@ export class UserCanActivateGuard implements CanActivate {
           return true;
         } // user-profile exist
         // user-profile does not exist
-        void this.router.navigate(['**'], {skipLocationChange: true});
+        void this.router.navigate(['**'], {skipLocationChange: true, state: {statusCode: 404}});
         return false;
       }),
     );

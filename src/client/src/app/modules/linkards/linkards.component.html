@@ -29,17 +29,6 @@
   <!--  <app-linkard class="linkard"></app-linkard>-->
 </main>
 
-<app-navigation [mainActionType]="navigationMainActionType">
-  <button
-    matTooltip="Add bookmark"
-    matTooltipPosition="above"
-    mat-icon-button
-    (click)="openAddBookmarkDialog()"
-  >
-    <mat-icon svgIcon="bookmark-plus"></mat-icon>
-  </button>
-</app-navigation>
-
 <ng-template #addBookmarkContent>
   <form [formGroup]="addBookmarkForm" class="add-bookmark">
     <mat-form-field class="link">
@@ -106,3 +95,16 @@
   <!--  [mat-dialog-close]="true"-->
   <!--    &lt;!&ndash; The mat-dialog-close directive optionally accepts a value as a result for the dialog. &ndash;&gt;-->
 </ng-template>
+
+<app-navigation [mainActionType]="navigationMainActionType">
+  <ng-container *ngIf="isOwner">
+    <button
+      matTooltip="Add bookmark"
+      matTooltipPosition="above"
+      mat-icon-button
+      (click)="openAddBookmarkDialog()"
+    >
+      <mat-icon svgIcon="bookmark-plus"></mat-icon>
+    </button>
+  </ng-container>
+</app-navigation>

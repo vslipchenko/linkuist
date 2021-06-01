@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {
   Event,
   NavigationCancel,
@@ -6,13 +6,11 @@ import {
   NavigationError,
   NavigationStart,
   Router,
-  RouterEvent,
 } from '@angular/router';
 import {ProgressBarMode} from '@angular/material/progress-bar/progress-bar';
 import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {ThemePalette} from '@angular/material/core/common-behaviors/color';
 import {SnackbarService} from '~app/shared/services/snackbar/snackbar.service';
-import {SNACKBAR_CONFIG} from '~app/constants/snackbar';
 import {DOCUMENT} from '@angular/common';
 
 @Component({
@@ -36,45 +34,57 @@ export class ProgressBarComponent {
       (showProgress) => (this.show = showProgress),
     );
     this.router.events.subscribe((event: Event) => {
+      // if (event instanceof ActivationStart) {
       this.handleNavigationProgress(event);
+      // }
     });
   }
 
   private handleNavigationProgress(event: Event): void {
+    // console.log(event);
     switch (true) {
       case event instanceof NavigationStart:
-        this.errorState = false;
-        this.color = 'primary';
+        // this.errorState = false;
+        // this.color = 'primary';
         this.show = true;
+        this.addBackgroundLogo();
         break;
       case event instanceof NavigationEnd:
         this.removeBackgroundLogo();
         // remove snackbar before navigation end
-        this.removeSnackbar();
+        // this.removeSnackbar();
         this.show = false;
         break;
       case event instanceof NavigationCancel:
       case event instanceof NavigationError:
-        this.errorState = true;
-        this.color = 'warn';
+        // console.log('THIS SHOW ', this.show);
+        // this.errorState = true;
+        // this.color = 'warn';
+        this.show = false;
 
-        this.handleNavigationFailure();
+        // this.handleNavigationFailure();
         break;
     }
   }
 
-  private handleNavigationFailure(): void {
-    this.snackbarService.showError('Something went wrong during navigation');
-    setTimeout(() => {
-      if (this.errorState) {
-        this.show = false;
-      } // actual duration + ~fadeout
-    }, (SNACKBAR_CONFIG.duration as number) + 200);
-  }
+  // private handleNavigationFailure(): void {
+  //   this.snackbarService.showError('Something went wrong during navigation');
+  //   setTimeout(() => {
+  //     if (this.errorState) {
+  //       this.show = false;
+  //     } // actual duration + ~fadeout
+  //   }, (SNACKBAR_CONFIG.duration as number) + 200);
+  // }
 
-  private removeSnackbar(): void {
-    if (this.snackbarService.isOpened) {
-      this.snackbarService.hide();
+  // private removeSnackbar(): void {
+  //   if (this.snackbarService.isOpened) {
+  //     this.snackbarService.hide();
+  //   }
+  // }
+
+  private addBackgroundLogo(): void {
+    if (!this.document.body.classList.contains('background-logo')) {
+      this.document.body.classList.add('background-logo');
     }
   }
 

@@ -58,6 +58,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     // attach current access token value to request
     return next.handle(AuthenticationInterceptor.attachAccessToken(request, accessToken)).pipe(
       switchMap((response) => {
+        // console.log('here ', response);
         if (response instanceof HttpResponse && response.body?.errors) {
           // look for graphql errors
           console.log('response is ', response);
@@ -105,6 +106,14 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         }
         // release stream
         return of(response);
+      }),
+      catchError((error) => {
+        // Probably server error
+        // setTimeout(() => {
+        void this.router.navigate(['**'], {skipLocationChange: true, state: {statusCode: 500}});
+        // }, 3000);
+
+        return throwError(error);
       }),
     );
   }

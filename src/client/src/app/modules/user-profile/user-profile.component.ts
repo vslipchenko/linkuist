@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -13,21 +13,45 @@ import {UserRole} from '~app/types/user/user.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserProfileComponent implements OnInit {
-  public resolvedUser: ResolvedUser | undefined;
+  public resolvedUser: ResolvedUser = {role: UserRole.Viewer, urlUsername: ''};
   public readonly userRole = UserRole;
 
   public constructor(
+    private readonly changeDetector: ChangeDetectorRef,
     private readonly progressBarService: ProgressBarService,
     private readonly authenticationService: AuthenticationService,
     private readonly userService: UserService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-  ) {}
+  ) {
+    // this.router.events.subscribe((event) => {
+    //   // if (event instanceof NavigationEnd) {
+    //   //   this.changeDetector.markForCheck();
+    //   // if (event instanceof NavigationEnd) {
+    //   //   console.log('NAVIGATION END', event);
+    //   // }
+    //   // }
+    //   if (event instanceof NavigationEnd && event.url !== event.urlAfterRedirects) {
+    //     // setTimeout(() => {
+    //     // console.log('DETECT CHANGES ');
+    //     // this.changeDetector.markForCheck();
+    //     // }, 3000);
+    //     console.log('HERE');
+    //     window.location.reload();
+    //   }
+    // });
+  }
+
+  // public ngOnChanges() {
+  //   this.changeDetector.detectChanges();
+  // }
 
   // define component to render
   public ngOnInit(): void {
     this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
-    console.log(this.route.snapshot);
+    // this.changeDetector.detectChanges();
+    console.log('NEW', this.route.snapshot);
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     // const user-profile: ResolvedUser =
     // this.progressBarService.show();
@@ -90,7 +114,11 @@ export class UserProfileComponent implements OnInit {
   //   return UserComponentToRender;
   // }
 
+  public get isOwner(): boolean {
+    return this.resolvedUser.role === UserRole.Owner;
+  }
+
   public get navigationMainActionType(): NavigationMainActionType {
-    return NavigationMainActionType.HOME;
+    return this.isOwner ? NavigationMainActionType.HOME : NavigationMainActionType.PROFILE;
   }
 }

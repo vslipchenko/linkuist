@@ -1,15 +1,15 @@
-$progress-bar-selector: '.mat-progress-bar';
+//$progress-bar-selector: '.mat-progress-bar';
 
-#{$progress-bar-selector} {
+.mat-progress-bar {
   position: fixed;
-  top: 0;
+  //top: 0;
 }
 
-#{$progress-bar-selector}.state-error ::ng-deep {
-  #{$progress-bar-selector}-primary,
-  #{$progress-bar-selector}-secondary,
-  #{$progress-bar-selector}-primary:after,
-  #{$progress-bar-selector}-secondary:after {
-    animation: none !important;
-  }
-}
+//#{$progress-bar-selector}.state-error ::ng-deep {
+//  #{$progress-bar-selector}-primary,
+//  #{$progress-bar-selector}-secondary,
+//  #{$progress-bar-selector}-primary:after,
+//  #{$progress-bar-selector}-secondary:after {
+//    animation: none !important;
+//  }
+//}

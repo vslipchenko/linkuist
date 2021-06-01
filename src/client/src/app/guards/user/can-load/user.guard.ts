@@ -27,7 +27,7 @@ export class UserCanLoadGuard implements CanLoad {
       map(({data}) => {
         if (data.userByUsername?._id) return true; // user-profile exist
         // user-profile does not exist
-        void this.router.navigate(['**'], {skipLocationChange: true});
+        void this.router.navigate(['**'], {skipLocationChange: true, state: {statusCode: 404}});
         return false;
       }),
     );

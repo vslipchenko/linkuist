@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms';
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from '~app/constants/regexps';
@@ -23,6 +23,7 @@ export class SignInComponent implements OnInit {
   public isSubmitting = false;
 
   public constructor(
+    private readonly changeDetector: ChangeDetectorRef,
     private readonly formBuilder: FormBuilder,
     private readonly authenticationService: AuthenticationService,
     private readonly snackbarService: SnackbarService,
@@ -122,11 +123,13 @@ export class SignInComponent implements OnInit {
           },
           ({graphQLErrors}: ApolloError) => {
             const errors = shapeGraphQLErrors(graphQLErrors);
+            // console.log('errors ', graphQLErrors, errors);
 
             errors.forEach((error) => {
               switch (error.code) {
                 case 'BAD_USER_INPUT':
-                  return this.dispatchErrors({pattern: true});
+                  this.dispatchErrors({pattern: true});
+                  return this.changeDetector.detectChanges();
                 default:
                   // 'INTERNAL_SERVER_ERROR'
                   this.snackbarService.showError();

@@ -2,6 +2,10 @@
 @use 'variables' as var;
 @use 'media';
 
+:host(.backdrop-navigation) .navigation {
+  z-index: 1;
+}
+
 .navigation {
   align-items: center;
   background-color: var.$theme-light;
@@ -9,20 +13,21 @@
   bottom: 0;
   display: flex;
   height: var.$common-navigation-height;
-  justify-content: space-between;
+  //justify-content: space-between;
   //box-shadow: $home-shadow;
   padding: 0 var.$unit-2;
   position: fixed;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
 }
 
 .secondary-actions {
   display: flex;
+  gap: var.$unit-2;
 }
 
-.secondary-actions ::ng-deep [mat-icon-button]:not(:last-child) {
-  margin-right: var.$unit-2;
+.main-action {
+  margin-left: auto;
 }
 
 .main-action-title {

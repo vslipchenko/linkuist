@@ -124,7 +124,7 @@ export class LinkardsComponent implements OnInit {
   }
 
   private loadLinkards(): void {
-    if (this.resolvedUser.role === UserRole.Owner) {
+    if (this.isOwner) {
       this.linkardService
         .getAllByUserId(this.authenticationService.accessTokenData?.userId as string)
         .pipe(first(), untilDestroyed(this))
@@ -214,6 +214,14 @@ export class LinkardsComponent implements OnInit {
     });
   }
 
+  // public get areActionsVisible(): boolean {
+  //   return this.isOwner;
+  // }
+
+  public get isOwner(): boolean {
+    return this.resolvedUser.role === UserRole.Owner;
+  }
+
   public get linkField(): AbstractControl | null | undefined {
     return this.addBookmarkForm?.get('link');
   }
@@ -231,6 +239,8 @@ export class LinkardsComponent implements OnInit {
   }
 
   public get navigationMainActionType(): NavigationMainActionType {
-    return NavigationMainActionType.PROFILE;
+    return this.authenticationService.isUserAuthenticated
+      ? NavigationMainActionType.PROFILE
+      : NavigationMainActionType.HOME;
   }
 }

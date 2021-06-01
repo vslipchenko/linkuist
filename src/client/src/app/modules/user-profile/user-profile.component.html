@@ -74,24 +74,26 @@
   </section>
 </main>
 <app-navigation [mainActionType]="navigationMainActionType">
-  <!-- Link collections -->
-  <a matTooltip="Linkards" matTooltipPosition="above" mat-icon-button routerLink="linkards">
-    <mat-icon svgIcon="bookmark-collection"></mat-icon>
-  </a>
-  <!-- Profile Settings -->
-  <mat-menu #profileSettings>
-    <button mat-menu-item (click)="confirmLogout()">
-      <mat-icon svgIcon="exit-to-app" color="warn"></mat-icon>
-      Sign out
+  <ng-container *ngIf="isOwner">
+    <!-- Link collections -->
+    <a matTooltip="Linkards" matTooltipPosition="above" mat-icon-button routerLink="linkards">
+      <mat-icon svgIcon="bookmark-collection"></mat-icon>
+    </a>
+    <!-- Profile Settings -->
+    <mat-menu #profileSettings>
+      <button mat-menu-item (click)="confirmLogout()">
+        <mat-icon svgIcon="exit-to-app" color="warn"></mat-icon>
+        Sign out
+      </button>
+    </mat-menu>
+    <button
+      [matMenuTriggerFor]="profileSettings"
+      matTooltip="Settings"
+      matTooltipPosition="above"
+      mat-icon-button
+      aria-label="Example icon button with a delete icon"
+    >
+      <mat-icon svgIcon="account-settings"></mat-icon>
     </button>
-  </mat-menu>
-  <button
-    [matMenuTriggerFor]="profileSettings"
-    matTooltip="Settings"
-    matTooltipPosition="above"
-    mat-icon-button
-    aria-label="Example icon button with a delete icon"
-  >
-    <mat-icon svgIcon="account-settings"></mat-icon>
-  </button>
+  </ng-container>
 </app-navigation>

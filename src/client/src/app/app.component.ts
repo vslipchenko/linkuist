@@ -3,16 +3,23 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material/icon';
 import {CUSTOM_ICONS_FOLDER, ICONS, MATERIAL_ICONS_FOLDER} from '~app/constants/assets';
 import {Icon} from '~app/types/assets/assets.interfaces';
+import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 
 @Component({
   selector: 'app-root',
   template: `
     <app-progress-bar></app-progress-bar>
     <router-outlet></router-outlet>
+    <app-navigation
+      class="backdrop-navigation"
+      [mainActionType]="NavigationMainActionType.HOME"
+    ></app-navigation>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
+  public readonly NavigationMainActionType = NavigationMainActionType;
+
   public constructor(
     private readonly matIconRegistry: MatIconRegistry,
     private readonly domSanitizer: DomSanitizer, // private readonly translateService: TranslateService, // private readonly appTranslateService: AppTranslateService, // private readonly titleService: Title, // @Inject(DOCUMENT) private readonly document: Document,
