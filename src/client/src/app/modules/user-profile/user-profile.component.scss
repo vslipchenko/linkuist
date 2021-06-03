@@ -82,12 +82,12 @@ $user-avatar-height: 150px;
   background-repeat: no-repeat;
   background-size: cover;
 
-  @include media.zero-small {
-    height: 200px;
+  @include media.zero-large {
+    height: 35%;
   }
 
-  @include media.above-small {
-    height: 300px;
+  @include media.above-large {
+    height: 50%;
   }
 }
 
