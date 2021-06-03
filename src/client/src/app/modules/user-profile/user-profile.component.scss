@@ -2,7 +2,7 @@
 @use 'media';
 @use 'shared';
 
-$user-avatar-height: 150px;
+$user-avatar-size: 175px;
 
 @mixin content-first-block-media {
   @include media.zero-small {
@@ -44,7 +44,7 @@ $user-avatar-height: 150px;
   //background-color: var.$theme-light;
   //border-color: var.$theme-light-darkest;
   //border-style: solid;
-  margin: -#{$user-avatar-height / 2} auto 0;
+  margin: -#{$user-avatar-size / 2} auto 0;
   //max-width: var.$common-user-page-content-block-width-3;
   //overflow-y: auto;
   //padding-bottom: var.$unit-4;
@@ -94,14 +94,15 @@ $user-avatar-height: 150px;
 .user-avatar {
   background-position: center;
   background-size: cover;
-  border: 3px solid var.$theme-light;
-  border-radius: 50%;
-  height: $user-avatar-height;
+  //border: 3px solid var.$theme-light;
+  border: 1px solid var.$theme-light;
+  //border-radius: 50%;
+  height: $user-avatar-size;
   margin-left: auto;
   margin-right: auto;
   //margin-top: -75px;
   position: relative;
-  width: 150px;
+  width: $user-avatar-size;
 }
 
 .user-info {
@@ -112,9 +113,9 @@ $user-avatar-height: 150px;
   border-width: 0 1px 1px;
   display: flex;
   flex-direction: column;
-  margin-top: -#{$user-avatar-height / 2};
+  margin-top: -#{$user-avatar-size / 2};
 
-  padding: #{var.$unit-4 + $user-avatar-height / 2} var.$unit-3 var.$unit-4;
+  padding: #{var.$unit-4 + $user-avatar-size / 2} var.$unit-3 var.$unit-4;
 }
 
 .user-names {
