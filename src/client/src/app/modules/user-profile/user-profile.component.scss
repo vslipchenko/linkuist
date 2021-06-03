@@ -2,6 +2,8 @@
 @use 'media';
 @use 'shared';
 
+$user-avatar-height: 150px;
+
 @mixin content-first-block-media {
   @include media.zero-small {
     margin-top: var.$unit-4;
@@ -14,54 +16,79 @@
 
 @mixin content-block-media {
   @include media.zero-small {
-    width: var.$common-user-page-content-block-width-1;
+    max-width: var.$common-user-page-content-block-width-1;
   }
 
   @include media.small-large {
-    width: var.$common-user-page-content-block-width-2;
+    max-width: var.$common-user-page-content-block-width-2;
   }
 
   @include media.above-large {
-    width: var.$common-user-page-content-block-width-3;
+    max-width: var.$common-user-page-content-block-width-3;
   }
 }
 
 .profile {
-  @include media.zero-small {
-    @include shared.background;
-  }
+  //@include media.zero-small {
+  //  @include shared.background;
+  //}
+  @include shared.background;
 
-  @include media.above-small {
-    display: flex;
-  }
+  //@include media.above-small {
+  //  display: flex;
+  //}
 }
 
 /* User */
 .user {
-  background-color: var.$theme-light;
-  border-color: var.$theme-light-darkest;
-  border-style: solid;
-  max-width: var.$common-user-page-content-block-width-3;
-  overflow-y: auto;
-  padding-bottom: var.$unit-4;
+  //background-color: var.$theme-light;
+  //border-color: var.$theme-light-darkest;
+  //border-style: solid;
+  margin: -#{$user-avatar-height / 2} auto 0;
+  //max-width: var.$common-user-page-content-block-width-3;
+  //overflow-y: auto;
+  //padding-bottom: var.$unit-4;
+  //max-width: 600px;
+
+  //@include media.zero-small {
+  //  //border-width: 0 0 1px;
+  //  width: 100%;
+  //}
 
   @include media.zero-small {
-    border-width: 0 0 1px;
-    width: 100%;
+    max-width: 100%;
   }
 
-  @include media.above-small {
-    border-width: 0 1px 0 0;
-    width: 35%;
+  @include media.small-large {
+    margin-bottom: var.$unit-3;
+    max-width: var.$common-user-page-content-block-width-2;
   }
+
+  @include media.above-large {
+    margin-bottom: var.$unit-4;
+    max-width: var.$common-user-page-content-block-width-3;
+  }
+
+  //@include media.above-small {
+  //  //border-width: 0 1px 0 0;
+  //  width: 35%;
+  //}
 }
 
 .user-background {
+  background-attachment: fixed;
   background-position: center;
   //margin-right: -1px;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 150px;
+
+  @include media.zero-small {
+    height: 200px;
+  }
+
+  @include media.above-small {
+    height: 300px;
+  }
 }
 
 .user-avatar {
@@ -69,18 +96,25 @@
   background-size: cover;
   border: 3px solid var.$theme-light;
   border-radius: 50%;
-  height: 150px;
+  height: $user-avatar-height;
   margin-left: auto;
   margin-right: auto;
-  margin-top: -75px;
+  //margin-top: -75px;
+  position: relative;
   width: 150px;
 }
 
 .user-info {
   align-items: center;
+  background-color: var.$theme-light;
+  border-color: var.$theme-light-darkest;
+  border-style: solid;
+  border-width: 0 1px 1px;
   display: flex;
   flex-direction: column;
-  padding: var.$unit-4 var.$unit-3 0;
+  margin-top: -#{$user-avatar-height / 2};
+
+  padding: #{var.$unit-4 + $user-avatar-height / 2} var.$unit-3 var.$unit-4;
 }
 
 .user-names {
@@ -96,18 +130,19 @@
 }
 
 .user-field {
-  display: flex;
+  //display: flex;
   margin-top: var.$unit-4;
 }
 
 .user-field-label {
   font-weight: bold;
+  margin-bottom: var.$unit;
   margin-right: var.$unit-3;
 }
 
-.user-field-label::after {
-  content: ':';
-}
+//.user-field-label::after {
+//  content: ':';
+//}
 
 /* Notes */
 .notes {
@@ -119,7 +154,6 @@
 
   @include media.above-small {
     overflow-y: auto;
-    @include shared.background;
   }
 }
 
@@ -180,6 +214,7 @@
 
 .notes-add {
   //margin-top: var.$unit-2;
+
   background-color: var.$theme-light;
   //border-color: var.$theme-light-darkest;
   //border-style: solid;
@@ -193,6 +228,7 @@
   //height: 35%;
   min-height: var.$common-user-page-content-block-min-height;
   transition: 0.5s bottom;
+  width: 100%;
 
   @include content-first-block-media;
   @include content-block-media;

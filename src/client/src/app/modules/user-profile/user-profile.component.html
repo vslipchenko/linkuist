@@ -1,12 +1,12 @@
 <main class="profile">
-  <aside class="user">
+  <div
+    class="user-background"
+    style="
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/76/National_Library_manuscripts_being_washed_in_Florence_after_the_1966_flood_of_the_Arno_-_UNESCO_-_PHOTO_0000001407_0001_-_Restoration.jpg');
+    "
+  ></div>
+  <div class="user">
     <div class="user-images">
-      <div
-        class="user-background"
-        style="
-          background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/76/National_Library_manuscripts_being_washed_in_Florence_after_the_1966_flood_of_the_Arno_-_UNESCO_-_PHOTO_0000001407_0001_-_Restoration.jpg');
-        "
-      ></div>
       <div
         class="user-avatar"
         style="
@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-  </aside>
+  </div>
   <section class="notes">
     <div *ngIf="resolvedUser?.role === userRole.Owner" class="notes-add">
       <textarea class="input" placeholder="Capture your ideas..."></textarea>
