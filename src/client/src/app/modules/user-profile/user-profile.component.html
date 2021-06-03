@@ -73,7 +73,8 @@
     </div>
   </section>
 </main>
-<app-navigation [mainActionType]="navigationMainActionType">
+
+<app-navigation [mainActionType]="navigationMainActionType" [isMainActionPlainLink]="true">
   <ng-container *ngIf="isOwner">
     <!-- Link collections -->
     <a matTooltip="Linkards" matTooltipPosition="above" mat-icon-button routerLink="linkards">

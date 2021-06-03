@@ -19,6 +19,7 @@ export class NavigationComponent {
   // Visitor not signed-in on the home screen
   // Visitor signed-in on a page different from the profile page
   @Input() public mainActionType = NavigationMainActionType.NONE;
+  @Input() public isMainActionPlainLink = false;
 
   public constructor(private readonly authenticationService: AuthenticationService) {}
 
@@ -34,16 +35,6 @@ export class NavigationComponent {
 
   public get tooltipContent(): string {
     return this.mainActionType;
-    // switch (this.mainActionType) {
-    //   case NavigationMainActionType.NONE:
-    //     return NavigationMainActionType.NONE;
-    //   case NavigationMainActionType.HOME:
-    //     return NavigationMainActionType.HOME;
-    //   case NavigationMainActionType.PROFILE:
-    //     return NavigationMainActionType.PROFILE;
-    //   default:
-    //     return '';
-    // }
   }
 
   public get isUserAuthenticated(): boolean {
@@ -56,7 +47,7 @@ export class NavigationComponent {
   }
 
   public get isProfileMainAction(): boolean {
-    return this.isUserAuthenticated && this.mainActionType === NavigationMainActionType.PROFILE;
+    return this.mainActionType === NavigationMainActionType.PROFILE;
   }
 
   public get isHomeMainAction(): boolean {
@@ -67,6 +58,9 @@ export class NavigationComponent {
     return this.isUserAuthenticated && this.isHomeMainAction;
   }
 
+  // Define different subtypes of actions home actions
+  // - Home plain text action (acts like a homepage logo)
+  // - Home link action (for authenticated person that locates on the page different to the homepage)
   public get isHomeTextMainAction(): boolean {
     return (
       !this.isUserAuthenticated &&

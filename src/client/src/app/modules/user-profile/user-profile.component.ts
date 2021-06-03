@@ -119,6 +119,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   public get navigationMainActionType(): NavigationMainActionType {
-    return this.isOwner ? NavigationMainActionType.HOME : NavigationMainActionType.PROFILE;
+    return this.isOwner || !this.authenticationService.isUserAuthenticated
+      ? NavigationMainActionType.HOME
+      : NavigationMainActionType.PROFILE;
   }
 }

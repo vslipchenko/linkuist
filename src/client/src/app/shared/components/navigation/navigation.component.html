@@ -2,10 +2,24 @@
   <div class="secondary-actions">
     <ng-content></ng-content>
   </div>
-  <div class="main-action" [matTooltip]="tooltipContent" matTooltipPosition="above">
+  <div
+    class="main-action"
+    [matTooltip]="tooltipContent"
+    matTooltipPosition="above"
+    [ngSwitch]="true"
+  >
+    <!-- Profile plain link action (reload profile page for visitor in order to see relevant profile info while navigating back to the profile) -->
+    <a
+      *ngSwitchCase="isProfileMainAction && isMainActionPlainLink"
+      [href]="userAccountPageUrl"
+      mat-icon-button
+      aria-label="Example icon button with a bookmark icon"
+    >
+      <mat-icon svgIcon="linkuist"></mat-icon>
+    </a>
     <!-- Profile action -->
     <a
-      *ngIf="isProfileMainAction"
+      *ngSwitchCase="isProfileMainAction && !isMainActionPlainLink"
       [routerLink]="userAccountPageUrl"
       mat-icon-button
       aria-label="Example icon button with a bookmark icon"
@@ -13,11 +27,12 @@
       <mat-icon svgIcon="linkuist"></mat-icon>
     </a>
     <!-- Home icon action -->
-    <a *ngIf="isHomeIconMainAction" routerLink="/" mat-icon-button>
+    <a *ngSwitchCase="isHomeIconMainAction" routerLink="/" mat-icon-button>
       <mat-icon svgIcon="home"></mat-icon>
     </a>
     <!-- Home text action -->
-    <a *ngIf="isHomeTextMainAction" [appWrapIf]="isHomeMainAction" routerLink="/">
+    <!--    {{ isHomeTextMainAction }} {{ isHomeMainAction }} {{ isUserAuthenticated }} {{ mainActionType }}-->
+    <a *ngSwitchCase="isHomeTextMainAction" [appWrapIf]="isHomeMainAction" routerLink="/">
       <h2 class="main-action-title as-h3">Linkuist</h2>
     </a>
   </div>
