@@ -5,11 +5,11 @@
       [src]="faviconSrc"
       class="favicon"
       alt="Linkard favicon"
-      (error)="handleFaviconError()"
+      (error)="handleFaviconError($event)"
     />
-    <h2 class="as-text">{{ title }}</h2>
+    <h2 *ngIf="title" class="as-text">{{ title }}</h2>
   </header>
-  <img class="image" [src]="imageSrc" alt="Linkard thumbnail" (error)="handleImageError()" />
+  <img class="image" [src]="imageSrc" alt="Linkard thumbnail" (error)="handleImageError($event)" />
   <p
     #description
     class="description"

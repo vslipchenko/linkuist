@@ -1,4 +1,11 @@
-import {ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {DialogService} from '~app/shared/services/dialog/dialog.service';
 // import {DialogTypes} from '~app/types/dialog/dialog.enums';
@@ -45,6 +52,7 @@ export class LinkardsComponent implements OnInit {
   public linkards: Array<unknown> = [];
 
   public constructor(
+    private readonly changeDetector: ChangeDetectorRef,
     private readonly dialogService: DialogService,
     private readonly linkardService: LinkardService,
     private readonly formBuilder: FormBuilder,
@@ -130,6 +138,7 @@ export class LinkardsComponent implements OnInit {
         .pipe(first(), untilDestroyed(this))
         .subscribe(({data}: {data: LinkardsByUserIdQueryResult}) => {
           this.linkards = data.linkardsByUserId;
+          this.changeDetector.detectChanges();
         });
 
       return;
@@ -140,6 +149,7 @@ export class LinkardsComponent implements OnInit {
       .pipe(first(), untilDestroyed(this))
       .subscribe(({data}: {data: LinkardsByUsernameQueryResult}) => {
         this.linkards = data.linkardsByUsername;
+        this.changeDetector.detectChanges();
       });
   }
 

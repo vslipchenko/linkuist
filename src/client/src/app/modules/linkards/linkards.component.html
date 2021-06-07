@@ -16,8 +16,18 @@
   <!--      <app-linkard></app-linkard>-->
   <!--    </ng-template>-->
   <!--  </ng-container>-->
+  <div class="container">
+    <app-linkard *ngFor="let linkard of linkards" [linkard]="linkard" class="linkard"></app-linkard>
+    <!--  <ng-container *ngFor="let i of [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]; index as ind">-->
+    <!--    <div *ngIf="!(ind % 3); else default">-->
+    <!--      <ng-container [ngTemplateOutlet]="default"></ng-container>-->
+    <!--    </div>-->
+    <!--    <ng-template #default>-->
+    <!--      <app-linkard></app-linkard>-->
+    <!--    </ng-template>-->
+    <!--  </ng-container>-->
+  </div>
 
-  <app-linkard *ngFor="let linkard of linkards" [linkard]="linkard"></app-linkard>
   <!--  <app-linkard class="linkard"></app-linkard>-->
   <!--  <app-linkard class="linkard"></app-linkard>-->
   <!--  <app-linkard class="linkard"></app-linkard>-->
@@ -99,7 +109,7 @@
 <app-navigation [mainActionType]="navigationMainActionType">
   <ng-container *ngIf="isOwner">
     <button
-      matTooltip="Add bookmark"
+      matTooltip="Add linkard"
       matTooltipPosition="above"
       mat-icon-button
       (click)="openAddBookmarkDialog()"

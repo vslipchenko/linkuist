@@ -65,16 +65,15 @@ export class ChipsComponent implements OnInit, ControlValueAccessor {
   @ViewChild('chipInput') public inputElementRef: ElementRef<HTMLInputElement> | undefined;
   // @ViewChild('chipList') public test: MatChipList | undefined;
   public areAutocompleteOptionsLoading = false;
-  public chips$: Observable<Array<any>> | undefined;
+  public chips$: Observable<Array<any> | undefined> | undefined;
 
   public constructor(
     @Optional() private readonly controlContainer: ControlContainer,
     private readonly changeDetector: ChangeDetectorRef,
   ) {}
 
-  @Input() public onAutocompleteOptionSelect: (
-    event: MatAutocompleteSelectedEvent,
-  ) => unknown = () => {};
+  @Input() public onAutocompleteOptionSelect: (event: MatAutocompleteSelectedEvent) => unknown =
+    () => {};
 
   public ngOnInit(): void {
     // get control by name if not control itself passed
