@@ -107,6 +107,16 @@
 </ng-template>
 
 <app-navigation [mainActionType]="navigationMainActionType">
+  <button
+    *ngIf="isViewer"
+    matTooltip="Go to profile"
+    matTooltipPosition="above"
+    mat-icon-button
+    [routerLink]="'/@' + resolvedUser.urlUsername"
+  >
+    <mat-icon svgIcon="account-box"></mat-icon>
+  </button>
+
   <ng-container *ngIf="isOwner">
     <button
       matTooltip="Add linkard"

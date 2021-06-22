@@ -1,17 +1,18 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {UserProfileComponent} from './user-profile.component';
+import {ProfileComponent} from './profile.component';
 import {RouterModule} from '@angular/router';
 import {SharedModule} from '~app/shared/shared.module';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
+import {PostsComponent} from './posts/posts.component';
 
 @NgModule({
-  declarations: [UserProfileComponent],
+  declarations: [ProfileComponent, PostsComponent],
   imports: [
-    RouterModule.forChild([{path: '', component: UserProfileComponent}]),
+    RouterModule.forChild([{path: '', component: ProfileComponent}]),
     CommonModule,
     SharedModule,
     MatMenuModule,
@@ -20,4 +21,4 @@ import {MatButtonModule} from '@angular/material/button';
     MatButtonModule,
   ],
 })
-export class UserProfileModule {}
+export class ProfileModule {}

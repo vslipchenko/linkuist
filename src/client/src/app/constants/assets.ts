@@ -2,37 +2,46 @@ import {Icon} from '~app/types/assets/assets.interfaces';
 
 const ASSETS_FOLDER = 'assets/';
 
-const ICONS_FOLDER = `${ASSETS_FOLDER}icons/`;
-export const CUSTOM_ICONS_FOLDER = `${ICONS_FOLDER}custom/`;
-export const MATERIAL_ICONS_FOLDER = `${ICONS_FOLDER}material/`;
+export const ICONS_FOLDER = `${ASSETS_FOLDER}icons/`;
+// export const CUSTOM_ICONS_FOLDER = `${ICONS_FOLDER}custom/`;
+// export const MATERIAL_ICONS_FOLDER = `${ICONS_FOLDER}material/`;
 export const ICONS: Array<Icon> = [
-  {name: 'login', fileName: 'login-24px', isMaterial: true, isOutlined: true},
-  {name: 'person-add', fileName: 'person_add-24px', isMaterial: true, isFilled: true},
-  {name: 'explore', fileName: 'explore-24px', isMaterial: true, isOutlined: true},
-  {name: 'architecture', fileName: 'architecture-24px', isMaterial: true, isOutlined: true},
-  {name: 'share', fileName: 'share-24px', isMaterial: true, isOutlined: true},
-  {name: 'support', fileName: 'support-24px', isMaterial: true, isOutlined: true},
-  {name: 'visibility', fileName: 'visibility-24px', isMaterial: true, isFilled: true},
-  {name: 'visibility-off', fileName: 'visibility_off-24px', isMaterial: true, isFilled: true},
+  {name: 'login', fileName: 'login-24px'},
+  {name: 'person-add', fileName: 'person_add-24px'},
+  {name: 'explore', fileName: 'explore-24px'},
+  {name: 'architecture', fileName: 'architecture-24px'},
+  {name: 'share', fileName: 'share-24px'},
+  {name: 'support', fileName: 'support-24px'},
+  {name: 'visibility', fileName: 'visibility-24px'},
+  {name: 'visibility-off', fileName: 'visibility_off-24px'},
   {
     name: 'account-settings',
     fileName: 'account_settings-24px',
-    isMaterial: true,
-    isFilled: true,
   },
-  {name: 'add', fileName: 'add-24px', isMaterial: true, isOutlined: true},
-  {name: 'linkuist', fileName: 'linkuist_bold-24px', isCustom: true, isOutlined: true},
-  {name: 'home', fileName: 'home-24px', isMaterial: true, isFilled: true},
-  {name: 'exit-to-app', fileName: 'exit_to_app-24px', isMaterial: true, isOutlined: true},
-  {name: 'pencil-plus', fileName: 'pencil_plus-24px', isMaterial: true, isFilled: true},
+  {name: 'add', fileName: 'add-24px'},
+  {name: 'linkuist', fileName: 'linkuist_bold-24px'},
+  {name: 'home', fileName: 'home-24px'},
+  {name: 'exit-to-app', fileName: 'exit_to_app-24px'},
+  {name: 'pencil-plus', fileName: 'pencil_plus-24px'},
   {
     name: 'bookmark-collection',
     fileName: 'collections_bookmark-24px',
-    isMaterial: true,
-    isFilled: true,
   },
-  {name: 'bookmark-plus', fileName: 'book_plus-24px', isMaterial: true, isFilled: true},
-  {name: 'cancel', fileName: 'cancel-24px', isMaterial: true, isFilled: true},
+  {name: 'bookmark-plus', fileName: 'book_plus-24px'},
+  {name: 'cancel', fileName: 'cancel-24px'},
+  {name: 'check-decagram', fileName: 'check_decagram-24px'},
+  {name: 'paid', fileName: 'paid_black-24dp'},
+  {name: 'currency-usd-circle', fileName: 'currency-usd-circle'},
+  {name: 'eye', fileName: 'eye'},
+  {name: 'open-in-new', fileName: 'open-in-new'},
+  {name: 'shopping', fileName: 'shopping'},
+  {name: 'delete-forever', fileName: 'delete-forever'},
+  {name: 'share', fileName: 'share'},
+  {name: 'dots-vertical', fileName: 'dots-vertical'},
+  {name: 'heart', fileName: 'heart'},
+  {name: 'comment', fileName: 'comment'},
+  {name: 'share-variant', fileName: 'share-variant'},
+  {name: 'account-box', fileName: 'account-box'},
   // {name: 'google', fileName: 'google-24px', isOutlined: true},
   // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
 ];

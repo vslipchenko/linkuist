@@ -8,13 +8,12 @@ import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {UserRole} from '~app/types/user/user.enums';
 
 @Component({
-  templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.scss'],
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit {
   public resolvedUser: ResolvedUser = {role: UserRole.Viewer, urlUsername: ''};
-  public readonly userRole = UserRole;
 
   public constructor(
     private readonly changeDetector: ChangeDetectorRef,
@@ -53,7 +52,7 @@ export class UserProfileComponent implements OnInit {
     console.log('NEW', this.route.snapshot);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const user-profile: ResolvedUser =
+    // const profile: ResolvedUser =
     // this.progressBarService.show();
     //
     // const accessToken = this.authenticationService.accessToken;

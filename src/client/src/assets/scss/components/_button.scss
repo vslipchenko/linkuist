@@ -1,0 +1,18 @@
+@use 'variables' as var;
+
+.mat-button.color-success .mat-button-focus-overlay,
+.mat-icon-button.color-success .mat-button-focus-overlay,
+.mat-stroked-button.color-success .mat-button-focus-overlay {
+  background-color: var.$color-success;
+}
+
+.icon-button .mat-button-wrapper {
+  align-items: center;
+  display: flex;
+}
+
+// make mat-hint act like mat-button
+.hint-as-button [mat-button] {
+  line-height: unset;
+  margin-left: -(var.$unit-2);
+}

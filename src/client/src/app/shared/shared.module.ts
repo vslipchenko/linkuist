@@ -18,6 +18,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {LinkardComponent} from './components/linkard/linkard.component';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import {LinkardComponent} from './components/linkard/linkard.component';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
+    MatMenuModule,
   ],
 })
 export class SharedModule {}

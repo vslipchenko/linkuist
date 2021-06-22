@@ -31,6 +31,7 @@ import {
   LinkardsByUserIdQueryResult,
   LinkardsByUsernameQueryResult,
 } from '~app/types/linkard/linkard.interfaces';
+import {getId} from '~app/utilities/unique';
 
 @UntilDestroy()
 @Component({
@@ -122,7 +123,7 @@ export class LinkardsComponent implements OnInit {
       // return;
       this.linkardService
         .create({
-          id: new Date().getTime(),
+          id: getId(),
           ...this.addBookmarkForm.value,
           tags,
         })
@@ -227,6 +228,10 @@ export class LinkardsComponent implements OnInit {
   // public get areActionsVisible(): boolean {
   //   return this.isOwner;
   // }
+
+  public get isViewer(): boolean {
+    return this.resolvedUser.role === UserRole.Viewer;
+  }
 
   public get isOwner(): boolean {
     return this.resolvedUser.role === UserRole.Owner;

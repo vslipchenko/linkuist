@@ -6,7 +6,7 @@ import {URL_USERNAME_REGEXP} from '~app/constants/regexps';
 import {HomeModule} from '~app/modules/home/home.module';
 import {SignInModule} from '~app/modules/sign-in/sign-in.module';
 import {SignUpModule} from '~app/modules/sign-up/sign-up.module';
-import {UserProfileModule} from '~app/modules/user-profile/user-profile.module';
+import {ProfileModule} from '~app/modules/profile/profile.module';
 import {LinkardsModule} from '~app/modules/linkards/linkards.module';
 import {UserResolver} from '~app/shared/resolvers/user/user.resolver';
 import {UserCanActivateGuard} from '~app/guards/user/can-activate/user.guard';
@@ -20,8 +20,8 @@ const routes: Routes = [
     },
     canActivate: [UserCanActivateGuard],
     canLoad: [UserCanLoadGuard],
-    loadChildren: (): Promise<string | typeof UserProfileModule> =>
-      import('~app/modules/user-profile/user-profile.module').then((m) => m.UserProfileModule),
+    loadChildren: (): Promise<string | typeof ProfileModule> =>
+      import('~app/modules/profile/profile.module').then((m) => m.ProfileModule),
   },
   {
     matcher: urlMatcher([URL_USERNAME_REGEXP, 'linkards']),

@@ -14,7 +14,6 @@ import {
   SignInQueryResult,
 } from '~app/types/authentication/authentication.interfaces';
 import jwt_decode from 'jwt-decode';
-import {map} from 'rxjs/operators';
 import {Router} from '@angular/router';
 
 @Injectable({
@@ -76,22 +75,22 @@ export class AuthenticationService {
     }
   }
 
-  public get accessToken$(): Observable<string> {
-    return this.token$.asObservable();
-  }
+  // public get accessToken$(): Observable<string> {
+  //   return this.token$.asObservable();
+  // }
 
-  private get accessTokenData$(): Observable<AccessTokenData | null> {
-    return this.accessToken$.pipe(
-      map((accessToken) => {
-        try {
-          return jwt_decode(accessToken);
-        } catch {
-          // ignore error
-          return null;
-        }
-      }),
-    );
-  }
+  // private get accessTokenData$(): Observable<AccessTokenData | null> {
+  //   return this.accessToken$.pipe(
+  //     map((accessToken) => {
+  //       try {
+  //         return jwt_decode(accessToken);
+  //       } catch {
+  //         // ignore error
+  //         return null;
+  //       }
+  //     }),
+  //   );
+  // }
 
   public set isRefreshingAccessToken(isRefreshing: boolean) {
     this.isRefreshing$.next(isRefreshing);
@@ -100,9 +99,9 @@ export class AuthenticationService {
     return this.isRefreshing$.getValue();
   }
 
-  private get isRefreshingAccessToken$(): Observable<boolean> {
-    return this.isRefreshing$.asObservable();
-  }
+  // private get isRefreshingAccessToken$(): Observable<boolean> {
+  //   return this.isRefreshing$.asObservable();
+  // }
 
   public get refreshToken(): string {
     return localStorage.getItem('token') || '';

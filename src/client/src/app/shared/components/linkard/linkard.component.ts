@@ -29,7 +29,9 @@ export class LinkardComponent implements OnInit {
       label: linkard.metadata.description ? 'Description' : 'Note',
       value:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+      // TODO dont forget to decode!!!
       // value: 'small',
+      // value: '',
     };
     this.changeDetector.detectChanges();
   }
@@ -39,6 +41,12 @@ export class LinkardComponent implements OnInit {
   public imageSrc = '';
   public faviconSrc = '';
   public text = {label: '', value: ''};
+  public liked = false;
+  public shared = false;
+
+  // @HostListener('window:resize') test() {
+  //   console.log('resize');
+  // }
 
   public constructor(
     private readonly dialogService: DialogService,
@@ -61,15 +69,28 @@ export class LinkardComponent implements OnInit {
   }
 
   // counter = 0;
+  // test() {
+  //   console.log('resize');
+  // }
+
+  public like(): void {
+    this.liked = !this.liked;
+  }
+
+  public shareTo(): void {
+    this.shared = !this.shared;
+  }
 
   public handleFaviconError(event: Event): void {
     console.log('favicon error');
     // if (this.counter) return;
-    (event.target as HTMLImageElement).src = '/assets/images/shared/placeholder.jpg';
+    // (event.target as HTMLImageElement).src = '/assets/images/shared/placeholder.jpg';
     // this.counter++;
+    this.faviconSrc = '';
   }
   public handleImageError(event: Event): void {
     console.log('image error');
-    (event.target as HTMLImageElement).src = '/assets/images/shared/placeholder.jpg';
+    // (event.target as HTMLImageElement).src = '/assets/images/shared/placeholder.jpg';
+    this.imageSrc = '';
   }
 }

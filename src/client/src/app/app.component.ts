@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material/icon';
-import {CUSTOM_ICONS_FOLDER, ICONS, MATERIAL_ICONS_FOLDER} from '~app/constants/assets';
-import {Icon} from '~app/types/assets/assets.interfaces';
+import {ICONS, ICONS_FOLDER} from '~app/constants/assets';
+// import {Icon} from '~app/types/assets/assets.interfaces';
 import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 
 @Component({
@@ -57,21 +57,21 @@ export class AppComponent implements OnInit {
   // }
 
   private registerMaterialIcons(): void {
-    const registerIcons = (icons: Array<Icon>): void => {
-      icons.forEach((icon) => {
-        this.matIconRegistry.addSvgIcon(
-          icon.name,
-          this.domSanitizer.bypassSecurityTrustResourceUrl(
-            `${
-              (icon.isMaterial && MATERIAL_ICONS_FOLDER) || (icon.isCustom && CUSTOM_ICONS_FOLDER)
-            }${(icon.isOutlined && 'outlined/') || (icon.isFilled && 'filled/') || ''}${
-              icon.fileName
-            }.svg`,
-          ),
-        );
-      });
-    };
-
-    registerIcons(ICONS);
+    // const registerIcons = (icons: Array<Icon>): void => {
+    //   icons.forEach((icon) => {
+    //     this.matIconRegistry.addSvgIcon(
+    //       icon.name,
+    //       this.domSanitizer.bypassSecurityTrustResourceUrl(`${ICONS_FOLDER}${icon.fileName}.svg`),
+    //     );
+    //   });
+    // };
+    //
+    // registerIcons(ICONS);
+    ICONS.forEach((icon) => {
+      this.matIconRegistry.addSvgIcon(
+        icon.name,
+        this.domSanitizer.bypassSecurityTrustResourceUrl(`${ICONS_FOLDER}${icon.fileName}.svg`),
+      );
+    });
   }
 }

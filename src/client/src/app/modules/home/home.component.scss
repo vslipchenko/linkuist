@@ -22,7 +22,7 @@ $home-section-width: 70%;
 
 .home-content {
   align-items: center;
-  background-color: var.$theme-light-darker;
+  background-color: var.$color-light-darker;
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -109,7 +109,7 @@ $home-section-width: 70%;
 
 .home-background {
   align-items: center;
-  background-color: var.$theme-primary;
+  background-color: var.$color-primary;
   display: flex;
   height: var.$common-main-screen-height;
   justify-content: center;

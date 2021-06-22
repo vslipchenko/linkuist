@@ -286,7 +286,7 @@ export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> =>
 
     // if (Url?.hostname) metadata.hostname = Url.hostname; // Prettify
 
-    //if (!userAgent) return resolve(fulfillMetadata(responseData)); // Out of user-profile agents
+    //if (!userAgent) return resolve(fulfillMetadata(responseData)); // Out of profile agents
 
     options.headers['Host'] = Url?.host;
     options.headers['User-Agent'] = userAgent;
@@ -307,13 +307,13 @@ export const fetchUrlMetadata = (sourceUrl: string): Promise<FetchedMetadata> =>
         response.destroy();
 
         if (redirectCounter > maxRedirectCountPerUserAgent) {
-          return fetchMetadata(sourceUrl, options, resolve); // try to fetch with another user-profile agent
+          return fetchMetadata(sourceUrl, options, resolve); // try to fetch with another profile agent
         }
 
         // redirectLocation = isRelativeUrl(redirectLocation) ? resolveAmbiguousHref(redirectLocation, Url?.origin) : redirectLocation;
         redirectLocation = resolveAmbiguousHref(redirectLocation, Url?.origin); // the second argument is ignored if redirectLocation is an absolute url
 
-        return fetchMetadata(redirectLocation, options, resolve, userAgent); // no need to switch user-profile agent on redirect
+        return fetchMetadata(redirectLocation, options, resolve, userAgent); // no need to switch profile agent on redirect
       }
       // reset counter
       redirectCounter = 0;

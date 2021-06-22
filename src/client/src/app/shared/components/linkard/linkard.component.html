@@ -1,24 +1,138 @@
+<div class="d-flex align-items-center justify-content-between px-2 mb-h">
+  <div class="d-flex ml-auto">
+    <mat-icon
+      class="color-success"
+      svgIcon="paid"
+      matTooltip="Paid"
+      matTooltipPosition="above"
+    ></mat-icon>
+  </div>
+  <!--  <div style="display: flex; color: #8e8e8e; font-size: 0.9rem; font-weight: bold">-->
+  <!--    <div style="display: flex; align-items: center" class="mr-1">-->
+  <!--      <mat-icon svgIcon="eye" class="mr-h" style="width: 18px; height: 18px"></mat-icon>-->
+  <!--      27k-->
+  <!--    </div>-->
+  <!--    <div style="display: flex; align-items: center" class="mr-1">-->
+  <!--      <mat-icon svgIcon="eye" class="mr-h" style="width: 18px; height: 18px"></mat-icon>-->
+  <!--      27k-->
+  <!--    </div>-->
+  <!--    <div style="display: flex; align-items: center">-->
+  <!--      <mat-icon svgIcon="eye" class="mr-h" style="width: 18px; height: 18px"></mat-icon>-->
+  <!--      27k-->
+  <!--    </div>-->
+  <!--  </div>-->
+</div>
+
 <article class="linkard-card">
-  <header class="header">
-    <img
-      *ngIf="faviconSrc"
-      [src]="faviconSrc"
-      class="favicon"
-      alt="Linkard favicon"
-      (error)="handleFaviconError($event)"
-    />
-    <h2 *ngIf="title" class="as-text">{{ title }}</h2>
+  <header class="d-flex align-items-center justify-content-between mb-1">
+    <div class="linkard-essentials d-flex">
+      <img
+        *ngIf="faviconSrc"
+        [src]="faviconSrc"
+        class="favicon"
+        alt="Linkard favicon"
+        (error)="handleFaviconError($event)"
+      />
+      <h2 *ngIf="title" class="as-text text-truncate">
+        {{ title }}
+      </h2>
+    </div>
+    <button
+      [matMenuTriggerFor]="profileSettings"
+      mat-icon-button
+      color="primary"
+      class="ml-auto mr-n1"
+      aria-label="Example icon button with a delete icon"
+    >
+      <mat-icon svgIcon="dots-vertical"></mat-icon>
+    </button>
+    <mat-menu #profileSettings>
+      <!--      <button mat-menu-item>-->
+      <!--        <mat-icon svgIcon="share-variant"></mat-icon>-->
+      <!--        Share to-->
+      <!--      </button>-->
+      <button mat-menu-item>
+        <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>
+        Delete
+      </button>
+    </mat-menu>
+    <!--    <div style="display: flex">-->
+    <!--      <button mat-icon-button color="primary" style="margin-left: auto; margin-right: -8px">-->
+    <!--        <mat-icon svgIcon="share"></mat-icon>-->
+    <!--      </button>-->
+    <!--      <button mat-icon-button color="warn" style="margin-left: auto; margin-right: -8px">-->
+    <!--        <mat-icon svgIcon="delete-forever"></mat-icon>-->
+    <!--      </button>-->
+
+    <!--    </div>-->
   </header>
-  <img class="image" [src]="imageSrc" alt="Linkard thumbnail" (error)="handleImageError($event)" />
-  <p
-    #description
-    class="description"
-    [class.tease]="description.scrollHeight > description.clientHeight"
+  <div
+    class="
+      linkard-panel
+      mx-n2
+      px-2
+      d-flex
+      flex-wrap
+      justify-content-around
+      color-light-dark
+      border-y
+    "
   >
-    <strong>{{ text.label }}: </strong> {{ text.value }}
-  </p>
+    <button
+      mat-button
+      class="icon-button d-flex justify-content-center flex"
+      (click)="like()"
+      [color]="liked ? 'warn' : null"
+    >
+      <!--    <div style="display: flex; align-items: center" class="mr-1">-->
+      <mat-icon svgIcon="heart" class="d-flex mr-h icon-sm"></mat-icon>
+      <span class="font-weight-bold">27k</span>
+      <!--    </div>-->
+    </button>
+    <button mat-button class="icon-button d-flex justify-content-center flex">
+      <mat-icon svgIcon="comment" class="d-flex mr-h icon-sm"></mat-icon>
+      <span class="font-weight-bold">27k</span>
+    </button>
+    <button
+      mat-button
+      class="icon-button d-flex justify-content-center flex"
+      (click)="shareTo()"
+      [color]="shared ? 'primary' : null"
+    >
+      <mat-icon svgIcon="share" class="mr-h"></mat-icon>
+      <span class="font-weight-bold">27k</span>
+    </button>
+  </div>
+  <img
+    *ngIf="imageSrc"
+    class="image border-bottom"
+    [src]="imageSrc"
+    alt="Linkard thumbnail"
+    (error)="handleImageError($event)"
+  />
+  <ng-container *ngIf="text.value">
+    <p
+      #description
+      class="description"
+      [class.tease]="description.scrollHeight > description.clientHeight"
+    >
+      <strong>{{ text.label }}: </strong> {{ text.value }}
+    </p>
+  </ng-container>
   <footer class="actions">
-    <button mat-button color="primary" (click)="openCard()">SHOW</button>
+    <!--    <button mat-button class="icon-button" style="color: #008543" (click)="openCard()">-->
+    <button mat-button class="icon-button color-success" (click)="openCard()">
+      <mat-icon svgIcon="shopping" class="d-flex mr-h icon-sm"></mat-icon>
+      BUY
+    </button>
+    <button mat-button color="accent" class="icon-button" (click)="openCard()">
+      <mat-icon svgIcon="open-in-new" class="d-flex mr-h icon-sm"></mat-icon>
+      OPEN
+    </button>
+    <button mat-button color="primary" class="icon-button" (click)="openCard()">
+      <mat-icon svgIcon="eye" class="d-flex mr-h icon-sm"></mat-icon>
+      SHOW
+    </button>
   </footer>
 </article>
 
@@ -28,7 +142,7 @@
     <!--    </div>-->
     <img class="image" src="https://material.angular.io/assets/img/examples/shiba2.jpg" />
     <div class="content">
-      <header class="header">
+      <header class="d-flex align-items-center">
         <img
           class="favicon"
           src="https://res.cloudinary.com/practicaldev/image/fetch/s--E8ak4Hr1--/c_limit,f_auto,fl_progressive,q_auto,w_32/https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico"

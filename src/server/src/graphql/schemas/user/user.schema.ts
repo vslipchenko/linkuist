@@ -9,4 +9,5 @@ export const userTypeDefinitions = [
   userQueryTypeDefinitions,
   userMutationTypeDefinitions,
 ];
+
 export const userResolvers = [userQueryResolvers, userMutationResolvers];

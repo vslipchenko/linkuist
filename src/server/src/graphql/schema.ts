@@ -7,6 +7,7 @@ import {
 } from './schemas/authentication/authentication.schema';
 import {linkardResolvers, linkardTypeDefinitions} from './schemas/linkard/linkard.schema';
 import {userTypeDefinitions, userResolvers} from './schemas/user/user.schema';
+import {postResolvers, postTypeDefinitions} from './schemas/post/post.schema';
 
 // TODO remove as soon as extend of empty types is available
 const rootTypeDefs = gql`
@@ -25,6 +26,7 @@ export default makeExecutableSchema({
     ...scalarTypeDefinitions,
     ...authenticationTypeDefinitions,
     ...userTypeDefinitions,
+    ...postTypeDefinitions,
     ...linkardTypeDefinitions,
   ],
   resolvers: _merge(
@@ -32,6 +34,7 @@ export default makeExecutableSchema({
     ...scalarResolvers,
     ...authenticationResolvers,
     ...userResolvers,
+    ...postResolvers,
     ...linkardResolvers,
   ),
 });

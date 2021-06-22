@@ -1,14 +1,16 @@
 @use '~@angular/material/theming' as mat;
 //@use 'components/navigation/variables' as navigationVar;
 
-/* theme */
-$theme-primary: map-get(mat.$mat-blue, 500); // #2196f3
-$theme-accent: map-get(mat.$mat-pink, 500); // #e91e63
-$theme-warn: map-get(mat.$mat-red, 500); // #f44336
-$theme-light: #fff;
-$theme-light-darker: #fafafa;
-$theme-light-darkest: #dbdbdb;
-$theme-dark: #000;
+/* color */
+$color-primary: map-get(mat.$mat-blue, 500); // #2196f3
+$color-accent: map-get(mat.$mat-pink, 500); // #e91e63
+$color-warn: map-get(mat.$mat-red, 500); // #f44336
+$color-success: #28a745;
+$color-light: #fff;
+$color-light-darker: #fafafa;
+$color-light-darkest: #dbdbdb;
+$color-light-dark: #8e8e8e;
+$color-dark: #000;
 
 /* unit measures */
 $unit: 8px;
@@ -24,13 +26,13 @@ $unit-9: $unit * 9;
 $unit-10: $unit * 10;
 
 /* font size (default: 1rem = 16px) */
-$font-size-root: 16px;
+$font-size-root: 16px; // define fixed font size
 $font-size-largest: 2rem;
 $font-size-larger: 1.5rem;
 $font-size-large: 1.2rem;
 $font-size-regular: 0.9rem;
-$font-size-medium: 0.7rem;
-$font-size-small: 0.5rem;
+//$font-size-medium: 0.7rem;
+//$font-size-small: 0.5rem;
 
 /* responsive breakpoints and unit interval */
 $breakpoint-small: 568px; // < portrait phones, > landscape phones
@@ -48,7 +50,7 @@ $common-navigation-height: 48px;
 $common-main-screen-height: calc(100vh - #{$common-navigation-height});
 $common-line-height: 1.428;
 $common-default-material-icon-size: 24px;
-// user-profile-page
+// profile-page
 $common-user-page-content-block-min-height: 148px; // littlest height that dont cause scroll on device viewport >= iphone se
 $common-user-page-content-block-width-1: calc(100% - #{$unit-3} * 2);
 $common-user-page-content-block-width-2: 500px;

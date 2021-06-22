@@ -17,10 +17,10 @@ import {USER_ID_BY_EMAIL, USER_ID_BY_USERNAME} from '~app/graphql/user/user.quer
 export class UserService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public create({email, username, password}: UserSignUpPayload): Observable<FetchResult<RecordId>> {
+  public create(input: UserSignUpPayload): Observable<FetchResult<RecordId>> {
     return this.apollo.mutate({
       mutation: CREATE_USER,
-      variables: {input: {email, username, password}},
+      variables: {input},
     });
   }
 
