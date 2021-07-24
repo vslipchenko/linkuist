@@ -118,7 +118,7 @@ export class SignInComponent implements OnInit {
             const username = this.authenticationService.accessTokenData?.username;
 
             if (username) {
-              void this.router.navigate([`/@${username}`]);
+              void this.router.navigate([`@${username}`]);
             }
           },
           ({graphQLErrors}: ApolloError) => {

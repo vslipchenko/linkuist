@@ -1,15 +1,17 @@
 @use 'variables' as var;
 @use 'media';
 
-@mixin content-first-block-media {
-  @include media.zero-small {
-    margin-top: var.$unit-4;
-  }
-
-  @include media.above-small {
-    margin-top: var.$unit-2;
-  }
-}
+//@mixin content-first-block-media {
+//  @include media.zero-small {
+//    margin-top: var.$unit-4;
+//    margin-bottom: var.$unit-4;
+//  }
+//
+//  @include media.above-small {
+//    margin-top: var.$unit-2;
+//    margin-bottom: var.$unit-2;
+//  }
+//}
 
 @mixin content-block-media {
   @include media.zero-small {
@@ -43,8 +45,18 @@
   transition: 0.5s bottom;
   width: 100%;
 
-  @include content-first-block-media;
+  //@include content-first-block-media;
   @include content-block-media;
+
+  //@include media.zero-small {
+  //  margin-bottom: var.$unit-4;
+  //  //margin-top: var.$unit-4;
+  //}
+  //
+  //@include media.above-small {
+  //  margin-bottom: var.$unit-2;
+  //  //margin-top: var.$unit-2;
+  //}
 }
 
 .notes-add .input {
@@ -66,27 +78,38 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  gap: var.$unit-4;
   width: 100%;
+
+  @include media.zero-small {
+    padding-top: var.$unit-4;
+    //margin-top: var.$unit-4;
+  }
+
+  @include media.above-small {
+    padding-top: var.$unit-2;
+    //margin-top: var.$unit-2;
+  }
 }
 
-.notes-content:empty {
-  justify-content: center;
-}
-
-.notes-content:empty::after {
-  align-items: center;
-  background-color: var.$color-light;
-  border: 1.5px dashed var.$color-light-darkest;
-  content: attr(data-empty-notes);
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  //margin-top: 50px;
-  margin: var.$unit-2 auto;
-  max-height: var.$common-user-page-content-block-width-3;
-  min-height: var.$common-user-page-content-block-min-height;
-  width: var.$common-user-page-content-block-width-3;
-}
+//.notes-content:empty {
+//  justify-content: center;
+//}
+//
+//.notes-content:empty::after {
+//  align-items: center;
+//  background-color: var.$color-light;
+//  border: 1.5px dashed var.$color-light-darkest;
+//  content: attr(data-empty-notes);
+//  display: flex;
+//  height: 100%;
+//  justify-content: center;
+//  //margin-top: 50px;
+//  margin: var.$unit-2 auto;
+//  max-height: var.$common-user-page-content-block-width-3;
+//  min-height: var.$common-user-page-content-block-min-height;
+//  width: var.$common-user-page-content-block-width-3;
+//}
 
 .note {
   background-color: var.$color-light;
@@ -95,24 +118,25 @@
   margin-left: auto;
   margin-right: auto;
   padding: var.$unit-2;
+  width: 100%;
 
   @include content-block-media;
 }
 
-.note:first-child {
-  @include content-first-block-media;
-}
+//.note:first-child {
+//  @include content-first-block-media;
+//}
 
-.note:not(:last-child) {
-  margin-bottom: var.$unit-4;
-}
+//.note:not(:last-child) {
+//  margin-bottom: var.$unit-4;
+//}
 
-.note:last-child {
-  @include media.zero-small {
-    margin-bottom: var.$unit-4;
-  }
-
-  @include media.above-small {
-    margin-bottom: var.$unit-2;
-  }
-}
+//.note:last-child {
+//  @include media.zero-small {
+//    margin-bottom: var.$unit-4;
+//  }
+//
+//  @include media.above-small {
+//    margin-bottom: var.$unit-2;
+//  }
+//}

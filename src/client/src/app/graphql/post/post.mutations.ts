@@ -4,6 +4,10 @@ export const CREATE_POST = gql`
   mutation ($input: CreatePostMutationInput!) {
     createPost(input: $input) {
       _id
+      createdAt
+      text
+      postId
+      isRepost
     }
   }
 `;

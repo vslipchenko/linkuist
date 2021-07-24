@@ -3,9 +3,9 @@
 // Utility styles
 
 // size
-//.w-100 {
-//  width: 100%;
-//}
+.w-100 {
+  width: 100%;
+}
 
 // flexbox
 .d-flex {
@@ -69,6 +69,10 @@
   margin-bottom: var.$unit;
 }
 
+.mb-2 {
+  margin-bottom: var.$unit-2;
+}
+
 .mx-n2 {
   margin-left: -#{var.$unit-2};
   margin-right: -#{var.$unit-2};
@@ -98,6 +102,11 @@
 .color-light-dark {
   color: var.$color-light-dark;
 }
+
+.color-dark {
+  color: var.$color-dark;
+}
+
 // font
 .font-weight-bold {
   font-weight: bold;

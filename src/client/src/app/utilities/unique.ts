@@ -1,3 +1,3 @@
-export const getId = (): number => {
-  return new Date().getTime();
-};
+// export const getId = (): number => {
+//   return new Date().getTime();
+// };

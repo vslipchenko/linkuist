@@ -20,17 +20,10 @@ import {
 export class LinkardService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public create({
-    id,
-    link,
-    note,
-    isPrivate,
-    isPaid,
-    tags,
-  }: LinkardCreatePayload): Observable<FetchResult<RecordId>> {
+  public create(input: LinkardCreatePayload): Observable<FetchResult<RecordId>> {
     return this.apollo.mutate({
       mutation: CREATE_LINKARD,
-      variables: {input: {id, link, note, isPrivate, isPaid, tags}},
+      variables: {input},
     });
   }
 

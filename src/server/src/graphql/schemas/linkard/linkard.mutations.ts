@@ -1,16 +1,18 @@
-import {gql} from 'apollo-server-express';
+import {ApolloError, gql} from 'apollo-server-express';
 import {authenticationGuard} from '../../../utilities/guards';
 import {ILinkard} from '../../../types/linkard/linkard.interfaces';
 import {Linkard} from '../../../models/linkard';
 import {fetchUrlMetadata} from '../../../utilities/url-metadata';
+import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
+import {getUtcMillisecondTimestamp} from '../../../utilities/date';
 
 const createLinkard = async (
   _: unknown,
-  {input}: {input: Omit<ILinkard, 'userId'>},
+  {input}: {input: Omit<ILinkard, 'userId' | 'createdAt'>},
   {accessToken}: {accessToken: string},
-): Promise<unknown> => {
+): Promise<MongooseDocument<ILinkard> | ApolloError> => {
   const {tokenData, error} = await authenticationGuard(accessToken);
-  if (!tokenData) return error;
+  if (error) return error;
   // TODO Bookmark input validation
   // try {
   //   new URL(input.link);
@@ -34,6 +36,7 @@ const createLinkard = async (
     ...input,
     metadata,
     userId: tokenData.userId,
+    createdAt: getUtcMillisecondTimestamp(),
   });
 };
 

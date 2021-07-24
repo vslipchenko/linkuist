@@ -85,6 +85,7 @@
       <mat-slide-toggle formControlName="isPrivate" labelPosition="after">Private</mat-slide-toggle>
       <mat-slide-toggle formControlName="isPaid" labelPosition="after">Paid</mat-slide-toggle>
     </div>
+    <!-- Add term whitelist -->
     <app-chips
       formControlName="tags"
       label="Tags"
@@ -117,7 +118,7 @@
     <mat-icon svgIcon="account-box"></mat-icon>
   </button>
 
-  <ng-container *ngIf="isOwner">
+  <ng-container *ngIf="isUser">
     <button
       matTooltip="Add linkard"
       matTooltipPosition="above"

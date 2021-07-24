@@ -52,7 +52,7 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:not(.link-no-underline):hover {
   text-decoration: underline;
 }
 
@@ -103,6 +103,9 @@ textarea {
   }
 }
 
+mat-progress-bar {
+  height: 2px;
+}
 //.icon-button {
 //  display: flex !important;
 //  justify-content: center;

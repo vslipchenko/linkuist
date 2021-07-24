@@ -14,15 +14,15 @@
   padding: 0;
 }
 
-.dialog-small {
-  @include media.small-huge {
-    min-width: 50vw;
-  }
-
-  @include media.above-huge {
-    min-width: 30vw;
-  }
-}
+//.dialog-small {
+//  @include media.small-huge {
+//    min-width: 50vw;
+//  }
+//
+//  @include media.above-huge {
+//    min-width: 30vw;
+//  }
+//}
 
 //.dialog-medium {
 //  @include media.above-small {
@@ -33,4 +33,24 @@
 .dialog .mat-dialog-actions .mat-button-base + .mat-button-base,
 .dialog .mat-dialog-actions .mat-mdc-button-base + .mat-mdc-button-base {
   margin-left: var.$unit-2;
+}
+
+.linkard-dialog {
+  @include media.small-huge {
+    min-width: 50vw;
+  }
+
+  @include media.above-huge {
+    min-width: 30vw;
+  }
+}
+
+.profile-settings-dialog {
+  @include media.small-large {
+    min-width: var.$common-user-page-content-block-width-2;
+  }
+
+  @include media.above-large {
+    min-width: var.$common-user-page-content-block-width-3;
+  }
 }

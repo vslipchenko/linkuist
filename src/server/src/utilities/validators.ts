@@ -1,6 +1,6 @@
 import {Constructable} from '../types/utility/utility.types';
-
 type PatternArrowFunction = (value: any) => boolean;
+// type Pattern = RegExp | Constructable | PatternArrowFunction | Array<any>; // e.g. /[a-z]/ | URL | (value: any) => boolean (isValid)
 type Pattern = RegExp | Constructable | PatternArrowFunction; // e.g. /[a-z]/ | URL | (value: any) => boolean (isValid)
 type ComplexPattern = Record<string, Pattern>;
 
@@ -10,18 +10,21 @@ interface CheckDataValidityOptions {
   pathsToCheck?: Array<string>;
   outputInvalidPaths?: boolean;
   ignoreNumericKeys?: boolean;
+  ignoreUndefinedValuePaths?: Array<string>;
 }
 
 type CheckDataValidityResult =
   | {isValidData: boolean}
   | {isValidData: boolean; invalidPaths: Array<string>};
-
+// !!! It does not check data integrity, returns {isValidData: true} in case of data path / pattern path mismatch
+// Set data object explicitly to make sure that all required properties are in place
 export const checkDataValidity = ({
   data,
   pattern, // Expect RegExp | Constructable | PatternArrowFunction OR ComplexPattern
-  pathsToCheck = [],
+  pathsToCheck = [], // Useful in case if pattern represented as a single validator for the entire data object where certain properties validation can be skipped
   outputInvalidPaths = false,
   ignoreNumericKeys = true,
+  ignoreUndefinedValuePaths = [],
 }: CheckDataValidityOptions): CheckDataValidityResult => {
   const invalidPaths: Array<string> = [];
 
@@ -47,13 +50,15 @@ export const checkDataValidity = ({
     } else {
       const fullPath = path.join('.') || 'data'; // Assign data key in case if validating array or primitive value, in that case path result of join is ''
 
+      if (value === undefined && ignoreUndefinedValuePaths.includes(fullPath)) return;
+
       // Validate entire data object or specific paths, check for duplicate invalid paths in case of array values validation
       if (
         !invalidPaths.includes(fullPath) &&
         (!pathsToCheck.length || pathsToCheck.includes(fullPath))
       ) {
         // RegExp
-        // Fall-through condition is intentional in order to trap in suitable condition and prevent further conditions check
+        // Fall-through condition is intentional in order to fall in suitable condition and prevent further conditions check
         if (pattern instanceof RegExp) {
           if (!pattern.test(value)) invalidPaths.push(fullPath);
           return;
@@ -67,13 +72,23 @@ export const checkDataValidity = ({
 
         // If paths specified, e.g. { name: <RegExp>/[a-z]/, link: <Constructable>URL, isValidPassword: <Function>(value: any) => boolean }
         if (pattern.constructor === Object) {
+          // console.log('here 69', pattern, fullPath);
           if (Object.prototype.hasOwnProperty.call(pattern, fullPath)) {
+            // console.log('here 71');
             // { name: <RegExp>/[a-z]/ }
             if ((pattern as ComplexPattern)[fullPath] instanceof RegExp) {
+              // console.log('here 74');
               if (!((pattern as ComplexPattern)[fullPath] as RegExp).test(value))
                 invalidPaths.push(fullPath);
               return;
             }
+
+            // {order: [SortOrder.ASCENDING, SortOrder.DESCENDING]} pick one of
+            // if (Array.isArray((pattern as ComplexPattern)[fullPath])) {
+            //   if (!((pattern as ComplexPattern)[fullPath] as Array<any>).includes(value))
+            //     invalidPaths.push(fullPath);
+            //   return;
+            // }
 
             // { isValidPassword: <Function>(value: any) => boolean (isValid) }
             if (
@@ -95,7 +110,7 @@ export const checkDataValidity = ({
           return;
         }
 
-        // Constructable
+        // Constructable (<Constructable>URL)
         try {
           new (pattern as Constructable)(value);
         } catch {
@@ -130,11 +145,11 @@ export const checkDataValidity = ({
 //   checkDataValidity({
 //     data: {
 //       number: 3,
-//       strings: ['first', 'second'],
+//       strings: { nested: ['first', 'second'] },
 //     },
-//     pattern: {number: /[0-9]/, strings: /[a-z]/},
+//     pattern: {number: /[0-9]/, 'strings.nested': /[a-z]/},
 //     outputInvalidPaths: true,
-//     pathsToCheck: ['number', 'strings'],
+//     pathsToCheck: ['number', 'strings.nested'],
 //   }),
 // );
 

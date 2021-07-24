@@ -24,4 +24,5 @@ export interface UserSignInPayload {
 export interface ResolvedUser {
   role: UserRole;
   urlUsername: string;
+  relativePaths: Array<string>; // urlUsername relative paths
 }

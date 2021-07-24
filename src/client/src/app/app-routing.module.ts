@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {urlMatcher} from '~app/utilities/url';
+import {multiUrlMatcher, urlMatcher} from '~app/utilities/url';
 import {PageNotFoundComponent} from '~app/shared/components/page-not-found/page-not-found.component';
 import {URL_USERNAME_REGEXP} from '~app/constants/regexps';
 import {HomeModule} from '~app/modules/home/home.module';
@@ -14,7 +14,11 @@ import {UserCanLoadGuard} from '~app/guards/user/can-load/user.guard';
 
 const routes: Routes = [
   {
-    matcher: urlMatcher([URL_USERNAME_REGEXP]),
+    matcher: multiUrlMatcher([
+      // match any of list items
+      [URL_USERNAME_REGEXP],
+      [URL_USERNAME_REGEXP, 'settings', 'profile'],
+    ]),
     resolve: {
       user: UserResolver,
     },

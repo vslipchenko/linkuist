@@ -8,6 +8,10 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
 import {PostsComponent} from './posts/posts.component';
+import {ReactiveFormsModule} from '@angular/forms';
+// import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [ProfileComponent, PostsComponent],
@@ -19,6 +23,10 @@ import {PostsComponent} from './posts/posts.component';
     MatIconModule,
     MatTooltipModule,
     MatButtonModule,
+    ReactiveFormsModule,
+    // MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
   ],
 })
 export class ProfileModule {}

@@ -4,8 +4,8 @@ import jwt, {TokenExpiredError} from 'jsonwebtoken';
 import {AccessTokenData} from '../types/jwt/jwt.interfaces';
 
 interface AuthenticationInterceptorResult {
-  error?: ApolloError;
-  tokenData?: AccessTokenData;
+  error: ApolloError;
+  tokenData: AccessTokenData;
 }
 
 export const authenticationGuard = (
@@ -13,18 +13,24 @@ export const authenticationGuard = (
 ): Promise<AuthenticationInterceptorResult> => {
   return new Promise((resolve) => {
     if (!accessToken) {
-      return resolve({error: new ApolloError('', 'ACCESS_TOKEN_EMPTY')});
+      return resolve({
+        error: new ApolloError('', 'ACCESS_TOKEN_EMPTY'),
+      } as AuthenticationInterceptorResult);
     }
 
     try {
       const tokenData = jwt.verify(accessToken, ACCESS_JWT_SECRET) as AccessTokenData;
-      resolve({tokenData});
+      resolve({tokenData} as AuthenticationInterceptorResult);
     } catch (error) {
       // The only legit error
       if (error instanceof TokenExpiredError) {
-        return resolve({error: new ApolloError('', 'ACCESS_TOKEN_EXPIRED')});
+        return resolve({
+          error: new ApolloError('', 'ACCESS_TOKEN_EXPIRED'),
+        } as AuthenticationInterceptorResult);
       } else {
-        return resolve({error: new ApolloError('', 'ACCESS_TOKEN_INVALID')});
+        return resolve({
+          error: new ApolloError('', 'ACCESS_TOKEN_INVALID'),
+        } as AuthenticationInterceptorResult);
       }
     }
   });

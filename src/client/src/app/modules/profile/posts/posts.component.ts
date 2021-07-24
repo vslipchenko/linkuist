@@ -1,26 +1,96 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {UserRole} from '~app/types/user/user.enums';
 import {PostService} from '~app/services/post/post.service';
-import {getId} from '~app/utilities/unique';
+import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
+import {AuthenticationService} from '~app/services/authentication/authentication.service';
+import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
+import {
+  PostCreateMutationResult,
+  PostsByUserIdQueryResult,
+  PostsByUsernameQueryResult,
+} from '~app/types/post/post.interfaces';
+import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
+import {finalize} from 'rxjs/operators';
+import {SortOrder} from '~app/types/shared/shared.enums';
 
+@UntilDestroy()
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostsComponent implements OnInit {
-  @Input() public readonly resolvedUser: ResolvedUser = {role: UserRole.Viewer, urlUsername: ''};
+  @Input() public readonly resolvedUser: ResolvedUser = {
+    role: UserRole.Viewer,
+    urlUsername: '',
+    relativePaths: [],
+  };
   public readonly UserRole = UserRole;
+  public posts: Array<unknown> = [];
 
-  public constructor(private readonly postService: PostService) {}
+  public constructor(
+    private readonly postService: PostService,
+    private readonly authenticationService: AuthenticationService,
+    private readonly changeDetector: ChangeDetectorRef,
+    private readonly progressBarService: ProgressBarService,
+  ) {}
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void {
+    this.fetchAllPosts();
+  }
+
+  public postsTrackBy(index: number, post: any): string {
+    return post._id;
+  }
 
   public createPost(text: string): void {
-    this.postService.create({
-      id: getId(),
-      text,
-    });
+    this.progressBarService.show();
+    this.postService
+      .create({
+        // createdAt: getId(),
+        text,
+      })
+      .pipe(
+        untilDestroyed(this),
+        finalize(() => {
+          this.progressBarService.hide();
+        }),
+      )
+      .subscribe(({data}: FetchResult<PostCreateMutationResult>) => {
+        this.posts.unshift(data!.createPost);
+        this.changeDetector.detectChanges();
+      });
+  }
+
+  private fetchAllPosts(): void {
+    this.progressBarService.show();
+
+    if (this.resolvedUser.role === UserRole.User) {
+      this.postService
+        .getAllByUserId(this.authenticationService.accessTokenData!.userId, SortOrder.DESCENDING)
+        .pipe(
+          finalize(() => this.progressBarService.hide()),
+          untilDestroyed(this),
+        )
+        .subscribe(({data}: ApolloQueryResult<PostsByUserIdQueryResult>) => {
+          this.posts = data.postsByUserId.slice();
+          this.changeDetector.detectChanges();
+        });
+
+      return;
+    }
+
+    this.postService
+      .getAllByUsername(this.resolvedUser.urlUsername, SortOrder.DESCENDING)
+      .pipe(
+        finalize(() => this.progressBarService.hide()),
+        untilDestroyed(this),
+      )
+      .subscribe(({data}: ApolloQueryResult<PostsByUsernameQueryResult>) => {
+        this.posts = data.postsByUsername.slice();
+        this.changeDetector.detectChanges();
+      });
   }
 }

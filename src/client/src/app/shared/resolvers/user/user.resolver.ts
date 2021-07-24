@@ -16,15 +16,24 @@ export class UserResolver implements Resolve<ResolvedUser> {
 
     // TODO move to url.ts utilities once stable
     const username = route.url[0].path.slice(1);
+    const resolvedUser = {
+      urlUsername: username,
+      //relativePaths: route.url.slice(1).map((segment) => segment.path), // Drop urlUsername path
+    } as ResolvedUser; // Paths have to be extracted from the router events only!!!
 
     if (accessToken && refreshToken) {
       const data = this.authenticationService.accessTokenData;
 
       if (data?.username === username) {
-        return {role: UserRole.Owner, urlUsername: username};
+        resolvedUser.role = UserRole.User;
+        return resolvedUser;
       }
+
+      resolvedUser.role = UserRole.Viewer;
+      return resolvedUser;
     }
 
-    return {role: UserRole.Viewer, urlUsername: username};
+    resolvedUser.role = UserRole.Guest;
+    return resolvedUser;
   }
 }

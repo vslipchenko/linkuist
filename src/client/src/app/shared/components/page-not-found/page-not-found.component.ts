@@ -9,7 +9,7 @@ import {Router} from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageNotFoundComponent {
-  public statusCode = 404;
+  public statusCode = 404; // number | string
 
   public constructor(
     private readonly authenticationService: AuthenticationService,

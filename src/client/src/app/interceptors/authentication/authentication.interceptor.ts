@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {
+  HttpErrorResponse,
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
@@ -107,10 +108,15 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         // release stream
         return of(response);
       }),
-      catchError((error) => {
+      catchError((error: HttpErrorResponse) => {
         // Probably server error
         // setTimeout(() => {
-        void this.router.navigate(['**'], {skipLocationChange: true, state: {statusCode: 500}});
+        if (error.status > 499) {
+          void this.router.navigate(['**'], {
+            skipLocationChange: true,
+            state: {statusCode: '50X'},
+          });
+        }
         // }, 3000);
 
         return throwError(error);

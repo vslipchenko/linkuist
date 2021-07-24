@@ -5,7 +5,7 @@ interface ILinkardTag {
 }
 
 export interface ILinkard {
-  id: number; // = new Date().getTime()
+  createdAt: number; // = new Date().getTime()
   userId: string;
   link: string;
   note: string;

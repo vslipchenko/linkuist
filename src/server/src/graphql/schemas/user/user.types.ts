@@ -5,6 +5,5 @@ export const userTypes = gql`
     _id: ID!
     email: String!
     username: String!
-    password: String!
   }
 `;

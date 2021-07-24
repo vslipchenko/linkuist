@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject} from '@angular/core';
 import {
   Event,
   NavigationCancel,
@@ -12,11 +12,13 @@ import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar
 import {ThemePalette} from '@angular/material/core/common-behaviors/color';
 import {SnackbarService} from '~app/shared/services/snackbar/snackbar.service';
 import {DOCUMENT} from '@angular/common';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-progress-bar',
   templateUrl: './progress-bar.component.html',
   styleUrls: ['./progress-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgressBarComponent {
   public mode: ProgressBarMode = 'indeterminate';
@@ -28,15 +30,18 @@ export class ProgressBarComponent {
     private readonly router: Router,
     private readonly progressBarService: ProgressBarService,
     private readonly snackbarService: SnackbarService,
+    private readonly changeDetector: ChangeDetectorRef,
     @Inject(DOCUMENT) private readonly document: Document,
   ) {
-    this.progressBarService.showProgressBar$.subscribe(
-      (showProgress) => (this.show = showProgress),
-    );
+    // this.progressBarService.showProgressBar$.subscribe((showProgress) => {
+    //   this.show = showProgress;
+    //   this.changeDetector.detectChanges();
+    // });
     this.router.events.subscribe((event: Event) => {
       // if (event instanceof ActivationStart) {
       this.handleNavigationProgress(event);
       // }
+      // this.changeDetector.detectChanges();
     });
   }
 
@@ -46,21 +51,24 @@ export class ProgressBarComponent {
       case event instanceof NavigationStart:
         // this.errorState = false;
         // this.color = 'primary';
-        this.show = true;
+        // this.show = true;
+        this.progressBarService.show();
         this.addBackgroundLogo();
         break;
       case event instanceof NavigationEnd:
         this.removeBackgroundLogo();
         // remove snackbar before navigation end
         // this.removeSnackbar();
-        this.show = false;
+        // this.show = false;
+        this.progressBarService.hide();
         break;
       case event instanceof NavigationCancel:
       case event instanceof NavigationError:
         // console.log('THIS SHOW ', this.show);
         // this.errorState = true;
         // this.color = 'warn';
-        this.show = false;
+        // this.show = false;
+        this.progressBarService.hide();
 
         // this.handleNavigationFailure();
         break;
@@ -81,6 +89,10 @@ export class ProgressBarComponent {
   //     this.snackbarService.hide();
   //   }
   // }
+
+  public get showProgressBar$(): Observable<boolean> {
+    return this.progressBarService.showProgressBar$;
+  }
 
   private addBackgroundLogo(): void {
     if (!this.document.body.classList.contains('background-logo')) {

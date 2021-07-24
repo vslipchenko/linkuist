@@ -3,10 +3,11 @@ import {MongooseDocument} from '../types/mongoose/mongoose.types';
 import {IPost} from '../types/post/post.interfaces';
 
 const postSchema = new mongoose.Schema({
-  id: {type: Number, required: true, unique: true},
-  text: {type: String, trim: true},
-  postObjectId: {type: mongoose.Schema.Types.ObjectId}, // Original post ObjectId reference
+  userId: {type: mongoose.Schema.Types.ObjectId, required: true},
+  text: {type: String},
+  postId: {type: mongoose.Schema.Types.ObjectId}, // Original post ObjectId reference
   isRepost: {type: Boolean, required: true},
+  createdAt: {type: Number, required: true},
 });
 
-export const Post = mongoose.model<MongooseDocument<IPost>>('Post', postSchema, 'posts');
+export const Post = mongoose.model<MongooseDocument<IPost>>('Post', postSchema, 'users.posts');

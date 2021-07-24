@@ -18,6 +18,14 @@ const userByUsername = (_: unknown, {username}: {username: IUser['username']}): 
   }
 };
 
+// const userProfileByUsername = (): unknown => {
+//   const {isValidData} = {isValidData: true};
+//
+//   if (!isValidData) return;
+//
+//   return '';
+// };
+
 export const userQueryTypeDefinitions = gql`
   extend type Query {
     userByEmail(email: String!): User

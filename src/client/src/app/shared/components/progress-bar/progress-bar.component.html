@@ -1,2 +1,3 @@
 <!--<mat-progress-bar *ngIf="show" [class.state-error]="errorState" [color]="color" [mode]="mode">-->
-<mat-progress-bar *ngIf="show" [color]="color" [mode]="mode"> </mat-progress-bar>
+<mat-progress-bar *ngIf="showProgressBar$ | async" [color]="color" [mode]="mode">
+</mat-progress-bar>

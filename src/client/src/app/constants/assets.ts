@@ -18,6 +18,10 @@ export const ICONS: Array<Icon> = [
     name: 'account-settings',
     fileName: 'account_settings-24px',
   },
+  {
+    name: 'account-edit',
+    fileName: 'account_edit-24px',
+  },
   {name: 'add', fileName: 'add-24px'},
   {name: 'linkuist', fileName: 'linkuist_bold-24px'},
   {name: 'home', fileName: 'home-24px'},
@@ -42,6 +46,7 @@ export const ICONS: Array<Icon> = [
   {name: 'comment', fileName: 'comment'},
   {name: 'share-variant', fileName: 'share-variant'},
   {name: 'account-box', fileName: 'account-box'},
+  {name: 'cog', fileName: 'cog'},
   // {name: 'google', fileName: 'google-24px', isOutlined: true},
   // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
 ];

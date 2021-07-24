@@ -1,0 +1,420 @@
+{
+	"info": {
+		"_postman_id": "3229e878-1f57-4934-90fb-9bbbfe69546a",
+		"name": "Linkuist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": " mutation ($input: CreateUserMutationInput!) {\r\n    createUser(input: $input) {\r\n        _id\r\n    }\r\n  }",
+								"variables": "{\"input\": \r\n    {\r\n        \"email\": \"h@h.com\",\r\n        \"username\": \"vlad\",\r\n        \"password\": \"537vlad11\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable('accessToken', responseData.data.signIn.accessToken);\r",
+									"postman.setEnvironmentVariable('refreshToken', responseData.data.signIn.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($input: SignInQueryInput!) {\r\n    signIn(input: $input) {\r\n        accessToken,\r\n        refreshToken\r\n    }\r\n}",
+								"variables": "{\"input\": \r\n    {\r\n        \"email\": \"h@h.com\",\r\n        \"password\": \"537vlad11\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recover Access Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($refreshToken: String!) {\r\n    accessTokenByRefreshToken(refreshToken: $refreshToken)\r\n}",
+								"variables": "{\r\n    \"refreshToken\": \"{{refreshToken}}\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						},
+						"description": "By Refresh Token"
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In (Bad Input)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($input: SignInQueryInput!) {\r\n    signIn(input: $input) {\r\n        accessToken,\r\n        refreshToken\r\n    }\r\n}",
+								"variables": "{\"input\": \r\n    {\r\n        \"email\": \"invalid@email.com\",\r\n        \"password\": \"invalid\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($email: String!) {\r\n    userByEmail(email: $email) {\r\n      _id\r\n    }\r\n}",
+								"variables": "{\r\n    \"email\": \"test@email.com\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Username",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($username: String!) {\r\n    userByUsername(username: $username) {\r\n      _id\r\n    }\r\n}",
+								"variables": "{\r\n    \"username\": \"johnny\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Linkard",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setEnvironmentVariable('dateGetTime', (new Date).getTime());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": " mutation ($input: CreateLinkardMutationInput!) {\r\n    createLinkard(input: $input) {\r\n        _id\r\n    }\r\n  }",
+								"variables": "{\"input\": \r\n    {\r\n        \"id\": {{dateGetTime}},\r\n        \"link\": \"https://en.wikipedia.org/wiki/Sewing_needle\",\r\n        \"note\": \"Me new bookmark\",\r\n        \"isPrivate\": false,\r\n        \"isPaid\": false,\r\n        \"tags\": [{\"text\": \"public\"}, {\"text\": \"sewing-needle\"}]\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All By User Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($userId: String!) {\r\n    linkardsByUserId(userId: $userId) {\r\n        _id\r\n    }\r\n}",
+								"variables": "{\r\n    \"userId\": \"5f8e142df79fbc499cc71775\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All By Username",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setEnvironmentVariable('dateGetTime', (new Date).getTime());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($username: String!) {\r\n    linkardsByUsername(username: $username) {\r\n        _id\r\n    }\r\n}",
+								"variables": "{\r\n    \"username\": \"vlad\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setEnvironmentVariable('dateGetTime', (new Date).getTime());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": " mutation ($input: CreatePostMutationInput!) {\r\n    createPost(input: $input) {\r\n        _id\r\n    }\r\n  }",
+								"variables": "{\"input\": \r\n    {\r\n        \"id\": {{dateGetTime}},\r\n        \"text\": \"Testing\",\r\n        \"isRepost\": false\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All By User Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": " query ($userId: String!, $parameters: RequestParameters!) {\r\n    postsByUserId(userId: $userId, parameters: $parameters) {\r\n      data {\r\n        createdAt\r\n        text\r\n        isRepost\r\n      }\r\n      total\r\n    }\r\n  }",
+								"variables": "{\r\n    \"userId\": \"5f8e142df79fbc499cc71775\",\r\n    \"parameters\": {\r\n        \"order\": \"descending\",\r\n        \"limit\": 2\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All By Username",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($username: String!, $order: Order) {\r\n    postsByUsername(username: $username, order: $order) {\r\n      createdAt\r\n      text\r\n      isRepost\r\n    }\r\n  }",
+								"variables": "{\r\n    \"username\": \"vlad\"\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Update Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": " mutation ($input: UpdateProfileMutationInput!) {\r\n    updateProfile(input: $input) {\r\n        _id\r\n    }\r\n  }",
+								"variables": "{\r\n    \"input\": {\r\n        \"backgroundUrl\": \"testing11\"\r\n    }\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{graphqlUri}}",
+							"host": [
+								"{{graphqlUri}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

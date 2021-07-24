@@ -6,6 +6,7 @@ import {User} from '../../../models/user';
 import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
+import {getUtcMillisecondTimestamp} from '../../../utilities/date';
 
 /* Resolver declarations */
 const createUser = (
@@ -24,6 +25,7 @@ const createUser = (
   if (isValidData) {
     input.password = bcrypt.hashSync(input.password, 15);
     input.accessKey = uuidv4();
+    input.createdAt = getUtcMillisecondTimestamp();
     return User.create(input);
   }
 };

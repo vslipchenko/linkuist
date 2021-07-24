@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {UserSignInPayload} from '~app/types/user/user.interfaces';
 import {Apollo} from 'apollo-angular';
 import {
@@ -15,6 +15,7 @@ import {
 } from '~app/types/authentication/authentication.interfaces';
 import jwt_decode from 'jwt-decode';
 import {Router} from '@angular/router';
+import {LOCAL_STORAGE} from '~app/tokens/local-storage';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,11 @@ export class AuthenticationService {
   // isRefreshingAccessToken
   private readonly isRefreshing$ = new BehaviorSubject(false);
 
-  public constructor(private readonly apollo: Apollo, private readonly router: Router) {}
+  public constructor(
+    private readonly apollo: Apollo,
+    private readonly router: Router,
+    @Inject(LOCAL_STORAGE) private readonly localStorage: Storage,
+  ) {}
 
   public refreshAccessToken(): Observable<ApolloQueryResult<AccessTokenQueryResult>> {
     return this.refreshToken
@@ -104,14 +109,16 @@ export class AuthenticationService {
   // }
 
   public get refreshToken(): string {
-    return localStorage.getItem('token') || '';
+    return this.localStorage.getItem('token') || '';
   }
 
   public set refreshToken(refreshToken: string) {
     if (!refreshToken) {
-      localStorage.removeItem('token');
+      this.localStorage.removeItem('token');
+      return;
     }
-    localStorage.setItem('token', refreshToken);
+
+    this.localStorage.setItem('token', refreshToken);
   }
 
   public get isUserAuthenticated(): boolean {

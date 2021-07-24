@@ -24,14 +24,14 @@ import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {LinkardService} from '~app/services/linkard/linkard.service';
 import {ActivatedRoute} from '@angular/router';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
-import {first} from 'rxjs/operators';
 import {UserRole} from '~app/types/user/user.enums';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {
   LinkardsByUserIdQueryResult,
   LinkardsByUsernameQueryResult,
 } from '~app/types/linkard/linkard.interfaces';
-import {getId} from '~app/utilities/unique';
+// import {getId} from '~app/utilities/unique';
+import {ApolloQueryResult} from '@apollo/client/core/types';
 
 @UntilDestroy()
 @Component({
@@ -40,17 +40,21 @@ import {getId} from '~app/utilities/unique';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LinkardsComponent implements OnInit {
-  @ViewChild('addBookmarkContent') public addBookmarkContent: TemplateRef<unknown> | undefined;
-  @ViewChild('addBookmarkActions') public addBookmarkActions: TemplateRef<unknown> | undefined;
+  @ViewChild('addBookmarkContent', {static: true}) public addBookmarkContent:
+    | TemplateRef<unknown>
+    | undefined;
+  @ViewChild('addBookmarkActions', {static: true}) public addBookmarkActions:
+    | TemplateRef<unknown>
+    | undefined;
 
   public readonly tagsSeparatorKeysCodes = [ENTER];
   public readonly tagSeparator = '-';
   public readonly tagLetterValidator = LINKARD_TAG_LETTER_REGEXP;
   public readonly tagSplitWordBy = /[-\s]/;
 
-  public resolvedUser: ResolvedUser = {role: UserRole.Viewer, urlUsername: ''};
+  public resolvedUser: ResolvedUser = {role: UserRole.Viewer, urlUsername: '', relativePaths: []};
   public addBookmarkForm: FormGroup | undefined;
-  public linkards: Array<unknown> = [];
+  public linkards: Array<unknown> = []; // TODO type
 
   public constructor(
     private readonly changeDetector: ChangeDetectorRef,
@@ -58,8 +62,10 @@ export class LinkardsComponent implements OnInit {
     private readonly linkardService: LinkardService,
     private readonly formBuilder: FormBuilder,
     private readonly route: ActivatedRoute,
-    private readonly authenticationService: AuthenticationService,
-  ) {}
+    private readonly authenticationService: AuthenticationService, // private readonly test: BrowserWindowRe // private test: WindowRef
+  ) {
+    this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
+  }
 
   private static linkValidator(control: AbstractControl): null | ValidationErrors {
     const link = control.value;
@@ -77,10 +83,9 @@ export class LinkardsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
     // IF this.resolvedUser.role === Owner -> getUserById, else by username
     // const getAllLinkards =
-    //   this.resolvedUser.role === UserRole.Owner
+    //   this.resolvedUser.role === UserRole.User
     //     ? this.linkardService.getAllByUserId(
     //         this.authenticationService.accessTokenData?.userId as string,
     //       )
@@ -99,7 +104,7 @@ export class LinkardsComponent implements OnInit {
 
   public openAddBookmarkDialog(): void {
     this.dialogService.open({
-      panelClass: 'dialog-small',
+      panelClass: 'linkard-dialog',
       data: {
         title: 'Add linkard',
         form: this.addBookmarkForm,
@@ -123,7 +128,7 @@ export class LinkardsComponent implements OnInit {
       // return;
       this.linkardService
         .create({
-          id: getId(),
+          // createdAt: getId(),
           ...this.addBookmarkForm.value,
           tags,
         })
@@ -133,11 +138,11 @@ export class LinkardsComponent implements OnInit {
   }
 
   private loadLinkards(): void {
-    if (this.isOwner) {
+    if (this.isUser) {
       this.linkardService
-        .getAllByUserId(this.authenticationService.accessTokenData?.userId as string)
-        .pipe(first(), untilDestroyed(this))
-        .subscribe(({data}: {data: LinkardsByUserIdQueryResult}) => {
+        .getAllByUserId(this.authenticationService.accessTokenData!.userId)
+        .pipe(untilDestroyed(this))
+        .subscribe(({data}: ApolloQueryResult<LinkardsByUserIdQueryResult>) => {
           this.linkards = data.linkardsByUserId;
           this.changeDetector.detectChanges();
         });
@@ -147,8 +152,8 @@ export class LinkardsComponent implements OnInit {
 
     this.linkardService
       .getAllByUsername(this.resolvedUser.urlUsername)
-      .pipe(first(), untilDestroyed(this))
-      .subscribe(({data}: {data: LinkardsByUsernameQueryResult}) => {
+      .pipe(untilDestroyed(this))
+      .subscribe(({data}: ApolloQueryResult<LinkardsByUsernameQueryResult>) => {
         this.linkards = data.linkardsByUsername;
         this.changeDetector.detectChanges();
       });
@@ -226,15 +231,15 @@ export class LinkardsComponent implements OnInit {
   }
 
   // public get areActionsVisible(): boolean {
-  //   return this.isOwner;
+  //   return this.isUser;
   // }
 
   public get isViewer(): boolean {
     return this.resolvedUser.role === UserRole.Viewer;
   }
 
-  public get isOwner(): boolean {
-    return this.resolvedUser.role === UserRole.Owner;
+  public get isUser(): boolean {
+    return this.resolvedUser.role === UserRole.User;
   }
 
   public get linkField(): AbstractControl | null | undefined {

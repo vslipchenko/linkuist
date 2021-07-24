@@ -3,9 +3,9 @@ import {METADATA_PREVIEW_FRAGMENT} from '~app/graphql/linkard/linkard.fragments'
 
 export const GET_LINKARDS_BY_USER_ID = gql`
   ${METADATA_PREVIEW_FRAGMENT}
-  query($userId: String!) {
+  query ($userId: String!) {
     linkardsByUserId(userId: $userId) {
-      id
+      createdAt
       note
       metadata {
         ...MetadataPreviewFragment
@@ -16,9 +16,9 @@ export const GET_LINKARDS_BY_USER_ID = gql`
 
 export const GET_LINKARDS_BY_USERNAME = gql`
   ${METADATA_PREVIEW_FRAGMENT}
-  query($username: String!) {
+  query ($username: String!) {
     linkardsByUsername(username: $username) {
-      id
+      createdAt
       note
       metadata {
         ...MetadataPreviewFragment

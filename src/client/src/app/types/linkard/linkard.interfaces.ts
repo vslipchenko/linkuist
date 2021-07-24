@@ -1,11 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // interface Linkard {
-//   id: number;
+//   createdAt: number;
 //   metadata: LinkardMetadata;
 // }
 
 export interface LinkardPreview {
-  id: number;
+  createdAt: number;
   note: string;
   metadata: LinkardMetadata;
 }
@@ -24,7 +24,6 @@ interface LinkardTag {
 }
 
 export interface LinkardCreatePayload {
-  id: number;
   link: string;
   note: string;
   isPrivate: boolean;
@@ -34,7 +33,7 @@ export interface LinkardCreatePayload {
 
 export interface LinkardsByUserIdQueryResult {
   linkardsByUserId: Array<{
-    id: number;
+    createdAt: number;
     note: string;
     metadata: LinkardMetadata;
   }>;
@@ -42,7 +41,7 @@ export interface LinkardsByUserIdQueryResult {
 
 export interface LinkardsByUsernameQueryResult {
   linkardsByUsername: Array<{
-    id: number;
+    createdAt: number;
     note: string;
     metadata: LinkardMetadata;
   }>;
