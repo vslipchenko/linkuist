@@ -195,7 +195,7 @@ export class SignUpComponent implements OnInit {
 
   private emailValidator(control: AbstractControl): null | ValidationErrors {
     const email = control.value;
-    return this.userService.getIdByEmail(email).pipe(
+    return this.userService.getUserIdByEmail(email).pipe(
       map(({data}) => {
         return data.userByEmail?._id ? {isUsed: true} : null;
       }),
@@ -217,7 +217,7 @@ export class SignUpComponent implements OnInit {
 
   private usernameValidator(control: AbstractControl): Observable<ValidationErrors | null> {
     const username = control.value;
-    return this.userService.getIdByUsername(username).pipe(
+    return this.userService.getUserIdByUsername(username).pipe(
       map(({data}) => {
         return data.userByUsername?._id ? {isUsed: true} : null;
       }),

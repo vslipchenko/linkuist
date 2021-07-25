@@ -1,5 +1,5 @@
 export enum UserRole {
-  User, // Authenticated user with read / write permissions
-  Viewer, // Authenticated user with read permissions
-  Guest, // Unauthenticated user
+  USER, // Authenticated user with read / write permissions
+  VIEWER, // Authenticated user with read permissions
+  GUEST, // Unauthenticated user
 }

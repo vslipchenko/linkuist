@@ -6,4 +6,16 @@ export const userTypes = gql`
     email: String!
     username: String!
   }
+
+  type UserProfile {
+    backgroundUrl: String
+    avatarUrl: String
+    name: String
+    bio: String
+  }
+
+  type UserProfileTeaser {
+    avatarUrl: String
+    username: String
+  }
 `;

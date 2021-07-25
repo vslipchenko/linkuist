@@ -1,21 +1,27 @@
 import gql from 'graphql-tag';
 
 export const GET_POSTS_BY_USER_ID = gql`
-  query ($userId: String!, $order: SortOrder) {
-    postsByUserId(userId: $userId, order: $order) {
-      createdAt
-      text
-      isRepost
+  query ($userId: String!, $parameters: RequestParameters!) {
+    postsByUserId(userId: $userId, parameters: $parameters) {
+      data {
+        createdAt
+        text
+        isRepost
+      }
+      total
     }
   }
 `;
 
 export const GET_POSTS_BY_USERNAME = gql`
-  query ($username: String!, $order: SortOrder) {
-    postsByUsername(username: $username, order: $order) {
-      createdAt
-      text
-      isRepost
+  query ($username: String!, $parameters: RequestParameters!) {
+    postsByUsername(username: $username, parameters: $parameters) {
+      data {
+        createdAt
+        text
+        isRepost
+      }
+      total
     }
   }
 `;

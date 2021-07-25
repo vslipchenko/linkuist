@@ -12,17 +12,23 @@ export interface PostCreateMutationResult {
 }
 
 export interface PostsByUserIdQueryResult {
-  postsByUserId: Array<{
-    createdAt: number;
-    text: string;
-    isRepost: boolean;
-  }>;
+  postsByUserId: {
+    data: Array<{
+      createdAt: number;
+      text: string;
+      isRepost: boolean;
+    }>;
+    total: number;
+  };
 }
 
 export interface PostsByUsernameQueryResult {
-  postsByUsername: Array<{
-    createdAt: number;
-    text: string;
-    isRepost: boolean;
-  }>;
+  postsByUsername: {
+    data: Array<{
+      createdAt: number;
+      text: string;
+      isRepost: boolean;
+    }>;
+    total: number;
+  };
 }

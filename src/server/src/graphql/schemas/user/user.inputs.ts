@@ -6,4 +6,11 @@ export const userInputs = gql`
     username: String!
     password: String!
   }
+
+  input UpdateProfileMutationInput {
+    backgroundUrl: String
+    avatarUrl: String
+    name: String
+    bio: String
+  }
 `;

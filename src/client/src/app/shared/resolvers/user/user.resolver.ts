@@ -25,15 +25,15 @@ export class UserResolver implements Resolve<ResolvedUser> {
       const data = this.authenticationService.accessTokenData;
 
       if (data?.username === username) {
-        resolvedUser.role = UserRole.User;
+        resolvedUser.role = UserRole.USER;
         return resolvedUser;
       }
 
-      resolvedUser.role = UserRole.Viewer;
+      resolvedUser.role = UserRole.VIEWER;
       return resolvedUser;
     }
 
-    resolvedUser.role = UserRole.Guest;
+    resolvedUser.role = UserRole.GUEST;
     return resolvedUser;
   }
 }

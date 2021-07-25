@@ -1,7 +1,11 @@
 export interface IUser {
+  createdAt: number;
   email: string;
   username: string;
   password: string;
   accessKey: string;
-  createdAt: number;
+  backgroundUrl: string;
+  avatarUrl: string;
+  name: string;
+  bio: string;
 }

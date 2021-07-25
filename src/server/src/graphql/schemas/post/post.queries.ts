@@ -9,6 +9,7 @@ import {Post} from '../../../models/post';
 import {ILinkard} from '../../../types/linkard/linkard.interfaces';
 import {SortOrder} from '../../../types/shared/shared.enums';
 import mongoose from 'mongoose';
+import {RequestParameters} from '../../../types/shared/shared.types';
 
 // TODO inspect Post null issue
 export const postQueryTypeDefinitions = gql`
@@ -20,10 +21,7 @@ export const postQueryTypeDefinitions = gql`
 
 const postsByUserId = async (
   _: unknown,
-  {
-    userId,
-    parameters,
-  }: {userId: ILinkard['userId']; parameters: {order: SortOrder; offset: number; limit: number}},
+  {userId, parameters}: {userId: ILinkard['userId']; parameters: RequestParameters},
 ): Promise<Array<MongooseDocument<IPost>> | {data: any; total: any} | null> => {
   const {isValidData} = checkDataValidity({
     data: {userId, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
@@ -121,26 +119,45 @@ const postsByUserId = async (
 
 const postsByUsername = async (
   _: unknown,
-  {username, order}: {username: IUser['username']; order: SortOrder},
-): Promise<Array<MongooseDocument<IPost>> | UserInputError | null> => {
+  {username, parameters}: {username: IUser['username']; parameters: RequestParameters},
+): Promise<Array<MongooseDocument<IPost>> | {data: any; total: any} | UserInputError | null> => {
   const {isValidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
   if (!isValidData) return null;
 
-  const user = await User.findOne({
-    username,
-  });
+  const user = await User.findOne(
+    {
+      username,
+    },
+    '_id',
+  );
 
   if (!user) return new UserInputError('Invalid username');
 
-  const cursor = Post.find({
-    userId: user._id,
-  });
+  const aggregationResult = await Post.aggregate([
+    {$match: {userId: mongoose.Types.ObjectId(user._id)}},
+    {
+      $facet: {
+        data: [
+          {$limit: parameters.limit},
+          parameters.offset ? {$skip: parameters.offset} : null,
+          // parameters.limit ? {$limit: parameters.limit} : null,
+          parameters.order
+            ? {$sort: {createdAt: parameters.order === SortOrder.ASCENDING ? 1 : -1}}
+            : null,
+        ].filter((stage) => stage), // Filter null
+        total: [{$count: 'total'}],
+      },
+    },
+  ]);
 
-  if (order) {
-    return cursor.sort({createdAt: order});
-  }
+  const data = aggregationResult[0].data;
 
-  return cursor;
+  // const uniqueUserIds = data.map((post) => post.userId);
+
+  return {
+    data: data,
+    total: aggregationResult[0].total[0].total,
+  };
 };
 
 export const postQueryResolvers = {

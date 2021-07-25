@@ -16,7 +16,7 @@ import {pathsMatch} from '~app/utilities/url';
 import {DialogService} from '~app/shared/services/dialog/dialog.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
-import {ProfileService} from '~app/services/profile/profile.service';
+// import {ProfileService} from '~app/services/profile/profile.service';
 import {ApolloQueryResult} from '@apollo/client/core/types';
 import {
   ProfileByUserIdQueryResult,
@@ -40,7 +40,7 @@ export class ProfileComponent {
     | TemplateRef<unknown>
     | undefined;
 
-  public resolvedUser: ResolvedUser = {role: UserRole.Viewer, urlUsername: '', relativePaths: []};
+  public resolvedUser: ResolvedUser = {role: UserRole.VIEWER, urlUsername: '', relativePaths: []};
   public profile = {
     backgroundUrl: '',
     avatarUrl: '',
@@ -57,8 +57,7 @@ export class ProfileComponent {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly dialogService: DialogService,
-    private readonly formBuilder: FormBuilder,
-    private readonly profileService: ProfileService,
+    private readonly formBuilder: FormBuilder, // private readonly profileService: ProfileService,
   ) {
     // console.debug('PROFILE');
     this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
@@ -174,8 +173,8 @@ export class ProfileComponent {
 
   public saveProfile(): void {
     this.progressBarService.show();
-    this.profileService
-      .update(this.profileSettingsForm.value)
+    this.userService
+      .updateProfile(this.profileSettingsForm.value)
       .pipe(
         untilDestroyed(this),
         finalize(() => {
@@ -214,9 +213,9 @@ export class ProfileComponent {
   }
 
   private loadProfile(): void {
-    if (this.resolvedUser.role === UserRole.User) {
-      this.profileService
-        .getByUserId(this.authenticationService.accessTokenData!.userId)
+    if (this.resolvedUser.role === UserRole.USER) {
+      this.userService
+        .getProfileByUserId(this.authenticationService.accessTokenData!.userId)
         .pipe(untilDestroyed(this))
         .subscribe(({data}: ApolloQueryResult<ProfileByUserIdQueryResult>) => {
           this.profile = data.profileByUserId;
@@ -226,8 +225,8 @@ export class ProfileComponent {
       return;
     }
 
-    this.profileService
-      .getByUsername(this.resolvedUser.urlUsername)
+    this.userService
+      .getProfileByUsername(this.resolvedUser.urlUsername)
       .pipe(untilDestroyed(this))
       .subscribe(({data}: ApolloQueryResult<ProfileByUsernameQueryResult>) => {
         this.profile = data.profileByUsername;
@@ -264,12 +263,12 @@ export class ProfileComponent {
       }):
         // console.debug('pathsMatch', paths);
         // if (!this.canProceedPageInnerNavigation()) return;
-        if (this.resolvedUser.role === UserRole.Guest) {
+        if (this.resolvedUser.role === UserRole.GUEST) {
           this.navigateToSignInPage();
           return;
         }
 
-        if (this.resolvedUser.role === UserRole.Viewer) {
+        if (this.resolvedUser.role === UserRole.VIEWER) {
           this.navigateToResolvedUserProfile();
           return;
         }
@@ -302,7 +301,7 @@ export class ProfileComponent {
   // }
 
   public get isUser(): boolean {
-    return this.resolvedUser.role === UserRole.User;
+    return this.resolvedUser.role === UserRole.USER;
   }
 
   public get navigationMainActionType(): NavigationMainActionType {

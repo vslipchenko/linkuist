@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
       partialFilterExpression: {accessKey: {$type: 'string'}},
     },
   },
+  backgroundUrl: {type: String},
+  avatarUrl: {type: String},
+  name: {type: String},
+  bio: {type: String},
   createdAt: {type: Number, required: true},
 } as MongooseSchema<IUser>);
 

@@ -23,7 +23,7 @@ export class UserCanLoadGuard implements CanLoad {
     if (data?.username === username) return true; // profile exist
 
     // check profile exist
-    return this.userService.getIdByUsername(username).pipe(
+    return this.userService.getUserIdByUsername(username).pipe(
       map(({data}) => {
         if (data.userByUsername?._id) return true; // profile exist
         // profile does not exist

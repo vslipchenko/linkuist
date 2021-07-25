@@ -52,7 +52,7 @@ export class LinkardsComponent implements OnInit {
   public readonly tagLetterValidator = LINKARD_TAG_LETTER_REGEXP;
   public readonly tagSplitWordBy = /[-\s]/;
 
-  public resolvedUser: ResolvedUser = {role: UserRole.Viewer, urlUsername: '', relativePaths: []};
+  public resolvedUser: ResolvedUser = {role: UserRole.VIEWER, urlUsername: '', relativePaths: []};
   public addBookmarkForm: FormGroup | undefined;
   public linkards: Array<unknown> = []; // TODO type
 
@@ -235,11 +235,11 @@ export class LinkardsComponent implements OnInit {
   // }
 
   public get isViewer(): boolean {
-    return this.resolvedUser.role === UserRole.Viewer;
+    return this.resolvedUser.role === UserRole.VIEWER;
   }
 
   public get isUser(): boolean {
-    return this.resolvedUser.role === UserRole.User;
+    return this.resolvedUser.role === UserRole.USER;
   }
 
   public get linkField(): AbstractControl | null | undefined {

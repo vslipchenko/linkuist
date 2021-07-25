@@ -23,12 +23,13 @@ import {SortOrder} from '~app/types/shared/shared.enums';
 })
 export class PostsComponent implements OnInit {
   @Input() public readonly resolvedUser: ResolvedUser = {
-    role: UserRole.Viewer,
+    role: UserRole.VIEWER,
     urlUsername: '',
     relativePaths: [],
   };
   public readonly UserRole = UserRole;
   public posts: Array<unknown> = [];
+  private readonly POST_FETCH_LIMIT = 20;
 
   public constructor(
     private readonly postService: PostService,
@@ -38,7 +39,7 @@ export class PostsComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.fetchAllPosts();
+    this.fetchPosts();
   }
 
   public postsTrackBy(index: number, post: any): string {
@@ -64,18 +65,22 @@ export class PostsComponent implements OnInit {
       });
   }
 
-  private fetchAllPosts(): void {
+  private fetchPosts(offset = 0): void {
     this.progressBarService.show();
 
-    if (this.resolvedUser.role === UserRole.User) {
+    if (this.resolvedUser.role === UserRole.USER) {
       this.postService
-        .getAllByUserId(this.authenticationService.accessTokenData!.userId, SortOrder.DESCENDING)
+        .getAllByUserId(this.authenticationService.accessTokenData!.userId, {
+          order: SortOrder.DESCENDING,
+          offset,
+          limit: this.POST_FETCH_LIMIT,
+        })
         .pipe(
           finalize(() => this.progressBarService.hide()),
           untilDestroyed(this),
         )
         .subscribe(({data}: ApolloQueryResult<PostsByUserIdQueryResult>) => {
-          this.posts = data.postsByUserId.slice();
+          this.posts = data.postsByUserId.data.slice();
           this.changeDetector.detectChanges();
         });
 
@@ -83,13 +88,17 @@ export class PostsComponent implements OnInit {
     }
 
     this.postService
-      .getAllByUsername(this.resolvedUser.urlUsername, SortOrder.DESCENDING)
+      .getAllByUsername(this.resolvedUser.urlUsername, {
+        order: SortOrder.DESCENDING,
+        offset,
+        limit: this.POST_FETCH_LIMIT,
+      })
       .pipe(
         finalize(() => this.progressBarService.hide()),
         untilDestroyed(this),
       )
       .subscribe(({data}: ApolloQueryResult<PostsByUsernameQueryResult>) => {
-        this.posts = data.postsByUsername.slice();
+        this.posts = data.postsByUsername.data.slice();
         this.changeDetector.detectChanges();
       });
   }

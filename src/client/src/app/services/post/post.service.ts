@@ -10,7 +10,7 @@ import {
 import {Observable} from 'rxjs';
 import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
 import {GET_POSTS_BY_USER_ID, GET_POSTS_BY_USERNAME} from '~app/graphql/post/post.queries';
-import {SortOrder} from '~app/types/shared/shared.enums';
+import {RequestParameters} from '~app/types/shared/shared.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -27,21 +27,21 @@ export class PostService {
 
   public getAllByUserId(
     userId: string,
-    order?: SortOrder,
+    parameters: RequestParameters,
   ): Observable<ApolloQueryResult<PostsByUserIdQueryResult>> {
     return this.apollo.query({
       query: GET_POSTS_BY_USER_ID,
-      variables: {userId, order},
+      variables: {userId, parameters},
     });
   }
 
   public getAllByUsername(
     username: string,
-    order?: SortOrder,
+    parameters: RequestParameters,
   ): Observable<ApolloQueryResult<PostsByUsernameQueryResult>> {
     return this.apollo.query({
       query: GET_POSTS_BY_USERNAME,
-      variables: {username, order},
+      variables: {username, parameters},
     });
   }
 }
