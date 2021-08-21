@@ -30,10 +30,12 @@ export class UserResolver implements Resolve<ResolvedUser> {
       }
 
       resolvedUser.role = UserRole.VIEWER;
+      // this.userRoleService.userRole = UserRole.VIEWER;
       return resolvedUser;
     }
 
     resolvedUser.role = UserRole.GUEST;
+    // this.userRoleService.userRole = UserRole.GUEST;
     return resolvedUser;
   }
 }

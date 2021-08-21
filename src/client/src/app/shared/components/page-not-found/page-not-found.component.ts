@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {Router} from '@angular/router';
+import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
 
 @Component({
   templateUrl: './page-not-found.component.html',

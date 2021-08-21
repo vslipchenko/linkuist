@@ -5,3 +5,9 @@ export interface RequestParameters {
   offset?: number;
   limit: number;
 }
+
+export interface ClientPresetQueryResult {
+  clientPreset: {
+    serverUtcTimestamp: number;
+  };
+}

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 
 @Component({

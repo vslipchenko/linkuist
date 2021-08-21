@@ -6,4 +6,8 @@ export const postInputs = gql`
     postId: String
     isRepost: Boolean!
   }
+
+  input DeletePostMutationInput {
+    _id: String
+  }
 `;

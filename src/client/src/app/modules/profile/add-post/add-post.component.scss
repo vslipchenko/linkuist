@@ -1,0 +1,68 @@
+@use 'variables' as var;
+@use 'media';
+@use 'shared';
+
+//.character-progress mat-progress-spinner {
+//  display: inline;
+//}
+
+.notes-add {
+  //margin-top: var.$unit-2;
+
+  background-color: var.$color-light;
+  //border-color: var.$color-light-darkest;
+  //border-style: solid;
+  border: 1px solid var.$color-light-darkest;
+  //position: fixed;
+  //bottom: -35%;
+  //box-shadow: 0 -10px 10px 0 var.$color-light-darker;
+  //box-shadow: 0 -10px 10px 0 var.$color-light-darker;
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
+  //height: 35%;
+  //min-height: var.$common-user-page-content-block-min-height;
+  //transition: 0.5s bottom;
+  width: 100%;
+
+  //@include content-first-block-media;
+  @include shared.content-block-media;
+
+  //@include media.zero-small {
+  //  margin-bottom: var.$unit-4;
+  //  //margin-top: var.$unit-4;
+  //}
+  //
+  //@include media.above-small {
+  //  margin-bottom: var.$unit-2;
+  //  //margin-top: var.$unit-2;
+  //}
+  @include media.zero-large {
+    margin-bottom: var.$unit-2;
+  }
+
+  @include media.above-large {
+    margin-bottom: var.$unit-3;
+  }
+}
+
+.notes-add .input {
+  border-bottom: 1px solid var.$color-light-darkest;
+  flex: 1;
+  padding: var.$unit-2;
+}
+
+.notes-add .input:empty:not(:focus)::before {
+  color: var.$color-light-dark;
+  content: attr(data-placeholder);
+  pointer-events: none;
+}
+
+//.notes-add .panel {
+//  display: flex;
+//  padding: var.$unit;
+//}
+
+.notes-add .button-note {
+  margin-left: auto;
+}

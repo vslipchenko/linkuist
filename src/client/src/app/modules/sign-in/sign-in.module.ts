@@ -36,7 +36,7 @@ import {HttpClient} from '@angular/common/http';
   ],
 })
 export class SignInModule {
-  public constructor(private readonly translateService: TranslateService) {
+  public constructor(translateService: TranslateService) {
     setupTranslate(translateService);
   }
 }

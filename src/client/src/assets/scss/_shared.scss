@@ -72,3 +72,17 @@
   background-image: url('~assets/images/shared/background.jpg');
   background-size: contain;
 }
+
+@mixin content-block-media {
+  @include media.zero-small {
+    max-width: var.$common-user-page-content-block-width-1;
+  }
+
+  @include media.small-large {
+    max-width: var.$common-user-page-content-block-width-2;
+  }
+
+  @include media.above-large {
+    max-width: var.$common-user-page-content-block-width-3;
+  }
+}

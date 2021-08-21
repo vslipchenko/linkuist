@@ -12,9 +12,15 @@ import {ReactiveFormsModule} from '@angular/forms';
 // import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatDialogModule} from '@angular/material/dialog';
+import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
+import {setupTranslate, translateLoaderFactory} from '~app/utilities/translate';
+import {HttpClient} from '@angular/common/http';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { PostComponent } from './post/post.component';
+import { AddPostComponent } from './add-post/add-post.component';
 
 @NgModule({
-  declarations: [ProfileComponent, PostsComponent],
+  declarations: [ProfileComponent, PostsComponent, PostComponent, AddPostComponent],
   imports: [
     RouterModule.forChild([{path: '', component: ProfileComponent}]),
     CommonModule,
@@ -27,6 +33,19 @@ import {MatDialogModule} from '@angular/material/dialog';
     // MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: translateLoaderFactory('profile'),
+        deps: [HttpClient],
+      },
+      isolate: true,
+    }),
+    MatProgressSpinnerModule,
   ],
 })
-export class ProfileModule {}
+export class ProfileModule {
+  public constructor(translateService: TranslateService) {
+    setupTranslate(translateService);
+  }
+}

@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
-import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {UserRole} from '~app/types/user/user.enums';
 import {PostService} from '~app/services/post/post.service';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
@@ -11,8 +10,25 @@ import {
   PostsByUsernameQueryResult,
 } from '~app/types/post/post.interfaces';
 import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
-import {finalize} from 'rxjs/operators';
-import {SortOrder} from '~app/types/shared/shared.enums';
+import {endWith, finalize, map, startWith, takeWhile} from 'rxjs/operators';
+import {SortOrder, ElapsedTimeMeasure} from '~app/types/shared/shared.enums';
+import {POST_FETCH_LIMIT} from '~app/constants/post';
+import {DateService} from '~app/shared/services/date/date.service';
+import {
+  determineElapsedTimeMeasure,
+  hasLessMillisecondsThanDay,
+  hasMoreMillisecondsThanDay,
+  millisecondsToHours,
+  millisecondsToMinutes,
+} from '~app/utilities/date';
+import {TranslateService} from '@ngx-translate/core';
+// import {MONTH_NAMES} from '~app/constants/date';
+import {Observable} from 'rxjs';
+import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
+// import {WINDOW} from '~app/tokens/window';
+// import {BehaviorSubject, of} from 'rxjs';
+
+// export const POST_DATE_UPDATE_PERIOD = 1000 * 60;
 
 @UntilDestroy()
 @Component({
@@ -22,28 +38,44 @@ import {SortOrder} from '~app/types/shared/shared.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostsComponent implements OnInit {
-  @Input() public readonly resolvedUser: ResolvedUser = {
-    role: UserRole.VIEWER,
-    urlUsername: '',
-    relativePaths: [],
-  };
-  public readonly UserRole = UserRole;
-  public posts: Array<unknown> = [];
-  private readonly POST_FETCH_LIMIT = 20;
+  // @Input() public readonly resolvedUser: ResolvedUser = {
+  //   role: UserRole.VIEWER,
+  //   urlUsername: '',
+  //   // relativePaths: [],
+  // };
+  // @Input() public username = '';
+  @Input() public avatarUrl = '';
+
+  // public resolvedUser: ResolvedUser = {
+  //   role: UserRole.GUEST,
+  //   urlUsername: '',
+  //   // relativePaths: [],
+  // };
+
+  // public readonly UserRole = UserRole;
+  public posts: Array<any> = [];
+  public readonly profileTeasers: {[userId: string]: {username: string; avatarUrl: string}} = {};
 
   public constructor(
+    // @Inject(WINDOW) private readonly window: Window,
+
+    private readonly resolvedUserService: ResolvedUserService,
     private readonly postService: PostService,
     private readonly authenticationService: AuthenticationService,
     private readonly changeDetector: ChangeDetectorRef,
     private readonly progressBarService: ProgressBarService,
+    private readonly dateService: DateService,
+    private readonly translateService: TranslateService,
   ) {}
 
   public ngOnInit(): void {
     this.fetchPosts();
   }
 
-  public postsTrackBy(index: number, post: any): string {
-    return post._id;
+  public postsTrackBy(_: number, post: any): string {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    // console.debug(post.millisecondsElapsed);
+    return post._id + post.millisecondsElapsed; // Hour frequency items gets re-rendered as well
   }
 
   public createPost(text: string): void {
@@ -60,46 +92,177 @@ export class PostsComponent implements OnInit {
         }),
       )
       .subscribe(({data}: FetchResult<PostCreateMutationResult>) => {
-        this.posts.unshift(data!.createPost);
+        const {userId, text, isRepost, createdAt} = data!.createPost;
+        // Assume userId is equal to if of current user
+        this.profileTeasers[userId] = {
+          avatarUrl: this.avatarUrl,
+          username: this.resolvedUserService.user.urlUsername,
+        };
+
+        const newPost = {
+          userId,
+          text,
+          isRepost,
+          createdAt,
+          millisecondsElapsed: this.dateService.serverUtcTimestamp - createdAt,
+          date: this.getPostFullDate(createdAt),
+          // userId: this.authenticationService.accessTokenData?.userId,
+        } as any;
+
+        newPost.timeElapsedAfterCreation$ = this.getTimeElapsedAfterCreation$(newPost, newPost);
+
+        this.posts.unshift(newPost);
+
         this.changeDetector.detectChanges();
       });
+  }
+
+  public handlePostDelete(_id: string): void {
+    this.posts.splice(
+      this.posts.findIndex((post) => post._id === _id),
+      1,
+    );
   }
 
   private fetchPosts(offset = 0): void {
     this.progressBarService.show();
 
-    if (this.resolvedUser.role === UserRole.USER) {
-      this.postService
-        .getAllByUserId(this.authenticationService.accessTokenData!.userId, {
+    (
+      this.postService[this.hasUserRole ? 'getAllByUserId' : 'getAllByUsername'](
+        this.hasUserRole
+          ? this.authenticationService.accessTokenData!.userId
+          : this.resolvedUserService.user.urlUsername,
+        {
           order: SortOrder.DESCENDING,
           offset,
-          limit: this.POST_FETCH_LIMIT,
-        })
-        .pipe(
-          finalize(() => this.progressBarService.hide()),
-          untilDestroyed(this),
-        )
-        .subscribe(({data}: ApolloQueryResult<PostsByUserIdQueryResult>) => {
-          this.posts = data.postsByUserId.data.slice();
-          this.changeDetector.detectChanges();
-        });
-
-      return;
-    }
-
-    this.postService
-      .getAllByUsername(this.resolvedUser.urlUsername, {
-        order: SortOrder.DESCENDING,
-        offset,
-        limit: this.POST_FETCH_LIMIT,
-      })
+          limit: POST_FETCH_LIMIT,
+        },
+      ) as Observable<ApolloQueryResult<PostsByUserIdQueryResult | PostsByUsernameQueryResult>>
+    )
       .pipe(
         finalize(() => this.progressBarService.hide()),
         untilDestroyed(this),
       )
-      .subscribe(({data}: ApolloQueryResult<PostsByUsernameQueryResult>) => {
-        this.posts = data.postsByUsername.data.slice();
-        this.changeDetector.detectChanges();
-      });
+      .subscribe(
+        ({data}: ApolloQueryResult<PostsByUserIdQueryResult | PostsByUsernameQueryResult>) => {
+          const posts = this.hasUserRole
+            ? (data as PostsByUserIdQueryResult).postsByUserId
+            : (data as PostsByUsernameQueryResult).postsByUsername;
+
+          posts.userProfileTeasers.forEach((teaser) => {
+            this.profileTeasers[teaser._id] = {
+              // Where profile/teaser _id is equal to user id
+              avatarUrl: teaser.avatarUrl,
+              username: teaser.username,
+            };
+          });
+
+          this.posts = posts.posts.data.map((post) => {
+            const newPost = {...post} as any;
+
+            newPost.millisecondsElapsed = this.dateService.serverUtcTimestamp - post.createdAt;
+            newPost.date = this.getPostFullDate(post.createdAt);
+
+            if (hasLessMillisecondsThanDay(this.dateService.serverUtcTimestamp - post.createdAt)) {
+              newPost.timeElapsedAfterCreation$ = this.getTimeElapsedAfterCreation$(post, newPost);
+
+              return newPost;
+            }
+
+            newPost.timeElapsedAfterCreation = this.getPostShortDate(
+              post.createdAt,
+              this.dateService.serverUtcTimestamp,
+            );
+
+            return newPost;
+          });
+          console.debug(this.posts);
+          // this.posts.forEach((post) => post.userId)
+          this.changeDetector.detectChanges();
+        },
+      );
+  }
+
+  // !!! MUTATES POST ITEM [NOT PURE]
+  private getTimeElapsedAfterCreation$(originalPost: any, newPost: any): Observable<string> {
+    return this.dateService.serverUtcTimestampTick$ // Update UI each minute
+      .pipe(
+        startWith(this.dateService.serverUtcTimestamp),
+        takeWhile(
+          (serverUtcTimestamp: number) =>
+            !hasMoreMillisecondsThanDay(serverUtcTimestamp - originalPost.createdAt, true), // Use inclusive in order to state the actual date instead of 1d
+        ),
+        endWith(this.getPostShortDate(originalPost.createdAt, this.dateService.serverUtcTimestamp)), // Emitted each time whenever subscription to completed observable happens
+        map((value) => {
+          // At this point this.dateService.serverUtcTimestamp has relevant value until, this part of the code executed with ~1m lag
+          const millisecondsElapsed = this.dateService.serverUtcTimestamp - originalPost.createdAt;
+
+          if (typeof value === 'string') {
+            // Let change detection spot it's time change for the last time
+            newPost.millisecondsElapsed = millisecondsElapsed;
+            // Nullify observable
+            newPost.timeElapsedAfterCreation$ = null;
+            // MUTATES; use timeElapsedAfterCreation for the rest of a time
+            return (newPost.timeElapsedAfterCreation = value); // endWith emitted value
+          }
+
+          // const millisecondsElapsed = value - originalPost.createdAt;
+          // MUTATES
+          newPost.millisecondsElapsed = millisecondsElapsed;
+
+          const measure = determineElapsedTimeMeasure(millisecondsElapsed);
+
+          switch (measure) {
+            case ElapsedTimeMeasure.SECOND:
+              return this.translateService.instant('DATE.JUST_NOW');
+            case ElapsedTimeMeasure.MINUTE:
+              return this.translateService.instant('DATE.MINUTES_PASSED', {
+                number: millisecondsToMinutes(millisecondsElapsed),
+              });
+            case ElapsedTimeMeasure.HOUR:
+              return this.translateService.instant('DATE.HOURS_PASSED', {
+                number: millisecondsToHours(millisecondsElapsed),
+              });
+          }
+        }),
+        // tap(() => this.changeDetector.detectChanges()),
+      );
+  }
+
+  private getPostShortDate(createdAt: number, serverUtcTimestamp: number): string {
+    const createdAtDate = new Date(createdAt);
+    const createdAtYear = createdAtDate.getFullYear();
+    const haveYearDifference = new Date(serverUtcTimestamp).getFullYear() - createdAtYear > 0;
+    const createdAtMonth = this.translateService.instant(
+      `DATE.CREATED_AT_MONTH.${createdAtDate.getMonth()}`,
+    ) as string;
+
+    return `${createdAtDate.getDate()} ${createdAtMonth} ${
+      haveYearDifference ? createdAtYear : ''
+    }`.trim();
+  }
+
+  private getPostFullDate(createdAt: number): string {
+    const createdAtDate = new Date(createdAt);
+    const createdAtYear = createdAtDate.getFullYear();
+    const createdAtDay = this.translateService.instant(
+      `DATE.CREATED_AT_DAY.${createdAtDate.getDay()}`,
+    ) as string;
+    const createdAtMonth = this.translateService.instant(
+      `DATE.CREATED_AT_MONTH.${createdAtDate.getMonth()}`,
+    ) as string;
+    const createdAtPhrase = this.translateService.instant('DATE.CREATED_AT') as string;
+    const createdAtHours =
+      createdAtDate.getHours() < 10 ? `0${createdAtDate.getHours()}` : createdAtDate.getHours();
+    const createdAtMinutes =
+      createdAtDate.getMinutes() < 10
+        ? `0${createdAtDate.getMinutes()}`
+        : createdAtDate.getMinutes();
+
+    return `${createdAtDay}, ${createdAtDate.getDate()} ${createdAtMonth} ${createdAtYear} ${createdAtPhrase} ${createdAtHours}:${createdAtMinutes}`;
+  }
+
+  public get hasUserRole(): boolean {
+    return this.resolvedUserService.user.role === UserRole.USER;
   }
 }

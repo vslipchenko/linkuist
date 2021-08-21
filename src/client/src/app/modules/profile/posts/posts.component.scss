@@ -1,4 +1,5 @@
 @use 'variables' as var;
+@use 'shared';
 @use 'media';
 
 //@mixin content-first-block-media {
@@ -13,81 +14,23 @@
 //  }
 //}
 
-@mixin content-block-media {
-  @include media.zero-small {
-    max-width: var.$common-user-page-content-block-width-1;
-  }
-
-  @include media.small-large {
-    max-width: var.$common-user-page-content-block-width-2;
-  }
-
-  @include media.above-large {
-    max-width: var.$common-user-page-content-block-width-3;
-  }
-}
-
-.notes-add {
-  //margin-top: var.$unit-2;
-
-  background-color: var.$color-light;
-  //border-color: var.$color-light-darkest;
-  //border-style: solid;
-  border: 1px solid var.$color-light-darkest;
-  //position: fixed;
-  //bottom: -35%;
-  //box-shadow: 0 -10px 10px 0 var.$color-light-darker;
-  box-shadow: 0 -10px 10px 0 var.$color-light-darker;
-  display: flex;
-  flex-direction: column;
-  //height: 35%;
-  min-height: var.$common-user-page-content-block-min-height;
-  transition: 0.5s bottom;
-  width: 100%;
-
-  //@include content-first-block-media;
-  @include content-block-media;
-
-  //@include media.zero-small {
-  //  margin-bottom: var.$unit-4;
-  //  //margin-top: var.$unit-4;
-  //}
-  //
-  //@include media.above-small {
-  //  margin-bottom: var.$unit-2;
-  //  //margin-top: var.$unit-2;
-  //}
-}
-
-.notes-add .input {
-  border-bottom: 1px solid var.$color-light-darkest;
-  flex: 1;
-  padding: var.$unit-2;
-}
-
-.notes-add .panel {
-  display: flex;
-  padding: var.$unit;
-}
-
-.notes-add .button-note {
-  margin-left: auto;
-}
-
-.notes-content {
+.post-list {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: var.$unit-4;
+  //gap: var.$unit-2;
+  //padding-top: var.$unit-2;
   width: 100%;
 
-  @include media.zero-small {
-    padding-top: var.$unit-4;
+  @include media.zero-large {
+    gap: var.$unit-2;
+    //padding-top: var.$unit-2;
     //margin-top: var.$unit-4;
   }
 
-  @include media.above-small {
-    padding-top: var.$unit-2;
+  @include media.above-large {
+    gap: var.$unit-3;
+    //padding-top: var.$unit-3;
     //margin-top: var.$unit-2;
   }
 }
@@ -110,18 +53,6 @@
 //  min-height: var.$common-user-page-content-block-min-height;
 //  width: var.$common-user-page-content-block-width-3;
 //}
-
-.note {
-  background-color: var.$color-light;
-  border: 1px solid var.$color-light-darkest;
-  height: max-content;
-  margin-left: auto;
-  margin-right: auto;
-  padding: var.$unit-2;
-  width: 100%;
-
-  @include content-block-media;
-}
 
 //.note:first-child {
 //  @include content-first-block-media;

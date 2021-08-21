@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
-import {SnackbarConfig} from '~app/types/snackbar/snackbar.interfaces';
 import {MatSnackBarRef} from '@angular/material/snack-bar/snack-bar-ref';
 import {TextOnlySnackBar} from '@angular/material/snack-bar/simple-snack-bar';
+import {SnackbarConfig} from '~app/shared/types/snackbar/snackbar.interfaces';
 
 // TODO implement multiple snackbars
 @Injectable({

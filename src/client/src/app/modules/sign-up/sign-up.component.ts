@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
 import {
   AbstractControl,
   FormBuilder,

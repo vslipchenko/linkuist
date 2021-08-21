@@ -5,7 +5,7 @@ import {gql, UserInputError} from 'apollo-server-express';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
 import {IProfile} from '../../../types/profile/profile.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
-import {USER_ID_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
+import {RECORD_ID_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
 
 export const profileQueryTypeDefinitions = gql`
   extend type Query {
@@ -18,8 +18,8 @@ const profileByUserId = async (
   _: unknown,
   {userId}: {userId: IProfile['userId']},
 ): Promise<MongooseDocument<IProfile> | UserInputError | null> => {
-  const {isValidData} = checkDataValidity({data: userId, pattern: USER_ID_REGEXP});
-  if (!isValidData) return null;
+  const {isInvalidData} = checkDataValidity({data: userId, pattern: RECORD_ID_REGEXP});
+  if (isInvalidData) return null;
 
   // const user = await User.findOne({
   //   username,
@@ -34,8 +34,8 @@ const profileByUsername = async (
   _: unknown,
   {username}: {username: IUser['username']},
 ): Promise<MongooseDocument<IProfile> | UserInputError | null> => {
-  const {isValidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
-  if (!isValidData) return null;
+  const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
+  if (isInvalidData) return null;
 
   const user = await User.findOne({
     username,

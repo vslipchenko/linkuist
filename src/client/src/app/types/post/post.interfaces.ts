@@ -4,31 +4,46 @@ export interface PostCreatePayload {
 
 export interface PostCreateMutationResult {
   createPost: {
-    postId: string;
+    userId: string;
+    // postId: string;
     createdAt: number;
     text: string;
     isRepost: boolean;
   };
 }
 
+export interface PostDeleteCountMutationResult {
+  deletePost: number;
+}
+
 export interface PostsByUserIdQueryResult {
   postsByUserId: {
-    data: Array<{
-      createdAt: number;
-      text: string;
-      isRepost: boolean;
-    }>;
-    total: number;
+    posts: {
+      data: Array<{
+        userId: string;
+        createdAt: number;
+        // date: string;
+        text: string;
+        isRepost: boolean;
+      }>;
+      total: number;
+    };
+    userProfileTeasers: Array<{_id: string; username: string; avatarUrl: string}>;
   };
 }
 
 export interface PostsByUsernameQueryResult {
   postsByUsername: {
-    data: Array<{
-      createdAt: number;
-      text: string;
-      isRepost: boolean;
-    }>;
-    total: number;
+    posts: {
+      data: Array<{
+        userId: string;
+        createdAt: number;
+        // date: string;
+        text: string;
+        isRepost: boolean;
+      }>;
+      total: number;
+    };
+    userProfileTeasers: Array<{_id: string; username: string; avatarUrl: string}>;
   };
 }

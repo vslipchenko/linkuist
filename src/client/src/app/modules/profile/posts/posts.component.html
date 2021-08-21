@@ -1,20 +1,44 @@
-<div *ngIf="resolvedUser?.role === UserRole.USER" class="notes-add mx-auto">
-  <textarea #postInput class="input" placeholder="Capture your ideas..."></textarea>
-  <div class="panel">
-    <button
-      mat-flat-button
-      color="primary"
-      class="button-note"
-      (click)="createPost(postInput.value)"
-    >
-      Post
-    </button>
-  </div>
-</div>
-<div class="notes-content" data-empty-notes="There are no notes yet...">
-  <div *ngFor="let post of posts; trackBy: postsTrackBy" class="note">
-    {{ post.text }}
-  </div>
+<app-add-post *ngIf="hasUserRole" (addPost)="createPost($event)"></app-add-post>
+
+<div class="post-list" data-empty-notes="There are no notes yet...">
+  <app-post
+    *ngFor="let post of posts; trackBy: postsTrackBy.bind(this)"
+    [post]="post"
+    [profileTeasers]="profileTeasers"
+    (deletePost)="handlePostDelete($event)"
+  ></app-post>
+  <!--  <div *ngFor="let post of posts; trackBy: postsTrackBy.bind(this)" class="note">-->
+  <!--    <div class="panel">-->
+  <!--      <div class="user-block d-flex align-items-center">-->
+  <!--        <div class="user-image" style="width: 50px; height: 50px">-->
+  <!--          <a-->
+  <!--            [routerLink]="'/@' + profileTeasers[post.userId].username"-->
+  <!--            (click)="hasUserRole && scrollTop()"-->
+  <!--          >-->
+  <!--            <img [src]="profileTeasers[post.userId].avatarUrl" class="w-100 h-100" alt="" />-->
+  <!--          </a>-->
+  <!--        </div>-->
+  <!--        <div class="ml-2">-->
+  <!--          <div class="username font-weight-bold">-->
+  <!--            <a-->
+  <!--              [routerLink]="'/@' + profileTeasers[post.userId].username"-->
+  <!--              (click)="isDifferentUser(profileTeasers[post.userId].username) && scrollTop()"-->
+  <!--            >-->
+  <!--              @{{ profileTeasers[post.userId].username }}-->
+  <!--            </a>-->
+  <!--          </div>-->
+  <!--          <div class="timestamp color-light-dark font-size-regular">-->
+  <!--            {{-->
+  <!--              post.timeElapsedAfterCreation$-->
+  <!--                ? (post.timeElapsedAfterCreation$ | async)-->
+  <!--                : post.timeElapsedAfterCreation-->
+  <!--            }}-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="content mt-2">{{ post.text }}</div>-->
+  <!--  </div>-->
   <!--  <div class="note">-->
   <!--    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been-->
   <!--    the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley-->

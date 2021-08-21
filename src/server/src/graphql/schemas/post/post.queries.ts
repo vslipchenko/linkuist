@@ -3,161 +3,125 @@ import {IUser} from '../../../types/user/user.interfaces';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
 import {IPost} from '../../../types/post/post.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
-import {USER_ID_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
+import {RECORD_ID_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
 import {User} from '../../../models/user';
 import {Post} from '../../../models/post';
 import {ILinkard} from '../../../types/linkard/linkard.interfaces';
 import {SortOrder} from '../../../types/shared/shared.enums';
 import mongoose from 'mongoose';
 import {RequestParameters} from '../../../types/shared/shared.types';
+import {POST_FETCH_LIMIT} from '../../../constants/post';
+// import {getUtcTimestamp} from '../../../utilities/date';
+// import {composePostDate} from '../../../utilities/date';
 
 // TODO inspect Post null issue
 export const postQueryTypeDefinitions = gql`
   extend type Query {
-    postsByUserId(userId: String!, parameters: RequestParameters!): PostByUserId
-    postsByUsername(username: String!, order: SortOrder): [Post!]!
+    postsByUserId(userId: String!, parameters: RequestParameters!): UserPosts
+    postsByUsername(username: String!, parameters: RequestParameters!): UserPosts
   }
 `;
 
-const postsByUserId = async (
-  _: unknown,
-  {userId, parameters}: {userId: ILinkard['userId']; parameters: RequestParameters},
-): Promise<Array<MongooseDocument<IPost>> | {data: any; total: any} | null> => {
-  const {isValidData} = checkDataValidity({
-    data: {userId, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
-    ignoreUndefinedValuePaths: ['order', 'offset'],
-    pattern: {
-      userId: USER_ID_REGEXP,
-      order: (value) => value === SortOrder.ASCENDING || value === SortOrder.DESCENDING,
-      offset: Number.isSafeInteger,
-      limit: Number.isSafeInteger,
-    },
-  });
-
-  if (!isValidData) return null;
-
-  // const dataval = checkDataValidity({
-  //   data: {userId: {userId: userId}, chill: 4},
-  //   pattern: {'userId.userId': USER_ID_REGEXP},
-  // });
-  // console.log(dataval);
-  // const response = await Post.aggregate()
-  //   .match({userId: mongoose.Types.ObjectId(userId)})
-  //   .facet({
-  //     data: [{$skip: 0}, {$limit: 2}],
-  //     total: [{$count: 'total'}],
-  //   });
-
-  // const shapeAggregated = (response: any) => {
-  //   if (!response.length) return {};
-  //   console.log(response[0].total);
-  //   return {
-  //     data: response[0].data,
-  //     total: response[0].total[0].total,
-  //   };
-  // };
-
-  // const cursor = () =>
-  //   Post.find({
-  //     userId,
-  //   });
-
+const aggregatePost = async (
+  userId: string,
+  parameters: RequestParameters,
+): Promise<{
+  posts: {data: any; total: any};
+  userProfileTeasers: Array<unknown>;
+}> => {
   const aggregationResult = await Post.aggregate([
     {$match: {userId: mongoose.Types.ObjectId(userId)}},
     {
       $facet: {
         data: [
-          {$limit: parameters.limit},
-          parameters.offset ? {$skip: parameters.offset} : null,
           // parameters.limit ? {$limit: parameters.limit} : null,
           parameters.order
             ? {$sort: {createdAt: parameters.order === SortOrder.ASCENDING ? 1 : -1}}
             : null,
+          parameters.offset ? {$skip: parameters.offset} : null,
+          {$limit: parameters.limit},
         ].filter((stage) => stage), // Filter null
         total: [{$count: 'total'}],
       },
     },
   ]);
 
-  const data = aggregationResult[0].data;
+  const data = aggregationResult[0].data as Array<IPost>;
+  const uniqueUserIds: Array<string> = [];
 
-  // const uniqueUserIds = data.map((post) => post.userId);
+  data.forEach((post: IPost & {date?: string}) => {
+    // post.date = composePostDate(post.createdAt);
+
+    if (!uniqueUserIds.includes(post.userId)) uniqueUserIds.push(post.userId);
+  });
+
+  const userProfileTeasers = await User.find(
+    {
+      _id: {
+        $in: uniqueUserIds.map((id) => mongoose.Types.ObjectId(id)),
+      },
+    },
+    'avatarUrl username',
+  );
 
   return {
-    data: data,
-    total: aggregationResult[0].total[0].total,
+    posts: {
+      data: data,
+      total: aggregationResult[0].total[0].total,
+    },
+    userProfileTeasers,
   };
+};
 
-  // const cursor = PostByUserId();
-  // console.log(
-  //
-  // );
+const postsByUserId = (
+  _: unknown,
+  {userId, parameters}: {userId: ILinkard['userId']; parameters: RequestParameters},
+): Promise<{posts: {data: any; total: any}; userProfileTeasers: Array<unknown>}> | null => {
+  const {isInvalidData} = checkDataValidity({
+    data: {userId, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
+    ignoreUndefinedValuePaths: ['order', 'offset'],
+    pattern: {
+      userId: RECORD_ID_REGEXP,
+      order: (value) => value === SortOrder.ASCENDING || value === SortOrder.DESCENDING,
+      offset: Number.isInteger,
+      limit: (value) => Number.isInteger(value) && value > 0 && value <= POST_FETCH_LIMIT,
+    },
+  });
 
-  // return Post.aggregate([
-  //   {
-  //     // $facet: {postsByUserId: [{$match: {userId}}], total: [{$count: 'total'}]},
-  //     $facet: {data: [{$match: {userId}}]},
-  //   },
-  // ]);
-  //
-  // console.log('sort ', await cursor.sort({createdAt: order}));
-  // if (parameters) {
-  //   let mutableCursor = cursor();
-  //
-  //   // if (parameters.order) mutableCursor = mutableCursor.sort({createdAt: parameters.order});
-  //   // if (parameters.offset) mutableCursor = mutableCursor.skip(parameters.offset);
-  //   if (parameters.limit) mutableCursor = mutableCursor.limit(parameters.offset);
-  //
-  //   return {
-  //     data: await mutableCursor,
-  //     total: await cursor().countDocuments(),
-  //   };
-  // }
-  //
-  // return cursor();
+  if (isInvalidData) return null;
+
+  return aggregatePost(userId, parameters);
 };
 
 const postsByUsername = async (
   _: unknown,
   {username, parameters}: {username: IUser['username']; parameters: RequestParameters},
-): Promise<Array<MongooseDocument<IPost>> | {data: any; total: any} | UserInputError | null> => {
-  const {isValidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
-  if (!isValidData) return null;
-
-  const user = await User.findOne(
-    {
-      username,
+): Promise<
+  | Array<MongooseDocument<IPost>>
+  | {posts: {data: any; total: any}; userProfileTeasers: Array<unknown>}
+  | UserInputError
+  | null
+> => {
+  const {isInvalidData} = checkDataValidity({
+    data: {username, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
+    ignoreUndefinedValuePaths: ['order', 'offset'],
+    pattern: {
+      username: USERNAME_REGEXP,
+      order: (value) => value === SortOrder.ASCENDING || value === SortOrder.DESCENDING,
+      offset: Number.isInteger,
+      limit: (value) => Number.isInteger(value) && value > 0 && value <= POST_FETCH_LIMIT,
     },
-    '_id',
-  );
+  });
+
+  if (isInvalidData) return null;
+  // TODO Consider to pull only required data
+  const user = await User.findOne({
+    username,
+  });
 
   if (!user) return new UserInputError('Invalid username');
 
-  const aggregationResult = await Post.aggregate([
-    {$match: {userId: mongoose.Types.ObjectId(user._id)}},
-    {
-      $facet: {
-        data: [
-          {$limit: parameters.limit},
-          parameters.offset ? {$skip: parameters.offset} : null,
-          // parameters.limit ? {$limit: parameters.limit} : null,
-          parameters.order
-            ? {$sort: {createdAt: parameters.order === SortOrder.ASCENDING ? 1 : -1}}
-            : null,
-        ].filter((stage) => stage), // Filter null
-        total: [{$count: 'total'}],
-      },
-    },
-  ]);
-
-  const data = aggregationResult[0].data;
-
-  // const uniqueUserIds = data.map((post) => post.userId);
-
-  return {
-    data: data,
-    total: aggregationResult[0].total[0].total,
-  };
+  return aggregatePost(user._id, parameters);
 };
 
 export const postQueryResolvers = {

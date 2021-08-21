@@ -1,5 +1,5 @@
 import {gql, UserInputError} from 'apollo-server-express';
-import {EMAIL_REGEXP, USER_ID_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
+import {EMAIL_REGEXP, RECORD_ID_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
 import {User} from '../../../models/user';
 import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
@@ -13,31 +13,33 @@ export const userQueryTypeDefinitions = gql`
     userByUsername(username: String!): User
     profileByUserId(userId: String!): UserProfile
     profileByUsername(username: String!): UserProfile # Consider to simplify to just Profile
-    profileTeaserByUserId(userId: String!): UserProfileTeaser # Consider to simplify to just ProfileTeaser
-    profileTeaserByUsername(userId: String!): UserProfileTeaser
+    # profileTeaserByUserId(userId: String!): UserProfileTeaser # Consider to simplify to just ProfileTeaser
+    # profileTeaserByUsername(userId: String!): UserProfileTeaser
   }
 `;
 
 const userByEmail = (_: unknown, {email}: {email: IUser['email']}): unknown => {
-  const {isValidData} = checkDataValidity({data: email, pattern: EMAIL_REGEXP});
-  if (isValidData) {
-    return User.findOne({email});
-  }
+  const {isInvalidData} = checkDataValidity({data: email, pattern: EMAIL_REGEXP});
+
+  if (isInvalidData) return null;
+
+  return User.findOne({email});
 };
 
 const userByUsername = (_: unknown, {username}: {username: IUser['username']}): unknown => {
-  const {isValidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
-  if (isValidData) {
-    return User.findOne({username});
-  }
+  const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
+
+  if (isInvalidData) return null;
+
+  return User.findOne({username});
 };
 
 const profileByUserId = async (
   _: unknown,
   {userId}: {userId: IProfile['userId']},
 ): Promise<MongooseDocument<IUser> | UserInputError | null> => {
-  const {isValidData} = checkDataValidity({data: userId, pattern: USER_ID_REGEXP});
-  if (!isValidData) return null;
+  const {isInvalidData} = checkDataValidity({data: userId, pattern: RECORD_ID_REGEXP});
+  if (isInvalidData) return null;
 
   // const user = await User.findOne({
   //   username,
@@ -53,8 +55,8 @@ const profileByUsername = async (
   _: unknown,
   {username}: {username: IUser['username']},
 ): Promise<MongooseDocument<IUser> | UserInputError | null> => {
-  const {isValidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
-  if (!isValidData) return null;
+  const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
+  if (isInvalidData) return null;
 
   // const user = await User.findOne({
   //   username,
@@ -65,42 +67,42 @@ const profileByUsername = async (
   return User.findOne({username}, 'backgroundUrl avatarUrl name bio');
 };
 
-const profileTeaserByUserId = async (
-  _: unknown,
-  {userId}: {userId: IProfile['userId']},
-): Promise<MongooseDocument<IUser> | UserInputError | null> => {
-  const {isValidData} = checkDataValidity({data: userId, pattern: USER_ID_REGEXP});
-  if (!isValidData) return null;
-
-  // const user = await User.findOne({
-  //   username,
-  // });
-  //
-  // if (!user) return new UserInputError('Invalid username');
-
-  return User.findOne({_id: userId}, 'avatarUrl username');
-};
-
-const profileTeaserByUsername = async (
-  _: unknown,
-  {username}: {username: IUser['username']},
-): Promise<MongooseDocument<IUser> | UserInputError | null> => {
-  const {isValidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
-  if (!isValidData) return null;
-
-  // const user = await User.findOne({
-  //   username,
-  // });
-  //
-  // if (!user) return new UserInputError('Invalid username');
-
-  return User.findOne({username}, 'avatarUrl username');
-};
+// const profileTeaserByUserId = async (
+//   _: unknown,
+//   {userId}: {userId: IProfile['userId']},
+// ): Promise<MongooseDocument<IUser> | UserInputError | null> => {
+//   const {isInvalidData} = checkDataValidity({data: userId, pattern: USER_ID_REGEXP});
+//   if (isInvalidData) return null;
+//
+//   // const user = await User.findOne({
+//   //   username,
+//   // });
+//   //
+//   // if (!user) return new UserInputError('Invalid username');
+//
+//   return User.findOne({_id: userId}, 'avatarUrl username');
+// };
+//
+// const profileTeaserByUsername = async (
+//   _: unknown,
+//   {username}: {username: IUser['username']},
+// ): Promise<MongooseDocument<IUser> | UserInputError | null> => {
+//   const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
+//   if (isInvalidData) return null;
+//
+//   // const user = await User.findOne({
+//   //   username,
+//   // });
+//   //
+//   // if (!user) return new UserInputError('Invalid username');
+//
+//   return User.findOne({username}, 'avatarUrl username');
+// };
 
 // const userProfileByUsername = (): unknown => {
-//   const {isValidData} = {isValidData: true};
+//   const {isInvalidData} = {isValidData: true};
 //
-//   if (!isValidData) return;
+//   if (isInvalidData) return null;
 //
 //   return '';
 // };
@@ -111,7 +113,7 @@ export const userQueryResolvers = {
     userByUsername,
     profileByUserId,
     profileByUsername,
-    profileTeaserByUserId,
-    profileTeaserByUsername,
+    // profileTeaserByUserId,
+    // profileTeaserByUsername,
   },
 };

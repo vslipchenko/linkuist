@@ -6,7 +6,7 @@ import {User} from '../../../models/user';
 import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
-import {getUtcMillisecondTimestamp} from '../../../utilities/date';
+import {getUtcTimestamp} from '../../../utilities/date';
 import {IProfile} from '../../../types/profile/profile.interfaces';
 import {authenticationGuard} from '../../../utilities/guards';
 // import {Profile} from '../../../models/profile';
@@ -23,8 +23,8 @@ export const userMutationTypeDefinitions = gql`
 const createUser = (
   _: unknown,
   {input}: {input: IUser},
-): Promise<MongooseDocument<IUser>> | void => {
-  const {isValidData} = checkDataValidity({
+): Promise<MongooseDocument<IUser>> | null => {
+  const {isInvalidData} = checkDataValidity({
     data: input,
     pattern: {
       email: EMAIL_REGEXP,
@@ -33,12 +33,13 @@ const createUser = (
     },
   });
 
-  if (isValidData) {
-    input.password = bcrypt.hashSync(input.password, 15);
-    input.accessKey = uuidv4();
-    input.createdAt = getUtcMillisecondTimestamp();
-    return User.create(input);
-  }
+  if (isInvalidData) return null;
+
+  input.password = bcrypt.hashSync(input.password, 15);
+  input.accessKey = uuidv4();
+  input.createdAt = getUtcTimestamp();
+
+  return User.create(input);
 };
 
 const updateProfile = async (

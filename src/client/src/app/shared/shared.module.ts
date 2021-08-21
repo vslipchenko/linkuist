@@ -19,6 +19,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {LinkardComponent} from './components/linkard/linkard.component';
 import {MatMenuModule} from '@angular/material/menu';
+import {LengthCircleComponent} from './components/length-circle/length-circle.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {MatMenuModule} from '@angular/material/menu';
     DialogComponent,
     ChipsComponent,
     LinkardComponent,
+    LengthCircleComponent,
   ],
   exports: [
     NavigationComponent,
@@ -36,6 +38,7 @@ import {MatMenuModule} from '@angular/material/menu';
     ChipsComponent,
     LinkardComponent,
     WrapIfDirective,
+    LengthCircleComponent,
   ],
   imports: [
     CommonModule,
@@ -51,6 +54,18 @@ import {MatMenuModule} from '@angular/material/menu';
     MatFormFieldModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    // TranslateModule.forChild({
+    //   loader: {
+    //     provide: TranslateLoader,
+    //     useFactory: translateLoaderFactory('shared'),
+    //     deps: [HttpClient],
+    //   },
+    //   isolate: true,
+    // }),
   ],
 })
-export class SharedModule {}
+export class SharedModule {
+  // public constructor(translateService: TranslateService) {
+  //   setupTranslate(translateService);
+  // }
+}

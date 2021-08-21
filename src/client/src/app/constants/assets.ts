@@ -47,6 +47,7 @@ export const ICONS: Array<Icon> = [
   {name: 'share-variant', fileName: 'share-variant'},
   {name: 'account-box', fileName: 'account-box'},
   {name: 'cog', fileName: 'cog'},
+  {name: 'dots-horizontal', fileName: 'dots-horizontal'},
   // {name: 'google', fileName: 'google-24px', isOutlined: true},
   // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
 ];

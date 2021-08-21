@@ -1,9 +1,9 @@
-<main class="profile">
+<main id="main" class="profile">
   <div
     class="user-background"
     [style.background-image]="'url(' + profile.backgroundUrl + ')'"
   ></div>
-  <div class="user">
+  <div class="user mx-auto">
     <div class="user-images">
       <div class="user-avatar" [style.background-image]="'url(' + profile.avatarUrl + ')'"></div>
     </div>
@@ -43,7 +43,7 @@
     </div>
   </div>
   <section class="notes">
-    <app-posts [resolvedUser]="resolvedUser"></app-posts>
+    <app-posts [avatarUrl]="profile.avatarUrl"></app-posts>
   </section>
 </main>
 

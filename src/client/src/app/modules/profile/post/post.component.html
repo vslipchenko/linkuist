@@ -1,0 +1,100 @@
+<div class="post">
+  <div class="user-panel d-flex align-items-center p-2 border-bottom">
+    <div class="user-block d-flex align-items-center">
+      <div class="user-image" style="width: 50px; height: 50px">
+        <a
+          [routerLink]="'/@' + profileTeasers[post.userId].username"
+          (click)="isPostOwner(profileTeasers[post.userId].username) && scrollTop()"
+        >
+          <img
+            [src]="profileTeasers[post.userId].avatarUrl"
+            class="w-100 h-100 border-radius-circle"
+            alt=""
+          />
+        </a>
+      </div>
+      <div class="ml-2">
+        <div class="username font-weight-bold">
+          <a
+            [routerLink]="'/@' + profileTeasers[post.userId].username"
+            (click)="isPostOwner(profileTeasers[post.userId].username) && scrollTop()"
+          >
+            @{{ profileTeasers[post.userId].username }}
+          </a>
+        </div>
+        <div
+          class="timestamp color-light-dark font-size-regular"
+          [matTooltip]="post.date"
+          matTooltipPosition="right"
+        >
+          {{
+            post.timeElapsedAfterCreation
+              ? post.timeElapsedAfterCreation
+              : (post.timeElapsedAfterCreation$ | async)
+          }}
+        </div>
+      </div>
+    </div>
+    <button
+      *ngIf="hasUserRole"
+      [matMenuTriggerFor]="postSettings"
+      mat-icon-button
+      color="primary"
+      class="ml-auto"
+      aria-label="Example icon button with a delete icon"
+    >
+      <mat-icon svgIcon="dots-horizontal"></mat-icon>
+    </button>
+    <mat-menu #postSettings>
+      <!--      <button mat-menu-item>-->
+      <!--        <mat-icon svgIcon="share-variant"></mat-icon>-->
+      <!--        Share to-->
+      <!--      </button>-->
+      <button mat-menu-item (click)="delete(post._id)">
+        <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>
+        Delete
+      </button>
+    </mat-menu>
+  </div>
+  <div class="post-content px-2 py-3">{{ post.text }}</div>
+  <div class="d-flex justify-content-around flex-wrap color-light-dark border-top">
+    <button
+      mat-button
+      class="icon-button d-flex justify-content-center flex"
+      (click)="(null)"
+      [color]="null ? 'warn' : null"
+    >
+      <!--    <div style="display: flex; align-items: center" class="mr-1">-->
+      <mat-icon svgIcon="heart" class="d-flex mr-h icon-sm"></mat-icon>
+      <span class="font-weight-bold">27k</span>
+      <!--    </div>-->
+    </button>
+    <button mat-button class="icon-button d-flex justify-content-center flex">
+      <mat-icon svgIcon="comment" class="d-flex mr-h icon-sm"></mat-icon>
+      <span class="font-weight-bold">27k</span>
+    </button>
+    <button
+      mat-button
+      class="icon-button d-flex justify-content-center flex"
+      (click)="(null)"
+      [color]="null ? 'primary' : null"
+    >
+      <mat-icon svgIcon="share" class="mr-h"></mat-icon>
+      <span class="font-weight-bold">27k</span>
+    </button>
+  </div>
+  <div class="border-top">
+    <div class="d-flex">
+      <span
+        #postInput
+        class="input w-100 p-2"
+        role="textbox"
+        contenteditable
+        data-placeholder="Write a comment..."
+        (input)="(null)"
+      >
+        <!--    <span class="placeholder"></span>-->
+      </span>
+    </div>
+  </div>
+</div>

@@ -15,6 +15,7 @@ export const userTypes = gql`
   }
 
   type UserProfileTeaser {
+    _id: ID! # user id
     avatarUrl: String
     username: String
   }

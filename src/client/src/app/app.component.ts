@@ -3,7 +3,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material/icon';
 import {ICONS, ICONS_FOLDER} from '~app/constants/assets';
 // import {Icon} from '~app/types/assets/assets.interfaces';
-import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
 
 @Component({
   selector: 'app-root',

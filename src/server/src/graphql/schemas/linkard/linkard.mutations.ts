@@ -4,7 +4,7 @@ import {ILinkard} from '../../../types/linkard/linkard.interfaces';
 import {Linkard} from '../../../models/linkard';
 import {fetchUrlMetadata} from '../../../utilities/url-metadata';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
-import {getUtcMillisecondTimestamp} from '../../../utilities/date';
+import {getUtcTimestamp} from '../../../utilities/date';
 
 const createLinkard = async (
   _: unknown,
@@ -36,7 +36,7 @@ const createLinkard = async (
     ...input,
     metadata,
     userId: tokenData.userId,
-    createdAt: getUtcMillisecondTimestamp(),
+    createdAt: getUtcTimestamp(),
   });
 };
 

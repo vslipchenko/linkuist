@@ -1,0 +1,28 @@
+<div class="notes-add mx-auto">
+  <span
+    #postInput
+    class="input"
+    role="textbox"
+    contenteditable
+    data-placeholder="Capture your ideas..."
+    (input)="inputChange($event)"
+  >
+  </span>
+  <div class="d-flex align-items-center p-1">
+    <app-length-circle
+      [diameter]="25"
+      [value]="characterLength"
+      [maxValue]="13"
+      [defineColor]="defineLengthCircleColor"
+    ></app-length-circle>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="button-note"
+      (click)="addPost.emit(postInput.textContent)"
+    >
+      Post
+    </button>
+  </div>
+</div>

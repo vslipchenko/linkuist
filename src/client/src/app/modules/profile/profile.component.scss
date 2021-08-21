@@ -26,7 +26,7 @@ $user-avatar-size: 176px;
   //background-color: var.$color-light;
   //border-color: var.$color-light-darkest;
   //border-style: solid;
-  margin: -#{$user-avatar-size / 2} auto 0;
+  margin-top: -#{$user-avatar-size / 2};
   //max-width: var.$common-user-page-content-block-width-3;
   //overflow-y: auto;
   //padding-bottom: var.$unit-4;
@@ -41,13 +41,18 @@ $user-avatar-size: 176px;
     max-width: 100%;
   }
 
+  @include media.zero-large {
+    margin-bottom: var.$unit-2;
+  }
+
   @include media.small-large {
-    margin-bottom: var.$unit;
+    //margin-bottom: var.$unit;
     max-width: var.$common-user-page-content-block-width-2;
   }
 
   @include media.above-large {
-    margin-bottom: var.$unit-2;
+    //margin-bottom: var.$unit-2;
+    margin-bottom: var.$unit-3;
     max-width: var.$common-user-page-content-block-width-3;
   }
 
@@ -158,14 +163,16 @@ $user-avatar-size: 176px;
 
 /* Notes */
 .notes {
-  @include media.zero-small {
-    padding: var.$unit-4 0;
+  padding-top: var.$unit;
+
+  @include media.zero-large {
+    padding-bottom: var.$unit-2;
   }
 
-  @include media.above-small {
+  @include media.above-large {
     //margin-bottom: var.$unit-2;
     //margin-top: var.$unit-2;
-    padding: var.$unit-2 0;
+    padding-bottom: var.$unit-3;
   }
 }
 

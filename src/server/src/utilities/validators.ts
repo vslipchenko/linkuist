@@ -14,8 +14,8 @@ interface CheckDataValidityOptions {
 }
 
 type CheckDataValidityResult =
-  | {isValidData: boolean}
-  | {isValidData: boolean; invalidPaths: Array<string>};
+  | {isInvalidData: boolean}
+  | {isInvalidData: boolean; invalidPaths: Array<string>};
 // !!! It does not check data integrity, returns {isValidData: true} in case of data path / pattern path mismatch
 // Set data object explicitly to make sure that all required properties are in place
 export const checkDataValidity = ({
@@ -124,9 +124,9 @@ export const checkDataValidity = ({
 
   return invalidPaths.length
     ? outputInvalidPaths
-      ? {isValidData: false, invalidPaths}
-      : {isValidData: false}
-    : {isValidData: true};
+      ? {isInvalidData: true, invalidPaths}
+      : {isInvalidData: true}
+    : {isInvalidData: false};
 };
 
 // console.log(checkDataValidity({

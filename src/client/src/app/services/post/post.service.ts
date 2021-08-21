@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Apollo} from 'apollo-angular';
-import {CREATE_POST} from '~app/graphql/post/post.mutations';
+import {CREATE_POST, DELETE_POST} from '~app/graphql/post/post.mutations';
 import {
   PostCreateMutationResult,
   PostCreatePayload,
+  PostDeleteCountMutationResult,
   PostsByUserIdQueryResult,
   PostsByUsernameQueryResult,
 } from '~app/types/post/post.interfaces';
@@ -42,6 +43,13 @@ export class PostService {
     return this.apollo.query({
       query: GET_POSTS_BY_USERNAME,
       variables: {username, parameters},
+    });
+  }
+
+  public deleteById(_id: string): Observable<FetchResult<PostDeleteCountMutationResult>> {
+    return this.apollo.mutate({
+      mutation: DELETE_POST,
+      variables: {input: {_id}},
     });
   }
 }

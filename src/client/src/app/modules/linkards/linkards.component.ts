@@ -6,7 +6,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
 import {DialogService} from '~app/shared/services/dialog/dialog.service';
 // import {DialogTypes} from '~app/types/dialog/dialog.enums';
 import {
@@ -19,7 +19,6 @@ import {
 import {ENTER} from '@angular/cdk/keycodes';
 import {LinkardPrice, LinkardPrivacy} from '~app/types/linkard/linkard.enums';
 import {LINKARD_TAG_LETTER_REGEXP} from '~app/constants/regexps';
-import {Chip} from '~app/types/chips/chips.interfaces';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {LinkardService} from '~app/services/linkard/linkard.service';
 import {ActivatedRoute} from '@angular/router';
@@ -32,6 +31,7 @@ import {
 } from '~app/types/linkard/linkard.interfaces';
 // import {getId} from '~app/utilities/unique';
 import {ApolloQueryResult} from '@apollo/client/core/types';
+import {Chip} from '~app/shared/types/chips/chips.interfaces';
 
 @UntilDestroy()
 @Component({
@@ -52,7 +52,11 @@ export class LinkardsComponent implements OnInit {
   public readonly tagLetterValidator = LINKARD_TAG_LETTER_REGEXP;
   public readonly tagSplitWordBy = /[-\s]/;
 
-  public resolvedUser: ResolvedUser = {role: UserRole.VIEWER, urlUsername: '', relativePaths: []};
+  public resolvedUser: ResolvedUser = {
+    role: UserRole.VIEWER,
+    urlUsername: '',
+    // relativePaths: []
+  };
   public addBookmarkForm: FormGroup | undefined;
   public linkards: Array<unknown> = []; // TODO type
 

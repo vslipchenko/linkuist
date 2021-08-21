@@ -1,0 +1,19 @@
+<div *ngIf="value" class="d-flex position-relative ml-1">
+  <!--      https://www.angularjswiki.com/angular/creating-progress-spinner-in-angular/-->
+  <mat-progress-spinner
+    class="opacity-2"
+    mode="determinate"
+    value="100"
+    [diameter]="diameter"
+    [color]="color"
+  >
+  </mat-progress-spinner>
+  <mat-progress-spinner
+    class="position-absolute"
+    mode="determinate"
+    [color]="color"
+    [value]="progressValue"
+    [diameter]="diameter"
+  >
+  </mat-progress-spinner>
+</div>

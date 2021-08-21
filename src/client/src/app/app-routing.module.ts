@@ -8,7 +8,7 @@ import {SignInModule} from '~app/modules/sign-in/sign-in.module';
 import {SignUpModule} from '~app/modules/sign-up/sign-up.module';
 import {ProfileModule} from '~app/modules/profile/profile.module';
 import {LinkardsModule} from '~app/modules/linkards/linkards.module';
-import {UserResolver} from '~app/shared/resolvers/user/user.resolver';
+import {UserResolver} from '~app/resolvers/user/user.resolver';
 import {UserCanActivateGuard} from '~app/guards/user/can-activate/user.guard';
 import {UserCanLoadGuard} from '~app/guards/user/can-load/user.guard';
 

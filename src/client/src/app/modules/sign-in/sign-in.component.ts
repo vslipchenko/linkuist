@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms';
 import {EMAIL_REGEXP, PASSWORD_REGEXP} from '~app/constants/regexps';
 import {ErrorStateMatcher} from '@angular/material/core';

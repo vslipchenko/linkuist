@@ -10,7 +10,7 @@ import {AuthenticationService} from '~app/services/authentication/authentication
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {UserService} from '~app/services/user/user.service';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
-import {NavigationMainActionType} from '~app/types/navigation/navigation.enums';
+import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
 import {UserRole} from '~app/types/user/user.enums';
 import {pathsMatch} from '~app/utilities/url';
 import {DialogService} from '~app/shared/services/dialog/dialog.service';
@@ -25,6 +25,8 @@ import {
 } from '~app/types/profile/profile.interfaces';
 import {FetchResult} from '@apollo/client/core';
 import {finalize} from 'rxjs/operators';
+import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
+import {Observable} from 'rxjs';
 
 @UntilDestroy()
 @Component({
@@ -40,7 +42,11 @@ export class ProfileComponent {
     | TemplateRef<unknown>
     | undefined;
 
-  public resolvedUser: ResolvedUser = {role: UserRole.VIEWER, urlUsername: '', relativePaths: []};
+  // public resolvedUser: ResolvedUser = {
+  //   role: UserRole.VIEWER,
+  //   urlUsername: '',
+  //   // relativePaths: []
+  // };
   public profile = {
     backgroundUrl: '',
     avatarUrl: '',
@@ -50,6 +56,7 @@ export class ProfileComponent {
   public profileSettingsForm = this.buildProfileSettingsForm();
 
   public constructor(
+    private readonly resolvedUserService: ResolvedUserService,
     private readonly changeDetector: ChangeDetectorRef,
     private readonly progressBarService: ProgressBarService,
     private readonly authenticationService: AuthenticationService,
@@ -60,9 +67,10 @@ export class ProfileComponent {
     private readonly formBuilder: FormBuilder, // private readonly profileService: ProfileService,
   ) {
     // console.debug('PROFILE');
-    this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
+    // this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
+    this.resolvedUserService.user = this.route.snapshot.data.user as ResolvedUser;
     // console.log('called', this.resolvedUser);
-
+    // this.userRoleService.userRole = UserRole.USER;
     this.loadProfile();
 
     // console.debug('CONSTRUCTOR');
@@ -167,7 +175,7 @@ export class ProfileComponent {
     });
 
     dialogAfterClosed$.subscribe(() => {
-      void this.router.navigate([`@${this.resolvedUser.urlUsername}`]);
+      void this.router.navigate([`@${this.resolvedUserService.user.urlUsername}`]);
     });
   }
 
@@ -213,26 +221,36 @@ export class ProfileComponent {
   }
 
   private loadProfile(): void {
-    if (this.resolvedUser.role === UserRole.USER) {
-      this.userService
-        .getProfileByUserId(this.authenticationService.accessTokenData!.userId)
-        .pipe(untilDestroyed(this))
-        .subscribe(({data}: ApolloQueryResult<ProfileByUserIdQueryResult>) => {
-          this.profile = data.profileByUserId;
+    // if (this.resolvedUserService.user.role === UserRole.USER) {
+    //   this.userService
+    //     .getProfileByUserId(this.authenticationService.accessTokenData!.userId)
+    //     .pipe(untilDestroyed(this))
+    //     .subscribe(({data}: ApolloQueryResult<ProfileByUserIdQueryResult>) => {
+    //       this.profile = data.profileByUserId;
+    //       this.profileSettingsForm = this.buildProfileSettingsForm(this.profile);
+    //       this.changeDetector.detectChanges();
+    //     });
+    //   return;
+    // }
+    const hasUserRole = this.resolvedUserService.user.role === UserRole.USER;
+
+    (
+      this.userService[hasUserRole ? 'getProfileByUserId' : 'getProfileByUsername'](
+        hasUserRole
+          ? this.authenticationService.accessTokenData!.userId
+          : this.resolvedUserService.user.urlUsername,
+      ) as Observable<ApolloQueryResult<ProfileByUserIdQueryResult | ProfileByUsernameQueryResult>>
+    )
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        ({data}: ApolloQueryResult<ProfileByUserIdQueryResult | ProfileByUsernameQueryResult>) => {
+          this.profile = hasUserRole
+            ? (data as ProfileByUserIdQueryResult).profileByUserId
+            : (data as ProfileByUsernameQueryResult).profileByUsername;
           this.profileSettingsForm = this.buildProfileSettingsForm(this.profile);
           this.changeDetector.detectChanges();
-        });
-      return;
-    }
-
-    this.userService
-      .getProfileByUsername(this.resolvedUser.urlUsername)
-      .pipe(untilDestroyed(this))
-      .subscribe(({data}: ApolloQueryResult<ProfileByUsernameQueryResult>) => {
-        this.profile = data.profileByUsername;
-        this.profileSettingsForm = this.buildProfileSettingsForm(this.profile);
-        this.changeDetector.detectChanges();
-      });
+        },
+      );
   }
 
   private handlePageInnerNavigation(): void {
@@ -263,12 +281,12 @@ export class ProfileComponent {
       }):
         // console.debug('pathsMatch', paths);
         // if (!this.canProceedPageInnerNavigation()) return;
-        if (this.resolvedUser.role === UserRole.GUEST) {
+        if (this.resolvedUserService.user.role === UserRole.GUEST) {
           this.navigateToSignInPage();
           return;
         }
 
-        if (this.resolvedUser.role === UserRole.VIEWER) {
+        if (this.resolvedUserService.user.role === UserRole.VIEWER) {
           this.navigateToResolvedUserProfile();
           return;
         }
@@ -279,7 +297,7 @@ export class ProfileComponent {
   }
 
   private navigateToResolvedUserProfile(): void {
-    void this.router.navigate([`@${this.resolvedUser.urlUsername}`]);
+    void this.router.navigate([`@${this.resolvedUserService.user.urlUsername}`]);
   }
 
   private navigateToSignInPage(): void {
@@ -301,7 +319,7 @@ export class ProfileComponent {
   // }
 
   public get isUser(): boolean {
-    return this.resolvedUser.role === UserRole.USER;
+    return this.resolvedUserService.user.role === UserRole.USER;
   }
 
   public get navigationMainActionType(): NavigationMainActionType {

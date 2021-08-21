@@ -30,7 +30,7 @@ import {translateLoaderFactory, setupTranslate} from '~app/utilities/translate';
   ],
 })
 export class HomeModule {
-  public constructor(private readonly translateService: TranslateService) {
+  public constructor(translateService: TranslateService) {
     setupTranslate(translateService);
   }
 }

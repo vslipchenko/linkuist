@@ -9,7 +9,7 @@ import {linkardResolvers, linkardTypeDefinitions} from './schemas/linkard/linkar
 import {userTypeDefinitions, userResolvers} from './schemas/user/user.schema';
 import {postResolvers, postTypeDefinitions} from './schemas/post/post.schema';
 import {profileResolvers, profileTypeDefinitions} from './schemas/profile/profile.schema';
-import {sharedTypeDefinitions} from './schemas/shared/shared.schema';
+import {sharedResolvers, sharedTypeDefinitions} from './schemas/shared/shared.schema';
 
 // TODO remove as soon as extend of empty types is available
 const rootTypeDefs = gql`
@@ -35,6 +35,7 @@ export default makeExecutableSchema({
   ],
   resolvers: _merge(
     {},
+    ...sharedResolvers,
     ...scalarResolvers,
     ...authenticationResolvers,
     ...userResolvers,

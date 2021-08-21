@@ -1,4 +1,4 @@
-// import {gql} from 'apollo-server-express';
+import {gql} from 'apollo-server-express';
 //
 // export const sharedTypes = gql`
 //   type RequestParameters {
@@ -7,3 +7,8 @@
 //     limit: Float
 //   }
 // `;
+export const sharedTypes = gql`
+  type ClientPreset {
+    serverUtcTimestamp: Float!
+  }
+`;

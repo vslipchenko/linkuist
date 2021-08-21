@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {DialogConfig} from '~app/types/dialog/dialog.interfaces';
+import {DialogConfig} from '~app/shared/types/dialog/dialog.interfaces';
 
 // import {DialogTypes} from '~app/types/dialog/dialog.enums';
 

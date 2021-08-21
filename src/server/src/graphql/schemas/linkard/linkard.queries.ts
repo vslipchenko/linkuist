@@ -2,7 +2,7 @@ import {gql, UserInputError} from 'apollo-server-express';
 import {Linkard} from '../../../models/linkard';
 // import {authenticationGuard} from '../../../utilities/guards';
 import {checkDataValidity} from '../../../utilities/validators';
-import {USER_ID_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
+import {RECORD_ID_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
 import {ILinkard} from '../../../types/linkard/linkard.interfaces';
 import {IUser} from '../../../types/user/user.interfaces';
 import {User} from '../../../models/user';
@@ -23,8 +23,9 @@ Promise<Array<MongooseDocument<ILinkard>> | null> => {
   // const {error} = await authenticationGuard(accessToken);
   // if (error) return error;
 
-  const {isValidData} = checkDataValidity({data: userId, pattern: USER_ID_REGEXP});
-  if (!isValidData) return null;
+  const {isInvalidData} = checkDataValidity({data: userId, pattern: RECORD_ID_REGEXP});
+
+  if (isInvalidData) return null;
 
   return Linkard.find({
     userId,
@@ -39,8 +40,9 @@ Promise<Array<MongooseDocument<ILinkard>> | null | UserInputError> => {
   // const {error} = await authenticationGuard(accessToken);
   // if (error) return error;
 
-  const {isValidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
-  if (!isValidData) return null;
+  const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
+
+  if (isInvalidData) return null;
 
   const user = await User.findOne({
     username,

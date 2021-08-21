@@ -7,6 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "debug": "ng serve --disable-host-check --proxy-config proxy.conf.json",
     "e2e": "ng e2e"
   },
   "husky": {

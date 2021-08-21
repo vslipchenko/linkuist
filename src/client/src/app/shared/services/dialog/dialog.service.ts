@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '~app/shared/components/dialog/dialog.component';
-import {Dialog, DialogConfig} from '~app/types/dialog/dialog.interfaces';
 import {finalize} from 'rxjs/operators';
 import {MatDialogConfig} from '@angular/material/dialog/dialog-config';
+import {Dialog, DialogConfig} from '~app/shared/types/dialog/dialog.interfaces';
 
 @Injectable({
   providedIn: 'root',
