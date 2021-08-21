@@ -1,0 +1,9 @@
+<app-progress-bar></app-progress-bar>
+<div class="main">
+  <router-outlet></router-outlet>
+  <!--  Displayed when nothing there is nothing to outlet -->
+  <app-navigation
+    class="reserve-navigation"
+    [mainActionType]="NavigationMainActionType.HOME"
+  ></app-navigation>
+</div>

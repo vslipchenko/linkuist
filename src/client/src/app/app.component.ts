@@ -7,14 +7,7 @@ import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.
 
 @Component({
   selector: 'app-root',
-  template: `
-    <app-progress-bar></app-progress-bar>
-    <router-outlet></router-outlet>
-    <app-navigation
-      class="backdrop-navigation"
-      [mainActionType]="NavigationMainActionType.HOME"
-    ></app-navigation>
-  `,
+  templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {

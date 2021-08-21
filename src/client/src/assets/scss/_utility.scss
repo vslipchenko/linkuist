@@ -24,6 +24,10 @@
   flex: 1;
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
 .align-items-center {
   align-items: center;
 }
@@ -198,4 +202,9 @@
 // Opacity
 .opacity-2 {
   opacity: 0.4;
+}
+
+// overflow
+.overflow-hidden {
+  overflow: hidden;
 }
