@@ -5,7 +5,7 @@
 export class Environment {
   public static readonly production = false;
   public static readonly apiHost = 'http://localhost:4300';
-  // public static readonly apiHost = 'http://c600-31-202-26-11.ngrok.io';
+  // public static readonly apiHost = 'http://3bed-31-202-26-11.ngrok.io';
   public static readonly graphqlUri = Environment.apiHost + '/graphql';
 }
 

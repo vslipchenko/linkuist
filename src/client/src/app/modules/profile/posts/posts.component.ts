@@ -75,8 +75,14 @@ export class PostsComponent implements OnInit {
   public postsTrackBy(_: number, post: any): string {
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     // console.debug(post.millisecondsElapsed);
-    return post._id + post.millisecondsElapsed; // Hour frequency items gets re-rendered as well
+    //console.log('CHANGE DET', post._id);
+    //return post._id + post.millisecondsElapsed; // Hour frequency items gets re-rendered as well
+    return post._id; // Hour frequency items gets re-rendered as well
   }
+
+  // ngDoCheck() {
+  //   console.log('DO CHECK');
+  // }
 
   public createPost(text: string): void {
     this.progressBarService.show();

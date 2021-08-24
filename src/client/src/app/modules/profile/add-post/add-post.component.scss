@@ -12,7 +12,9 @@
   background-color: var.$color-light;
   //border-color: var.$color-light-darkest;
   //border-style: solid;
-  border: 1px solid var.$color-light-darkest;
+  //border: 1px solid var.$color-light-darkest;
+  //border-width: 1px;
+
   //position: fixed;
   //bottom: -35%;
   //box-shadow: 0 -10px 10px 0 var.$color-light-darker;
@@ -26,7 +28,8 @@
   width: 100%;
 
   //@include content-first-block-media;
-  @include shared.content-block-media;
+  @include shared.content-block-width;
+  @include shared.content-block-border;
 
   //@include media.zero-small {
   //  margin-bottom: var.$unit-4;
@@ -46,17 +49,17 @@
   }
 }
 
-.notes-add .input {
-  border-bottom: 1px solid var.$color-light-darkest;
-  flex: 1;
-  padding: var.$unit-2;
-}
-
-.notes-add .input:empty:not(:focus)::before {
-  color: var.$color-light-dark;
-  content: attr(data-placeholder);
-  pointer-events: none;
-}
+//.notes-add .input {
+//  border-bottom: 1px solid var.$color-light-darkest;
+//  flex: 1;
+//  padding: var.$unit-2;
+//}
+//
+//.notes-add .input:empty:not(:focus)::before {
+//  color: var.$color-light-dark;
+//  content: attr(data-placeholder);
+//  pointer-events: none;
+//}
 
 //.notes-add .panel {
 //  display: flex;

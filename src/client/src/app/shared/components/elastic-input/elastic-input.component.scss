@@ -1,0 +1,13 @@
+@use 'variables' as var;
+
+//.input {
+//border-bottom: 1px solid var.$color-light-darkest;
+//flex: 1;
+//padding: var.$unit-2;
+//}
+
+.input:empty:not(:focus)::before {
+  color: var.$color-light-dark;
+  content: attr(data-placeholder);
+  pointer-events: none;
+}

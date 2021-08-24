@@ -12,5 +12,6 @@ export const translateLoaderFactory = (
 
 export const setupTranslate = (translateService: TranslateService): void => {
   translateService.setDefaultLang(DEFAULT_LANGUAGE);
+  console.debug('BROWSER LANG: ', translateService.getBrowserLang());
   translateService.use(translateService.getBrowserLang());
 };

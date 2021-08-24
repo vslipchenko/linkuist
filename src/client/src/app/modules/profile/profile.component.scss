@@ -132,6 +132,8 @@ $user-avatar-size: 176px;
   margin-top: -#{$user-avatar-size / 2};
 
   padding: #{var.$unit-4 + $user-avatar-size / 2} var.$unit-3 var.$unit-4;
+
+  @include shared.content-block-border($has-top-border: false);
 }
 
 .user-names {

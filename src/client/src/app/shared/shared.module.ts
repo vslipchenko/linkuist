@@ -20,6 +20,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {LinkardComponent} from './components/linkard/linkard.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {LengthCircleComponent} from './components/length-circle/length-circle.component';
+import {ElasticInputComponent} from './components/elastic-input/elastic-input.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {LengthCircleComponent} from './components/length-circle/length-circle.co
     ChipsComponent,
     LinkardComponent,
     LengthCircleComponent,
+    ElasticInputComponent,
   ],
   exports: [
     NavigationComponent,
@@ -39,6 +41,7 @@ import {LengthCircleComponent} from './components/length-circle/length-circle.co
     LinkardComponent,
     WrapIfDirective,
     LengthCircleComponent,
+    ElasticInputComponent,
   ],
   imports: [
     CommonModule,

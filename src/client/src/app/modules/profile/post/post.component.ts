@@ -1,4 +1,10 @@
-import {ChangeDetectionStrategy, Component, Inject, Input, Output} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  Output,
+} from '@angular/core';
 import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
 import {DOCUMENT} from '@angular/common';
 import {PostService} from '~app/services/post/post.service';
@@ -61,4 +67,12 @@ export class PostComponent {
   public get hasUserRole(): boolean {
     return this.resolvedUserService.user.role === UserRole.USER;
   }
+
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   console.log('CHANGES ', changes);
+  // }
+  //
+  // ngDoCheck(): void {
+  //   console.log('CHECK ', this);
+  // }
 }

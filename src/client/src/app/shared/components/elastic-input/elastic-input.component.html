@@ -1,0 +1,18 @@
+<div class="d-flex position-relative" [class]="extendClass">
+  <span
+    #input
+    role="textbox"
+    contenteditable
+    class="input w-100 px-2 pt-2"
+    [class]="isCounterVisible || input.textContent.length ? 'pb-4' : 'pb-2'"
+    [attr.data-placeholder]="placeholder"
+    (input)="inputChange.emit($event)"
+    (focus)="handleFocus()"
+    (blur)="handleBlur()"
+  ></span>
+  <span
+    *ngIf="isCounterVisible || input.textContent.length"
+    class="position-absolute b-h r-2 font-size-regular color-light-dark"
+    >{{ input.textContent.length }} / {{ maxCharacterLength }}</span
+  >
+</div>

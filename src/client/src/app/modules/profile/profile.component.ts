@@ -164,6 +164,7 @@ export class ProfileComponent {
 
   public openProfileSettings(): void {
     const {dialogAfterClosed$} = this.dialogService.open({
+      autoFocus: false,
       panelClass: 'profile-settings-dialog',
       data: {
         title: 'Profile settings',

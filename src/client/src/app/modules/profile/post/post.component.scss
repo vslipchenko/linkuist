@@ -4,14 +4,15 @@
 
 .post {
   background-color: var.$color-light;
-  border: 1px solid var.$color-light-darkest;
+  //border: 1px solid var.$color-light-darkest;
   height: max-content;
   margin-left: auto;
   margin-right: auto;
   //padding: var.$unit-2;
   width: 100%;
 
-  @include shared.content-block-media;
+  @include shared.content-block-width;
+  @include shared.content-block-border;
 }
 
 //.post-content {
@@ -23,8 +24,8 @@
 //padding: var.$unit-2;
 //}
 
-.input:empty:not(:focus)::before {
-  color: var.$color-light-dark;
-  content: attr(data-placeholder);
-  pointer-events: none;
-}
+//.input:empty:not(:focus)::before {
+//  color: var.$color-light-dark;
+//  content: attr(data-placeholder);
+//  pointer-events: none;
+//}

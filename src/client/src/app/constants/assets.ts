@@ -1,8 +1,8 @@
 import {Icon} from '~app/types/assets/assets.interfaces';
 
-const ASSETS_FOLDER = 'assets/';
+// const ASSETS_FOLDER = 'assets/';
 
-export const ICONS_FOLDER = `${ASSETS_FOLDER}icons/`;
+export const ICONS_FOLDER = `assets/icons/`;
 // export const CUSTOM_ICONS_FOLDER = `${ICONS_FOLDER}custom/`;
 // export const MATERIAL_ICONS_FOLDER = `${ICONS_FOLDER}material/`;
 export const ICONS: Array<Icon> = [
@@ -48,6 +48,8 @@ export const ICONS: Array<Icon> = [
   {name: 'account-box', fileName: 'account-box'},
   {name: 'cog', fileName: 'cog'},
   {name: 'dots-horizontal', fileName: 'dots-horizontal'},
+  {name: 'comment-plus', fileName: 'comment-plus'},
+  {name: 'post-plus', fileName: 'post_add_black_24dp'},
   // {name: 'google', fileName: 'google-24px', isOutlined: true},
   // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
 ];
