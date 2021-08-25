@@ -10,10 +10,14 @@ $user-avatar-size: 176px;
   background-size: cover;
 }
 
-.profile {
+.profile-background {
   //@include media.zero-small {
   //  @include shared.background;
   //}
+
+  height: calc(100vh - #{var.$common-navigation-height});
+  z-index: -1;
+
   @include shared.background;
 
   //@include media.above-small {
@@ -21,12 +25,21 @@ $user-avatar-size: 176px;
   //}
 }
 
+.profile-content {
+  //margin-top: calc(-100vh - #{$user-avatar-size / 2});
+  margin-top: calc(-100vh - 40px); // TODO: 40 ???
+}
+
+.profile-container {
+  z-index: 0;
+}
+
 /* User */
 .user {
   //background-color: var.$color-light;
   //border-color: var.$color-light-darkest;
   //border-style: solid;
-  margin-top: -#{$user-avatar-size / 2};
+
   //max-width: var.$common-user-page-content-block-width-3;
   //overflow-y: auto;
   //padding-bottom: var.$unit-4;
@@ -96,15 +109,17 @@ $user-avatar-size: 176px;
 }
 
 .user-background {
-  background-attachment: fixed;
+  //background-attachment: fixed;
+  //position: sticky;
+  //top: 0;
   @extend %user-image;
 
   @include media.zero-huge {
-    height: 35%;
+    height: 35vh;
   }
 
   @include media.above-huge {
-    height: 50%;
+    height: 50vh;
   }
 }
 

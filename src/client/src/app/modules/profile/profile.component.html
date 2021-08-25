@@ -1,50 +1,58 @@
-<main id="main" class="profile">
+<main id="main">
   <div
-    class="user-background"
+    class="user-background position-sticky t-0"
     [style.background-image]="'url(' + profile.backgroundUrl + ')'"
   ></div>
-  <div class="user mx-auto">
-    <div class="user-images">
-      <div class="user-avatar" [style.background-image]="'url(' + profile.avatarUrl + ')'"></div>
-    </div>
-    <div class="user-info">
-      <div class="user-names">
-        <div *ngIf="profile.name" class="full-name">{{ profile.name }}</div>
-        <div class="d-flex justify-content-center align-items-center">
-          <div class="username">@vlad</div>
-          <mat-icon
-            class="user-verificon icon-sm ml-h"
-            svgIcon="check-decagram"
-            color="primary"
-            matTooltip="Verified"
-            matTooltipPosition="below"
-          ></mat-icon>
+  <div class="profile-container position-relative">
+    <div class="profile-background w-100 position-sticky t-0"></div>
+    <div class="profile-content">
+      <div class="user mx-auto">
+        <div class="user-images">
+          <div
+            class="user-avatar"
+            [style.background-image]="'url(' + profile.avatarUrl + ')'"
+          ></div>
         </div>
-      </div>
-      <div class="user-statistics">
-        <div class="statistic-item">
-          <span class="font-weight-bold color-dark">108k</span> posts
-        </div>
-        <div class="statistic-item">
-          <span class="font-weight-bold color-dark">2k</span> connections
-        </div>
-        <div class="statistic-item">
-          <span class="font-weight-bold color-dark">27k</span> linkards
-        </div>
-      </div>
-      <div class="user-fields w-100">
-        <div class="user-field">
-          <div class="user-field-label">Bio</div>
-          <div class="user-field-description">
-            {{ profile.bio }}
+        <div class="user-info">
+          <div class="user-names">
+            <div *ngIf="profile.name" class="full-name">{{ profile.name }}</div>
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="username">@vlad</div>
+              <mat-icon
+                class="user-verificon icon-sm ml-h"
+                svgIcon="check-decagram"
+                color="primary"
+                matTooltip="Verified"
+                matTooltipPosition="below"
+              ></mat-icon>
+            </div>
+          </div>
+          <div class="user-statistics">
+            <div class="statistic-item">
+              <span class="font-weight-bold color-dark">108k</span> posts
+            </div>
+            <div class="statistic-item">
+              <span class="font-weight-bold color-dark">2k</span> connections
+            </div>
+            <div class="statistic-item">
+              <span class="font-weight-bold color-dark">27k</span> linkards
+            </div>
+          </div>
+          <div class="user-fields w-100">
+            <div class="user-field">
+              <div class="user-field-label">Bio</div>
+              <div class="user-field-description">
+                {{ profile.bio }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <section class="notes">
+        <app-posts [avatarUrl]="profile.avatarUrl"></app-posts>
+      </section>
     </div>
   </div>
-  <section class="notes">
-    <app-posts [avatarUrl]="profile.avatarUrl"></app-posts>
-  </section>
 </main>
 
 <ng-template #profileSettingsContent>

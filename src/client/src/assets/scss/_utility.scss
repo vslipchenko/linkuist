@@ -227,6 +227,14 @@
   position: absolute !important;
 }
 
+.position-sticky {
+  position: sticky !important;
+}
+
+.t-0 {
+  top: 0;
+}
+
 .b-h {
   bottom: var.$unit-half;
 }
