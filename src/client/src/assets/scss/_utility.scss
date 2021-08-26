@@ -118,8 +118,16 @@
   padding-top: var.$unit-2;
 }
 
+.pt-3 {
+  padding-top: var.$unit-3;
+}
+
 .pb-2 {
   padding-bottom: var.$unit-2;
+}
+
+.pb-3 {
+  padding-bottom: var.$unit-3;
 }
 
 .pb-4 {
@@ -137,6 +145,11 @@
 .px-2 {
   padding-left: var.$unit-2;
   padding-right: var.$unit-2;
+}
+
+.px-3 {
+  padding-left: var.$unit-3;
+  padding-right: var.$unit-3;
 }
 
 .py-3 {

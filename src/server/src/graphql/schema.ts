@@ -10,6 +10,10 @@ import {userTypeDefinitions, userResolvers} from './schemas/user/user.schema';
 import {postResolvers, postTypeDefinitions} from './schemas/post/post.schema';
 import {profileResolvers, profileTypeDefinitions} from './schemas/profile/profile.schema';
 import {sharedResolvers, sharedTypeDefinitions} from './schemas/shared/shared.schema';
+import {
+  postCommentResolvers,
+  postCommentTypeDefinitions,
+} from './schemas/post-comment/post-comment.schema';
 
 // TODO remove as soon as extend of empty types is available
 const rootTypeDefs = gql`
@@ -30,6 +34,7 @@ export default makeExecutableSchema({
     ...authenticationTypeDefinitions,
     ...userTypeDefinitions,
     ...postTypeDefinitions,
+    ...postCommentTypeDefinitions,
     ...linkardTypeDefinitions,
     ...profileTypeDefinitions,
   ],
@@ -40,6 +45,7 @@ export default makeExecutableSchema({
     ...authenticationResolvers,
     ...userResolvers,
     ...postResolvers,
+    ...postCommentResolvers,
     ...linkardResolvers,
     ...profileResolvers,
   ),

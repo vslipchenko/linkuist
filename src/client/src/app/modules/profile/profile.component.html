@@ -1,4 +1,5 @@
 <main id="main">
+  <!--  TODO: handle image error-->
   <div
     class="user-background position-sticky t-0"
     [style.background-image]="'url(' + profile.backgroundUrl + ')'"
@@ -8,6 +9,7 @@
     <div class="profile-content">
       <div class="user mx-auto">
         <div class="user-images">
+          <!--  TODO: handle image error-->
           <div
             class="user-avatar"
             [style.background-image]="'url(' + profile.avatarUrl + ')'"
@@ -27,7 +29,7 @@
               ></mat-icon>
             </div>
           </div>
-          <div class="user-statistics">
+          <div class="user-statistics w-100 border-top">
             <div class="statistic-item">
               <span class="font-weight-bold color-dark">108k</span> posts
             </div>
@@ -38,7 +40,7 @@
               <span class="font-weight-bold color-dark">27k</span> linkards
             </div>
           </div>
-          <div class="user-fields w-100">
+          <div class="user-fields w-100 border-top px-2 py-3" *ngIf="profile.bio">
             <div class="user-field">
               <div class="user-field-label">Bio</div>
               <div class="user-field-description">
