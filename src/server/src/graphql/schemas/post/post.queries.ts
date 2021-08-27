@@ -55,19 +55,21 @@ const aggregatePost = async (
     if (!uniqueUserIds.includes(post.userId)) uniqueUserIds.push(post.userId);
   });
 
-  const userProfileTeasers = await User.find(
-    {
-      _id: {
-        $in: uniqueUserIds.map((id) => mongoose.Types.ObjectId(id)),
-      },
-    },
-    'avatarUrl username',
-  );
-
+  const userProfileTeasers = uniqueUserIds.length
+    ? await User.find(
+        {
+          _id: {
+            $in: uniqueUserIds.map((id) => mongoose.Types.ObjectId(id)),
+          },
+        },
+        'username profile.avatarUrl',
+      )
+    : [];
+  // console.log('HERE', aggregationResult);
   return {
     posts: {
       data: data,
-      total: aggregationResult[0].total[0].total,
+      total: aggregationResult[0].total.length ? aggregationResult[0].total[0].total : 0,
     },
     userProfileTeasers,
   };

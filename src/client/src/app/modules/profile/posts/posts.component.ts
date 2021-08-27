@@ -25,6 +25,7 @@ import {TranslateService} from '@ngx-translate/core';
 // import {MONTH_NAMES} from '~app/constants/date';
 import {Observable} from 'rxjs';
 import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
+import {ProfileService} from '~app/services/profile/profile.service';
 // import {WINDOW} from '~app/tokens/window';
 // import {BehaviorSubject, of} from 'rxjs';
 
@@ -54,7 +55,7 @@ export class PostsComponent implements OnInit {
 
   // public readonly UserRole = UserRole;
   public posts: Array<any> = [];
-  public readonly profileTeasers: {[userId: string]: {username: string; avatarUrl: string}} = {};
+  public profileTeasers: {[userId: string]: {username: string; avatarUrl: string}} = {};
 
   public constructor(
     // @Inject(WINDOW) private readonly window: Window,
@@ -66,11 +67,26 @@ export class PostsComponent implements OnInit {
     private readonly progressBarService: ProgressBarService,
     private readonly dateService: DateService,
     private readonly translateService: TranslateService,
+    private readonly profileService: ProfileService,
   ) {}
 
   public ngOnInit(): void {
+    this.bindProfileChange();
     this.fetchPosts();
   }
+
+  // public ngOnChanges(changes: SimpleChanges): void {
+  //   console.log(changes);
+  //   if (changes.avatarUrl) {
+  //     console.log('DETECTED');
+  //     debugger;
+  //     if (this.profileTeasers[this.resolvedUserService.user.id]) {
+  //       this.profileTeasers[this.resolvedUserService.user.id].avatarUrl =
+  //         changes.avatarUrl.currentValue;
+  //       this.changeDetector.detectChanges();
+  //     }
+  //   }
+  // }
 
   public postsTrackBy(_: number, post: any): string {
     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
@@ -130,6 +146,20 @@ export class PostsComponent implements OnInit {
     );
   }
 
+  private bindProfileChange(): void {
+    this.profileService.userProfile$.pipe(untilDestroyed(this)).subscribe((profile) => {
+      if (!this.profileTeasers[this.resolvedUserService.user.id]) return;
+
+      this.profileTeasers = {
+        ...this.profileTeasers,
+        [this.resolvedUserService.user.id]: {
+          username: this.profileTeasers[this.resolvedUserService.user.id].username,
+          avatarUrl: profile.avatarUrl,
+        },
+      };
+    });
+  }
+
   private fetchPosts(offset = 0): void {
     this.progressBarService.show();
 
@@ -158,7 +188,7 @@ export class PostsComponent implements OnInit {
           posts.userProfileTeasers.forEach((teaser) => {
             this.profileTeasers[teaser._id] = {
               // Where profile/teaser _id is equal to user id
-              avatarUrl: teaser.avatarUrl,
+              avatarUrl: teaser.profile?.avatarUrl,
               username: teaser.username,
             };
           });

@@ -1,20 +1,24 @@
-<main id="main">
+<main id="main" *ngIf="profile$ | async as profile">
   <!--  TODO: handle image error-->
   <div
+    *ngIf="profile.backgroundUrl"
     class="user-background position-sticky t-0"
     [style.background-image]="'url(' + profile.backgroundUrl + ')'"
   ></div>
   <div class="profile-container position-relative">
     <div class="profile-background w-100 position-sticky t-0"></div>
     <div class="profile-content">
-      <div class="user mx-auto">
-        <div class="user-images">
-          <!--  TODO: handle image error-->
-          <div
-            class="user-avatar"
-            [style.background-image]="'url(' + profile.avatarUrl + ')'"
-          ></div>
-        </div>
+      <div class="user mx-auto" [class.profile-no-background]="!profile.backgroundUrl">
+        <!--        <div class="user-images"></div>-->
+        <!--  TODO: handle image error-->
+        <div
+          *ngIf="profile.avatarUrl"
+          class="user-avatar"
+          [class.border]="!profile.backgroundUrl"
+          [class.border-light]="profile.backgroundUrl"
+          [style.background-image]="'url(' + profile.avatarUrl + ')'"
+        ></div>
+        <div *ngIf="!profile.avatarUrl" class="user-avatar no-avatar"></div>
         <div class="user-info">
           <div class="user-names">
             <div *ngIf="profile.name" class="full-name">{{ profile.name }}</div>
@@ -50,6 +54,7 @@
           </div>
         </div>
       </div>
+      <!--      <a [routerLink]="'/@vladd'"> NAVIGATE </a>-->
       <section class="notes">
         <app-posts [avatarUrl]="profile.avatarUrl"></app-posts>
       </section>
@@ -60,8 +65,9 @@
 <ng-template #profileSettingsContent>
   <form [formGroup]="profileSettingsForm">
     <div
+      *ngIf="profileSettingsForm.controls.backgroundUrl.value"
       class="profile-settings-background"
-      [style.background-image]="'url(' + profile.backgroundUrl + ')'"
+      [style.background-image]="'url(' + profileSettingsForm.controls.backgroundUrl.value + ')'"
     ></div>
     <mat-form-field class="w-100">
       <mat-label>Background URL</mat-label>
@@ -69,8 +75,9 @@
     </mat-form-field>
     <!--    https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Altja_j%C3%B5gi_Lahemaal.jpg/1920px-Altja_j%C3%B5gi_Lahemaal.jpg-->
     <div
+      *ngIf="profileSettingsForm.controls.avatarUrl.value"
       class="profile-settings-avatar"
-      [style.background-image]="'url(' + profile.avatarUrl + ')'"
+      [style.background-image]="'url(' + profileSettingsForm.controls.avatarUrl.value + ')'"
     ></div>
     <mat-form-field class="w-100">
       <mat-label>Avatar URL</mat-label>

@@ -7,16 +7,20 @@ export const userTypes = gql`
     username: String!
   }
 
-  type UserProfile {
+  type Profile {
     backgroundUrl: String
     avatarUrl: String
     name: String
     bio: String
   }
 
+  type UserProfile {
+    profile: Profile
+  }
+
   type UserProfileTeaser {
     _id: ID! # user id
-    avatarUrl: String
+    profile: Profile
     username: String
   }
 `;

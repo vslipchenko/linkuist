@@ -1,7 +1,7 @@
 import {gql} from 'apollo-server-express';
 
 export const profileTypes = gql`
-  type Profile {
+  type _Profile {
     # _id: ID!
     backgroundUrl: String
     avatarUrl: String

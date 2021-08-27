@@ -5,6 +5,7 @@ import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {IProfile} from '../../../types/profile/profile.interfaces';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
+// import mongoose from 'mongoose';
 // import {Profile} from '../../../models/profile';
 
 export const userQueryTypeDefinitions = gql`
@@ -38,6 +39,21 @@ const profileByUserId = async (
   _: unknown,
   {userId}: {userId: IProfile['userId']},
 ): Promise<MongooseDocument<IUser> | UserInputError | null> => {
+  // console.log(
+  //   'profileByUserId',
+  //   (await User.aggregate([
+  //     {$match: {_id: mongoose.Types.ObjectId(userId)}},
+  //     // {$unwind: '$profile'},
+  //     {
+  //       $replaceRoot: {
+  //         newRoot: '$profile',
+  //       },
+  //     },
+  //   ])),
+  // );
+
+  // console.log('profileByUserId', await User.findOne({_id: userId}, 'profile'));
+
   const {isInvalidData} = checkDataValidity({data: userId, pattern: RECORD_ID_REGEXP});
   if (isInvalidData) return null;
 
@@ -46,15 +62,17 @@ const profileByUserId = async (
   // });
   //
   // if (!user) return new UserInputError('Invalid username');
-  console.log('here ', await User.findOne({userId}, 'backgroundUrl avatarUrl name bio'));
+  // console.log('here ', await User.findOne({userId}, 'backgroundUrl avatarUrl name bio'));
 
-  return User.findOne({_id: userId}, 'backgroundUrl avatarUrl name bio');
+  return User.findOne({_id: userId}, 'profile');
 };
 
 const profileByUsername = async (
   _: unknown,
   {username}: {username: IUser['username']},
 ): Promise<MongooseDocument<IUser> | UserInputError | null> => {
+  // console.log('profileByUsername', await User.findOne({username}, 'profile'));
+
   const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
   if (isInvalidData) return null;
 
@@ -63,8 +81,9 @@ const profileByUsername = async (
   // });
   //
   // if (!user) return new UserInputError('Invalid username');
+  // console.log('profileByUsername', await User.findOne({username}, 'profile'));
 
-  return User.findOne({username}, 'backgroundUrl avatarUrl name bio');
+  return User.findOne({username}, 'profile');
 };
 
 // const profileTeaserByUserId = async (

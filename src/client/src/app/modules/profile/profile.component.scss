@@ -131,13 +131,13 @@ $user-avatar-size: 176px;
   }
 
   @include media.above-huge {
-    height: 50vh;
+    height: calc(50vh - #{var.$common-navigation-height});
   }
 }
 
 .user-avatar {
   //border: 3px solid var.$color-light;
-  border: 1px solid var.$color-light;
+  //border: 1px solid var.$color-light;
   //border-radius: 50%;
   height: $user-avatar-size;
   margin-left: auto;
@@ -238,6 +238,21 @@ $user-avatar-size: 176px;
   width: 20vh;
 
   @extend %user-image;
+}
+
+.profile-no-background {
+  //padding-top: calc(#{$user-avatar-size / 2});
+  @include media.zero-large {
+    padding-top: calc(#{$user-avatar-size / 2} + #{var.$unit-2});
+  }
+
+  @include media.above-large {
+    padding-top: calc(#{$user-avatar-size / 2} + #{var.$unit-3});
+  }
+}
+
+.profile-no-background .user-info {
+  border-top: 1px solid var.$color-light-darkest;
 }
 //.notes {
 //  align-items: center;

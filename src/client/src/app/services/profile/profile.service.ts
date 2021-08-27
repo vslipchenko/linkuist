@@ -1,4 +1,6 @@
 import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {Profile} from '~app/types/profile/profile.interfaces';
 // import {Apollo} from 'apollo-angular';
 // import {UPDATE_PROFILE} from '~app/graphql/profile/profile.mutations';
 // import {
@@ -39,4 +41,10 @@ export class ProfileService {
   //     variables: {username},
   //   });
   // }
+  public readonly userProfile$ = new BehaviorSubject<Profile>({
+    backgroundUrl: '',
+    avatarUrl: '',
+    name: '',
+    bio: '',
+  });
 }

@@ -1,3 +1,10 @@
+export interface Profile {
+  backgroundUrl: string;
+  avatarUrl: string;
+  name: string;
+  bio: string;
+}
+
 export interface ProfileUpdatePayload {
   backgroundUrl: string;
   avatarUrl: string;
@@ -7,27 +14,33 @@ export interface ProfileUpdatePayload {
 
 export interface ProfileByUserIdQueryResult {
   profileByUserId: {
-    backgroundUrl: string;
-    avatarUrl: string;
-    name: string;
-    bio: string;
+    profile: {
+      backgroundUrl: string;
+      avatarUrl: string;
+      name: string;
+      bio: string;
+    };
   };
 }
 
 export interface ProfileByUsernameQueryResult {
   profileByUsername: {
-    backgroundUrl: string;
-    avatarUrl: string;
-    name: string;
-    bio: string;
+    profile: {
+      backgroundUrl: string;
+      avatarUrl: string;
+      name: string;
+      bio: string;
+    };
   };
 }
 
 export interface ProfileUpdateMutationResult {
   updateProfile: {
-    backgroundUrl: string;
-    avatarUrl: string;
-    name: string;
-    bio: string;
+    profile: {
+      backgroundUrl: string;
+      avatarUrl: string;
+      name: string;
+      bio: string;
+    };
   };
 }

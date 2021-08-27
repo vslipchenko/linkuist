@@ -6,7 +6,7 @@ export const postCommentMutationTypeDefinitions = gql`
   }
 `;
 
-const createPostComment = () => {};
+const createPostComment = (): void => {};
 
 export const postCommentMutationResolvers = {
   Mutation: {

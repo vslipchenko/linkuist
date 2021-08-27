@@ -17,7 +17,9 @@ export const GET_POSTS_BY_USER_ID = gql`
       userProfileTeasers {
         _id
         username
-        avatarUrl
+        profile {
+          avatarUrl
+        }
       }
     }
   }
@@ -40,7 +42,9 @@ export const GET_POSTS_BY_USERNAME = gql`
       userProfileTeasers {
         _id
         username
-        avatarUrl
+        profile {
+          avatarUrl
+        }
       }
     }
   }

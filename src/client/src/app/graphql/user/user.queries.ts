@@ -19,10 +19,12 @@ export const USER_ID_BY_USERNAME = gql`
 export const GET_PROFILE_BY_USER_ID = gql`
   query ($userId: String!) {
     profileByUserId(userId: $userId) {
-      backgroundUrl
-      avatarUrl
-      name
-      bio
+      profile {
+        backgroundUrl
+        avatarUrl
+        name
+        bio
+      }
     }
   }
 `;
@@ -30,10 +32,12 @@ export const GET_PROFILE_BY_USER_ID = gql`
 export const GET_PROFILE_BY_USERNAME = gql`
   query ($username: String!) {
     profileByUsername(username: $username) {
-      backgroundUrl
-      avatarUrl
-      name
-      bio
+      profile {
+        backgroundUrl
+        avatarUrl
+        name
+        bio
+      }
     }
   }
 `;

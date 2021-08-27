@@ -85,6 +85,10 @@
   margin-right: var.$unit;
 }
 
+.mr-2 {
+  margin-right: var.$unit-2;
+}
+
 .mr-n1 {
   margin-right: -#{var.$unit} !important;
 }
@@ -197,6 +201,10 @@
 
 .border {
   border: 1px solid var.$color-light-darkest;
+}
+
+.border-light {
+  border: 1px solid var.$color-light;
 }
 
 .border-x {

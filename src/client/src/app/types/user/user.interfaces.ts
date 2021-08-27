@@ -22,6 +22,7 @@ export interface UserSignInPayload {
 }
 
 export interface ResolvedUser {
+  id: string; // Resolved user _id
   role: UserRole;
   urlUsername: string;
   //relativePaths: Array<string>; // urlUsername relative paths

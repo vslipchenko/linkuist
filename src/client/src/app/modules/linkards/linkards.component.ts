@@ -53,6 +53,7 @@ export class LinkardsComponent implements OnInit {
   public readonly tagSplitWordBy = /[-\s]/;
 
   public resolvedUser: ResolvedUser = {
+    id: '',
     role: UserRole.VIEWER,
     urlUsername: '',
     // relativePaths: []

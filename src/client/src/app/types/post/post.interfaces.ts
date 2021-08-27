@@ -28,7 +28,7 @@ export interface PostsByUserIdQueryResult {
       }>;
       total: number;
     };
-    userProfileTeasers: Array<{_id: string; username: string; avatarUrl: string}>;
+    userProfileTeasers: Array<{_id: string; username: string; profile: {avatarUrl: string}}>;
   };
 }
 
@@ -44,6 +44,6 @@ export interface PostsByUsernameQueryResult {
       }>;
       total: number;
     };
-    userProfileTeasers: Array<{_id: string; username: string; avatarUrl: string}>;
+    userProfileTeasers: Array<{_id: string; username: string; profile: {avatarUrl: string}}>;
   };
 }

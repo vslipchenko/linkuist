@@ -7,6 +7,7 @@ import {UserRole} from '~app/types/user/user.enums';
 })
 export class ResolvedUserService {
   public user: ResolvedUser = {
+    id: '',
     urlUsername: '',
     role: UserRole.GUEST,
   };

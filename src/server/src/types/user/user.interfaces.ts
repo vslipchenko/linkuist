@@ -4,8 +4,10 @@ export interface IUser {
   username: string;
   password: string;
   accessKey: string;
-  backgroundUrl: string;
-  avatarUrl: string;
-  name: string;
-  bio: string;
+  profile: {
+    backgroundUrl: string;
+    avatarUrl: string;
+    name: string;
+    bio: string;
+  };
 }

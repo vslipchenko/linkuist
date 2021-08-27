@@ -6,7 +6,7 @@ export const postCommentQueryTypeDefinitions = gql`
   }
 `;
 
-const postsCommentByPostId = () => {};
+const postsCommentByPostId = (): void => {};
 
 export const postCommentQueryResolvers = {
   Query: {

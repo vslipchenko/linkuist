@@ -7,9 +7,9 @@ import {
 } from '@angular/core';
 import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {UserService} from '~app/services/user/user.service';
-import {ResolvedUser} from '~app/types/user/user.interfaces';
+// import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
 import {UserRole} from '~app/types/user/user.enums';
 import {pathsMatch} from '~app/utilities/url';
@@ -19,6 +19,7 @@ import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 // import {ProfileService} from '~app/services/profile/profile.service';
 import {ApolloQueryResult} from '@apollo/client/core/types';
 import {
+  Profile,
   ProfileByUserIdQueryResult,
   ProfileByUsernameQueryResult,
   ProfileUpdateMutationResult,
@@ -26,7 +27,8 @@ import {
 import {FetchResult} from '@apollo/client/core';
 import {finalize} from 'rxjs/operators';
 import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {ProfileService} from '~app/services/profile/profile.service';
 
 @UntilDestroy()
 @Component({
@@ -47,12 +49,12 @@ export class ProfileComponent {
   //   urlUsername: '',
   //   // relativePaths: []
   // };
-  public profile = {
-    backgroundUrl: '',
-    avatarUrl: '',
-    name: '',
-    bio: '',
-  };
+  // public profile: Profile = {
+  //   backgroundUrl: '',
+  //   avatarUrl: '',
+  //   name: '',
+  //   bio: '',
+  // };
   public profileSettingsForm = this.buildProfileSettingsForm();
 
   public constructor(
@@ -62,16 +64,22 @@ export class ProfileComponent {
     private readonly authenticationService: AuthenticationService,
     private readonly userService: UserService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    // private readonly route: ActivatedRoute,
     private readonly dialogService: DialogService,
-    private readonly formBuilder: FormBuilder, // private readonly profileService: ProfileService,
+    private readonly formBuilder: FormBuilder,
+    private readonly profileService: ProfileService,
   ) {
     // console.debug('PROFILE');
     // this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
-    this.resolvedUserService.user = this.route.snapshot.data.user as ResolvedUser;
+    // this.resolvedUserService.user = this.route.snapshot.data.user as ResolvedUser;
     // console.log('called', this.resolvedUser);
     // this.userRoleService.userRole = UserRole.USER;
+    console.log(this.resolvedUserService.user);
     this.loadProfile();
+
+    this.profileService.userProfile$.pipe(untilDestroyed(this)).subscribe((profile) => {
+      this.profileSettingsForm = this.buildProfileSettingsForm(profile);
+    });
 
     // console.debug('CONSTRUCTOR');
 
@@ -163,6 +171,11 @@ export class ProfileComponent {
   }
 
   public openProfileSettings(): void {
+    // debugger;
+    // this.profileSettingsForm = this.buildProfileSettingsForm(
+    //   this.profileService.userProfile$.value,
+    // );
+
     const {dialogAfterClosed$} = this.dialogService.open({
       autoFocus: false,
       panelClass: 'profile-settings-dialog',
@@ -194,8 +207,10 @@ export class ProfileComponent {
       .subscribe(
         ({data}: FetchResult<ProfileUpdateMutationResult>) => {
           // Update profile property value
-          this.profile = data!.updateProfile;
-          this.changeDetector.detectChanges();
+          // this.profile = data!.updateProfile.profile;
+          this.profileService.userProfile$.next(data!.updateProfile.profile);
+          // Trigger user section rerender
+          // this.changeDetector.detectChanges();
         },
         () => {
           // Show error snackbar
@@ -203,16 +218,7 @@ export class ProfileComponent {
       );
   }
 
-  // private buildProfileSettingsForm(): FormGroup {
-  //   return this.formBuilder.group({
-  //     backgroundUrl: [this.profile.backgroundUrl],
-  //     avatarUrl: [this.profile.avatarUrl],
-  //     name: [this.profile.name],
-  //     bio: [this.profile.bio],
-  //   });
-  // }
-  //
-  private buildProfileSettingsForm(profile = this.profile): FormGroup {
+  private buildProfileSettingsForm(profile = this.profileService.userProfile$.value): FormGroup {
     return this.formBuilder.group({
       backgroundUrl: [profile.backgroundUrl],
       avatarUrl: [profile.avatarUrl],
@@ -222,17 +228,6 @@ export class ProfileComponent {
   }
 
   private loadProfile(): void {
-    // if (this.resolvedUserService.user.role === UserRole.USER) {
-    //   this.userService
-    //     .getProfileByUserId(this.authenticationService.accessTokenData!.userId)
-    //     .pipe(untilDestroyed(this))
-    //     .subscribe(({data}: ApolloQueryResult<ProfileByUserIdQueryResult>) => {
-    //       this.profile = data.profileByUserId;
-    //       this.profileSettingsForm = this.buildProfileSettingsForm(this.profile);
-    //       this.changeDetector.detectChanges();
-    //     });
-    //   return;
-    // }
     const hasUserRole = this.resolvedUserService.user.role === UserRole.USER;
 
     (
@@ -245,11 +240,14 @@ export class ProfileComponent {
       .pipe(untilDestroyed(this))
       .subscribe(
         ({data}: ApolloQueryResult<ProfileByUserIdQueryResult | ProfileByUsernameQueryResult>) => {
-          this.profile = hasUserRole
-            ? (data as ProfileByUserIdQueryResult).profileByUserId
-            : (data as ProfileByUsernameQueryResult).profileByUsername;
-          this.profileSettingsForm = this.buildProfileSettingsForm(this.profile);
-          this.changeDetector.detectChanges();
+          // debugger;
+          const profile = hasUserRole
+            ? (data as ProfileByUserIdQueryResult).profileByUserId.profile
+            : (data as ProfileByUsernameQueryResult).profileByUsername.profile;
+          this.profileService.userProfile$.next(profile);
+          // debugger;
+
+          // this.changeDetector.detectChanges();
         },
       );
   }
@@ -321,6 +319,10 @@ export class ProfileComponent {
 
   public get isUser(): boolean {
     return this.resolvedUserService.user.role === UserRole.USER;
+  }
+
+  public get profile$(): BehaviorSubject<Profile> {
+    return this.profileService.userProfile$;
   }
 
   public get navigationMainActionType(): NavigationMainActionType {

@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {map} from 'rxjs/operators';
 import {UserService} from '~app/services/user/user.service';
+import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
 
 // Can activate only if profile exist
 @Injectable({
@@ -13,6 +14,7 @@ export class UserCanActivateGuard implements CanActivate {
   public constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly userService: UserService,
+    private readonly resolvedUserService: ResolvedUserService,
     private readonly router: Router,
   ) {}
 
@@ -21,13 +23,20 @@ export class UserCanActivateGuard implements CanActivate {
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const data = this.authenticationService.accessTokenData;
     const username = route.url[0].path.slice(1);
+    console.log('CAN ACTIVATE');
 
-    if (data?.username === username) return true; // profile exist
+    if (data?.username === username) {
+      this.resolvedUserService.user.id = data.userId;
+      return true;
+    } // profile exist
 
     // check profile exist
     return this.userService.getUserIdByUsername(username).pipe(
       map(({data}) => {
         if (data.userByUsername?._id) {
+          // Preserve user id to make a subsequent API calls based on it
+          // debugger;
+          this.resolvedUserService.user.id = data.userByUsername?._id;
           return true;
         } // profile exist
         // profile does not exist

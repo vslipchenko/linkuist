@@ -12,8 +12,8 @@ import {RecordId} from '~app/types/graphql/graphql.interfaces';
 import {
   GET_PROFILE_BY_USER_ID,
   GET_PROFILE_BY_USERNAME,
-  GET_PROFILE_TEASER_BY_USER_ID,
-  GET_PROFILE_TEASER_BY_USERNAME,
+  // GET_PROFILE_TEASER_BY_USER_ID,
+  // GET_PROFILE_TEASER_BY_USERNAME,
   USER_ID_BY_EMAIL,
   USER_ID_BY_USERNAME,
 } from '~app/graphql/user/user.queries';
@@ -85,17 +85,17 @@ export class UserService {
     });
   }
 
-  public getProfileTeaserByUserId(userId: string): Observable<ApolloQueryResult<unknown>> {
-    return this.apollo.query({
-      query: GET_PROFILE_TEASER_BY_USER_ID,
-      variables: {userId},
-    });
-  }
-
-  public getProfileTeaserByUsername(username: string): Observable<ApolloQueryResult<unknown>> {
-    return this.apollo.query({
-      query: GET_PROFILE_TEASER_BY_USERNAME,
-      variables: {username},
-    });
-  }
+  // public getProfileTeaserByUserId(userId: string): Observable<ApolloQueryResult<unknown>> {
+  //   return this.apollo.query({
+  //     query: GET_PROFILE_TEASER_BY_USER_ID,
+  //     variables: {userId},
+  //   });
+  // }
+  //
+  // public getProfileTeaserByUsername(username: string): Observable<ApolloQueryResult<unknown>> {
+  //   return this.apollo.query({
+  //     query: GET_PROFILE_TEASER_BY_USERNAME,
+  //     variables: {username},
+  //   });
+  // }
 }
