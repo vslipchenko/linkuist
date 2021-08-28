@@ -29,6 +29,7 @@ const createUser = (
       email: EMAIL_REGEXP,
       username: USERNAME_REGEXP,
       password: PASSWORD_REGEXP,
+      repeatPassword: (value) => value === input.password,
     },
   });
 

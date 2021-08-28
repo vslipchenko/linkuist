@@ -5,6 +5,7 @@ export const userInputs = gql`
     email: String!
     username: String!
     password: String!
+    repeatPassword: String!
   }
 
   input UpdateProfileMutationInput {
