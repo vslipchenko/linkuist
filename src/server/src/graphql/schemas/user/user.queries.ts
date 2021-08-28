@@ -24,7 +24,7 @@ const userByEmail = (_: unknown, {email}: {email: IUser['email']}): unknown => {
 
   if (isInvalidData) return null;
 
-  return User.findOne({email});
+  return User.findOne({email}).exec();
 };
 
 const userByUsername = (_: unknown, {username}: {username: IUser['username']}): unknown => {
@@ -32,7 +32,7 @@ const userByUsername = (_: unknown, {username}: {username: IUser['username']}): 
 
   if (isInvalidData) return null;
 
-  return User.findOne({username});
+  return User.findOne({username}).exec();
 };
 
 const profileByUserId = async (
@@ -64,7 +64,7 @@ const profileByUserId = async (
   // if (!user) return new UserInputError('Invalid username');
   // console.log('here ', await User.findOne({userId}, 'backgroundUrl avatarUrl name bio'));
 
-  return User.findOne({_id: userId}, 'profile');
+  return User.findById(userId, 'profile');
 };
 
 const profileByUsername = async (

@@ -14,7 +14,7 @@ $color-dark: #000;
 
 /* unit measures */
 $unit: 8px;
-$unit-half: $unit / 2;
+$unit-half: $unit * 0.5;
 $unit-2: $unit * 2;
 $unit-3: $unit * 3;
 $unit-4: $unit * 4;
