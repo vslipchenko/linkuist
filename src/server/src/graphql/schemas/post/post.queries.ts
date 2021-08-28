@@ -30,7 +30,7 @@ const aggregatePost = async (
   userProfileTeasers: Array<unknown>;
 }> => {
   const aggregationResult = await Post.aggregate([
-    {$match: {userId: mongoose.Types.ObjectId(userId)}},
+    {$match: {userId: new mongoose.Types.ObjectId(userId)}},
     {
       $facet: {
         data: [
@@ -59,7 +59,7 @@ const aggregatePost = async (
     ? await User.find(
         {
           _id: {
-            $in: uniqueUserIds.map((id) => mongoose.Types.ObjectId(id)),
+            $in: uniqueUserIds.map((id) => new mongoose.Types.ObjectId(id)),
           },
         },
         'username profile.avatarUrl',

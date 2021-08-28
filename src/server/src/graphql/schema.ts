@@ -1,5 +1,5 @@
 import {merge as _merge} from 'lodash';
-import {gql, makeExecutableSchema} from 'apollo-server-express';
+import {gql} from 'apollo-server-express';
 import {scalarResolvers, scalarTypeDefinitions} from './scalars/scalars';
 import {
   authenticationResolvers,
@@ -14,6 +14,7 @@ import {
   postCommentResolvers,
   postCommentTypeDefinitions,
 } from './schemas/post-comment/post-comment.schema';
+import {makeExecutableSchema} from '@graphql-tools/schema';
 
 // TODO remove as soon as extend of empty types is available
 const rootTypeDefs = gql`
