@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Output} from '@angular/core';
 import {ThemePalette} from '@angular/material/core/common-behaviors/color';
 import {POST_MAX_LENGTH} from '~app/constants/post';
+import {FormControl} from '@angular/forms';
 // import { LengthCircleDefineColor } from "~app/shared/types/length-circle/length-circle.interfaces";
 // import {ThemePalette} from '@angular/material/core/common-behaviors/color';
 // import {LengthCircleColorMap} from '~app/shared/types/length-circle/length-circle.types';
@@ -21,7 +22,7 @@ export class AddPostComponent {
   @Output() public addPost = new EventEmitter<string>();
 
   public readonly POST_MAX_LENGTH = POST_MAX_LENGTH;
-
+  public readonly addPostControl = new FormControl('');
   // public characterLengthSpinnerColor: ThemePalette = 'primary';
   public characterLength = 0;
 
@@ -39,6 +40,11 @@ export class AddPostComponent {
     if (value > POST_MAX_LENGTH - 5) return 'accent';
     return 'primary';
     // if pe
+  }
+
+  public handleAddPost(): void {
+    this.addPost.emit(this.addPostControl.value);
+    this.addPostControl.reset('');
   }
 
   // public handleLengthChange(value: number): ThemePalette {

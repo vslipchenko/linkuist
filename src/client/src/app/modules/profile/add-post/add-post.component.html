@@ -10,24 +10,20 @@
   <!--  </span>-->
   <app-elastic-input
     placeholder="Capture your ideas..."
-    maxCharacterLength="3000"
     extendClass="add-post-input"
+    [maxCharacterLength]="POST_MAX_LENGTH"
+    [formControl]="addPostControl"
   ></app-elastic-input>
 
   <div class="d-flex align-items-center border-top">
-    <app-length-circle
-      [diameter]="25"
-      [value]="characterLength"
-      [maxValue]="13"
-      [defineColor]="defineLengthCircleColor"
-    ></app-length-circle>
+    <!--    <app-length-circle-->
+    <!--      [diameter]="25"-->
+    <!--      [value]="characterLength"-->
+    <!--      [maxValue]="13"-->
+    <!--      [defineColor]="defineLengthCircleColor"-->
+    <!--    ></app-length-circle>-->
 
-    <button
-      mat-flat-button
-      color="primary"
-      class="button-note rounded-0"
-      (click)="addPost.emit('')"
-    >
+    <button mat-flat-button color="primary" class="button-note rounded-0" (click)="handleAddPost()">
       <!--      (click)="addPost.emit(postInput.textContent)"-->
       <mat-icon svgIcon="post-plus" class="mr-h"></mat-icon>
       Post
