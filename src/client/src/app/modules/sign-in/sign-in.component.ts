@@ -114,6 +114,11 @@ export class SignInComponent implements OnInit {
         )
         .subscribe(
           ({data}) => {
+            if (!data.signIn) {
+              this.dispatchErrors({pattern: true});
+              return this.changeDetector.detectChanges();
+            }
+
             this.authenticationService.tokens = data.signIn;
             const username = this.authenticationService.accessTokenData?.username;
 

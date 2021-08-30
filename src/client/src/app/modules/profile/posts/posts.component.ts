@@ -4,11 +4,7 @@ import {PostService} from '~app/services/post/post.service';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
-import {
-  PostCreateMutationResult,
-  PostsByUserIdQueryResult,
-  PostsByUsernameQueryResult,
-} from '~app/types/post/post.interfaces';
+import {PostCreateMutationResult, PostsByUserIdQueryResult} from '~app/types/post/post.interfaces';
 import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {endWith, finalize, map, startWith, takeWhile} from 'rxjs/operators';
 import {SortOrder, ElapsedTimeMeasure} from '~app/types/shared/shared.enums';
@@ -163,60 +159,50 @@ export class PostsComponent implements OnInit {
   private fetchPosts(offset = 0): void {
     this.progressBarService.show();
 
-    (
-      this.postService[this.hasUserRole ? 'getAllByUserId' : 'getAllByUsername'](
-        this.hasUserRole
-          ? this.authenticationService.accessTokenData!.userId
-          : this.resolvedUserService.user.urlUsername,
-        {
-          order: SortOrder.DESCENDING,
-          offset,
-          limit: POST_FETCH_LIMIT,
-        },
-      ) as Observable<ApolloQueryResult<PostsByUserIdQueryResult | PostsByUsernameQueryResult>>
-    )
+    this.postService
+      .getAllByUserId(this.resolvedUserService.user.id, {
+        order: SortOrder.DESCENDING,
+        offset,
+        limit: POST_FETCH_LIMIT,
+      })
       .pipe(
         finalize(() => this.progressBarService.hide()),
         untilDestroyed(this),
       )
-      .subscribe(
-        ({data}: ApolloQueryResult<PostsByUserIdQueryResult | PostsByUsernameQueryResult>) => {
-          const posts = this.hasUserRole
-            ? (data as PostsByUserIdQueryResult).postsByUserId
-            : (data as PostsByUsernameQueryResult).postsByUsername;
+      .subscribe(({data}: ApolloQueryResult<PostsByUserIdQueryResult>) => {
+        const posts = data.postsByUserId;
 
-          posts.userProfileTeasers.forEach((teaser) => {
-            this.profileTeasers[teaser._id] = {
-              // Where profile/teaser _id is equal to user id
-              avatarUrl: teaser.profile?.avatarUrl,
-              username: teaser.username,
-            };
-          });
+        posts.userProfileTeasers.forEach((teaser) => {
+          this.profileTeasers[teaser._id] = {
+            // Where profile/teaser _id is equal to user id
+            avatarUrl: teaser.profile?.avatarUrl,
+            username: teaser.username,
+          };
+        });
 
-          this.posts = posts.posts.data.map((post) => {
-            const newPost = {...post} as any;
+        this.posts = posts.posts.data.map((post) => {
+          const newPost = {...post} as any;
 
-            newPost.millisecondsElapsed = this.dateService.serverUtcTimestamp - post.createdAt;
-            newPost.date = this.getPostFullDate(post.createdAt);
+          newPost.millisecondsElapsed = this.dateService.serverUtcTimestamp - post.createdAt;
+          newPost.date = this.getPostFullDate(post.createdAt);
 
-            if (hasLessMillisecondsThanDay(this.dateService.serverUtcTimestamp - post.createdAt)) {
-              newPost.timeElapsedAfterCreation$ = this.getTimeElapsedAfterCreation$(post, newPost);
-
-              return newPost;
-            }
-
-            newPost.timeElapsedAfterCreation = this.getPostShortDate(
-              post.createdAt,
-              this.dateService.serverUtcTimestamp,
-            );
+          if (hasLessMillisecondsThanDay(this.dateService.serverUtcTimestamp - post.createdAt)) {
+            newPost.timeElapsedAfterCreation$ = this.getTimeElapsedAfterCreation$(post, newPost);
 
             return newPost;
-          });
-          console.debug(this.posts);
-          // this.posts.forEach((post) => post.userId)
-          this.changeDetector.detectChanges();
-        },
-      );
+          }
+
+          newPost.timeElapsedAfterCreation = this.getPostShortDate(
+            post.createdAt,
+            this.dateService.serverUtcTimestamp,
+          );
+
+          return newPost;
+        });
+        console.debug(this.posts);
+        // this.posts.forEach((post) => post.userId)
+        this.changeDetector.detectChanges();
+      });
   }
 
   // !!! MUTATES POST ITEM [NOT PURE]

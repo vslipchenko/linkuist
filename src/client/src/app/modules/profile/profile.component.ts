@@ -21,13 +21,12 @@ import {ApolloQueryResult} from '@apollo/client/core/types';
 import {
   Profile,
   ProfileByUserIdQueryResult,
-  ProfileByUsernameQueryResult,
   ProfileUpdateMutationResult,
 } from '~app/types/profile/profile.interfaces';
 import {FetchResult} from '@apollo/client/core';
 import {finalize} from 'rxjs/operators';
 import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {ProfileService} from '~app/services/profile/profile.service';
 
 @UntilDestroy()
@@ -165,6 +164,20 @@ export class ProfileComponent {
   //   return UserComponentToRender;
   // }
 
+  public get isUser(): boolean {
+    return this.resolvedUserService.user.role === UserRole.USER;
+  }
+
+  public get profile$(): BehaviorSubject<Profile> {
+    return this.profileService.userProfile$;
+  }
+
+  public get navigationMainActionType(): NavigationMainActionType {
+    return this.isUser || !this.authenticationService.isUserAuthenticated
+      ? NavigationMainActionType.HOME
+      : NavigationMainActionType.PROFILE;
+  }
+
   public confirmLogout(): void {
     this.authenticationService.resetTokens();
     void this.router.navigate(['sign-in']);
@@ -228,29 +241,34 @@ export class ProfileComponent {
   }
 
   private loadProfile(): void {
-    const hasUserRole = this.resolvedUserService.user.role === UserRole.USER;
+    // const hasUserRole = this.resolvedUserService.user.role === UserRole.USER;
 
-    (
-      this.userService[hasUserRole ? 'getProfileByUserId' : 'getProfileByUsername'](
-        hasUserRole
-          ? this.authenticationService.accessTokenData!.userId
-          : this.resolvedUserService.user.urlUsername,
-      ) as Observable<ApolloQueryResult<ProfileByUserIdQueryResult | ProfileByUsernameQueryResult>>
-    )
+    this.userService
+      .getProfileByUserId(this.resolvedUserService.user.id)
       .pipe(untilDestroyed(this))
-      .subscribe(
-        ({data}: ApolloQueryResult<ProfileByUserIdQueryResult | ProfileByUsernameQueryResult>) => {
-          // debugger;
-          const profile = hasUserRole
-            ? (data as ProfileByUserIdQueryResult).profileByUserId.profile
-            : (data as ProfileByUsernameQueryResult).profileByUsername.profile;
-          this.profileService.userProfile$.next(profile);
-          // debugger;
+      .subscribe(({data}: ApolloQueryResult<ProfileByUserIdQueryResult>) => {
+        // debugger;
+        const profile = data.profileByUserId.profile;
+        this.profileService.userProfile$.next(profile);
+        // debugger;
 
-          // this.changeDetector.detectChanges();
-        },
-      );
+        // this.changeDetector.detectChanges();
+      });
   }
+
+  // private canProceedPageInnerNavigation(): boolean {
+  //   if (this.resolvedUser.role === UserRole.Guest) {
+  //     this.navigateToSignInPage();
+  //     return false;
+  //   }
+  //
+  //   if (this.resolvedUser.role === UserRole.Viewer) {
+  //     this.navigateToResolvedUserProfile();
+  //     return false;
+  //   }
+  //
+  //   return true;
+  // }
 
   private handlePageInnerNavigation(): void {
     // console.log(
@@ -301,33 +319,5 @@ export class ProfileComponent {
 
   private navigateToSignInPage(): void {
     void this.router.navigate(['sign-in']);
-  }
-
-  // private canProceedPageInnerNavigation(): boolean {
-  //   if (this.resolvedUser.role === UserRole.Guest) {
-  //     this.navigateToSignInPage();
-  //     return false;
-  //   }
-  //
-  //   if (this.resolvedUser.role === UserRole.Viewer) {
-  //     this.navigateToResolvedUserProfile();
-  //     return false;
-  //   }
-  //
-  //   return true;
-  // }
-
-  public get isUser(): boolean {
-    return this.resolvedUserService.user.role === UserRole.USER;
-  }
-
-  public get profile$(): BehaviorSubject<Profile> {
-    return this.profileService.userProfile$;
-  }
-
-  public get navigationMainActionType(): NavigationMainActionType {
-    return this.isUser || !this.authenticationService.isUserAuthenticated
-      ? NavigationMainActionType.HOME
-      : NavigationMainActionType.PROFILE;
   }
 }

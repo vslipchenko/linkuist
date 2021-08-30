@@ -1,9 +1,7 @@
-import {gql, UserInputError} from 'apollo-server-express';
-import {IUser} from '../../../types/user/user.interfaces';
-import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
+import {gql} from 'apollo-server-express';
 import {IPost} from '../../../types/post/post.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
-import {RECORD_ID_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
+import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {User} from '../../../models/user';
 import {Post} from '../../../models/post';
 import {ILinkard} from '../../../types/linkard/linkard.interfaces';
@@ -18,7 +16,7 @@ import {POST_FETCH_LIMIT} from '../../../constants/post';
 export const postQueryTypeDefinitions = gql`
   extend type Query {
     postsByUserId(userId: String!, parameters: RequestParameters!): UserPosts
-    postsByUsername(username: String!, parameters: RequestParameters!): UserPosts
+    # postsByUsername(username: String!, parameters: RequestParameters!): UserPosts
   }
 `;
 
@@ -52,7 +50,9 @@ const aggregatePost = async (
   data.forEach((post: IPost & {date?: string}) => {
     // post.date = composePostDate(post.createdAt);
 
-    if (!uniqueUserIds.includes(post.userId)) uniqueUserIds.push(post.userId);
+    if (!uniqueUserIds.includes(post.userId)) {
+      uniqueUserIds.push(post.userId);
+    }
   });
 
   const userProfileTeasers = uniqueUserIds.length
@@ -90,45 +90,47 @@ const postsByUserId = (
     },
   });
 
-  if (isInvalidData) return null;
+  if (isInvalidData) {
+    return null;
+  }
 
   return aggregatePost(userId, parameters);
 };
 
-const postsByUsername = async (
-  _: unknown,
-  {username, parameters}: {username: IUser['username']; parameters: RequestParameters},
-): Promise<
-  | Array<MongooseDocument<IPost>>
-  | {posts: {data: any; total: any}; userProfileTeasers: Array<unknown>}
-  | UserInputError
-  | null
-> => {
-  const {isInvalidData} = checkDataValidity({
-    data: {username, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
-    ignoreUndefinedValuePaths: ['order', 'offset'],
-    pattern: {
-      username: USERNAME_REGEXP,
-      order: (value) => value === SortOrder.ASCENDING || value === SortOrder.DESCENDING,
-      offset: Number.isInteger,
-      limit: (value) => Number.isInteger(value) && value > 0 && value <= POST_FETCH_LIMIT,
-    },
-  });
-
-  if (isInvalidData) return null;
-  // TODO Consider to pull only required data
-  const user = await User.findOne({
-    username,
-  });
-
-  if (!user) return new UserInputError('Invalid username');
-
-  return aggregatePost(user._id, parameters);
-};
+// const postsByUsername = async (
+//   _: unknown,
+//   {username, parameters}: {username: IUser['username']; parameters: RequestParameters},
+// ): Promise<
+//   | Array<MongooseDocument<IPost>>
+//   | {posts: {data: any; total: any}; userProfileTeasers: Array<unknown>}
+//   | UserInputError
+//   | null
+// > => {
+//   const {isInvalidData} = checkDataValidity({
+//     data: {username, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
+//     ignoreUndefinedValuePaths: ['order', 'offset'],
+//     pattern: {
+//       username: USERNAME_REGEXP,
+//       order: (value) => value === SortOrder.ASCENDING || value === SortOrder.DESCENDING,
+//       offset: Number.isInteger,
+//       limit: (value) => Number.isInteger(value) && value > 0 && value <= POST_FETCH_LIMIT,
+//     },
+//   });
+//
+//   if (isInvalidData) return null;
+//   // TODO Consider to pull only required data
+//   const user = await User.findOne({
+//     username,
+//   });
+//
+//   if (!user) return new UserInputError('Invalid username');
+//
+//   return aggregatePost(user._id, parameters);
+// };
 
 export const postQueryResolvers = {
   Query: {
     postsByUserId,
-    postsByUsername,
+    // postsByUsername,
   },
 };

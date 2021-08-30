@@ -6,11 +6,10 @@ import {
   PostCreatePayload,
   PostDeleteCountMutationResult,
   PostsByUserIdQueryResult,
-  PostsByUsernameQueryResult,
 } from '~app/types/post/post.interfaces';
 import {Observable} from 'rxjs';
 import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
-import {GET_POSTS_BY_USER_ID, GET_POSTS_BY_USERNAME} from '~app/graphql/post/post.queries';
+import {GET_POSTS_BY_USER_ID} from '~app/graphql/post/post.queries';
 import {RequestParameters} from '~app/types/shared/shared.interfaces';
 
 @Injectable({
@@ -36,15 +35,15 @@ export class PostService {
     });
   }
 
-  public getAllByUsername(
-    username: string,
-    parameters: RequestParameters,
-  ): Observable<ApolloQueryResult<PostsByUsernameQueryResult>> {
-    return this.apollo.query({
-      query: GET_POSTS_BY_USERNAME,
-      variables: {username, parameters},
-    });
-  }
+  // public getAllByUsername(
+  //   username: string,
+  //   parameters: RequestParameters,
+  // ): Observable<ApolloQueryResult<PostsByUsernameQueryResult>> {
+  //   return this.apollo.query({
+  //     query: GET_POSTS_BY_USERNAME,
+  //     variables: {username, parameters},
+  //   });
+  // }
 
   public deleteById(_id: string): Observable<FetchResult<PostDeleteCountMutationResult>> {
     return this.apollo.mutate({

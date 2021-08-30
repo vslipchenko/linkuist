@@ -22,16 +22,18 @@ import {LINKARD_TAG_LETTER_REGEXP} from '~app/constants/regexps';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {LinkardService} from '~app/services/linkard/linkard.service';
 import {ActivatedRoute} from '@angular/router';
-import {ResolvedUser} from '~app/types/user/user.interfaces';
+// import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {UserRole} from '~app/types/user/user.enums';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {
   LinkardsByUserIdQueryResult,
-  LinkardsByUsernameQueryResult,
+  // LinkardsByUsernameQueryResult,
 } from '~app/types/linkard/linkard.interfaces';
 // import {getId} from '~app/utilities/unique';
 import {ApolloQueryResult} from '@apollo/client/core/types';
 import {Chip} from '~app/shared/types/chips/chips.interfaces';
+import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
+import {ResolvedUser} from '~app/types/user/user.interfaces';
 
 @UntilDestroy()
 @Component({
@@ -52,12 +54,12 @@ export class LinkardsComponent implements OnInit {
   public readonly tagLetterValidator = LINKARD_TAG_LETTER_REGEXP;
   public readonly tagSplitWordBy = /[-\s]/;
 
-  public resolvedUser: ResolvedUser = {
-    id: '',
-    role: UserRole.VIEWER,
-    urlUsername: '',
-    // relativePaths: []
-  };
+  // public resolvedUser: ResolvedUser = {
+  //   id: '',
+  //   role: UserRole.VIEWER,
+  //   urlUsername: '',
+  //   // relativePaths: []
+  // };
   public addBookmarkForm: FormGroup | undefined;
   public linkards: Array<unknown> = []; // TODO type
 
@@ -68,8 +70,9 @@ export class LinkardsComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly authenticationService: AuthenticationService, // private readonly test: BrowserWindowRe // private test: WindowRef
+    private readonly resolvedUserService: ResolvedUserService,
   ) {
-    this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
+    // this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
   }
 
   private static linkValidator(control: AbstractControl): null | ValidationErrors {
@@ -143,25 +146,25 @@ export class LinkardsComponent implements OnInit {
   }
 
   private loadLinkards(): void {
-    if (this.isUser) {
-      this.linkardService
-        .getAllByUserId(this.authenticationService.accessTokenData!.userId)
-        .pipe(untilDestroyed(this))
-        .subscribe(({data}: ApolloQueryResult<LinkardsByUserIdQueryResult>) => {
-          this.linkards = data.linkardsByUserId;
-          this.changeDetector.detectChanges();
-        });
-
-      return;
-    }
-
+    // if (this.isUser) {
     this.linkardService
-      .getAllByUsername(this.resolvedUser.urlUsername)
+      .getAllByUserId(this.resolvedUser.id)
       .pipe(untilDestroyed(this))
-      .subscribe(({data}: ApolloQueryResult<LinkardsByUsernameQueryResult>) => {
-        this.linkards = data.linkardsByUsername;
+      .subscribe(({data}: ApolloQueryResult<LinkardsByUserIdQueryResult>) => {
+        this.linkards = data.linkardsByUserId;
         this.changeDetector.detectChanges();
       });
+
+    return;
+    // }
+
+    // this.linkardService
+    //   .getAllByUsername(this.resolvedUserService.user.urlUsername)
+    //   .pipe(untilDestroyed(this))
+    //   .subscribe(({data}: ApolloQueryResult<LinkardsByUsernameQueryResult>) => {
+    //     this.linkards = data.linkardsByUsername;
+    //     this.changeDetector.detectChanges();
+    //   });
   }
 
   private initAddBookmarkForm(): void {
@@ -238,6 +241,10 @@ export class LinkardsComponent implements OnInit {
   // public get areActionsVisible(): boolean {
   //   return this.isUser;
   // }
+
+  public get resolvedUser(): ResolvedUser {
+    return this.resolvedUserService.user;
+  }
 
   public get isViewer(): boolean {
     return this.resolvedUser.role === UserRole.VIEWER;

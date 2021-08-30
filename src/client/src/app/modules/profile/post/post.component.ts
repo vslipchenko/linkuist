@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  Input,
-  Output,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, Output} from '@angular/core';
 import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
 import {DOCUMENT} from '@angular/common';
 import {PostService} from '~app/services/post/post.service';
@@ -15,6 +9,8 @@ import {finalize} from 'rxjs/operators';
 import {FetchResult} from '@apollo/client/core';
 import {PostDeleteCountMutationResult} from '~app/types/post/post.interfaces';
 import {EventEmitter} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {POST_COMMENT_MAX_LENGTH} from '~app/constants/post';
 
 @UntilDestroy()
 @Component({
@@ -28,6 +24,9 @@ export class PostComponent {
   @Input() public readonly profileTeasers: {[userId: string]: any} = {};
 
   @Output() public readonly deletePost = new EventEmitter<string>();
+
+  public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
+  public readonly addCommentControl = new FormControl('');
 
   public constructor(
     @Inject(DOCUMENT) private readonly document: Document,

@@ -11,4 +11,8 @@ export const sharedTypes = gql`
   type ClientPreset {
     serverUtcTimestamp: Float!
   }
+
+  type RecordId {
+    _id: ID!
+  }
 `;

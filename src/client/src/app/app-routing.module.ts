@@ -20,7 +20,7 @@ const routes: Routes = [
       [URL_USERNAME_REGEXP, 'settings', 'profile'],
     ]),
     resolve: {
-      user: UserResolver,
+      resolved: UserResolver,
     },
     canActivate: [UserCanActivateGuard],
     canLoad: [UserCanLoadGuard],
@@ -30,7 +30,7 @@ const routes: Routes = [
   {
     matcher: urlMatcher([URL_USERNAME_REGEXP, 'linkards']),
     resolve: {
-      user: UserResolver,
+      resolved: UserResolver,
     },
     canActivate: [UserCanActivateGuard],
     canLoad: [UserCanLoadGuard],

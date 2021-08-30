@@ -1,10 +1,14 @@
 import {gql} from 'apollo-server-express';
 
 export const userTypes = gql`
-  type User {
+  type CreatedUser {
     _id: ID!
     email: String!
     username: String!
+  }
+
+  type UserEmail {
+    email: String!
   }
 
   type Profile {

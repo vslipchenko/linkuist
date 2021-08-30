@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Apollo} from 'apollo-angular';
 import {CREATE_USER} from '~app/graphql/user/user.mutations';
 import {
-  UserIdByEmailQueryResult,
+  UserEmailByEmailQueryResult,
   UserIdByUsernameQueryResult,
   UserSignUpPayload,
 } from '~app/types/user/user.interfaces';
@@ -11,15 +11,11 @@ import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
 import {RecordId} from '~app/types/graphql/graphql.interfaces';
 import {
   GET_PROFILE_BY_USER_ID,
-  GET_PROFILE_BY_USERNAME,
-  // GET_PROFILE_TEASER_BY_USER_ID,
-  // GET_PROFILE_TEASER_BY_USERNAME,
-  USER_ID_BY_EMAIL,
+  USER_EMAIL_BY_EMAIL,
   USER_ID_BY_USERNAME,
 } from '~app/graphql/user/user.queries';
 import {
   ProfileByUserIdQueryResult,
-  ProfileByUsernameQueryResult,
   ProfileUpdateMutationResult,
   ProfileUpdatePayload,
 } from '~app/types/profile/profile.interfaces';
@@ -42,9 +38,11 @@ export class UserService {
     });
   }
 
-  public getUserIdByEmail(email: string): Observable<ApolloQueryResult<UserIdByEmailQueryResult>> {
+  public getUserEmailByEmail(
+    email: string,
+  ): Observable<ApolloQueryResult<UserEmailByEmailQueryResult>> {
     return this.apollo.query({
-      query: USER_ID_BY_EMAIL,
+      query: USER_EMAIL_BY_EMAIL,
       variables: {email},
     });
   }
@@ -76,14 +74,14 @@ export class UserService {
     });
   }
 
-  public getProfileByUsername(
-    username: string,
-  ): Observable<ApolloQueryResult<ProfileByUsernameQueryResult>> {
-    return this.apollo.query({
-      query: GET_PROFILE_BY_USERNAME,
-      variables: {username},
-    });
-  }
+  // public getProfileByUsername(
+  //   username: string,
+  // ): Observable<ApolloQueryResult<ProfileByUsernameQueryResult>> {
+  //   return this.apollo.query({
+  //     query: GET_PROFILE_BY_USERNAME,
+  //     variables: {username},
+  //   });
+  // }
 
   // public getProfileTeaserByUserId(userId: string): Observable<ApolloQueryResult<unknown>> {
   //   return this.apollo.query({

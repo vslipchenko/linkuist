@@ -13,7 +13,7 @@ import {authenticationGuard} from '../../../utilities/guards';
 // TODO server side validation
 export const userMutationTypeDefinitions = gql`
   extend type Mutation {
-    createUser(input: CreateUserMutationInput!): User
+    createUser(input: CreateUserMutationInput!): CreatedUser
     updateProfile(input: UpdateProfileMutationInput!): UserProfile
   }
 `; // User can be nullable in case of invalid input data

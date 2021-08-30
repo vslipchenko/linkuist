@@ -10,29 +10,29 @@ import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
 
 export const userQueryTypeDefinitions = gql`
   extend type Query {
-    userByEmail(email: String!): User
-    userByUsername(username: String!): User
+    userEmailByEmail(email: String!): UserEmail
+    userIdByUsername(username: String!): RecordId
     profileByUserId(userId: String!): UserProfile
-    profileByUsername(username: String!): UserProfile # Consider to simplify to just Profile
+    # profileByUsername(username: String!): UserProfile # Consider to simplify to just Profile
     # profileTeaserByUserId(userId: String!): UserProfileTeaser # Consider to simplify to just ProfileTeaser
     # profileTeaserByUsername(userId: String!): UserProfileTeaser
   }
 `;
 
-const userByEmail = (_: unknown, {email}: {email: IUser['email']}): unknown => {
+const userEmailByEmail = (_: unknown, {email}: {email: IUser['email']}): unknown => {
   const {isInvalidData} = checkDataValidity({data: email, pattern: EMAIL_REGEXP});
 
   if (isInvalidData) return null;
 
-  return User.findOne({email}).exec();
+  return User.findOne({email}, 'email').exec();
 };
 
-const userByUsername = (_: unknown, {username}: {username: IUser['username']}): unknown => {
+const userIdByUsername = (_: unknown, {username}: {username: IUser['username']}): unknown => {
   const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
 
   if (isInvalidData) return null;
 
-  return User.findOne({username}).exec();
+  return User.findOne({username}, '_id').exec();
 };
 
 const profileByUserId = async (
@@ -67,24 +67,24 @@ const profileByUserId = async (
   return User.findById(userId, 'profile');
 };
 
-const profileByUsername = async (
-  _: unknown,
-  {username}: {username: IUser['username']},
-): Promise<MongooseDocument<IUser> | UserInputError | null> => {
-  // console.log('profileByUsername', await User.findOne({username}, 'profile'));
-
-  const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
-  if (isInvalidData) return null;
-
-  // const user = await User.findOne({
-  //   username,
-  // });
-  //
-  // if (!user) return new UserInputError('Invalid username');
-  // console.log('profileByUsername', await User.findOne({username}, 'profile'));
-
-  return User.findOne({username}, 'profile');
-};
+// const profileByUsername = async (
+//   _: unknown,
+//   {username}: {username: IUser['username']},
+// ): Promise<MongooseDocument<IUser> | UserInputError | null> => {
+//   // console.log('profileByUsername', await User.findOne({username}, 'profile'));
+//
+//   const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
+//   if (isInvalidData) return null;
+//
+//   // const user = await User.findOne({
+//   //   username,
+//   // });
+//   //
+//   // if (!user) return new UserInputError('Invalid username');
+//   // console.log('profileByUsername', await User.findOne({username}, 'profile'));
+//
+//   return User.findOne({username}, 'profile');
+// };
 
 // const profileTeaserByUserId = async (
 //   _: unknown,
@@ -128,10 +128,10 @@ const profileByUsername = async (
 
 export const userQueryResolvers = {
   Query: {
-    userByEmail,
-    userByUsername,
+    userEmailByEmail,
+    userIdByUsername,
     profileByUserId,
-    profileByUsername,
+    // profileByUsername,
     // profileTeaserByUserId,
     // profileTeaserByUsername,
   },

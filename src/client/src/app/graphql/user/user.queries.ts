@@ -1,16 +1,16 @@
 import gql from 'graphql-tag';
 
-export const USER_ID_BY_EMAIL = gql`
+export const USER_EMAIL_BY_EMAIL = gql`
   query ($email: String!) {
-    userByEmail(email: $email) {
-      _id
+    userEmailByEmail(email: $email) {
+      email
     }
   }
 `;
 
 export const USER_ID_BY_USERNAME = gql`
   query ($username: String!) {
-    userByUsername(username: $username) {
+    userIdByUsername(username: $username) {
       _id
     }
   }

@@ -195,9 +195,9 @@ export class SignUpComponent implements OnInit {
 
   private emailValidator(control: AbstractControl): null | ValidationErrors {
     const email = control.value;
-    return this.userService.getUserIdByEmail(email).pipe(
+    return this.userService.getUserEmailByEmail(email).pipe(
       map(({data}) => {
-        return data.userByEmail?._id ? {isUsed: true} : null;
+        return data.userByEmail?.email ? {isUsed: true} : null;
       }),
     );
   }

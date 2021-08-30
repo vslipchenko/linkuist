@@ -104,7 +104,8 @@
     <app-elastic-input
       class="w-100 min-width-0"
       placeholder="Write a comment..."
-      maxCharacterLength="3000"
+      [maxCharacterLength]="POST_COMMENT_MAX_LENGTH"
+      [formControl]="addCommentControl"
     ></app-elastic-input>
     <div class="p-1">
       <button mat-icon-button color="primary" matTooltip="Add comment" matTooltipPosition="right">
