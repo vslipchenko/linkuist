@@ -7,12 +7,8 @@ import {RecordId} from '~app/types/graphql/graphql.interfaces';
 import {
   LinkardCreatePayload,
   LinkardsByUserIdQueryResult,
-  LinkardsByUsernameQueryResult,
 } from '~app/types/linkard/linkard.interfaces';
-import {
-  GET_LINKARDS_BY_USER_ID,
-  GET_LINKARDS_BY_USERNAME,
-} from '~app/graphql/linkard/linkard.queries';
+import {GET_LINKARDS_BY_USER_ID} from '~app/graphql/linkard/linkard.queries';
 
 @Injectable({
   providedIn: 'root',
@@ -36,12 +32,12 @@ export class LinkardService {
     });
   }
 
-  public getAllByUsername(
-    username: string,
-  ): Observable<ApolloQueryResult<LinkardsByUsernameQueryResult>> {
-    return this.apollo.query({
-      query: GET_LINKARDS_BY_USERNAME,
-      variables: {username},
-    });
-  }
+  // public getAllByUsername(
+  //   username: string,
+  // ): Observable<ApolloQueryResult<LinkardsByUsernameQueryResult>> {
+  //   return this.apollo.query({
+  //     query: GET_LINKARDS_BY_USERNAME,
+  //     variables: {username},
+  //   });
+  // }
 }

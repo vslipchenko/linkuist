@@ -55,7 +55,7 @@
       <!--        <mat-icon svgIcon="share-variant"></mat-icon>-->
       <!--        Share to-->
       <!--      </button>-->
-      <button mat-menu-item (click)="delete(post._id)">
+      <button mat-menu-item (click)="delete()">
         <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>
         Delete
       </button>
@@ -74,7 +74,11 @@
       <span class="font-weight-bold">27k</span>
       <!--    </div>-->
     </button>
-    <button mat-button class="icon-button d-flex justify-content-center flex">
+    <button
+      mat-button
+      class="icon-button d-flex justify-content-center flex"
+      (click)="commentInput.focus()"
+    >
       <mat-icon svgIcon="comment" class="d-flex mr-h icon-sm"></mat-icon>
       <span class="font-weight-bold">27k</span>
     </button>
@@ -102,13 +106,20 @@
     <!--      </span>-->
     <!--    </div>-->
     <app-elastic-input
+      #commentInput
       class="w-100 min-width-0"
       placeholder="Write a comment..."
       [maxCharacterLength]="POST_COMMENT_MAX_LENGTH"
       [formControl]="addCommentControl"
     ></app-elastic-input>
     <div class="p-1">
-      <button mat-icon-button color="primary" matTooltip="Add comment" matTooltipPosition="right">
+      <button
+        mat-icon-button
+        color="primary"
+        matTooltip="Add comment"
+        matTooltipPosition="right"
+        (click)="comment()"
+      >
         <mat-icon svgIcon="comment-plus"></mat-icon>
       </button>
     </div>

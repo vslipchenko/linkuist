@@ -197,7 +197,7 @@ export class SignUpComponent implements OnInit {
     const email = control.value;
     return this.userService.getUserEmailByEmail(email).pipe(
       map(({data}) => {
-        return data.userByEmail?.email ? {isUsed: true} : null;
+        return data.userEmailByEmail?.email ? {isUsed: true} : null;
       }),
     );
   }
@@ -219,7 +219,7 @@ export class SignUpComponent implements OnInit {
     const username = control.value;
     return this.userService.getUserIdByUsername(username).pipe(
       map(({data}) => {
-        return data.userByUsername?._id ? {isUsed: true} : null;
+        return data.userIdByUsername?._id ? {isUsed: true} : null;
       }),
     );
   }

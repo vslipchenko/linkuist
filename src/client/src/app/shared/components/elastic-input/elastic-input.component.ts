@@ -31,7 +31,7 @@ export class ElasticInputComponent implements ControlValueAccessor {
   @Output() public readonly inputChange = new EventEmitter<Event>();
 
   // public value = '';
-  @ViewChild('input', {static: true}) public readonly spanElement: ElementRef | undefined;
+  @ViewChild('input', {static: true}) public readonly spanElementRef: ElementRef | undefined;
 
   public isCounterVisible = false;
 
@@ -57,6 +57,10 @@ export class ElasticInputComponent implements ControlValueAccessor {
     this.isCounterVisible = false;
   }
 
+  public focus(): void {
+    this.spanElementRef?.nativeElement.focus();
+  }
+
   public registerOnChange(fn: (value: any) => void): void {
     this.onChange = fn;
   }
@@ -66,7 +70,7 @@ export class ElasticInputComponent implements ControlValueAccessor {
   }
 
   public writeValue(value: string): void {
-    this.renderer.setProperty(this.spanElement?.nativeElement, 'textContent', value);
+    this.renderer.setProperty(this.spanElementRef?.nativeElement, 'textContent', value);
   }
 
   private onChange = (value: any): void => value;

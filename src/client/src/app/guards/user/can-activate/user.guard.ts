@@ -33,10 +33,10 @@ export class UserCanActivateGuard implements CanActivate {
     // check profile exist
     return this.userService.getUserIdByUsername(username).pipe(
       map(({data}) => {
-        if (data.userByUsername?._id) {
+        if (data.userIdByUsername?._id) {
           // Preserve user id to make a subsequent API calls based on it
           // debugger;
-          this.resolvedUserService.user.id = data.userByUsername?._id;
+          this.resolvedUserService.user.id = data.userIdByUsername?._id;
           return true;
         } // profile exist
         // profile does not exist

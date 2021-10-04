@@ -112,6 +112,7 @@ textarea {
 
 mat-progress-bar {
   position: fixed !important;
+  z-index: 1;
 
   @include media.zero-small {
     height: 2px !important;

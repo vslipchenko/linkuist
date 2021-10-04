@@ -1,10 +1,5 @@
-import {Document, DocumentDefinition, Schema, SchemaTypeOpts} from 'mongoose';
-
-type SchemaPropertyDefinition = SchemaTypeOpts<DocumentDefinition<unknown>>;
+import {Document, SchemaDefinitionProperty} from 'mongoose';
 
 export type MongooseQueryResult<T> = T | null;
 export type MongooseDocument<T> = T & Document;
-export type MongooseSchema<T> = Record<
-  keyof T,
-  SchemaPropertyDefinition | Schema | {[k: string]: SchemaPropertyDefinition}
->;
+export type MongooseSchema<T> = Record<keyof T, SchemaDefinitionProperty>;

@@ -23,16 +23,16 @@ export interface ProfileByUserIdQueryResult {
   };
 }
 
-export interface ProfileByUsernameQueryResult {
-  profileByUsername: {
-    profile: {
-      backgroundUrl: string;
-      avatarUrl: string;
-      name: string;
-      bio: string;
-    };
-  };
-}
+// export interface ProfileByUsernameQueryResult {
+//   profileByUsername: {
+//     profile: {
+//       backgroundUrl: string;
+//       avatarUrl: string;
+//       name: string;
+//       bio: string;
+//     };
+//   };
+// }
 
 export interface ProfileUpdateMutationResult {
   updateProfile: {

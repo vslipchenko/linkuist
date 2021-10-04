@@ -1,17 +1,17 @@
 import {RecordId} from '../graphql/graphql.interfaces';
 import {UserRole} from '~app/types/user/user.enums';
 
-type UserEmail = {
+interface UserEmail {
   email: string;
-};
+}
 
 // TODO refactor gql specific interfaces
 export interface UserEmailByEmailQueryResult {
-  userByEmail: UserEmail;
+  userEmailByEmail: UserEmail;
 }
 
 export interface UserIdByUsernameQueryResult {
-  userByUsername: RecordId;
+  userIdByUsername: RecordId;
 }
 
 export interface UserSignUpPayload {

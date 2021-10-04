@@ -32,18 +32,18 @@ export interface PostsByUserIdQueryResult {
   };
 }
 
-export interface PostsByUsernameQueryResult {
-  postsByUsername: {
-    posts: {
-      data: Array<{
-        userId: string;
-        createdAt: number;
-        // date: string;
-        text: string;
-        isRepost: boolean;
-      }>;
-      total: number;
-    };
-    userProfileTeasers: Array<{_id: string; username: string; profile: {avatarUrl: string}}>;
-  };
-}
+// export interface PostsByUsernameQueryResult {
+//   postsByUsername: {
+//     posts: {
+//       data: Array<{
+//         userId: string;
+//         createdAt: number;
+//         // date: string;
+//         text: string;
+//         isRepost: boolean;
+//       }>;
+//       total: number;
+//     };
+//     userProfileTeasers: Array<{_id: string; username: string; profile: {avatarUrl: string}}>;
+//   };
+// }

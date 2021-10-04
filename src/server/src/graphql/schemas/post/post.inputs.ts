@@ -2,8 +2,7 @@ import {gql} from 'apollo-server-express';
 
 export const postInputs = gql`
   input CreatePostMutationInput {
-    text: String
-    postId: String
+    text: String!
     isRepost: Boolean!
   }
 

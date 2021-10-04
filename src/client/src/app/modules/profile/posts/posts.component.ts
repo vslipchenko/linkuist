@@ -4,7 +4,11 @@ import {PostService} from '~app/services/post/post.service';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
-import {PostCreateMutationResult, PostsByUserIdQueryResult} from '~app/types/post/post.interfaces';
+import {
+  PostCreateMutationResult,
+  PostDeleteCountMutationResult,
+  PostsByUserIdQueryResult,
+} from '~app/types/post/post.interfaces';
 import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {endWith, finalize, map, startWith, takeWhile} from 'rxjs/operators';
 import {SortOrder, ElapsedTimeMeasure} from '~app/types/shared/shared.enums';
@@ -22,6 +26,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {Observable} from 'rxjs';
 import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
 import {ProfileService} from '~app/services/profile/profile.service';
+import {PostCommentService} from '~app/services/post-comment/post-comment.service';
+import {PostCommentCreateMutationResult} from '~app/types/post-comment/post-comment.interfaces';
 // import {WINDOW} from '~app/tokens/window';
 // import {BehaviorSubject, of} from 'rxjs';
 
@@ -64,6 +70,7 @@ export class PostsComponent implements OnInit {
     private readonly dateService: DateService,
     private readonly translateService: TranslateService,
     private readonly profileService: ProfileService,
+    private readonly postCommentService: PostCommentService,
   ) {}
 
   public ngOnInit(): void {
@@ -136,10 +143,36 @@ export class PostsComponent implements OnInit {
   }
 
   public handlePostDelete(_id: string): void {
-    this.posts.splice(
-      this.posts.findIndex((post) => post._id === _id),
-      1,
-    );
+    this.progressBarService.show();
+    // console.log(_id, this.post);
+    this.postService
+      .deleteById(_id)
+      .pipe(
+        untilDestroyed(this),
+        finalize(() => this.progressBarService.hide()),
+      )
+      .subscribe(({data}: FetchResult<PostDeleteCountMutationResult>) => {
+        if (!data?.deletePost) return;
+
+        this.posts.splice(
+          this.posts.findIndex((post) => post._id === _id),
+          1,
+        );
+      });
+  }
+
+  public handleAddPostComment(payload: {body: string; postId: string}): void {
+    this.progressBarService.show();
+    console.log(payload);
+    this.postCommentService
+      .create(payload)
+      .pipe(
+        untilDestroyed(this),
+        finalize(() => this.progressBarService.hide()),
+      )
+      .subscribe(({data}: FetchResult<PostCommentCreateMutationResult>) => {
+        console.log(data);
+      });
   }
 
   private bindProfileChange(): void {

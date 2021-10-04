@@ -2,12 +2,9 @@ import {ChangeDetectionStrategy, Component, Inject, Input, Output} from '@angula
 import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
 import {DOCUMENT} from '@angular/common';
 import {PostService} from '~app/services/post/post.service';
-import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
+import {UntilDestroy} from '~app/utilities/until-destroy';
 import {UserRole} from '~app/types/user/user.enums';
 import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
-import {finalize} from 'rxjs/operators';
-import {FetchResult} from '@apollo/client/core';
-import {PostDeleteCountMutationResult} from '~app/types/post/post.interfaces';
 import {EventEmitter} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {POST_COMMENT_MAX_LENGTH} from '~app/constants/post';
@@ -23,7 +20,8 @@ export class PostComponent {
   @Input() public readonly post: any;
   @Input() public readonly profileTeasers: {[userId: string]: any} = {};
 
-  @Output() public readonly deletePost = new EventEmitter<string>();
+  @Output() public readonly deletePost = new EventEmitter<void>();
+  @Output() public readonly addComment = new EventEmitter<string>();
 
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   public readonly addCommentControl = new FormControl('');
@@ -45,18 +43,12 @@ export class PostComponent {
     });
   }
 
-  public delete(_id: string): void {
-    this.progressBarService.show();
-    console.log(_id, this.post);
-    this.postService
-      .deleteById(_id)
-      .pipe(
-        untilDestroyed(this),
-        finalize(() => this.progressBarService.hide()),
-      )
-      .subscribe(({data}: FetchResult<PostDeleteCountMutationResult>) => {
-        if (data?.deletePost) this.deletePost.emit(_id);
-      });
+  public delete(): void {
+    this.deletePost.emit();
+  }
+
+  public comment(): void {
+    this.addComment.emit(this.addCommentControl.value);
   }
 
   public isPostOwner(username: string): boolean {

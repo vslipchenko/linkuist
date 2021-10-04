@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import {MongooseDocument} from '../types/mongoose/mongoose.types';
+import {IPostComment} from '../types/post-comment/post-comment.interfaces';
 
 // Idea https://stackoverflow.com/questions/45833804/suggested-table-structure-for-one-level-deep-nested-comment
 const postCommentSchema = new mongoose.Schema({
@@ -11,7 +12,7 @@ const postCommentSchema = new mongoose.Schema({
   createdAt: {type: Number, required: true},
 });
 
-export const PostComment = mongoose.model<MongooseDocument<unknown>>(
+export const PostComment = mongoose.model<MongooseDocument<IPostComment>>(
   'PostComment',
   postCommentSchema,
   'users.posts.comments',

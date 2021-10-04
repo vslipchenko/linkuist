@@ -39,10 +39,10 @@ export interface LinkardsByUserIdQueryResult {
   }>;
 }
 
-export interface LinkardsByUsernameQueryResult {
-  linkardsByUsername: Array<{
-    createdAt: number;
-    note: string;
-    metadata: LinkardMetadata;
-  }>;
-}
+// export interface LinkardsByUsernameQueryResult {
+//   linkardsByUsername: Array<{
+//     createdAt: number;
+//     note: string;
+//     metadata: LinkardMetadata;
+//   }>;
+// }
