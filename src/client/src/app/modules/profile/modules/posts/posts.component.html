@@ -2,9 +2,8 @@
 
 <div class="post-list" data-empty-notes="There are no posts yet...">
   <app-post
-    *ngFor="let post of posts; trackBy: postsTrackBy.bind(this)"
+    *ngFor="let post of posts$ | async; trackBy: postsTrackBy.bind(this)"
     [post]="post"
-    [profileTeasers]="profileTeasers"
     (addComment)="handleAddPostComment({postId: post._id, body: $event})"
     (deletePost)="handlePostDelete(post._id)"
   ></app-post>

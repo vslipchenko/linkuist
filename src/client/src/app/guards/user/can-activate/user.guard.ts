@@ -4,7 +4,10 @@ import {Observable} from 'rxjs';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {map} from 'rxjs/operators';
 import {UserService} from '~app/services/user/user.service';
-import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
+// import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
+import {AppState} from '~app/store';
+import {Store} from '@ng-estate/store';
+import {AppActions} from '~app/store/app.actions';
 
 // Can activate only if profile exist
 @Injectable({
@@ -14,8 +17,9 @@ export class UserCanActivateGuard implements CanActivate {
   public constructor(
     private readonly authenticationService: AuthenticationService,
     private readonly userService: UserService,
-    private readonly resolvedUserService: ResolvedUserService,
+    // private readonly resolvedUserService: ResolvedUserService,
     private readonly router: Router,
+    private readonly store: Store<AppState>,
   ) {}
 
   public canActivate(
@@ -26,7 +30,8 @@ export class UserCanActivateGuard implements CanActivate {
     console.log('CAN ACTIVATE');
 
     if (data?.username === username) {
-      this.resolvedUserService.user.id = data.userId;
+      // this.resolvedUserService.user.id = data.userId;
+      this.store.dispatch(AppActions.setResolvedUserId, data.userId);
       return true;
     } // profile exist
 
@@ -36,7 +41,8 @@ export class UserCanActivateGuard implements CanActivate {
         if (data.userIdByUsername?._id) {
           // Preserve user id to make a subsequent API calls based on it
           // debugger;
-          this.resolvedUserService.user.id = data.userIdByUsername?._id;
+          // this.resolvedUserService.user.id = data.userIdByUsername?._id;
+          this.store.dispatch(AppActions.setResolvedUserId, data.userIdByUsername?._id);
           return true;
         } // profile exist
         // profile does not exist

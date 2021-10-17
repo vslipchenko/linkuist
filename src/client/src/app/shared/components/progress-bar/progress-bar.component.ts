@@ -21,10 +21,14 @@ import {Observable} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgressBarComponent {
+  // @Input() public set show(isVisible: boolean) {
+  //   console.log('SET ', isVisible);
+  //   this.progressBarService[isVisible ? 'show' : 'hide']();
+  // }
+
   public mode: ProgressBarMode = 'indeterminate';
   public color: ThemePalette = 'primary';
   public errorState = false;
-  public show = false;
 
   public constructor(
     private readonly router: Router,

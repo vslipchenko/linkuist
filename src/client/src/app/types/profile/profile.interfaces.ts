@@ -23,6 +23,10 @@ export interface ProfileByUserIdQueryResult {
   };
 }
 
+export interface ProfileTeasers {
+  [userId: string]: {avatarUrl: string; username: string};
+}
+
 // export interface ProfileByUsernameQueryResult {
 //   profileByUsername: {
 //     profile: {

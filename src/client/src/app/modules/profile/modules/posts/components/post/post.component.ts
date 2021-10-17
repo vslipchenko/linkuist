@@ -1,13 +1,18 @@
 import {ChangeDetectionStrategy, Component, Inject, Input, Output} from '@angular/core';
-import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
 import {DOCUMENT} from '@angular/common';
-import {PostService} from '~app/services/post/post.service';
-import {UntilDestroy} from '~app/utilities/until-destroy';
+import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {UserRole} from '~app/types/user/user.enums';
-import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {EventEmitter} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {POST_COMMENT_MAX_LENGTH} from '~app/constants/post';
+import {UIPost} from '~app/types/post/post.interfaces';
+import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
+import {PostsState} from '~app/modules/profile/modules/posts/store';
+import {Store} from '@ng-estate/store';
+import {Observable} from 'rxjs';
+import {ProfileSelectors} from '~app/modules/profile/store/profile.selectors';
+import {ResolvedUser} from '~app/types/user/user.interfaces';
+import {AppSelectors} from '~app/store/app.selectors';
 
 @UntilDestroy()
 @Component({
@@ -17,21 +22,32 @@ import {POST_COMMENT_MAX_LENGTH} from '~app/constants/post';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostComponent {
-  @Input() public readonly post: any;
-  @Input() public readonly profileTeasers: {[userId: string]: any} = {};
+  @Input() public readonly post!: UIPost;
 
   @Output() public readonly deletePost = new EventEmitter<void>();
   @Output() public readonly addComment = new EventEmitter<string>();
 
+  public readonly profileTeasers$: Observable<ProfileTeasers>;
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   public readonly addCommentControl = new FormControl('');
 
+  private resolvedUser!: ResolvedUser;
+
   public constructor(
     @Inject(DOCUMENT) private readonly document: Document,
-    private readonly resolvedUserService: ResolvedUserService,
-    private readonly postService: PostService,
-    private readonly progressBarService: ProgressBarService,
-  ) {}
+    // private readonly postService: PostService,
+    // private readonly progressBarService: ProgressBarService,
+    private readonly store: Store<PostsState>,
+  ) {
+    this.profileTeasers$ = this.store.select$(ProfileSelectors.getProfileTeasers);
+
+    this.store
+      .select$<ResolvedUser>(AppSelectors.getResolvedUser)
+      .pipe(untilDestroyed(this))
+      .subscribe((resolvedUser) => {
+        this.resolvedUser = resolvedUser;
+      });
+  }
 
   // ngOnInit(): void {}
 
@@ -52,11 +68,11 @@ export class PostComponent {
   }
 
   public isPostOwner(username: string): boolean {
-    return this.resolvedUserService.user.urlUsername === username;
+    return this.resolvedUser.urlUsername === username;
   }
 
   public get hasUserRole(): boolean {
-    return this.resolvedUserService.user.role === UserRole.USER;
+    return this.resolvedUser.role === UserRole.USER;
   }
 
   // ngOnChanges(changes: SimpleChanges): void {

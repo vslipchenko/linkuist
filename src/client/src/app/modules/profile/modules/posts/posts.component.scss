@@ -1,6 +1,6 @@
-@use 'variables' as var;
-@use 'shared';
-@use 'media';
+@use 'src/assets/scss/variables' as var;
+@use 'src/assets/scss/shared';
+@use 'src/assets/scss/media';
 
 //@mixin content-first-block-media {
 //  @include media.zero-small {

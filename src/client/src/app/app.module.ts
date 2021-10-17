@@ -18,6 +18,8 @@ import {ApolloQueryResult} from '@apollo/client/core';
 import {ClientPresetQueryResult} from '~app/types/shared/shared.interfaces';
 import {DateService} from '~app/shared/services/date/date.service';
 import {PresetService} from '~app/services/preset/preset.service';
+import {StoreModule} from '@ng-estate/store';
+import {AppStore} from '~app/store';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +27,7 @@ import {PresetService} from '~app/services/preset/preset.service';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    StoreModule.forRoot(AppStore),
     AppRoutingModule,
     GraphQLModule,
     MatSnackBarModule,

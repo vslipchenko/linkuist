@@ -1,16 +1,15 @@
 // import {MatDialogConfig} from '@angular/material/dialog/dialog-config';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '~app/shared/components/dialog/dialog.component';
-import {Observable} from 'rxjs';
 import {TemplateRef} from '@angular/core';
 // import {MatDialogConfig} from '@angular/material/dialog/dialog-config';
 
 // import {DialogTypes} from '~app/types/dialog/dialog.enums';
 
-export interface Dialog {
-  dialogRef: MatDialogRef<DialogComponent>;
-  dialogAfterClosed$: Observable<unknown>;
-}
+// export interface Dialog {
+//   dialogRef: MatDialogRef<DialogComponent>;
+//   dialogAfterClosed$: Observable<unknown>;
+// }
 
 // export interface DialogConfig extends MatDialogConfig {
 //   // type: DialogTypes;
@@ -20,6 +19,7 @@ export interface Dialog {
 //   // config?: MatDialogConfig;
 //   // [P in keyof MatDialogConfig]: MatDialogConfig[P];
 // }
+export type DialogRef = MatDialogRef<DialogComponent>;
 
 export interface DialogConfig {
   // dialogType: DialogTypes;

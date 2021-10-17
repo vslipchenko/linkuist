@@ -4,6 +4,16 @@
 //   metadata: LinkardMetadata;
 // }
 
+export interface Linkard {
+  createdAt: number;
+  link: string;
+  isPrivate: boolean;
+  isPaid: boolean;
+  note: string;
+  metadata: LinkardMetadata;
+  tags: Array<LinkardTag>;
+}
+
 export interface LinkardPreview {
   createdAt: number;
   note: string;
@@ -29,6 +39,10 @@ export interface LinkardCreatePayload {
   isPrivate: boolean;
   isPaid: boolean;
   tags: Array<LinkardTag>;
+}
+
+export interface LinkardCreateMutationResult {
+  createLinkard: Linkard;
 }
 
 export interface LinkardsByUserIdQueryResult {

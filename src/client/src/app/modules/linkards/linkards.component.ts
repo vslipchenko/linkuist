@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
+  // ChangeDetectorRef,
   Component,
   OnInit,
   TemplateRef,
@@ -20,20 +20,29 @@ import {ENTER} from '@angular/cdk/keycodes';
 import {LinkardPrice, LinkardPrivacy} from '~app/types/linkard/linkard.enums';
 import {LINKARD_TAG_LETTER_REGEXP} from '~app/constants/regexps';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
-import {LinkardService} from '~app/services/linkard/linkard.service';
-import {ActivatedRoute} from '@angular/router';
+// import {LinkardService} from '~app/services/linkard/linkard.service';
+// import {ActivatedRoute} from '@angular/router';
 // import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {UserRole} from '~app/types/user/user.enums';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
-import {
-  LinkardsByUserIdQueryResult,
-  // LinkardsByUsernameQueryResult,
-} from '~app/types/linkard/linkard.interfaces';
+// import {
+//   LinkardsByUserIdQueryResult,
+//   // LinkardsByUsernameQueryResult,
+// } from '~app/types/linkard/linkard.interfaces';
 // import {getId} from '~app/utilities/unique';
-import {ApolloQueryResult} from '@apollo/client/core/types';
+// import {ApolloQueryResult} from '@apollo/client/core/types';
 import {Chip} from '~app/shared/types/chips/chips.interfaces';
-import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
+// import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
+// import {ResolvedUser} from '~app/types/user/user.interfaces';
+import {DialogRef} from '~app/shared/types/dialog/dialog.interfaces';
+import {LinkardsState} from '~app/modules/linkards/store';
+import {Store} from '@ng-estate/store';
+import {LinkardsActions} from '~app/modules/linkards/store/linkards.actions';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
+import {AppSelectors} from '~app/store/app.selectors';
+import {Observable} from 'rxjs';
+import {LinkardsSelectors} from '~app/modules/linkards/store/linkards.selectors';
+import {Linkard} from '~app/types/linkard/linkard.interfaces';
 
 @UntilDestroy()
 @Component({
@@ -61,18 +70,29 @@ export class LinkardsComponent implements OnInit {
   //   // relativePaths: []
   // };
   public addBookmarkForm: FormGroup | undefined;
-  public linkards: Array<unknown> = []; // TODO type
+  public resolvedUser!: ResolvedUser;
+  // public linkards: Array<unknown> = []; // TODO type
+  public linkards$: Observable<Array<Linkard>>;
+  private addLinkardDialogRef: DialogRef | undefined;
 
   public constructor(
-    private readonly changeDetector: ChangeDetectorRef,
+    private readonly store: Store<LinkardsState>,
+    // private readonly changeDetector: ChangeDetectorRef,
     private readonly dialogService: DialogService,
-    private readonly linkardService: LinkardService,
+    // private readonly linkardService: LinkardService,
     private readonly formBuilder: FormBuilder,
-    private readonly route: ActivatedRoute,
-    private readonly authenticationService: AuthenticationService, // private readonly test: BrowserWindowRe // private test: WindowRef
-    private readonly resolvedUserService: ResolvedUserService,
+    // private readonly route: ActivatedRoute,
+    private readonly authenticationService: AuthenticationService, // private readonly test: BrowserWindowRe // private test: WindowRef // private readonly resolvedUserService: ResolvedUserService,
   ) {
     // this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
+    this.store
+      .select$<ResolvedUser>(AppSelectors.getResolvedUser)
+      .pipe(untilDestroyed(this))
+      .subscribe((resolvedUser) => {
+        this.resolvedUser = resolvedUser;
+      });
+
+    this.linkards$ = this.store.select$(LinkardsSelectors.getLinkards);
   }
 
   private static linkValidator(control: AbstractControl): null | ValidationErrors {
@@ -111,7 +131,7 @@ export class LinkardsComponent implements OnInit {
   }
 
   public openAddBookmarkDialog(): void {
-    this.dialogService.open({
+    this.addLinkardDialogRef = this.dialogService.open({
       panelClass: 'linkard-dialog',
       data: {
         title: 'Add linkard',
@@ -126,7 +146,7 @@ export class LinkardsComponent implements OnInit {
   public addBookmark(): void {
     this.addBookmarkForm?.markAllAsTouched();
     if (this.addBookmarkForm?.valid) {
-      this.dialogService.close();
+      this.addLinkardDialogRef!.close();
       console.log('Add linkard value ', this.addBookmarkForm.value);
       const tags = this.tagsField?.value.map((tag: any) => ({text: tag.text})); // Array<string>
       console.log('tags ', tags);
@@ -134,28 +154,40 @@ export class LinkardsComponent implements OnInit {
       //tags[1] = tags[1] ? LinkardPrice.PAID : LinkardPrice.FREE; // simplify first element in order to match [String!]! constraint
       // debugger;
       // return;
-      this.linkardService
-        .create({
-          // createdAt: getId(),
+      this.store
+        .dispatch$(LinkardsActions.createLinkard, {
           ...this.addBookmarkForm.value,
           tags,
         })
         .pipe(untilDestroyed(this))
         .subscribe();
+      // this.linkardService
+      //   .create({
+      //     // createdAt: getId(),
+      //     ...this.addBookmarkForm.value,
+      //     tags,
+      //   })
+      //   .pipe(untilDestroyed(this))
+      //   .subscribe();
     }
   }
 
   private loadLinkards(): void {
-    // if (this.isUser) {
-    this.linkardService
-      .getAllByUserId(this.resolvedUser.id)
+    // TODO: add possibility of lazy loading
+    this.store
+      .dispatch$(LinkardsActions.loadLinkards, {resolvedUserId: this.resolvedUser.id})
       .pipe(untilDestroyed(this))
-      .subscribe(({data}: ApolloQueryResult<LinkardsByUserIdQueryResult>) => {
-        this.linkards = data.linkardsByUserId;
-        this.changeDetector.detectChanges();
-      });
+      .subscribe();
 
-    return;
+    // this.linkardService
+    //   .getAllByUserId(this.resolvedUser.id)
+    //   .pipe(untilDestroyed(this))
+    //   .subscribe(({data}: ApolloQueryResult<LinkardsByUserIdQueryResult>) => {
+    //     this.linkards = data.linkardsByUserId;
+    //     // this.changeDetector.detectChanges();
+    //   });
+
+    // return;
     // }
 
     // this.linkardService
@@ -242,9 +274,9 @@ export class LinkardsComponent implements OnInit {
   //   return this.isUser;
   // }
 
-  public get resolvedUser(): ResolvedUser {
-    return this.resolvedUserService.user;
-  }
+  // public get resolvedUser(): ResolvedUser {
+  //   return this.resolvedUserService.user;
+  // }
 
   public get isViewer(): boolean {
     return this.resolvedUser.role === UserRole.VIEWER;

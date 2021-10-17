@@ -10,13 +10,16 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatDialogModule} from '@angular/material/dialog';
+import {StoreModule} from '@ng-estate/store';
+import {LinkardsStore} from '~app/modules/linkards/store';
+import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
   declarations: [LinkardsComponent],
   imports: [
     RouterModule.forChild([{path: '', component: LinkardsComponent}]),
     CommonModule,
+    StoreModule.forChild(LinkardsStore),
     SharedModule,
     MatIconModule,
     MatButtonModule,

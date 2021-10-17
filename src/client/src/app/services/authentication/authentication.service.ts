@@ -24,7 +24,7 @@ export class AuthenticationService {
   // accessToken
   private readonly token$ = new BehaviorSubject('');
   // isRefreshingAccessToken
-  private readonly isRefreshing$ = new BehaviorSubject(false);
+  // private readonly isRefreshing$ = new BehaviorSubject(false);
 
   public constructor(
     private readonly apollo: Apollo,
@@ -97,12 +97,12 @@ export class AuthenticationService {
   //   );
   // }
 
-  public set isRefreshingAccessToken(isRefreshing: boolean) {
-    this.isRefreshing$.next(isRefreshing);
-  }
-  public get isRefreshingAccessToken(): boolean {
-    return this.isRefreshing$.getValue();
-  }
+  // public set isRefreshingAccessToken(isRefreshing: boolean) {
+  //   this.isRefreshing$.next(isRefreshing);
+  // }
+  // public get isRefreshingAccessToken(): boolean {
+  //   return this.isRefreshing$.getValue();
+  // }
 
   // private get isRefreshingAccessToken$(): Observable<boolean> {
   //   return this.isRefreshing$.asObservable();

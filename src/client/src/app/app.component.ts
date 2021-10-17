@@ -4,6 +4,7 @@ import {MatIconRegistry} from '@angular/material/icon';
 import {ICONS, ICONS_FOLDER} from '~app/constants/assets';
 // import {Icon} from '~app/types/assets/assets.interfaces';
 import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
+import {storeLogger, StoreManager} from '@ng-estate/store';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +15,13 @@ export class AppComponent implements OnInit {
   public readonly NavigationMainActionType = NavigationMainActionType;
 
   public constructor(
+    storeManager: StoreManager,
     private readonly matIconRegistry: MatIconRegistry,
     private readonly domSanitizer: DomSanitizer, // private readonly translateService: TranslateService, // private readonly appTranslateService: AppTranslateService, // private readonly titleService: Title, // @Inject(DOCUMENT) private readonly document: Document,
-  ) {}
+  ) {
+    // console.log('APP');
+    storeLogger(storeManager).subscribe(console.debug);
+  }
 
   public ngOnInit(): void {
     // const selectedLanguage = this.initTranslation();

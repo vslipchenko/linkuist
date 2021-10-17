@@ -1,33 +1,29 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
-import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
+import {ChangeDetectionStrategy, Component, TemplateRef, ViewChild} from '@angular/core';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {NavigationEnd, Router} from '@angular/router';
-import {UserService} from '~app/services/user/user.service';
-// import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {NavigationMainActionType} from '~app/shared/types/navigation/navigation.enums';
 import {UserRole} from '~app/types/user/user.enums';
 import {pathsMatch} from '~app/utilities/url';
 import {DialogService} from '~app/shared/services/dialog/dialog.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
-// import {ProfileService} from '~app/services/profile/profile.service';
-import {ApolloQueryResult} from '@apollo/client/core/types';
 import {
   Profile,
   ProfileByUserIdQueryResult,
+  ProfileTeasers,
   ProfileUpdateMutationResult,
 } from '~app/types/profile/profile.interfaces';
-import {FetchResult} from '@apollo/client/core';
 import {finalize} from 'rxjs/operators';
-import {ResolvedUserService} from '~app/services/resolved-user/resolved-user.service';
-import {BehaviorSubject} from 'rxjs';
-import {ProfileService} from '~app/services/profile/profile.service';
+import {Observable} from 'rxjs';
+import {Store} from '@ng-estate/store';
+import {ProfileState} from '~app/modules/profile/store';
+import {ProfileSelectors} from '~app/modules/profile/store/profile.selectors';
+import {AppSelectors} from '~app/store/app.selectors';
+import {ProfileActions} from '~app/modules/profile/store/profile.actions';
+import {ResolvedUser} from '~app/types/user/user.interfaces';
+import {DialogRef} from '~app/shared/types/dialog/dialog.interfaces';
+import {ApolloQueryResult} from '@apollo/client/core/types';
+import {FetchResult} from '@apollo/client/core';
 
 @UntilDestroy()
 @Component({
@@ -43,42 +39,40 @@ export class ProfileComponent {
     | TemplateRef<unknown>
     | undefined;
 
-  // public resolvedUser: ResolvedUser = {
-  //   role: UserRole.VIEWER,
-  //   urlUsername: '',
-  //   // relativePaths: []
-  // };
-  // public profile: Profile = {
-  //   backgroundUrl: '',
-  //   avatarUrl: '',
-  //   name: '',
-  //   bio: '',
-  // };
   public profileSettingsForm = this.buildProfileSettingsForm();
+  private profileSettingsDialogRef: DialogRef | undefined;
+  private resolvedUser!: ResolvedUser;
 
   public constructor(
-    private readonly resolvedUserService: ResolvedUserService,
-    private readonly changeDetector: ChangeDetectorRef,
-    private readonly progressBarService: ProgressBarService,
     private readonly authenticationService: AuthenticationService,
-    private readonly userService: UserService,
     private readonly router: Router,
-    // private readonly route: ActivatedRoute,
     private readonly dialogService: DialogService,
     private readonly formBuilder: FormBuilder,
-    private readonly profileService: ProfileService,
+    private readonly store: Store<ProfileState>,
   ) {
-    // console.debug('PROFILE');
-    // this.resolvedUser = this.route.snapshot.data.user as ResolvedUser;
-    // this.resolvedUserService.user = this.route.snapshot.data.user as ResolvedUser;
-    // console.log('called', this.resolvedUser);
-    // this.userRoleService.userRole = UserRole.USER;
-    console.log(this.resolvedUserService.user);
+    this.store
+      .select$<ResolvedUser>(AppSelectors.getResolvedUser)
+      .pipe(untilDestroyed(this))
+      .subscribe((resolvedUser) => {
+        this.resolvedUser = resolvedUser;
+      });
+
     this.loadProfile();
 
-    this.profileService.userProfile$.pipe(untilDestroyed(this)).subscribe((profile) => {
-      this.profileSettingsForm = this.buildProfileSettingsForm(profile);
-    });
+    // this.store.dispatch(ProfileActions.setCurrentUserProfileTeaser, {
+    //   [this.resolvedUser.id]: {
+    //     username: this.resolvedUser.urlUsername,
+    //     avatarUrl: '',
+    //   },
+    // });
+
+    this.store
+      .select$<Profile>(ProfileSelectors.getProfile)
+      .pipe(untilDestroyed(this))
+      .subscribe((profile: Profile) => {
+        // debugger;
+        this.profileSettingsForm = this.buildProfileSettingsForm(profile);
+      });
 
     // console.debug('CONSTRUCTOR');
 
@@ -87,89 +81,12 @@ export class ProfileComponent {
     });
   }
 
-  // ngOnInit() {
-  //   console.debug('ONINIT');
-  // }
-
-  // public ngOnChanges() {
-  //   this.changeDetector.detectChanges();
-  // }
-
-  // define component to render
-  // public ngOnInit(): void {
-  // console.log('CALLED');
-  // this.changeDetector.detectChanges();
-  // console.log('NEW', this.route.snapshot, this.route);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const profile: ResolvedUser =
-  // this.progressBarService.show();
-  //
-  // const accessToken = this.authenticationService.accessToken;
-  // const refreshToken = this.authenticationService.refreshToken;
-  //
-  // const username = extractUsername(window.location.pathname);
-  //
-  // if (!username) {
-  //   // 404
-  //   void this.router.navigate(['**'], {skipLocationChange: true});
-  //   return;
-  // }
-  //
-  // if (refreshToken && accessToken) {
-  //   this.tryRenderAccount(username);
-  // } else {
-  //   this.tryRenderProfile(username);
-  // }
-  // }
-
-  // public editProfile(): void {
-  //   void this.router.navigate(['settings/profile']);
-  // }
-
-  // private tryRenderAccount(username: string): void {
-  //   const data = this.authenticationService.accessTokenData;
-  //
-  //   if (data?.username === username) {
-  //     this.progressBarService.hide();
-  //     this.componentToRender = UserComponentToRender.ACCOUNT;
-  //   } else {
-  //     this.tryRenderProfile(username);
-  //   }
-  // }
-  //
-  // private tryRenderProfile(username: string): void {
-  //   this.userService
-  //     .getIdByUsername(username)
-  //     .pipe(
-  //       first(),
-  //       finalize(() => this.progressBarService.hide()),
-  //     )
-  //     .subscribe(
-  //       ({data}) => {
-  //         if (!data.userByUsername?._id) {
-  //           void this.router.navigate(['**'], {skipLocationChange: true});
-  //         } else {
-  //           this.componentToRender = UserComponentToRender.PROFILE;
-  //         }
-  //       },
-  //       () => {
-  //         // can't fulfill any of requests
-  //         // TODO redirect to specific error page (service unavailable)
-  //         void this.router.navigate(['/']);
-  //       },
-  //     );
-  // }
-  //
-  // public get userComponentToRender(): typeof UserComponentToRender {
-  //   return UserComponentToRender;
-  // }
-
   public get isUser(): boolean {
-    return this.resolvedUserService.user.role === UserRole.USER;
+    return this.resolvedUser.role === UserRole.USER;
   }
 
-  public get profile$(): BehaviorSubject<Profile> {
-    return this.profileService.userProfile$;
+  public get profile$(): Observable<Profile> {
+    return this.store.select$(ProfileSelectors.getProfile);
   }
 
   public get navigationMainActionType(): NavigationMainActionType {
@@ -184,12 +101,7 @@ export class ProfileComponent {
   }
 
   public openProfileSettings(): void {
-    // debugger;
-    // this.profileSettingsForm = this.buildProfileSettingsForm(
-    //   this.profileService.userProfile$.value,
-    // );
-
-    const {dialogAfterClosed$} = this.dialogService.open({
+    this.profileSettingsDialogRef = this.dialogService.open({
       autoFocus: false,
       panelClass: 'profile-settings-dialog',
       data: {
@@ -197,41 +109,43 @@ export class ProfileComponent {
         form: this.formBuilder.group({}),
         contentTemplateRef: this.profileSettingsContent,
         actionsTemplateRef: this.profileSettingsActions,
-        // statusChanges$: this.addBookmarkForm?.statusChanges,
       },
     });
 
-    dialogAfterClosed$.subscribe(() => {
-      void this.router.navigate([`@${this.resolvedUserService.user.urlUsername}`]);
+    this.profileSettingsDialogRef.afterClosed().subscribe(() => {
+      void this.router.navigate([`@${this.resolvedUser.urlUsername}`]);
     });
   }
 
   public saveProfile(): void {
-    this.progressBarService.show();
-    this.userService
-      .updateProfile(this.profileSettingsForm.value)
+    // this.progressBarService.show();
+    this.store
+      .dispatch$<FetchResult<ProfileUpdateMutationResult>>(
+        ProfileActions.updateProfile,
+        this.profileSettingsForm.value,
+      )
       .pipe(
         untilDestroyed(this),
         finalize(() => {
-          this.dialogService.close();
-          this.progressBarService.hide();
+          console.log('finalize');
+          this.profileSettingsDialogRef!.close();
+          // this.progressBarService.hide();
         }),
       )
-      .subscribe(
-        ({data}: FetchResult<ProfileUpdateMutationResult>) => {
-          // Update profile property value
-          // this.profile = data!.updateProfile.profile;
-          this.profileService.userProfile$.next(data!.updateProfile.profile);
-          // Trigger user section rerender
-          // this.changeDetector.detectChanges();
-        },
-        () => {
-          // Show error snackbar
-        },
-      );
+      .subscribe(({data}: FetchResult<ProfileUpdateMutationResult>) => {
+        this.store.dispatch<ProfileTeasers>(ProfileActions.patchProfileTeasers, {
+          [this.resolvedUser.id]: {
+            // TODO: add possibility to change usernames as well
+            avatarUrl: data!.updateProfile.profile.avatarUrl,
+            username: this.resolvedUser.urlUsername,
+          },
+        });
+      });
   }
 
-  private buildProfileSettingsForm(profile = this.profileService.userProfile$.value): FormGroup {
+  private buildProfileSettingsForm(
+    profile = this.store.select<Profile>(ProfileSelectors.getProfile),
+  ): FormGroup {
     return this.formBuilder.group({
       backgroundUrl: [profile.backgroundUrl],
       avatarUrl: [profile.avatarUrl],
@@ -241,34 +155,23 @@ export class ProfileComponent {
   }
 
   private loadProfile(): void {
-    // const hasUserRole = this.resolvedUserService.user.role === UserRole.USER;
-
-    this.userService
-      .getProfileByUserId(this.resolvedUserService.user.id)
+    this.store
+      .dispatch$<ApolloQueryResult<ProfileByUserIdQueryResult>>(
+        ProfileActions.getProfileByUserId,
+        this.resolvedUser.id,
+      )
       .pipe(untilDestroyed(this))
       .subscribe(({data}: ApolloQueryResult<ProfileByUserIdQueryResult>) => {
-        // debugger;
-        const profile = data.profileByUserId.profile;
-        this.profileService.userProfile$.next(profile);
-        // debugger;
-
-        // this.changeDetector.detectChanges();
+        // Set current user profile teaser
+        this.store.dispatch<ProfileTeasers>(ProfileActions.patchProfileTeasers, {
+          [this.resolvedUser.id]: {
+            // TODO: add possibility to change usernames as well
+            avatarUrl: data.profileByUserId.profile.avatarUrl,
+            username: this.resolvedUser.urlUsername,
+          },
+        });
       });
   }
-
-  // private canProceedPageInnerNavigation(): boolean {
-  //   if (this.resolvedUser.role === UserRole.Guest) {
-  //     this.navigateToSignInPage();
-  //     return false;
-  //   }
-  //
-  //   if (this.resolvedUser.role === UserRole.Viewer) {
-  //     this.navigateToResolvedUserProfile();
-  //     return false;
-  //   }
-  //
-  //   return true;
-  // }
 
   private handlePageInnerNavigation(): void {
     // console.log(
@@ -298,12 +201,13 @@ export class ProfileComponent {
       }):
         // console.debug('pathsMatch', paths);
         // if (!this.canProceedPageInnerNavigation()) return;
-        if (this.resolvedUserService.user.role === UserRole.GUEST) {
+
+        if (this.resolvedUser.role === UserRole.GUEST) {
           this.navigateToSignInPage();
           return;
         }
 
-        if (this.resolvedUserService.user.role === UserRole.VIEWER) {
+        if (this.resolvedUser.role === UserRole.VIEWER) {
           this.navigateToResolvedUserProfile();
           return;
         }
@@ -314,7 +218,7 @@ export class ProfileComponent {
   }
 
   private navigateToResolvedUserProfile(): void {
-    void this.router.navigate([`@${this.resolvedUserService.user.urlUsername}`]);
+    void this.router.navigate([`@${this.resolvedUser.urlUsername}`]);
   }
 
   private navigateToSignInPage(): void {

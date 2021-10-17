@@ -7,7 +7,7 @@ import {combineLatest} from 'rxjs';
 import {AuthenticationService} from '~app/services/authentication/authentication.service';
 import {SnackbarService} from '~app/shared/services/snackbar/snackbar.service';
 import {ApolloError} from '@apollo/client/core';
-import {shapeGraphQLErrors} from '~app/utilities/graphql';
+import {extractGraphQLErrors} from '~app/utilities/graphql';
 import {ProgressBarService} from '~app/shared/services/progress-bar/progress-bar.service';
 import {Router} from '@angular/router';
 import {finalize} from 'rxjs/operators';
@@ -127,7 +127,7 @@ export class SignInComponent implements OnInit {
             }
           },
           ({graphQLErrors}: ApolloError) => {
-            const errors = shapeGraphQLErrors(graphQLErrors);
+            const errors = extractGraphQLErrors(graphQLErrors);
             // console.log('errors ', graphQLErrors, errors);
 
             errors.forEach((error) => {

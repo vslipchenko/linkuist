@@ -7,32 +7,24 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatButtonModule} from '@angular/material/button';
-import {PostsComponent} from './posts/posts.component';
 import {ReactiveFormsModule} from '@angular/forms';
 // import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {MatDialogModule} from '@angular/material/dialog';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {setupTranslate, translateLoaderFactory} from '~app/utilities/translate';
 import {HttpClient} from '@angular/common/http';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { PostComponent } from './post/post.component';
-import { AddPostComponent } from './add-post/add-post.component';
+import {StoreModule} from '@ng-estate/store';
+import {ProfileStore} from '~app/modules/profile/store';
+import {PostsModule} from '~app/modules/profile/modules/posts/posts.module';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [ProfileComponent, PostsComponent, PostComponent, AddPostComponent],
+  declarations: [ProfileComponent],
   imports: [
     RouterModule.forChild([{path: '', component: ProfileComponent}]),
     CommonModule,
-    SharedModule,
-    MatMenuModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    // MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
+    StoreModule.forChild(ProfileStore),
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
@@ -42,6 +34,15 @@ import { AddPostComponent } from './add-post/add-post.component';
       isolate: true,
     }),
     MatProgressSpinnerModule,
+    MatInputModule,
+    SharedModule,
+    MatMenuModule,
+    MatIconModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    PostsModule,
+    MatDialogModule,
   ],
 })
 export class ProfileModule {

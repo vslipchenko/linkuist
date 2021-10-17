@@ -3,8 +3,9 @@ import {Apollo} from 'apollo-angular';
 import {CREATE_LINKARD} from '~app/graphql/linkard/linkard.mutations';
 import {Observable} from 'rxjs';
 import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
-import {RecordId} from '~app/types/graphql/graphql.interfaces';
+// import {RecordId} from '~app/types/graphql/graphql.interfaces';
 import {
+  LinkardCreateMutationResult,
   LinkardCreatePayload,
   LinkardsByUserIdQueryResult,
 } from '~app/types/linkard/linkard.interfaces';
@@ -16,7 +17,7 @@ import {GET_LINKARDS_BY_USER_ID} from '~app/graphql/linkard/linkard.queries';
 export class LinkardService {
   public constructor(private readonly apollo: Apollo) {}
 
-  public create(input: LinkardCreatePayload): Observable<FetchResult<RecordId>> {
+  public create(input: LinkardCreatePayload): Observable<FetchResult<LinkardCreateMutationResult>> {
     return this.apollo.mutate({
       mutation: CREATE_LINKARD,
       variables: {input},
