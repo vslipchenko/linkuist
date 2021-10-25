@@ -8,7 +8,7 @@ import {
 import {linkardResolvers, linkardTypeDefinitions} from './schemas/linkard/linkard.schema';
 import {userTypeDefinitions, userResolvers} from './schemas/user/user.schema';
 import {postResolvers, postTypeDefinitions} from './schemas/post/post.schema';
-import {profileResolvers, profileTypeDefinitions} from './schemas/profile/profile.schema';
+// import {profileResolvers, profileTypeDefinitions} from './schemas/_profile/profile.schema';
 import {sharedResolvers, sharedTypeDefinitions} from './schemas/shared/shared.schema';
 import {
   postCommentResolvers,
@@ -37,7 +37,7 @@ export default makeExecutableSchema({
     ...postTypeDefinitions,
     ...postCommentTypeDefinitions,
     ...linkardTypeDefinitions,
-    ...profileTypeDefinitions,
+    // ...profileTypeDefinitions,
   ],
   resolvers: _merge(
     {},
@@ -48,7 +48,7 @@ export default makeExecutableSchema({
     ...postResolvers,
     ...postCommentResolvers,
     ...linkardResolvers,
-    ...profileResolvers,
+    // ...profileResolvers,
   ),
   // resolvers: {
   //   ...scalarResolvers,

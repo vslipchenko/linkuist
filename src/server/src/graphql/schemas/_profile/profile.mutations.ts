@@ -1,6 +1,6 @@
 // import {authenticationGuard} from '../../../utilities/guards';
-// import {IProfile} from '../../../types/profile/profile.interfaces';
-// import {Profile} from '../../../models/profile';
+// import {IProfile} from '../../../types/_profile/_profile.interfaces';
+// import {Profile} from '../../../models/_profile';
 // import {gql} from 'apollo-server-express';
 //
 // const updateProfile = async (

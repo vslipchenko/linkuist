@@ -162,7 +162,7 @@ export class ProfileComponent {
       )
       .pipe(untilDestroyed(this))
       .subscribe(({data}: ApolloQueryResult<ProfileByUserIdQueryResult>) => {
-        // Set current user profile teaser
+        // Set current user _profile teaser
         this.store.dispatch<ProfileTeasers>(ProfileActions.patchProfileTeasers, {
           [this.resolvedUser.id]: {
             // TODO: add possibility to change usernames as well
@@ -176,9 +176,9 @@ export class ProfileComponent {
   private handlePageInnerNavigation(): void {
     // console.log(
     //   pathsMatch({
-    //     // settings/profile
+    //     // settings/_profile
     //     paths: this.resolvedUser.relativePaths,
-    //     testAgainst: ['settings', 'profile'],
+    //     testAgainst: ['settings', '_profile'],
     //   }),
     //   this.resolvedUser.relativePaths,
     // );
@@ -195,7 +195,7 @@ export class ProfileComponent {
     // console.debug(paths, this.resolvedUser);
     switch (true) {
       case pathsMatch({
-        // settings/profile
+        // settings/_profile
         paths,
         testAgainst: ['settings', 'profile'],
       }):

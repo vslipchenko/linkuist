@@ -3,6 +3,7 @@ export interface IPost {
   userId: string;
   createdAt: number;
   text: string;
+  likes: number;
   postId: string; // Source post object id
   isRepost: boolean;
 }

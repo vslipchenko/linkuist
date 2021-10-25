@@ -4,10 +4,11 @@ import {
   postCommentMutationTypeDefinitions,
 } from './post-comment.mutations';
 import {postCommentInputs} from './post-comment.inputs';
+import {postCommentTypes} from './post-comment.types';
 
 export const postCommentTypeDefinitions = [
-  // postTypes,
-  // postInputs,
+  postCommentTypes,
+  // postCommentInputs,
   postCommentInputs,
   postCommentQueryTypeDefinitions,
   postCommentMutationTypeDefinitions,

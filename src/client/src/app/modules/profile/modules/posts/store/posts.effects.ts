@@ -14,11 +14,15 @@ import {DateService} from '~app/shared/services/date/date.service';
 import {TranslateService} from '@ngx-translate/core';
 import {getPostFullDate, getPostShortDate, getTimeElapsedAfterCreation$} from '~app/utilities/post';
 import {PostCommentService} from '~app/services/post-comment/post-comment.service';
-import {PostCommentCreatePayload} from '~app/types/post-comment/post-comment.interfaces';
+import {
+  PostCommentCreatePayload,
+  PostCommentsByPostIdQueryResult,
+} from '~app/types/post-comment/post-comment.interfaces';
 import {SortOrder} from '~app/types/shared/shared.enums';
-import {POST_FETCH_LIMIT} from '~app/constants/post';
+import {POST_COMMENT_FETCH_LIMIT, POST_FETCH_LIMIT} from '~app/constants/post';
 import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
 import {hasLessMillisecondsThanDay} from '~app/utilities/date';
+import {ProfileActions} from '~app/modules/profile/store/profile.actions';
 
 export const PostsEffects: Effects<PostsState> = {
   [PostsActions.createPost]: ({dispatch, payload, injector}: EffectOptions<PostsState, string>) => {
@@ -85,21 +89,68 @@ export const PostsEffects: Effects<PostsState> = {
       tap(),
     );
   },
+  [PostsActions.loadPostComments]: ({
+    payload,
+    dispatch,
+    injector,
+  }: EffectOptions<
+    PostsState,
+    {
+      postId: string;
+      skipProfileTeaserIds: Array<string>;
+      offset: number;
+      order?: SortOrder;
+      limit?: number;
+    }
+  >) => {
+    const postCommentService = injector.get(PostCommentService);
+
+    return postCommentService
+      .getByPostId(payload.postId, payload.skipProfileTeaserIds, {
+        order: payload.order ?? SortOrder.DESCENDING,
+        offset: payload.offset,
+        limit: payload.limit ?? POST_COMMENT_FETCH_LIMIT,
+      })
+      .pipe(
+        tap(({data}: ApolloQueryResult<PostCommentsByPostIdQueryResult>) => {
+          console.log(data);
+          const postComments = data.postCommentsByPostId.postComments;
+          const profileTeasers: ProfileTeasers = {};
+          // TODO update response model shape ??? object instead of array
+          data.postCommentsByPostId.userProfileTeasers.forEach((profileTeaser) => {
+            profileTeasers[profileTeaser._id] = {
+              username: profileTeaser.username,
+              avatarUrl: profileTeaser.profile.avatarUrl,
+            };
+          });
+          // const postComments = data.postCommentsByPostId.postComments;
+
+          dispatch(ProfileActions.patchProfileTeasers, profileTeasers); // profileTeasers type mismatch
+          dispatch(PostsActions.appendPostComments, {[payload.postId]: postComments});
+        }),
+      );
+  },
   [PostsActions.loadPosts]: ({
     dispatch,
     payload,
     injector,
   }: EffectOptions<
     PostsState,
-    {resolvedUserId: string; offset: number; order?: SortOrder; limit?: number}
+    {
+      resolvedUserId: string;
+      skipProfileTeaserIds: Array<string>;
+      offset: number;
+      order?: SortOrder;
+      limit?: number;
+    }
   >) => {
     const postService = injector.get(PostService);
 
     return postService
-      .getAllByUserId(payload.resolvedUserId, {
-        order: SortOrder.DESCENDING,
+      .getByUserId(payload.resolvedUserId, payload.skipProfileTeaserIds, {
+        order: payload.order ?? SortOrder.DESCENDING,
         offset: payload.offset,
-        limit: POST_FETCH_LIMIT,
+        limit: payload.limit ?? POST_FETCH_LIMIT,
       })
       .pipe(
         tap(({data}: ApolloQueryResult<PostsByUserIdQueryResult>) => {
@@ -111,7 +162,7 @@ export const PostsEffects: Effects<PostsState> = {
 
           data.postsByUserId.userProfileTeasers.forEach((teaser) => {
             profileTeasers[teaser._id] = {
-              // Where profile/teaser _id is equal to user id
+              // Where _profile/teaser _id is equal to user id
               avatarUrl: teaser.profile?.avatarUrl,
               username: teaser.username,
             };
@@ -149,7 +200,10 @@ export const PostsEffects: Effects<PostsState> = {
             return newPost;
           });
 
-          dispatch(PostsActions.appendPosts, posts);
+          dispatch(PostsActions.appendPosts, {
+            posts,
+            postTotalCount: data.postsByUserId.posts.total,
+          });
         }),
       );
   },

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, OnInit, Output} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {UserRole} from '~app/types/user/user.enums';
@@ -9,10 +9,13 @@ import {UIPost} from '~app/types/post/post.interfaces';
 import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
 import {PostsState} from '~app/modules/profile/modules/posts/store';
 import {Store} from '@ng-estate/store';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {ProfileSelectors} from '~app/modules/profile/store/profile.selectors';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {AppSelectors} from '~app/store/app.selectors';
+import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
+import {PostComment} from '~app/types/post-comment/post-comment.interfaces';
+import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
 
 @UntilDestroy()
 @Component({
@@ -21,17 +24,20 @@ import {AppSelectors} from '~app/store/app.selectors';
   styleUrls: ['./post.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostComponent {
+export class PostComponent implements OnInit {
   @Input() public readonly post!: UIPost;
 
   @Output() public readonly deletePost = new EventEmitter<void>();
   @Output() public readonly addComment = new EventEmitter<string>();
 
   public readonly profileTeasers$: Observable<ProfileTeasers>;
+  public postComments$: Observable<Array<PostComment>> = of();
+  public isLoadingPostComments$: Observable<boolean>;
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   public readonly addCommentControl = new FormControl('');
+  public showPostComments = false;
 
-  private resolvedUser!: ResolvedUser;
+  public resolvedUser!: ResolvedUser;
 
   public constructor(
     @Inject(DOCUMENT) private readonly document: Document,
@@ -40,6 +46,7 @@ export class PostComponent {
     private readonly store: Store<PostsState>,
   ) {
     this.profileTeasers$ = this.store.select$(ProfileSelectors.getProfileTeasers);
+    this.isLoadingPostComments$ = this.store.select$(PostsSelectors.getIsLoadingPostComments);
 
     this.store
       .select$<ResolvedUser>(AppSelectors.getResolvedUser)
@@ -49,7 +56,9 @@ export class PostComponent {
       });
   }
 
-  // ngOnInit(): void {}
+  public ngOnInit(): void {
+    this.postComments$ = this.store.select$(PostsSelectors.getPostCommentsByPostId, this.post._id);
+  }
 
   public scrollTop(): void {
     // this.window.scrollTo(0, 0);
@@ -65,6 +74,19 @@ export class PostComponent {
 
   public comment(): void {
     this.addComment.emit(this.addCommentControl.value);
+  }
+
+  public showComments(postId: string): void {
+    this.showPostComments = true;
+
+    this.store
+      .dispatch$(PostsActions.loadPostComments, {
+        postId,
+        skipProfileTeaserIds: Object.keys(this.store.select(ProfileSelectors.getProfileTeasers)),
+        offset: 0,
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe(console.log);
   }
 
   public isPostOwner(username: string): boolean {

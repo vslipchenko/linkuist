@@ -27,7 +27,7 @@ const createPostComment = async (
     pattern: {
       postId: RECORD_ID_REGEXP,
       commentId: RECORD_ID_REGEXP,
-      body: (value: unknown) => typeof value === 'string' && value.length <= 3000,
+      body: (value: unknown) => typeof value === 'string' && value.length < 3001,
     },
   });
 

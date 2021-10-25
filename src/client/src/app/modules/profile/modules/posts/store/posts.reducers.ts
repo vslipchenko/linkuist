@@ -2,18 +2,46 @@ import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actio
 import {ReducerResult, Reducers} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store/index';
 import {UIPost} from '~app/types/post/post.interfaces';
+import {PostComment} from '~app/types/post-comment/post-comment.interfaces';
 
 export const PostsReducers: Reducers<PostsState> = {
+  [PostsActions.loadPostComments]: (state) => ({
+    ...state,
+    isLoadingPostComments: true,
+  }),
+  [PostsActions.loadPosts]: (state) => ({
+    ...state,
+    isLoadingPosts: true,
+  }),
   [PostsActions.prependPost]: (state, newPost: UIPost): ReducerResult<PostsState> => ({
     ...state,
     posts: [newPost, ...state.posts],
+    postTotalCount: state.postTotalCount + 1,
   }),
   [PostsActions.removePost]: (state, _id: string): ReducerResult<PostsState> => ({
     ...state,
     posts: state.posts.filter((post) => post._id !== _id),
+    postTotalCount: state.postTotalCount - 1,
   }),
-  [PostsActions.appendPosts]: (state, posts: Array<UIPost>): ReducerResult<PostsState> => ({
+  [PostsActions.appendPosts]: (
+    state,
+    {posts, postTotalCount}: {posts: Array<UIPost>; postTotalCount: number},
+  ): ReducerResult<PostsState> => ({
     ...state,
     posts: [...state.posts, ...posts],
+    postTotalCount: postTotalCount,
+    isLoadingPosts: false,
+  }),
+  [PostsActions.appendPostComments]: (
+    state,
+    payload: {[postId: string]: Array<PostComment>},
+  ): ReducerResult<PostsState> => ({
+    ...state,
+    postComments: {
+      ...state.postComments,
+      // [payload._id]: payload
+      ...payload,
+    },
+    isLoadingPostComments: false,
   }),
 };

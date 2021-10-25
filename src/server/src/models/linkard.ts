@@ -4,7 +4,7 @@ import {ILinkard} from '../types/linkard/linkard.interfaces';
 
 // https://mongoosejs.com/docs/guide.html
 const linkardSchema = new mongoose.Schema({
-  userId: {type: mongoose.Schema.Types.ObjectId, required: true},
+  userId: {type: mongoose.Schema.Types.ObjectId, required: true, index: true},
   link: {type: String, required: true},
   note: {type: String},
   isPrivate: {type: Boolean, required: true},

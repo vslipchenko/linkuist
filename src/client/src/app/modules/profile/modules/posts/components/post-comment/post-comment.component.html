@@ -1,0 +1,26 @@
+<app-user-post-panel
+  extendsClass="post-comment-user-panel px-4 py-1 border-top border-bottom"
+  [avatarUrl]="avatarUrl"
+  [username]="username"
+  [creationDate]="creationDate"
+  [timeElapsedAfterCreation$]="timeElapsedAfterCreation$"
+  [resolvedUserUrlUsername]="resolvedUserUrlUsername"
+>
+  <ng-content></ng-content>
+</app-user-post-panel>
+<div class="px-4 py-1">
+  {{ body }}
+</div>
+<div class="border-top color-light-dark">
+  <button
+    mat-button
+    class="icon-button d-flex justify-content-center flex ml-auto"
+    (click)="(null)"
+    [color]="null ? 'warn' : null"
+  >
+    <!--    <div style="display: flex; align-items: center" class="mr-1">-->
+    <mat-icon svgIcon="heart" class="d-flex mr-h icon-sm"></mat-icon>
+    <span class="font-weight-bold">27k</span>
+    <!--    </div>-->
+  </button>
+</div>

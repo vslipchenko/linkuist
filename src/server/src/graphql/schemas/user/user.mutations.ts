@@ -8,7 +8,7 @@ import {checkDataValidity} from '../../../utilities/validators';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
 import {getUtcTimestamp} from '../../../utilities/date';
 import {authenticationGuard} from '../../../utilities/guards';
-// import {Profile} from '../../../models/profile';
+// import {Profile} from '../../../models/_profile';
 
 // TODO server side validation
 export const userMutationTypeDefinitions = gql`

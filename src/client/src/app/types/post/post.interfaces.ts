@@ -1,4 +1,5 @@
 import {Observable} from 'rxjs';
+import {UserProfileTeaser} from '~app/types/user/user.interfaces';
 
 export interface PostCreatePayload {
   text: string;
@@ -10,6 +11,7 @@ interface Post {
   createdAt: number;
   text: string;
   isRepost: boolean;
+  commentCount: number;
 }
 
 export interface UIPost extends Post {
@@ -37,7 +39,7 @@ export interface PostsByUserIdQueryResult {
       data: Array<Post>;
       total: number;
     };
-    userProfileTeasers: Array<{_id: string; username: string; profile: {avatarUrl: string}}>;
+    userProfileTeasers: Array<UserProfileTeaser>;
   };
 }
 
@@ -53,6 +55,6 @@ export interface PostsByUserIdQueryResult {
 //       }>;
 //       total: number;
 //     };
-//     userProfileTeasers: Array<{_id: string; username: string; profile: {avatarUrl: string}}>;
+//     userProfileTeasers: Array<{_id: string; username: string; _profile: {avatarUrl: string}}>;
 //   };
 // }

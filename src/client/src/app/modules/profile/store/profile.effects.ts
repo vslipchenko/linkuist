@@ -18,7 +18,7 @@ export const ProfileEffects: Effects<ProfileState> = {
     injector,
   }: EffectOptions<ProfileState, Profile>) => {
     const userService = injector.get(UserService);
-
+    // TODO: trigger current user profile teaser update as well
     return userService.updateProfile(payload).pipe(
       tap(({data}: FetchResult<ProfileUpdateMutationResult>) => {
         dispatch(ProfileActions.setUserProfile, data!.updateProfile.profile);

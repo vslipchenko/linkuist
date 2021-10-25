@@ -5,15 +5,24 @@ import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actio
 import {PostsReducers} from '~app/modules/profile/modules/posts/store/posts.reducers';
 import {PostsEffects} from '~app/modules/profile/modules/posts/store/posts.effects';
 import {UIPost} from '~app/types/post/post.interfaces';
+import {PostComment} from '~app/types/post-comment/post-comment.interfaces';
 
 export type PostsState = Immutable<{
   posts: Array<UIPost>;
-  profileTeasers: {[userId: string]: {username: string; avatarUrl: string}};
+  postTotalCount: number;
+  postComments: {[postId: string]: Array<PostComment>};
+  // profileTeasers: {[userId: string]: {username: string; avatarUrl: string}};
+  isLoadingPosts: boolean;
+  isLoadingPostComments: boolean;
 }>;
 
 const PostsInitialState: PostsState = {
   posts: [],
-  profileTeasers: {},
+  postComments: {},
+  postTotalCount: 0,
+  // profileTeasers: {},
+  isLoadingPosts: false,
+  isLoadingPostComments: false,
 };
 
 export const PostsStore: StoreConfig<PostsState> = {

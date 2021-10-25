@@ -1,46 +1,15 @@
 <div *ngIf="profileTeasers$ | async as profileTeasers" class="post">
-  <div class="user-panel d-flex align-items-center p-2 border-bottom">
-    <div class="user-block d-flex align-items-center">
-      <div class="user-image mr-2" style="width: 50px; height: 50px">
-        <a
-          [routerLink]="'/@' + profileTeasers[post.userId].username"
-          (click)="isPostOwner(profileTeasers[post.userId].username) && scrollTop()"
-        >
-          <img
-            *ngIf="profileTeasers[post.userId].avatarUrl"
-            [src]="profileTeasers[post.userId].avatarUrl"
-            class="w-100 h-100 rounded-circle"
-            alt=""
-          />
-          <div
-            *ngIf="!profileTeasers[post.userId].avatarUrl"
-            class="w-100 h-100 rounded-circle no-avatar"
-          ></div>
-        </a>
-      </div>
-      <div>
-        <div class="username font-weight-bold">
-          <a
-            [routerLink]="'/@' + profileTeasers[post.userId].username"
-            (click)="isPostOwner(profileTeasers[post.userId].username) && scrollTop()"
-          >
-            @{{ profileTeasers[post.userId].username }}
-          </a>
-        </div>
-        <div
-          class="timestamp color-light-dark font-size-regular"
-          [matTooltip]="post.date"
-          matTooltipPosition="right"
-        >
-          <!--          {{-->
-          <!--            post.timeElapsedAfterCreation-->
-          <!--              ? post.timeElapsedAfterCreation-->
-          <!--              : (post.timeElapsedAfterCreation$ | async)-->
-          <!--          }}-->
-          {{ post.timeElapsedAfterCreation$ | async }}
-        </div>
-      </div>
-    </div>
+  <!--  <div class="user-panel d-flex align-items-center p-2 border-bottom">-->
+  <!--  ngIf caused by race condition-->
+  <app-user-post-panel
+    *ngIf="profileTeasers[post.userId]"
+    extendsClass="post-user-panel p-2 border-bottom"
+    [avatarUrl]="profileTeasers[post.userId].avatarUrl"
+    [username]="profileTeasers[post.userId].username"
+    [creationDate]="post.date"
+    [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"
+    [resolvedUserUrlUsername]="resolvedUser.urlUsername"
+  >
     <button
       *ngIf="hasUserRole"
       [matMenuTriggerFor]="postSettings"
@@ -61,9 +30,72 @@
         Delete
       </button>
     </mat-menu>
-  </div>
+  </app-user-post-panel>
+  <!--    <div *ngIf="profileTeasers[post.userId]" class="user-block d-flex align-items-center">-->
+  <!--      <div class="user-image mr-2" style="width: 50px; height: 50px">-->
+  <!--        <a-->
+  <!--          [routerLink]="'/@' + profileTeasers[post.userId].username"-->
+  <!--          (click)="isPostOwner(profileTeasers[post.userId].username) && scrollTop()"-->
+  <!--        >-->
+  <!--          <img-->
+  <!--            *ngIf="profileTeasers[post.userId].avatarUrl"-->
+  <!--            [src]="profileTeasers[post.userId].avatarUrl"-->
+  <!--            class="w-100 h-100 rounded-circle"-->
+  <!--            alt=""-->
+  <!--          />-->
+  <!--          <div-->
+  <!--            *ngIf="!profileTeasers[post.userId].avatarUrl"-->
+  <!--            class="w-100 h-100 rounded-circle no-avatar"-->
+  <!--          ></div>-->
+  <!--        </a>-->
+  <!--      </div>-->
+  <!--      <div>-->
+  <!--        <div class="username font-weight-bold">-->
+  <!--          <a-->
+  <!--            [routerLink]="'/@' + profileTeasers[post.userId].username"-->
+  <!--            (click)="isPostOwner(profileTeasers[post.userId].username) && scrollTop()"-->
+  <!--          >-->
+  <!--            @{{ profileTeasers[post.userId].username }}-->
+  <!--          </a>-->
+  <!--        </div>-->
+  <!--        <div-->
+  <!--          class="timestamp color-light-dark font-size-regular"-->
+  <!--          [matTooltip]="post.date"-->
+  <!--          matTooltipPosition="right"-->
+  <!--        >-->
+  <!--          &lt;!&ndash;          {{&ndash;&gt;-->
+  <!--          &lt;!&ndash;            post.timeElapsedAfterCreation&ndash;&gt;-->
+  <!--          &lt;!&ndash;              ? post.timeElapsedAfterCreation&ndash;&gt;-->
+  <!--          &lt;!&ndash;              : (post.timeElapsedAfterCreation$ | async)&ndash;&gt;-->
+  <!--          &lt;!&ndash;          }}&ndash;&gt;-->
+  <!--          {{ post.timeElapsedAfterCreation$ | async }}-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <button-->
+  <!--      *ngIf="hasUserRole"-->
+  <!--      [matMenuTriggerFor]="postSettings"-->
+  <!--      mat-icon-button-->
+  <!--      color="primary"-->
+  <!--      class="ml-auto"-->
+  <!--      aria-label="Example icon button with a delete icon"-->
+  <!--    >-->
+  <!--      <mat-icon svgIcon="dots-horizontal"></mat-icon>-->
+  <!--    </button>-->
+  <!--    <mat-menu #postSettings>-->
+  <!--      &lt;!&ndash;      <button mat-menu-item>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        <mat-icon svgIcon="share-variant"></mat-icon>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        Share to&ndash;&gt;-->
+  <!--      &lt;!&ndash;      </button>&ndash;&gt;-->
+  <!--      <button mat-menu-item (click)="delete()">-->
+  <!--        <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>-->
+  <!--        Delete-->
+  <!--      </button>-->
+  <!--    </mat-menu>-->
+  <!--  </div>-->
   <div class="post-content px-2 py-3">{{ post.text }}</div>
   <div class="d-flex justify-content-around flex-wrap color-light-dark border-top">
+    <!--    TODO: permissions-->
     <button
       mat-button
       class="icon-button d-flex justify-content-center flex"
@@ -77,11 +109,17 @@
     </button>
     <button
       mat-button
-      class="icon-button d-flex justify-content-center flex"
+      class="icon-button d-flex justify-content-center align-items-center flex"
       (click)="commentInput.focus()"
     >
       <mat-icon svgIcon="comment" class="d-flex mr-h icon-sm"></mat-icon>
-      <span class="font-weight-bold">27k</span>
+      <span class="font-weight-bold">
+        <app-number-cutter
+          *ngIf="post.commentCount; else commentTemplate"
+          [value]="post.commentCount"
+        ></app-number-cutter>
+        <ng-template #commentTemplate>Comment</ng-template>
+      </span>
     </button>
     <button
       mat-button
@@ -94,18 +132,7 @@
     </button>
   </div>
   <div class="d-flex align-items-end border-top">
-    <!--    <div class="d-flex w-100" style="min-width: 0">-->
-    <!--      <span-->
-    <!--        #postInput-->
-    <!--        class="input w-100 p-2"-->
-    <!--        role="textbox"-->
-    <!--        contenteditable-->
-    <!--        data-placeholder="Write a comment..."-->
-    <!--        (input)="(null)"-->
-    <!--      >-->
-    <!--        &lt;!&ndash;    <span class="placeholder"></span>&ndash;&gt;-->
-    <!--      </span>-->
-    <!--    </div>-->
+    <!--    TODO: permissions-->
     <app-elastic-input
       #commentInput
       class="w-100 min-width-0"
@@ -125,4 +152,29 @@
       </button>
     </div>
   </div>
+  <!--  <ng-container *ngIf="showPostComments && postComments$ | async as postComments">-->
+  <app-post-comment
+    *ngFor="let postComment of [1]"
+    [avatarUrl]="profileTeasers['612d4a3fad31a907479d5251'].avatarUrl"
+    [username]="profileTeasers['612d4a3fad31a907479d5251'].username"
+    [creationDate]="'20 October'"
+    [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"
+    [resolvedUserUrlUsername]="resolvedUser.urlUsername"
+    [body]="'Test'"
+  ></app-post-comment>
+
+  <!--  </ng-container>-->
+  <div *ngIf="post.commentCount" class="border-top">
+    <button
+      mat-button
+      color="primary"
+      class="w-100"
+      (click)="showComments(post._id)"
+      [disabled]="isLoadingPostComments$ | async"
+    >
+      <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
+      Show comments
+    </button>
+  </div>
+  <!--  </div>-->
 </div>

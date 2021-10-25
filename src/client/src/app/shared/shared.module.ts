@@ -21,6 +21,8 @@ import {LinkardComponent} from './components/linkard/linkard.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {LengthCircleComponent} from './components/length-circle/length-circle.component';
 import {ElasticInputComponent} from './components/elastic-input/elastic-input.component';
+import {NumberCutterComponent} from './components/number-cutter/number-cutter.component';
+import {UserPanelStripeComponent} from './components/user-panel-stripe/user-panel-stripe.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import {ElasticInputComponent} from './components/elastic-input/elastic-input.co
     LinkardComponent,
     LengthCircleComponent,
     ElasticInputComponent,
+    NumberCutterComponent,
+    UserPanelStripeComponent,
   ],
   exports: [
     NavigationComponent,
@@ -42,6 +46,8 @@ import {ElasticInputComponent} from './components/elastic-input/elastic-input.co
     WrapIfDirective,
     LengthCircleComponent,
     ElasticInputComponent,
+    NumberCutterComponent,
+    UserPanelStripeComponent,
   ],
   imports: [
     CommonModule,

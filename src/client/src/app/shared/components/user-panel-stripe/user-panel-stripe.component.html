@@ -1,0 +1,41 @@
+<!--<div class="d-flex align-items-center p-2 border-bottom">-->
+<!--  ngIf caused by race condition-->
+<div class="d-flex align-items-center" [class]="extendsClass">
+  <div class="d-flex align-items-center">
+    <div class="user-panel-image-container mr-2">
+      <a [routerLink]="'/@' + username" (click)="isPostOwner(username) && scrollTop()">
+        <img
+          *ngIf="avatarUrl"
+          [src]="avatarUrl"
+          class="user-image w-100 h-100 rounded-circle"
+          alt=""
+        />
+        <div *ngIf="!avatarUrl" class="w-100 h-100 rounded-circle no-avatar"></div>
+      </a>
+    </div>
+    <div>
+      <div class="username font-weight-bold">
+        <a [routerLink]="'/@' + username" (click)="isPostOwner(username) && scrollTop()">
+          @{{ username }}
+        </a>
+      </div>
+      <div
+        class="timestamp color-light-dark font-size-regular"
+        [matTooltip]="creationDate"
+        matTooltipPosition="right"
+      >
+        <!--          {{-->
+        <!--            post.timeElapsedAfterCreation-->
+        <!--              ? post.timeElapsedAfterCreation-->
+        <!--              : (post.timeElapsedAfterCreation$ | async)-->
+        <!--          }}-->
+        {{ timeElapsedAfterCreation$ | async }}
+      </div>
+    </div>
+  </div>
+  <!--  <div>-->
+  <ng-content></ng-content>
+  <!--  </div>-->
+</div>
+
+<!--</div>-->

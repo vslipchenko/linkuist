@@ -25,13 +25,14 @@ export class PostService {
     });
   }
 
-  public getAllByUserId(
+  public getByUserId(
     userId: string,
+    skipProfileTeaserIds: Array<string>,
     parameters: RequestParameters,
   ): Observable<ApolloQueryResult<PostsByUserIdQueryResult>> {
     return this.apollo.query({
       query: GET_POSTS_BY_USER_ID,
-      variables: {userId, parameters},
+      variables: {userId, skipProfileTeaserIds: [], parameters},
     });
   }
 

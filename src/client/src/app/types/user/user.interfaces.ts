@@ -31,3 +31,9 @@ export interface ResolvedUser {
   urlUsername: string;
   //relativePaths: Array<string>; // urlUsername relative paths
 }
+
+export interface UserProfileTeaser {
+  _id: string;
+  username: string;
+  profile: {avatarUrl: string};
+}

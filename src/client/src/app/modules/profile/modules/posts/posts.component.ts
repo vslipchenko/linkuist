@@ -11,6 +11,7 @@ import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
 import {PostsState} from '~app/modules/profile/modules/posts/store';
+import {ProfileSelectors} from '~app/modules/profile/store/profile.selectors';
 // import {WINDOW} from '~app/tokens/window';
 // import {BehaviorSubject, of} from 'rxjs';
 
@@ -40,6 +41,9 @@ export class PostsComponent implements OnInit {
   // public readonly UserRole = UserRole;
   // public posts: Array<any> = [];
   public posts$: Observable<Array<UIPost>>;
+  public postCount$: Observable<number>;
+  public postTotalCount$: Observable<number>;
+  public isLoadingPosts$: Observable<boolean>;
   // public profileTeasers: {[userId: string]: {username: string; avatarUrl: string}} = {};
   private resolvedUser!: ResolvedUser;
 
@@ -55,6 +59,9 @@ export class PostsComponent implements OnInit {
       });
 
     this.posts$ = this.store.select$(PostsSelectors.getPosts);
+    this.postCount$ = this.store.select$(PostsSelectors.getPostCount);
+    this.postTotalCount$ = this.store.select$(PostsSelectors.getPostTotalCount);
+    this.isLoadingPosts$ = this.store.select$(PostsSelectors.getIsLoadingPosts);
   }
 
   public ngOnInit(): void {
@@ -130,26 +137,37 @@ export class PostsComponent implements OnInit {
     //   });
   }
 
+  public showMorePosts(): void {
+    const offset = this.store.select<number>(PostsSelectors.getPostCount);
+
+    this.loadPosts(offset);
+  }
+
   // private bindProfileChange(): void {
-  //   this.profileService.userProfile$.pipe(untilDestroyed(this)).subscribe((profile) => {
+  //   this.profileService.userProfile$.pipe(untilDestroyed(this)).subscribe((_profile) => {
   //     if (!this.profileTeasers[this.resolvedUserId]) return;
   //
   //     this.profileTeasers = {
   //       ...this.profileTeasers,
   //       [this.resolvedUserId]: {
   //         username: this.profileTeasers[this.resolvedUserId].username,
-  //         avatarUrl: profile.avatarUrl,
+  //         avatarUrl: _profile.avatarUrl,
   //       },
   //     };
   //   });
   // }
 
   private loadPosts(offset = 0): void {
-    // this.progressBarService.show();
+    // Profile teasers is empty at this point as current user profile is not fetched yet,
+    // use resoled user id as a prediction
+    let skipProfileTeaserIds = Object.keys(this.store.select(ProfileSelectors.getProfileTeasers));
+
+    if (!skipProfileTeaserIds.length) skipProfileTeaserIds = [this.resolvedUser.id];
 
     this.store
       .dispatch$(PostsActions.loadPosts, {
         resolvedUserId: this.resolvedUser.id,
+        skipProfileTeaserIds,
         offset,
       })
       .pipe(untilDestroyed(this))
@@ -170,8 +188,8 @@ export class PostsComponent implements OnInit {
     //
     //     posts.userProfileTeasers.forEach((teaser) => {
     //       this.profileTeasers[teaser._id] = {
-    //         // Where profile/teaser _id is equal to user id
-    //         avatarUrl: teaser.profile?.avatarUrl,
+    //         // Where _profile/teaser _id is equal to user id
+    //         avatarUrl: teaser._profile?.avatarUrl,
     //         username: teaser.username,
     //       };
     //     });

@@ -1,14 +1,18 @@
 import {gql} from 'apollo-server-express';
 
 export const postTypes = gql`
+  # Extended
   type Post {
     _id: ID!
-    userId: String!
+    userId: ID!
     text: String
     # postId: String
     isRepost: Boolean!
+    likes: Int!
     createdAt: Float!
+    commentCount: Int! # Review its usage relevance
   }
+
   # Consider rename to Post
   # type PostItem {
   #  userId: String!

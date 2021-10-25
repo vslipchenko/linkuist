@@ -1,5 +1,5 @@
 export const ProfileActions = {
-  // fetchUserProfile: 'Fetch user profile',
+  // fetchUserProfile: 'Fetch user _profile',
   setUserProfile: 'Set user profile',
   updateProfile: 'Update user profile',
   getProfileByUserId: 'Get user profile by user id',

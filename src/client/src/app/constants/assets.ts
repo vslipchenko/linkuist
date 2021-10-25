@@ -37,6 +37,7 @@ export const ICONS: Array<Icon> = [
   {name: 'paid', fileName: 'paid_black-24dp'},
   {name: 'currency-usd-circle', fileName: 'currency-usd-circle'},
   {name: 'eye', fileName: 'eye'},
+  {name: 'comment-eye', fileName: 'comment-eye'},
   {name: 'open-in-new', fileName: 'open-in-new'},
   {name: 'shopping', fileName: 'shopping'},
   {name: 'delete-forever', fileName: 'delete-forever'},

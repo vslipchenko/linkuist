@@ -29,7 +29,7 @@ export interface ProfileTeasers {
 
 // export interface ProfileByUsernameQueryResult {
 //   profileByUsername: {
-//     profile: {
+//     _profile: {
 //       backgroundUrl: string;
 //       avatarUrl: string;
 //       name: string;

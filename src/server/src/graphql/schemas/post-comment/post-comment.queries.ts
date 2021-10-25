@@ -1,15 +1,99 @@
 import {gql} from 'apollo-server-express';
+import {RequestParameters} from '../../../types/shared/shared.types';
+import {checkDataValidity} from '../../../utilities/validators';
+import {RECORD_ID_REGEXP} from '../../../constants/regexps';
+import {SortOrder} from '../../../types/shared/shared.enums';
+import {POST_COMMENT_FETCH_LIMIT} from '../../../constants/post';
+import mongoose from 'mongoose';
+import {PostComment} from '../../../models/post-comment';
+import {IPostComment} from '../../../types/post-comment/post-comment.interfaces';
+import {userProfileTeasersByUserIds} from '../user/user.queries';
 
 export const postCommentQueryTypeDefinitions = gql`
   extend type Query {
-    postsCommentByPostId(input: Void): Void
+    postCommentsByPostId(
+      postId: String!
+      skipProfileTeaserIds: [String]!
+      parameters: RequestParameters!
+    ): UserPostComments!
   }
 `;
 
-const postsCommentByPostId = (): void => {};
+const aggregatePostCommentData = async (
+  postId: string,
+  skipProfileTeaserIds: Array<string>,
+  parameters: RequestParameters,
+): Promise<unknown> => {
+  const uniqueUserIdsMap: {[userId: string]: number} = {};
+  const skipProfileTeaserIdsMap: {[userId: string]: number} = {};
+
+  skipProfileTeaserIds.forEach((userId) => (skipProfileTeaserIdsMap[userId] = 1));
+
+  const aggregationResult = await PostComment.aggregate([
+    {$match: {postId: new mongoose.Types.ObjectId(postId)}},
+    {
+      $facet: {
+        data: [
+          // parameters.limit ? {$limit: parameters.limit} : null,
+          parameters.order
+            ? {$sort: {createdAt: parameters.order === SortOrder.ASCENDING ? 1 : -1}}
+            : null,
+          parameters.offset ? {$skip: parameters.offset} : null,
+          {$limit: parameters.limit},
+        ].filter((stage) => stage), // Filter null
+      },
+    },
+  ]);
+
+  const postComments = aggregationResult[0].data as Array<IPostComment & {subcommentCount: number}>;
+
+  for (const comment of postComments) {
+    comment.subcommentCount = await PostComment.countDocuments({commentId: comment._id});
+
+    const userId = comment.userId.toString();
+
+    if (!uniqueUserIdsMap[userId] && !skipProfileTeaserIdsMap[userId]) {
+      // console.log('unique ', post.userId.toString(), uniqueUserIdsMap, skipProfileTeaserIds);
+      uniqueUserIdsMap[userId] = 1;
+    }
+  }
+
+  const uniqueUserIds = Object.keys(uniqueUserIdsMap);
+
+  return {
+    postComments,
+    userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
+  };
+};
+
+const postCommentsByPostId = (
+  _: unknown,
+  {
+    postId,
+    skipProfileTeaserIds,
+    parameters,
+  }: {postId: string; skipProfileTeaserIds: Array<string>; parameters: RequestParameters},
+): Promise<unknown> | null => {
+  const {isInvalidData} = checkDataValidity({
+    data: {postId, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
+    ignoreUndefinedValuePaths: ['order', 'offset'],
+    pattern: {
+      postId: RECORD_ID_REGEXP,
+      order: (value) => value === SortOrder.ASCENDING || value === SortOrder.DESCENDING,
+      offset: Number.isSafeInteger,
+      limit: (value) => Number.isInteger(value) && value > 0 && value <= POST_COMMENT_FETCH_LIMIT,
+    },
+  });
+
+  if (isInvalidData) {
+    return null;
+  }
+
+  return aggregatePostCommentData(postId, skipProfileTeaserIds, parameters);
+};
 
 export const postCommentQueryResolvers = {
   Query: {
-    postsCommentByPostId,
+    postCommentsByPostId,
   },
 };

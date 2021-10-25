@@ -5,8 +5,9 @@ import {IUser} from '../../../types/user/user.interfaces';
 import {checkDataValidity} from '../../../utilities/validators';
 import {IProfile} from '../../../types/profile/profile.interfaces';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
+import mongoose from 'mongoose';
 // import mongoose from 'mongoose';
-// import {Profile} from '../../../models/profile';
+// import {Profile} from '../../../models/_profile';
 
 export const userQueryTypeDefinitions = gql`
   extend type Query {
@@ -43,16 +44,16 @@ const profileByUserId = async (
   //   'profileByUserId',
   //   (await User.aggregate([
   //     {$match: {_id: mongoose.Types.ObjectId(userId)}},
-  //     // {$unwind: '$profile'},
+  //     // {$unwind: '$_profile'},
   //     {
   //       $replaceRoot: {
-  //         newRoot: '$profile',
+  //         newRoot: '$_profile',
   //       },
   //     },
   //   ])),
   // );
 
-  // console.log('profileByUserId', await User.findOne({_id: userId}, 'profile'));
+  // console.log('profileByUserId', await User.findOne({_id: userId}, '_profile'));
 
   const {isInvalidData} = checkDataValidity({data: userId, pattern: RECORD_ID_REGEXP});
   if (isInvalidData) return null;
@@ -67,11 +68,31 @@ const profileByUserId = async (
   return User.findById(userId, 'profile');
 };
 
+export const userProfileTeasersByUserIds = async (
+  userIds: Array<string>,
+): Promise<
+  Array<{
+    username: string;
+    profile: {avatarUrl: string};
+  }>
+> => {
+  return userIds.length
+    ? await User.find(
+        {
+          _id: {
+            $in: userIds.map((id) => new mongoose.Types.ObjectId(id)),
+          },
+        },
+        'username profile.avatarUrl',
+      )
+    : [];
+};
+
 // const profileByUsername = async (
 //   _: unknown,
 //   {username}: {username: IUser['username']},
 // ): Promise<MongooseDocument<IUser> | UserInputError | null> => {
-//   // console.log('profileByUsername', await User.findOne({username}, 'profile'));
+//   // console.log('profileByUsername', await User.findOne({username}, '_profile'));
 //
 //   const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});
 //   if (isInvalidData) return null;
@@ -81,9 +102,9 @@ const profileByUserId = async (
 //   // });
 //   //
 //   // if (!user) return new UserInputError('Invalid username');
-//   // console.log('profileByUsername', await User.findOne({username}, 'profile'));
+//   // console.log('profileByUsername', await User.findOne({username}, '_profile'));
 //
-//   return User.findOne({username}, 'profile');
+//   return User.findOne({username}, '_profile');
 // };
 
 // const profileTeaserByUserId = async (
