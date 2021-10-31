@@ -6,7 +6,7 @@ import {IPostComment} from '../types/post-comment/post-comment.interfaces';
 const postCommentSchema = new mongoose.Schema({
   userId: {type: mongoose.Schema.Types.ObjectId, required: true}, // Comment author id
   postId: {type: mongoose.Schema.Types.ObjectId, required: true, index: true}, // required ?? Original post id
-  commentId: {type: mongoose.Schema.Types.ObjectId}, // Parent comment id, null for root comment
+  commentId: {type: mongoose.Schema.Types.ObjectId, index: true}, // Parent comment id, null for root comment
   body: {type: String, required: true},
   likes: {type: Number, default: 0},
   createdAt: {type: Number, required: true},

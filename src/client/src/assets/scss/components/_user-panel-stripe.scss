@@ -1,0 +1,14 @@
+.user-panel-image-container .user-image {
+  object-fit: cover;
+}
+
+.post-user-panel .user-panel-image-container,
+.post-comment-user-panel .user-panel-image-container {
+  height: 50px;
+  width: 50px;
+}
+
+//.post-comment-user-panel .user-panel-image-container {
+//  height: 38px;
+//  width: 38px;
+//}

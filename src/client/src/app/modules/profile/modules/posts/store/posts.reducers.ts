@@ -25,22 +25,38 @@ export const PostsReducers: Reducers<PostsState> = {
   }),
   [PostsActions.appendPosts]: (
     state,
-    {posts, postTotalCount}: {posts: Array<UIPost>; postTotalCount: number},
+    {
+      posts,
+      postCommentTotalCount,
+      postTotalCount,
+    }: {
+      posts: Array<UIPost>;
+      postCommentTotalCount: {[postId: string]: number};
+      postTotalCount: number;
+    },
   ): ReducerResult<PostsState> => ({
     ...state,
     posts: [...state.posts, ...posts],
     postTotalCount: postTotalCount,
+    postCommentTotalCount: {
+      ...state.postCommentTotalCount,
+      ...postCommentTotalCount,
+    },
     isLoadingPosts: false,
   }),
   [PostsActions.appendPostComments]: (
     state,
-    payload: {[postId: string]: Array<PostComment>},
+    payload: {postId: string; postComments: Array<PostComment>; postCommentTotalCount: number},
   ): ReducerResult<PostsState> => ({
     ...state,
     postComments: {
       ...state.postComments,
       // [payload._id]: payload
-      ...payload,
+      [payload.postId]: [...(state.postComments[payload.postId] ?? []), ...payload.postComments],
+    },
+    postCommentTotalCount: {
+      ...state.postCommentTotalCount,
+      [payload.postId]: payload.postCommentTotalCount,
     },
     isLoadingPostComments: false,
   }),

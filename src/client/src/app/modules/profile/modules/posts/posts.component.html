@@ -2,7 +2,7 @@
 
 <div class="post-list mx-auto">
   <app-post
-    *ngFor="let post of posts$ | async; trackBy: postsTrackBy.bind(this)"
+    *ngFor="let post of posts$ | async; trackBy: postsTrackBy"
     [post]="post"
     (addComment)="handleAddPostComment({postId: post._id, body: $event})"
     (deletePost)="handlePostDelete(post._id)"

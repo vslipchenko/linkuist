@@ -13,9 +13,16 @@ import {AddPostComponent} from '~app/modules/profile/modules/posts/components/ad
 import {StoreManager} from '@ng-estate/store';
 import {PostsStore} from '~app/modules/profile/modules/posts/store';
 import {PostCommentComponent} from './components/post-comment/post-comment.component';
+import {AddCommentComponent} from './components/add-comment/add-comment.component';
 
 @NgModule({
-  declarations: [PostsComponent, PostComponent, AddPostComponent, PostCommentComponent],
+  declarations: [
+    PostsComponent,
+    PostComponent,
+    AddPostComponent,
+    PostCommentComponent,
+    AddCommentComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule,

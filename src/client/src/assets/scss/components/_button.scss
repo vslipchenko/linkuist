@@ -16,3 +16,7 @@
   line-height: unset;
   margin-left: -(var.$unit-2);
 }
+
+.ordinary-button:not(:hover, :focus) {
+  color: var.$color-light-dark !important;
+}

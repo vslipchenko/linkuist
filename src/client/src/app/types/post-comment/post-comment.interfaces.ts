@@ -3,7 +3,7 @@ import {UserProfileTeaser} from '~app/types/user/user.interfaces';
 export interface PostComment {
   _id: string;
   userId: string;
-  subcommentCount: number;
+  totalSubcomments: number;
   commentId: string;
   body: string;
   createdAt: number;
@@ -23,7 +23,10 @@ export interface PostCommentCreateMutationResult {
 
 export interface PostCommentsByPostIdQueryResult {
   postCommentsByPostId: {
-    postComments: Array<PostComment>;
+    postComments: {
+      data: Array<PostComment>;
+      total: number;
+    };
     userProfileTeasers: Array<UserProfileTeaser>;
   };
 }

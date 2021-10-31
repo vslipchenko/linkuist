@@ -8,12 +8,15 @@ export const GET_POST_COMMENTS_BY_POST_ID = gql`
       parameters: $parameters
     ) {
       postComments {
-        _id
-        userId
-        subcommentCount
-        body
-        likes
-        createdAt
+        data {
+          _id
+          userId
+          totalSubcomments
+          body
+          likes
+          createdAt
+        }
+        total
       }
       userProfileTeasers {
         _id

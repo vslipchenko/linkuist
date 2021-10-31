@@ -9,4 +9,9 @@ export const PostsGetters: Getters<PostsState> = {
   [PostsSelectors.getPostTotalCount]: (state) => state.postTotalCount,
   [PostsSelectors.getIsLoadingPosts]: (state) => state.isLoadingPosts,
   [PostsSelectors.getIsLoadingPostComments]: (state) => state.isLoadingPostComments,
+  [PostsSelectors.getPostCommentCount]: (state, postId: string) =>
+    state.postComments[postId]?.length ?? 0,
+  [PostsSelectors.getPostCommentTotalCount]: (state, postId: string) =>
+    state.postCommentTotalCount[postId],
+  // [PostsSelectors.getVisiblePostComments]: (state) => state.visiblePostComments,
 };

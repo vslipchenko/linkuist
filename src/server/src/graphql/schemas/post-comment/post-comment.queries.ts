@@ -30,7 +30,7 @@ const aggregatePostCommentData = async (
   skipProfileTeaserIds.forEach((userId) => (skipProfileTeaserIdsMap[userId] = 1));
 
   const aggregationResult = await PostComment.aggregate([
-    {$match: {postId: new mongoose.Types.ObjectId(postId)}},
+    {$match: {postId: new mongoose.Types.ObjectId(postId), commentId: {$exists: false}}},
     {
       $facet: {
         data: [
@@ -40,15 +40,18 @@ const aggregatePostCommentData = async (
             : null,
           parameters.offset ? {$skip: parameters.offset} : null,
           {$limit: parameters.limit},
-        ].filter((stage) => stage), // Filter null
+        ].filter((stage) => stage), // Filter null,
+        total: [{$count: 'total'}],
       },
     },
   ]);
 
-  const postComments = aggregationResult[0].data as Array<IPostComment & {subcommentCount: number}>;
+  //console.log('aggregationResult ', parameters, aggregationResult, new Date());
 
-  for (const comment of postComments) {
-    comment.subcommentCount = await PostComment.countDocuments({commentId: comment._id});
+  const data = aggregationResult[0].data as Array<IPostComment & {totalSubcomments: number}>;
+
+  for (const comment of data) {
+    comment.totalSubcomments = await PostComment.countDocuments({commentId: comment._id});
 
     const userId = comment.userId.toString();
 
@@ -61,7 +64,10 @@ const aggregatePostCommentData = async (
   const uniqueUserIds = Object.keys(uniqueUserIdsMap);
 
   return {
-    postComments,
+    postComments: {
+      data,
+      total: aggregationResult[0].total.length ? aggregationResult[0].total[0].total : 0,
+    },
     userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
   };
 };
@@ -85,9 +91,7 @@ const postCommentsByPostId = (
     },
   });
 
-  if (isInvalidData) {
-    return null;
-  }
+  if (isInvalidData) return null;
 
   return aggregatePostCommentData(postId, skipProfileTeaserIds, parameters);
 };

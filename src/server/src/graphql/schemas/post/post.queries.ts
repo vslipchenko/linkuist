@@ -38,6 +38,7 @@ const aggregatePostData = async (
   //   username: string;
   //   profile: {avatarUrl: string};
   // };
+  // totalPostComments: {[postId: string]: number},
   userProfileTeasers: any;
 }> => {
   const uniqueUserIdsMap: {[userId: string]: number} = {};
@@ -62,9 +63,11 @@ const aggregatePostData = async (
     },
   ]);
 
-  const data = aggregationResult[0].data as Array<IPost & {commentCount: number}>;
+  const data = aggregationResult[0].data as Array<IPost & {totalComments: number}>;
+  // const data = aggregationResult[0].data as Array<IPost>;
   // Associative array
   // const postCommentCount: Array<{postId: string; count: number}> = [];
+  // const totalPostComments: {[postId: string]: number} = {};
 
   for (const post of data) {
     // post.date = composePostDate(post.createdAt);
@@ -74,7 +77,15 @@ const aggregatePostData = async (
     //   count: await PostComment.countDocuments({postId: post._id}),
     // });
 
-    post.commentCount = await PostComment.countDocuments({postId: post._id});
+    // totalPostComments[post.postId] = await PostComment.countDocuments({
+    //   postId: post._id,
+    //   commentId: {$exists: false}, // do not count subcomments (replies)
+    // });
+
+    post.totalComments = await PostComment.countDocuments({
+      postId: post._id,
+      commentId: {$exists: false}, // do not count subcomments (replies)
+    });
     // post.userId is of type mongoose ObjectId;
     const userId = post.userId.toString();
 
@@ -113,6 +124,7 @@ const aggregatePostData = async (
       data,
       total: aggregationResult[0].total.length ? aggregationResult[0].total[0].total : 0,
     },
+    // totalPostComments,
     // postCommentCount,
     userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
   };

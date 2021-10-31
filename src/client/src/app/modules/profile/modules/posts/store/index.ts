@@ -11,6 +11,12 @@ export type PostsState = Immutable<{
   posts: Array<UIPost>;
   postTotalCount: number;
   postComments: {[postId: string]: Array<PostComment>};
+  postCommentTotalCount: {[postId: string]: number};
+  // visiblePostComments: {
+  //   [postId: string]: {
+  //     [commentId: string]: {[subcommentId: string]: boolean};
+  //   };
+  // };
   // profileTeasers: {[userId: string]: {username: string; avatarUrl: string}};
   isLoadingPosts: boolean;
   isLoadingPostComments: boolean;
@@ -20,6 +26,8 @@ const PostsInitialState: PostsState = {
   posts: [],
   postComments: {},
   postTotalCount: 0,
+  postCommentTotalCount: {},
+  // visiblePostComments: {},
   // profileTeasers: {},
   isLoadingPosts: false,
   isLoadingPostComments: false,

@@ -13,8 +13,11 @@ export type AppState = Immutable<{
 
 const AppInitialState: AppState = {
   resolvedUser: {
+    // Id of resolved user
     id: '',
+    // Parsed username from url
     urlUsername: '',
+    // Role of resolved user profile viewer
     role: UserRole.GUEST,
   },
 };

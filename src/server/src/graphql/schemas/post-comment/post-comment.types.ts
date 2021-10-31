@@ -9,16 +9,16 @@ export const postCommentTypes = gql`
     body: String!
     createdAt: Float!
     likes: Int!
-    subcommentCount: Int!
+    totalSubcomments: Int!
   }
 
-  # type PostComments {
-  #  data: [PostComment]!
-  #  total: Float
-  # }
+  type PostComments {
+    data: [PostComment]!
+    total: Float!
+  }
 
   type UserPostComments {
-    postComments: [PostComment]!
+    postComments: PostComments!
     userProfileTeasers: [UserProfileTeaser!]!
   }
 `;

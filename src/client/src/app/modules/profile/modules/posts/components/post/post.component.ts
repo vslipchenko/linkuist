@@ -31,10 +31,12 @@ export class PostComponent implements OnInit {
   @Output() public readonly addComment = new EventEmitter<string>();
 
   public readonly profileTeasers$: Observable<ProfileTeasers>;
-  public postComments$: Observable<Array<PostComment>> = of();
-  public isLoadingPostComments$: Observable<boolean>;
+  // public readonly visiblePostComments$: Observable<PostsState['visiblePostComments']>;
+  public readonly isLoadingPostComments$: Observable<boolean>;
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   public readonly addCommentControl = new FormControl('');
+  public postComments$: Observable<Array<PostComment>> = of();
+  public postCommentTotalCount$: Observable<number> = of();
   public showPostComments = false;
 
   public resolvedUser!: ResolvedUser;
@@ -46,6 +48,7 @@ export class PostComponent implements OnInit {
     private readonly store: Store<PostsState>,
   ) {
     this.profileTeasers$ = this.store.select$(ProfileSelectors.getProfileTeasers);
+    // this.visiblePostComments$ = this.store.select$(PostsSelectors.getVisiblePostComments);
     this.isLoadingPostComments$ = this.store.select$(PostsSelectors.getIsLoadingPostComments);
 
     this.store
@@ -58,6 +61,14 @@ export class PostComponent implements OnInit {
 
   public ngOnInit(): void {
     this.postComments$ = this.store.select$(PostsSelectors.getPostCommentsByPostId, this.post._id);
+    this.postCommentTotalCount$ = this.store.select$(
+      PostsSelectors.getPostCommentTotalCount,
+      this.post._id,
+    );
+  }
+
+  public postCommentsTrackBy(_: number, postComment: PostComment): string {
+    return postComment._id;
   }
 
   public scrollTop(): void {
@@ -72,26 +83,29 @@ export class PostComponent implements OnInit {
     this.deletePost.emit();
   }
 
-  public comment(): void {
-    this.addComment.emit(this.addCommentControl.value);
+  public comment(value: string): void {
+    this.addComment.emit(value);
   }
 
   public showComments(postId: string): void {
-    this.showPostComments = true;
+    if (!this.showPostComments) this.showPostComments = true;
+
+    // console.log(this.store.select(PostsSelectors.getPostCommentCount, postId) ?? 0);
+    // console.log(postId, this.store.select(PostsSelectors.getPostCommentCount));
 
     this.store
       .dispatch$(PostsActions.loadPostComments, {
         postId,
         skipProfileTeaserIds: Object.keys(this.store.select(ProfileSelectors.getProfileTeasers)),
-        offset: 0,
+        offset: this.store.select(PostsSelectors.getPostCommentCount, postId),
       })
       .pipe(untilDestroyed(this))
       .subscribe(console.log);
   }
 
-  public isPostOwner(username: string): boolean {
-    return this.resolvedUser.urlUsername === username;
-  }
+  // public isPostOwner(username: string): boolean {
+  //   return this.resolvedUser.urlUsername === username;
+  // }
 
   public get hasUserRole(): boolean {
     return this.resolvedUser.role === UserRole.USER;

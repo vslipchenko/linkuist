@@ -10,7 +10,7 @@ export const postTypes = gql`
     isRepost: Boolean!
     likes: Int!
     createdAt: Float!
-    commentCount: Int! # Review its usage relevance
+    totalComments: Int! # Review its usage relevance
   }
 
   # Consider rename to Post
@@ -24,7 +24,7 @@ export const postTypes = gql`
   type Posts {
     # data: [PostItem]!
     data: [Post]!
-    total: Float
+    total: Float!
   }
 
   type UserPosts {

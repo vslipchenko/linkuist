@@ -1,4 +1,5 @@
 @use 'variables' as var;
+@use 'media' as media;
 
 // Utility styles
 
@@ -13,6 +14,10 @@
 
 .min-width-0 {
   min-width: 0 !important;
+}
+
+.max-width-content {
+  max-width: max-content;
 }
 
 // flexbox
@@ -61,8 +66,26 @@
   margin-right: auto;
 }
 
+.my-1 {
+  margin-bottom: var.$unit;
+  margin-top: var.$unit;
+}
+
+.my-2 {
+  margin-bottom: var.$unit-2;
+  margin-top: var.$unit-2;
+}
+
+.mt-glue {
+  margin-top: -1px;
+}
+
 .mt-nh {
   margin-top: -#{var.$unit-half};
+}
+
+.mt-1 {
+  margin-top: var.$unit;
 }
 
 .mt-2 {
@@ -226,8 +249,28 @@
   border: 1px solid var.$color-light-darkest;
 }
 
-.border-light {
-  border: 1px solid var.$color-light;
+.border-accent-primary {
+  border-left-color: var.$color-primary !important;
+
+  @include media.zero-small {
+    border-left-width: 5px !important;
+  }
+
+  @include media.above-small {
+    border-left-width: 2.5px !important;
+  }
+}
+
+.border-accent-secondary {
+  border-left-color: var.$color-accent !important;
+
+  @include media.zero-small {
+    border-left-width: 5px !important;
+  }
+
+  @include media.above-small {
+    border-left-width: 2.5px !important;
+  }
 }
 
 .border-x {

@@ -107,14 +107,14 @@ export const PostsEffects: Effects<PostsState> = {
 
     return postCommentService
       .getByPostId(payload.postId, payload.skipProfileTeaserIds, {
-        order: payload.order ?? SortOrder.DESCENDING,
+        order: payload.order ?? SortOrder.ASCENDING,
         offset: payload.offset,
         limit: payload.limit ?? POST_COMMENT_FETCH_LIMIT,
       })
       .pipe(
         tap(({data}: ApolloQueryResult<PostCommentsByPostIdQueryResult>) => {
-          console.log(data);
-          const postComments = data.postCommentsByPostId.postComments;
+          // console.log('here ', data);
+          const postComments = data.postCommentsByPostId.postComments.data;
           const profileTeasers: ProfileTeasers = {};
           // TODO update response model shape ??? object instead of array
           data.postCommentsByPostId.userProfileTeasers.forEach((profileTeaser) => {
@@ -125,8 +125,13 @@ export const PostsEffects: Effects<PostsState> = {
           });
           // const postComments = data.postCommentsByPostId.postComments;
 
+          // TODO: consider merge into a single dispatch
           dispatch(ProfileActions.patchProfileTeasers, profileTeasers); // profileTeasers type mismatch
-          dispatch(PostsActions.appendPostComments, {[payload.postId]: postComments});
+          dispatch(PostsActions.appendPostComments, {
+            postId: payload.postId,
+            postComments,
+            postCommentTotalCount: data.postCommentsByPostId.postComments.total,
+          });
         }),
       );
   },
@@ -168,8 +173,12 @@ export const PostsEffects: Effects<PostsState> = {
             };
           });
 
+          const postCommentTotalCount: {[postId: string]: number} = {};
+
           const posts = data.postsByUserId.posts.data.map((post) => {
             const newPost: Partial<UIPost> = {...post};
+
+            postCommentTotalCount[post._id] = post.totalComments;
 
             // newPost.millisecondsElapsed = dateService.serverUtcTimestamp - post.createdAt;
             newPost.date = getPostFullDate(post.createdAt, translateService);
@@ -202,6 +211,7 @@ export const PostsEffects: Effects<PostsState> = {
 
           dispatch(PostsActions.appendPosts, {
             posts,
+            postCommentTotalCount,
             postTotalCount: data.postsByUserId.posts.total,
           });
         }),

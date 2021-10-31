@@ -32,7 +32,7 @@ export class PostService {
   ): Observable<ApolloQueryResult<PostsByUserIdQueryResult>> {
     return this.apollo.query({
       query: GET_POSTS_BY_USER_ID,
-      variables: {userId, skipProfileTeaserIds: [], parameters},
+      variables: {userId, skipProfileTeaserIds, parameters},
     });
   }
 

@@ -11,7 +11,7 @@ interface Post {
   createdAt: number;
   text: string;
   isRepost: boolean;
-  commentCount: number;
+  totalComments: number;
 }
 
 export interface UIPost extends Post {
