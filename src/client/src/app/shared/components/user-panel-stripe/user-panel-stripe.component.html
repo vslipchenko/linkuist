@@ -14,8 +14,15 @@
       </a>
     </div>
     <div>
-      <div class="username font-weight-bold">
-        <a [routerLink]="'/@' + username" (click)="isPostOwner && scrollTop()"> @{{ username }} </a>
+      <div class="username font-weight-bold d-flex align-items-center">
+        <a [routerLink]="'/@' + username" (click)="isPostOwner && scrollTop()">@{{ username }}</a>
+        <mat-icon
+          class="user-verificon icon-sm ml-h"
+          svgIcon="check-decagram"
+          color="primary"
+          matTooltip="Verified"
+          matTooltipPosition="below"
+        ></mat-icon>
       </div>
       <div
         class="timestamp color-light-dark font-size-regular"

@@ -25,6 +25,7 @@ export const GET_POST_COMMENTS_BY_POST_ID = gql`
         profile {
           avatarUrl
         }
+        isVerified
       }
     }
   }

@@ -26,5 +26,6 @@ export const userTypes = gql`
     _id: ID! # user id
     profile: Profile
     username: String
+    isVerified: Boolean
   }
 `;

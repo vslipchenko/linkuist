@@ -25,6 +25,7 @@ export const GET_POSTS_BY_USER_ID = gql`
         profile {
           avatarUrl
         }
+        isVerified
       }
     }
   }

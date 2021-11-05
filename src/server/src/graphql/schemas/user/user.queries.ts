@@ -83,7 +83,7 @@ export const userProfileTeasersByUserIds = async (
             $in: userIds.map((id) => new mongoose.Types.ObjectId(id)),
           },
         },
-        'username profile.avatarUrl',
+        'username profile.avatarUrl isVerified',
       )
     : [];
 };
