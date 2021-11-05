@@ -30,3 +30,10 @@
   </button>
   <!--  </div>-->
 </div>
+
+<app-add-comment
+  *ngIf="_showAddReply"
+  placeholder="Write a reply..."
+  [maxCharLength]="0"
+  (comment)="(null)"
+></app-add-comment>

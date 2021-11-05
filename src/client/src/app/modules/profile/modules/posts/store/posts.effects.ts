@@ -15,8 +15,10 @@ import {TranslateService} from '@ngx-translate/core';
 import {getPostFullDate, getPostShortDate, getTimeElapsedAfterCreation$} from '~app/utilities/post';
 import {PostCommentService} from '~app/services/post-comment/post-comment.service';
 import {
+  PostCommentCreateMutationResult,
   PostCommentCreatePayload,
   PostCommentsByPostIdQueryResult,
+  UIPostComment,
 } from '~app/types/post-comment/post-comment.interfaces';
 import {SortOrder} from '~app/types/shared/shared.enums';
 import {POST_COMMENT_FETCH_LIMIT, POST_FETCH_LIMIT} from '~app/constants/post';
@@ -27,8 +29,6 @@ import {ProfileActions} from '~app/modules/profile/store/profile.actions';
 export const PostsEffects: Effects<PostsState> = {
   [PostsActions.createPost]: ({dispatch, payload, injector}: EffectOptions<PostsState, string>) => {
     const postService = injector.get(PostService);
-    const dateService = injector.get(DateService);
-    const translateService = injector.get(TranslateService);
 
     return postService
       .create({
@@ -36,6 +36,9 @@ export const PostsEffects: Effects<PostsState> = {
       })
       .pipe(
         tap(({data}: FetchResult<PostCreateMutationResult>) => {
+          const dateService = injector.get(DateService);
+          const translateService = injector.get(TranslateService);
+
           const {createdAt} = data!.createPost;
           // Assume userId is equal to id of current user
           // this.profileTeasers[userId] = {
@@ -78,15 +81,41 @@ export const PostsEffects: Effects<PostsState> = {
       }),
     );
   },
+  [PostsActions.loadPostSubcomments]: ({
+    dispatch,
+    payload,
+    injector,
+  }: EffectOptions<PostsState, string>) => {},
   [PostsActions.createPostComment]: ({
     payload,
+    dispatch,
     injector,
   }: EffectOptions<PostsState, PostCommentCreatePayload>) => {
     const postCommentService = injector.get(PostCommentService);
 
     return postCommentService.create(payload).pipe(
       // TODO...
-      tap(),
+      tap(({data}: FetchResult<PostCommentCreateMutationResult>) => {
+        const translateService = injector.get(TranslateService);
+        const dateService = injector.get(DateService);
+
+        const {createdAt} = data!.createPostComment;
+
+        const postComment: Partial<UIPostComment> = {
+          ...data?.createPostComment,
+          date: getPostFullDate(createdAt, translateService),
+          timeElapsedAfterCreation$: getTimeElapsedAfterCreation$({
+            createdAt,
+            translateService,
+            dateService,
+          }),
+          isRecentlyAdded: true,
+        };
+
+        console.log('postComment ', postComment);
+
+        dispatch(PostsActions.prependPostComment, postComment);
+      }),
     );
   },
   [PostsActions.loadPostComments]: ({
@@ -114,8 +143,37 @@ export const PostsEffects: Effects<PostsState> = {
       .pipe(
         tap(({data}: ApolloQueryResult<PostCommentsByPostIdQueryResult>) => {
           // console.log('here ', data);
-          const postComments = data.postCommentsByPostId.postComments.data;
+          const translateService = injector.get(TranslateService);
+          const dateService = injector.get(DateService);
+
+          const serverUtcTimestamp = dateService.serverUtcTimestamp;
+
           const profileTeasers: ProfileTeasers = {};
+          const postComments = data.postCommentsByPostId.postComments.data.map((postComment) => {
+            const newPostComment: Partial<UIPostComment> = {...postComment};
+
+            newPostComment.date = getPostFullDate(postComment.createdAt, translateService);
+
+            if (hasLessMillisecondsThanDay(serverUtcTimestamp - postComment.createdAt)) {
+              newPostComment.timeElapsedAfterCreation$ = getTimeElapsedAfterCreation$({
+                createdAt: postComment.createdAt,
+                dateService,
+                translateService,
+              });
+
+              return newPostComment;
+            }
+
+            newPostComment.timeElapsedAfterCreation$ = of(
+              getPostShortDate({
+                createdAt: postComment.createdAt,
+                serverUtcTimestamp: serverUtcTimestamp,
+                translateService,
+              }),
+            );
+
+            return newPostComment;
+          });
           // TODO update response model shape ??? object instead of array
           data.postCommentsByPostId.userProfileTeasers.forEach((profileTeaser) => {
             profileTeasers[profileTeaser._id] = {

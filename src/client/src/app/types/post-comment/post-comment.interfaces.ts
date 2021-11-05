@@ -1,12 +1,20 @@
 import {UserProfileTeaser} from '~app/types/user/user.interfaces';
+import {Observable} from 'rxjs';
 
 export interface PostComment {
   _id: string;
   userId: string;
+  postId: string;
   totalSubcomments: number;
   commentId: string;
   body: string;
   createdAt: number;
+}
+
+export interface UIPostComment extends PostComment {
+  date: string;
+  timeElapsedAfterCreation$: Observable<string>;
+  isRecentlyAdded?: boolean;
 }
 
 export interface PostCommentCreatePayload {
@@ -16,9 +24,7 @@ export interface PostCommentCreatePayload {
 }
 
 export interface PostCommentCreateMutationResult {
-  createPostComment: {
-    _id: string;
-  };
+  createPostComment: PostComment;
 }
 
 export interface PostCommentsByPostIdQueryResult {

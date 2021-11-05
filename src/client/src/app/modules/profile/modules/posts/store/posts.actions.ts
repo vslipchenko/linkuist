@@ -1,11 +1,15 @@
 export const PostsActions = {
   createPost: 'Create post',
+  // prependSubcomment: 'Create post',
   prependPost: 'Prepend post',
+  removeCommentThread: 'Remove comments & subcomments for specific post',
+  prependPostComment: 'Prepend post comment',
   deletePost: 'Delete post',
   removePost: 'Remove post from posts',
   createPostComment: 'Create post comment',
   appendPostComments: 'Append post comments',
   loadPosts: 'Load bunch of posts based on user id',
   loadPostComments: 'Load post comments',
+  loadPostSubcomments: 'Load post subcomments',
   appendPosts: 'Append posts',
 } as const;

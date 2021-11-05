@@ -9,7 +9,7 @@ import {getUtcTimestamp} from '../../../utilities/date';
 
 export const postCommentMutationTypeDefinitions = gql`
   extend type Mutation {
-    createPostComment(input: CreatePostCommentMutationInput): RecordId
+    createPostComment(input: CreatePostCommentMutationInput): PostComment
   }
 `;
 

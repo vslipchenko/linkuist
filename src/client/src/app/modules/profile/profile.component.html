@@ -13,8 +13,8 @@
         <!--  TODO: handle image error-->
         <div
           *ngIf="profile.avatarUrl"
-          class="user-avatar"
-          [class.border]="!profile.backgroundUrl"
+          class="user-avatar border"
+          [class.border]="profile.backgroundUrl"
           [class.border-light]="profile.backgroundUrl"
           [style.background-image]="'url(' + profile.avatarUrl + ')'"
         ></div>

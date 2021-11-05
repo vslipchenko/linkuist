@@ -17,6 +17,7 @@ import {ElasticInputComponent} from '~app/shared/components/elastic-input/elasti
 })
 export class AddCommentComponent {
   @Input() public readonly maxCharLength!: number;
+  @Input() public readonly placeholder!: string;
 
   @Output() public readonly comment = new EventEmitter<string>();
 
@@ -28,5 +29,11 @@ export class AddCommentComponent {
   public focusElasticInput(): void {
     // console.log(this.elasticInputComponent.);
     this.elasticInputComponent.focus();
+  }
+
+  public addComment(): void {
+    this.comment.emit(this.addCommentControl.value);
+    // Reset
+    this.addCommentControl.setValue('');
   }
 }

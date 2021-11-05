@@ -93,6 +93,7 @@
     <!--    </div>-->
     <app-add-comment
       #addComment
+      placeholder="Write a comment..."
       [maxCharLength]="POST_COMMENT_MAX_LENGTH"
       (comment)="comment($event)"
     ></app-add-comment>
@@ -112,24 +113,34 @@
       "
     >
       <!--      <ng-container *ngIf="profileTeasers[post.userId]">-->
-      <div class="post-item border-accent-primary" [class.mt-glue]="!isFirst">
+      <div
+        class="post-item border-accent-primary"
+        [class.mt-glue]="!isFirst"
+        [class.border-dashed]="postComment.isRecentlyAdded"
+      >
         <!--        {{ isFirst }}-->
         <app-post-comment
+          #postCommentComponent
           [avatarUrl]="profileTeasers[post.userId].avatarUrl"
           [username]="profileTeasers[post.userId].username"
-          [creationDate]="'20 October'"
-          [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"
+          [creationDate]="postComment.date"
+          [timeElapsedAfterCreation$]="postComment.timeElapsedAfterCreation$"
           [resolvedUserUrlUsername]="resolvedUser.urlUsername"
           [body]="postComment.body"
         >
-          <button mat-button color="accent" class="w-100 max-width-content ordinary-button">
+          <button
+            mat-button
+            color="accent"
+            class="w-100 max-width-content ordinary-button"
+            (click)="postCommentComponent.showAddReply()"
+          >
             <mat-icon svgIcon="reply" class="mr-h"></mat-icon>
-            Reply
-            <!--            <app-number-cutter-->
-            <!--              *ngIf="postComment.totalSubcomments; else replyTemplate"-->
-            <!--              [value]="postComment.totalSubcomments"-->
-            <!--            ></app-number-cutter>-->
-            <!--            <ng-template #replyTemplate>Reply</ng-template>-->
+            <!--            Reply-->
+            <app-number-cutter
+              *ngIf="postComment.totalSubcomments; else replyTemplate"
+              [value]="postComment.totalSubcomments"
+            ></app-number-cutter>
+            <ng-template #replyTemplate>Reply</ng-template>
           </button>
         </app-post-comment>
       </div>
@@ -149,7 +160,7 @@
           mat-button
           color="accent"
           class="w-100"
-          (click)="showComments(post._id)"
+          (click)="showSubcomments(post._id)"
           [disabled]="isLoadingPostComments$ | async"
         >
           <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
@@ -164,18 +175,33 @@
 
   <!--  </ng-container>-->
   <div
-    *ngIf="(postComments$ | async)?.length < (postCommentTotalCount$ | async)"
-    class="post-item mt-1"
+    *ngIf="
+      (postComments$ | async)?.length ||
+      (postComments$ | async)?.length < (postCommentTotalCount$ | async)
+    "
+    class="post-item mt-1 d-flex"
   >
     <button
+      *ngIf="(postComments$ | async)?.length < (postCommentTotalCount$ | async)"
       mat-button
       color="primary"
-      class="w-100"
+      class="w-100 rounded-0"
       (click)="showComments(post._id)"
       [disabled]="isLoadingPostComments$ | async"
     >
       <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
       Show comments
+    </button>
+    <button
+      *ngIf="(postComments$ | async)?.length"
+      mat-button
+      [class.border-left]="(postComments$ | async)?.length < (postCommentTotalCount$ | async)"
+      class="w-100 color-light-dark rounded-0"
+      (click)="hideCommentThread(post._id)"
+      [disabled]="isLoadingPostComments$ | async"
+    >
+      <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
+      Hide all comments
     </button>
   </div>
   <!--  </div>-->

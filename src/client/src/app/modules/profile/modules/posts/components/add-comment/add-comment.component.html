@@ -2,7 +2,7 @@
   <!--    TODO: permissions-->
   <app-elastic-input
     class="w-100 min-width-0"
-    placeholder="Write a comment..."
+    [placeholder]="placeholder"
     [maxCharacterLength]="maxCharLength"
     [formControl]="addCommentControl"
   ></app-elastic-input>
@@ -12,7 +12,7 @@
       color="primary"
       matTooltip="Add comment"
       matTooltipPosition="right"
-      (click)="comment.emit(addCommentControl.value)"
+      (click)="addComment()"
     >
       <mat-icon svgIcon="comment-plus"></mat-icon>
     </button>

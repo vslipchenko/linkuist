@@ -3,7 +3,7 @@
 <div class="d-flex align-items-center" [class]="extendsClass">
   <div class="d-flex align-items-center">
     <div class="user-panel-image-container mr-2">
-      <a [routerLink]="'/@' + username" (click)="isPostOwner(username) && scrollTop()">
+      <a [routerLink]="'/@' + username" (click)="isPostOwner && scrollTop()">
         <img
           *ngIf="avatarUrl"
           [src]="avatarUrl"
@@ -15,9 +15,7 @@
     </div>
     <div>
       <div class="username font-weight-bold">
-        <a [routerLink]="'/@' + username" (click)="isPostOwner(username) && scrollTop()">
-          @{{ username }}
-        </a>
+        <a [routerLink]="'/@' + username" (click)="isPostOwner && scrollTop()"> @{{ username }} </a>
       </div>
       <div
         class="timestamp color-light-dark font-size-regular"

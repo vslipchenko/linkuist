@@ -5,12 +5,12 @@ import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actio
 import {PostsReducers} from '~app/modules/profile/modules/posts/store/posts.reducers';
 import {PostsEffects} from '~app/modules/profile/modules/posts/store/posts.effects';
 import {UIPost} from '~app/types/post/post.interfaces';
-import {PostComment} from '~app/types/post-comment/post-comment.interfaces';
+import {UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
 
 export type PostsState = Immutable<{
   posts: Array<UIPost>;
   postTotalCount: number;
-  postComments: {[postId: string]: Array<PostComment>};
+  postComments: {[postId: string]: Array<UIPostComment>};
   postCommentTotalCount: {[postId: string]: number};
   // visiblePostComments: {
   //   [postId: string]: {

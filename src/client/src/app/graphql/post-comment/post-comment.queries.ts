@@ -11,6 +11,7 @@ export const GET_POST_COMMENTS_BY_POST_ID = gql`
         data {
           _id
           userId
+          postId
           totalSubcomments
           body
           likes

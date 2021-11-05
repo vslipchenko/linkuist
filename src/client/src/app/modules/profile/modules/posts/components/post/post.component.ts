@@ -14,7 +14,7 @@ import {ProfileSelectors} from '~app/modules/profile/store/profile.selectors';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {AppSelectors} from '~app/store/app.selectors';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
-import {PostComment} from '~app/types/post-comment/post-comment.interfaces';
+import {PostComment, UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
 
 @UntilDestroy()
@@ -35,7 +35,7 @@ export class PostComponent implements OnInit {
   public readonly isLoadingPostComments$: Observable<boolean>;
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   public readonly addCommentControl = new FormControl('');
-  public postComments$: Observable<Array<PostComment>> = of();
+  public postComments$: Observable<Array<UIPostComment>> = of();
   public postCommentTotalCount$: Observable<number> = of();
   public showPostComments = false;
 
@@ -84,6 +84,8 @@ export class PostComponent implements OnInit {
   }
 
   public comment(value: string): void {
+    if (!this.showPostComments) this.showPostComments = true;
+
     this.addComment.emit(value);
   }
 
@@ -102,6 +104,13 @@ export class PostComponent implements OnInit {
       .pipe(untilDestroyed(this))
       .subscribe(console.log);
   }
+
+  public hideCommentThread(postId: string): void {
+    this.store.dispatch(PostsActions.removeCommentThread, postId);
+    this.showPostComments = false;
+  }
+
+  public showSubcomments(postId: string): void {}
 
   // public isPostOwner(username: string): boolean {
   //   return this.resolvedUser.urlUsername === username;

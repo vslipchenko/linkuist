@@ -10,7 +10,7 @@ export const postTypes = gql`
     isRepost: Boolean!
     likes: Int!
     createdAt: Float!
-    totalComments: Int! # Review its usage relevance
+    totalComments: Int! # DOES NOT EXIST FOR POST CREATE BUT IS USED THERE
   }
 
   # Consider rename to Post

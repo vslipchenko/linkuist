@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
     bio: {type: String},
   } as MongooseSchema<IUser['profile']>,
   createdAt: {type: Number, required: true},
+  isVerified: {type: Boolean},
 } as MongooseSchema<IUser>);
 
 export const User = mongoose.model<MongooseDocument<IUser>>('User', userSchema, 'users');

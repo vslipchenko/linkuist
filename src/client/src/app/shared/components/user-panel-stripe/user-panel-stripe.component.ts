@@ -24,7 +24,7 @@ export class UserPanelStripeComponent {
     });
   }
 
-  public isPostOwner(username: string): boolean {
-    return this.resolvedUserUrlUsername === username;
+  public get isPostOwner(): boolean {
+    return this.resolvedUserUrlUsername === this.username;
   }
 }

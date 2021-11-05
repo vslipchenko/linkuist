@@ -2,7 +2,7 @@ import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actio
 import {ReducerResult, Reducers} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store/index';
 import {UIPost} from '~app/types/post/post.interfaces';
-import {PostComment} from '~app/types/post-comment/post-comment.interfaces';
+import {UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
 
 export const PostsReducers: Reducers<PostsState> = {
   [PostsActions.loadPostComments]: (state) => ({
@@ -44,9 +44,23 @@ export const PostsReducers: Reducers<PostsState> = {
     },
     isLoadingPosts: false,
   }),
+  [PostsActions.prependPostComment]: (
+    state,
+    payload: UIPostComment,
+  ): ReducerResult<PostsState> => ({
+    ...state,
+    postComments: {
+      ...state.postComments,
+      [payload.postId]: [payload, ...(state.postComments[payload.postId] ?? [])],
+    },
+    postCommentTotalCount: {
+      ...state.postCommentTotalCount,
+      [payload.postId]: state.postCommentTotalCount[payload.postId] + 1,
+    },
+  }),
   [PostsActions.appendPostComments]: (
     state,
-    payload: {postId: string; postComments: Array<PostComment>; postCommentTotalCount: number},
+    payload: {postId: string; postComments: Array<UIPostComment>; postCommentTotalCount: number},
   ): ReducerResult<PostsState> => ({
     ...state,
     postComments: {
@@ -59,5 +73,13 @@ export const PostsReducers: Reducers<PostsState> = {
       [payload.postId]: payload.postCommentTotalCount,
     },
     isLoadingPostComments: false,
+  }),
+  [PostsActions.removeCommentThread]: (state, postId: string) => ({
+    ...state,
+    postComments: {
+      ...state.postComments,
+      // [payload._id]: payload
+      [postId]: [],
+    },
   }),
 };
