@@ -13,7 +13,7 @@ export const userQueryTypeDefinitions = gql`
   extend type Query {
     userEmailByEmail(email: String!): UserEmail
     userIdByUsername(username: String!): RecordId
-    profileByUserId(userId: String!): UserProfile
+    profileByUserId(userId: String!): UserProfileTeaser # UserProfile
     # profileByUsername(username: String!): UserProfile # Consider to simplify to just Profile
     # profileTeaserByUserId(userId: String!): UserProfileTeaser # Consider to simplify to just ProfileTeaser
     # profileTeaserByUsername(userId: String!): UserProfileTeaser
@@ -65,7 +65,7 @@ const profileByUserId = async (
   // if (!user) return new UserInputError('Invalid username');
   // console.log('here ', await User.findOne({userId}, 'backgroundUrl avatarUrl name bio'));
 
-  return User.findById(userId, 'profile');
+  return User.findById(userId, 'profile isVerified');
 };
 
 export const userProfileTeasersByUserIds = async (

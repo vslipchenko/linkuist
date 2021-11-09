@@ -85,7 +85,22 @@ export const PostsEffects: Effects<PostsState> = {
     dispatch,
     payload,
     injector,
-  }: EffectOptions<PostsState, string>) => {},
+  }: EffectOptions<
+    PostsState,
+    {
+      commentId: string;
+      skipProfileTeaserIds: Array<string>;
+      offset: number;
+      order?: SortOrder;
+      limit?: number;
+    }
+  >) => {
+    const postCommentService = injector.get(PostCommentService);
+
+    // return postCommentService
+    //   .create(payload)
+    //   .pipe(tap(({data}: FetchResult<PostCommentCreateMutationResult>) => {}));
+  },
   [PostsActions.createPostComment]: ({
     payload,
     dispatch,
@@ -179,6 +194,7 @@ export const PostsEffects: Effects<PostsState> = {
             profileTeasers[profileTeaser._id] = {
               username: profileTeaser.username,
               avatarUrl: profileTeaser.profile.avatarUrl,
+              isVerified: profileTeaser.isVerified,
             };
           });
           // const postComments = data.postCommentsByPostId.postComments;
@@ -228,6 +244,7 @@ export const PostsEffects: Effects<PostsState> = {
               // Where _profile/teaser _id is equal to user id
               avatarUrl: teaser.profile?.avatarUrl,
               username: teaser.username,
+              isVerified: teaser.isVerified,
             };
           });
 

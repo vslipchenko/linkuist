@@ -25,6 +25,7 @@ export const GET_PROFILE_BY_USER_ID = gql`
         name
         bio
       }
+      isVerified
     }
   }
 `;

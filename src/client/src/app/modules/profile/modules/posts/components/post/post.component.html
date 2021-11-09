@@ -7,6 +7,7 @@
       extendsClass="post-user-panel p-2 border-bottom"
       [avatarUrl]="profileTeasers[post.userId].avatarUrl"
       [username]="profileTeasers[post.userId].username"
+      [isVerifiedUser]="profileTeasers[post.userId].isVerified"
       [creationDate]="post.date"
       [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"
       [resolvedUserUrlUsername]="resolvedUser.urlUsername"
@@ -123,6 +124,7 @@
           #postCommentComponent
           [avatarUrl]="profileTeasers[post.userId].avatarUrl"
           [username]="profileTeasers[post.userId].username"
+          [isVerifiedUser]="profileTeasers[post.userId].isVerified"
           [creationDate]="postComment.date"
           [timeElapsedAfterCreation$]="postComment.timeElapsedAfterCreation$"
           [resolvedUserUrlUsername]="resolvedUser.urlUsername"
@@ -144,7 +146,7 @@
           </button>
         </app-post-comment>
       </div>
-      <!--      <div class="post-item border-accent-secondary mt-glue">-->
+      <!--      <div *ngFor="" class="post-item border-accent-secondary mt-glue">-->
       <!--        <app-post-comment-->
       <!--          [avatarUrl]="profileTeasers[post.userId].avatarUrl"-->
       <!--          [username]="profileTeasers[post.userId].username"-->
@@ -160,7 +162,7 @@
           mat-button
           color="accent"
           class="w-100"
-          (click)="showSubcomments(post._id)"
+          (click)="showSubcomments(postComment._id)"
           [disabled]="isLoadingPostComments$ | async"
         >
           <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>

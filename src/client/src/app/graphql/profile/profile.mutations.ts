@@ -9,6 +9,7 @@ export const UPDATE_PROFILE = gql`
         name
         bio
       }
+      isVerified
     }
   }
 `;

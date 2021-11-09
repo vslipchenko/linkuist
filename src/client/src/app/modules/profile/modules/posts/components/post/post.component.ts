@@ -14,7 +14,10 @@ import {ProfileSelectors} from '~app/modules/profile/store/profile.selectors';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {AppSelectors} from '~app/store/app.selectors';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
-import {PostComment, UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
+import {
+  UIPostComment,
+  UIPostSubcomment,
+} from '~app/types/post-comment/post-comment.interfaces';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
 
 @UntilDestroy()
@@ -36,8 +39,10 @@ export class PostComponent implements OnInit {
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   public readonly addCommentControl = new FormControl('');
   public postComments$: Observable<Array<UIPostComment>> = of();
+  public postSubcomments$: Observable<Array<UIPostSubcomment>> = of();
   public postCommentTotalCount$: Observable<number> = of();
   public showPostComments = false;
+  public showPostSubcomments = false;
 
   public resolvedUser!: ResolvedUser;
 
@@ -67,7 +72,7 @@ export class PostComponent implements OnInit {
     );
   }
 
-  public postCommentsTrackBy(_: number, postComment: PostComment): string {
+  public postCommentsTrackBy(_: number, postComment: UIPostComment): string {
     return postComment._id;
   }
 
@@ -110,7 +115,18 @@ export class PostComponent implements OnInit {
     this.showPostComments = false;
   }
 
-  public showSubcomments(postId: string): void {}
+  public showSubcomments(commentId: string): void {
+    if (!this.showPostSubcomments) this.showPostSubcomments = true;
+
+    this.store
+      .dispatch$(PostsActions.loadPostSubcomments, {
+        commentId,
+        skipProfileTeaserIds: Object.keys(this.store.select(ProfileSelectors.getProfileTeasers)),
+        offset: this.store.select(PostsSelectors.getPostSubcommentCount, commentId),
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe(console.log);
+  }
 
   // public isPostOwner(username: string): boolean {
   //   return this.resolvedUser.urlUsername === username;

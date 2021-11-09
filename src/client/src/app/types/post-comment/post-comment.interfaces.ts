@@ -1,20 +1,26 @@
 import {UserProfileTeaser} from '~app/types/user/user.interfaces';
 import {Observable} from 'rxjs';
 
-export interface PostComment {
+interface PostComment {
   _id: string;
   userId: string;
   postId: string;
-  totalSubcomments: number;
-  commentId: string;
   body: string;
   createdAt: number;
 }
 
-export interface UIPostComment extends PostComment {
+interface PostCommentBase {
   date: string;
   timeElapsedAfterCreation$: Observable<string>;
   isRecentlyAdded?: boolean;
+}
+
+export interface UIPostComment extends PostComment, PostCommentBase {
+  totalSubcomments: number; // Absent for subcomments
+}
+
+export interface UIPostSubcomment extends PostComment, PostCommentBase {
+  commentId: string;
 }
 
 export interface PostCommentCreatePayload {

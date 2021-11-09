@@ -1,10 +1,11 @@
-import {Component, Inject, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input} from '@angular/core';
 import {Observable} from 'rxjs';
 import {DOCUMENT} from '@angular/common';
 
 @Component({
   selector: 'app-user-post-panel',
   templateUrl: './user-panel-stripe.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserPanelStripeComponent {
   @Input() public readonly extendsClass!: string;
@@ -13,6 +14,7 @@ export class UserPanelStripeComponent {
   @Input() public readonly resolvedUserUrlUsername!: string;
   @Input() public readonly creationDate!: string;
   @Input() public readonly timeElapsedAfterCreation$!: Observable<string>;
+  @Input() public readonly isVerifiedUser!: boolean;
 
   public constructor(@Inject(DOCUMENT) private readonly document: Document) {}
 

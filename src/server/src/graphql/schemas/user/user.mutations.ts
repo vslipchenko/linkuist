@@ -14,7 +14,7 @@ import {authenticationGuard} from '../../../utilities/guards';
 export const userMutationTypeDefinitions = gql`
   extend type Mutation {
     createUser(input: CreateUserMutationInput!): CreatedUser
-    updateProfile(input: UpdateProfileMutationInput!): UserProfile
+    updateProfile(input: UpdateProfileMutationInput!): UserProfileTeaser # UserProfile
   }
 `; // User can be nullable in case of invalid input data
 

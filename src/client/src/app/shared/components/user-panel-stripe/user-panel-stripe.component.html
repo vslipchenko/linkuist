@@ -17,6 +17,7 @@
       <div class="username font-weight-bold d-flex align-items-center">
         <a [routerLink]="'/@' + username" (click)="isPostOwner && scrollTop()">@{{ username }}</a>
         <mat-icon
+          *ngIf="isVerifiedUser"
           class="user-verificon icon-sm ml-h"
           svgIcon="check-decagram"
           color="primary"

@@ -7,6 +7,7 @@ export const PostsActions = {
   deletePost: 'Delete post',
   removePost: 'Remove post from posts',
   createPostComment: 'Create post comment',
+  // createPostSubcomment: 'Create post subcomment',
   appendPostComments: 'Append post comments',
   loadPosts: 'Load bunch of posts based on user id',
   loadPostComments: 'Load post comments',

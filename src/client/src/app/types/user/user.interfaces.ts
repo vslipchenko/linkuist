@@ -36,4 +36,5 @@ export interface UserProfileTeaser {
   _id: string;
   username: string;
   profile: {avatarUrl: string};
+  isVerified: boolean;
 }

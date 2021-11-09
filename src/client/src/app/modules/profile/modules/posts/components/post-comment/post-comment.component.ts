@@ -21,6 +21,7 @@ export class PostCommentComponent {
   @Input() public readonly creationDate!: string;
   @Input() public readonly timeElapsedAfterCreation$!: Observable<string>;
   @Input() public readonly body!: string;
+  @Input() public readonly isVerifiedUser!: boolean;
 
   @ViewChild(AddCommentComponent)
   private readonly addCommentComponent!: AddCommentComponent;

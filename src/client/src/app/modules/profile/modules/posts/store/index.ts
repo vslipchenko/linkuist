@@ -5,13 +5,15 @@ import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actio
 import {PostsReducers} from '~app/modules/profile/modules/posts/store/posts.reducers';
 import {PostsEffects} from '~app/modules/profile/modules/posts/store/posts.effects';
 import {UIPost} from '~app/types/post/post.interfaces';
-import {UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
+import {UIPostComment, UIPostSubcomment} from '~app/types/post-comment/post-comment.interfaces';
 
 export type PostsState = Immutable<{
   posts: Array<UIPost>;
   postTotalCount: number;
   postComments: {[postId: string]: Array<UIPostComment>};
+  postSubcomments: {[commentId: string]: Array<UIPostSubcomment>};
   postCommentTotalCount: {[postId: string]: number};
+  // postSubcommentTotalCount: {[commentId: string]: number};
   // visiblePostComments: {
   //   [postId: string]: {
   //     [commentId: string]: {[subcommentId: string]: boolean};
@@ -25,6 +27,7 @@ export type PostsState = Immutable<{
 const PostsInitialState: PostsState = {
   posts: [],
   postComments: {},
+  postSubcomments: {},
   postTotalCount: 0,
   postCommentTotalCount: {},
   // visiblePostComments: {},

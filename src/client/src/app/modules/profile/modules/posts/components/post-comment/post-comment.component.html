@@ -5,6 +5,7 @@
   [creationDate]="creationDate"
   [timeElapsedAfterCreation$]="timeElapsedAfterCreation$"
   [resolvedUserUrlUsername]="resolvedUserUrlUsername"
+  [isVerifiedUser]="isVerifiedUser"
 >
   <ng-content></ng-content>
 </app-user-post-panel>
@@ -30,6 +31,14 @@
   </button>
   <!--  </div>-->
 </div>
+
+<!--<app-post-comment-->
+<!--  #postCommentComponent-->
+<!--  [avatarUrl]="''"-->
+<!--  [username]="'profileTeasers[post.userId].username'"-->
+<!--  [creationDate]="'postComment.date'"-->
+<!--  [resolvedUserUrlUsername]="'kek'"-->
+<!--&gt;</app-post-comment>-->
 
 <app-add-comment
   *ngIf="_showAddReply"

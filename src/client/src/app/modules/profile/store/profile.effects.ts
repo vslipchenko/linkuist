@@ -21,7 +21,9 @@ export const ProfileEffects: Effects<ProfileState> = {
     // TODO: trigger current user profile teaser update as well
     return userService.updateProfile(payload).pipe(
       tap(({data}: FetchResult<ProfileUpdateMutationResult>) => {
-        dispatch(ProfileActions.setUserProfile, data!.updateProfile.profile);
+        const {profile, isVerified} = data!.updateProfile;
+
+        dispatch(ProfileActions.setUserProfile, {...profile, isVerified});
       }),
     );
   },
@@ -34,9 +36,9 @@ export const ProfileEffects: Effects<ProfileState> = {
 
     return userService.getProfileByUserId(payload).pipe(
       tap(({data}: ApolloQueryResult<ProfileByUserIdQueryResult>) => {
-        const profile = data.profileByUserId.profile;
+        const {profile, isVerified} = data.profileByUserId;
 
-        dispatch(ProfileActions.setUserProfile, profile);
+        dispatch(ProfileActions.setUserProfile, {...profile, isVerified});
       }),
     );
   },

@@ -5,6 +5,10 @@ export interface Profile {
   bio: string;
 }
 
+export interface UIProfile extends Profile {
+  isVerified: boolean;
+}
+
 export interface ProfileUpdatePayload {
   backgroundUrl: string;
   avatarUrl: string;
@@ -20,11 +24,12 @@ export interface ProfileByUserIdQueryResult {
       name: string;
       bio: string;
     };
+    isVerified: boolean;
   };
 }
 
 export interface ProfileTeasers {
-  [userId: string]: {avatarUrl: string; username: string};
+  [userId: string]: {avatarUrl: string; username: string; isVerified: boolean};
 }
 
 // export interface ProfileByUsernameQueryResult {
@@ -46,5 +51,6 @@ export interface ProfileUpdateMutationResult {
       name: string;
       bio: string;
     };
+    isVerified: boolean;
   };
 }

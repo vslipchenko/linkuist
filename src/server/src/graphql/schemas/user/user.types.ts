@@ -18,9 +18,9 @@ export const userTypes = gql`
     bio: String
   }
 
-  type UserProfile {
-    profile: Profile
-  }
+  # type UserProfile {
+  #  profile: Profile
+  # }
 
   type UserProfileTeaser {
     _id: ID! # user id

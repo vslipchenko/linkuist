@@ -4,10 +4,10 @@ import {ProfileGetters} from '~app/modules/profile/store/profile.getters';
 import {ProfileActions} from '~app/modules/profile/store/profile.actions';
 import {ProfileReducers} from '~app/modules/profile/store/profile.reducers';
 import {ProfileEffects} from '~app/modules/profile/store/profile.effects';
-import {Profile, ProfileTeasers} from '~app/types/profile/profile.interfaces';
+import {ProfileTeasers, UIProfile} from '~app/types/profile/profile.interfaces';
 
 export type ProfileState = Immutable<{
-  profile: Profile;
+  profile: UIProfile;
   profileTeasers: ProfileTeasers;
 }>;
 
@@ -17,6 +17,7 @@ const ProfileInitialState: ProfileState = {
     avatarUrl: '',
     name: '',
     bio: '',
+    isVerified: false,
   },
   profileTeasers: {},
 };

@@ -12,6 +12,7 @@ import {
   ProfileByUserIdQueryResult,
   ProfileTeasers,
   ProfileUpdateMutationResult,
+  UIProfile,
 } from '~app/types/profile/profile.interfaces';
 import {finalize} from 'rxjs/operators';
 import {Observable} from 'rxjs';
@@ -40,6 +41,7 @@ export class ProfileComponent {
     | undefined;
 
   public profileSettingsForm = this.buildProfileSettingsForm();
+  public readonly profile$: Observable<UIProfile>;
   private profileSettingsDialogRef: DialogRef | undefined;
   private resolvedUser!: ResolvedUser;
 
@@ -50,6 +52,8 @@ export class ProfileComponent {
     private readonly formBuilder: FormBuilder,
     private readonly store: Store<ProfileState>,
   ) {
+    this.profile$ = this.store.select$(ProfileSelectors.getProfile);
+
     this.store
       .select$<ResolvedUser>(AppSelectors.getResolvedUser)
       .pipe(untilDestroyed(this))
@@ -83,10 +87,6 @@ export class ProfileComponent {
 
   public get isUser(): boolean {
     return this.resolvedUser.role === UserRole.USER;
-  }
-
-  public get profile$(): Observable<Profile> {
-    return this.store.select$(ProfileSelectors.getProfile);
   }
 
   public get navigationMainActionType(): NavigationMainActionType {
@@ -138,6 +138,7 @@ export class ProfileComponent {
             // TODO: add possibility to change usernames as well
             avatarUrl: data!.updateProfile.profile.avatarUrl,
             username: this.resolvedUser.urlUsername,
+            isVerified: data!.updateProfile.isVerified,
           },
         });
       });
@@ -168,6 +169,7 @@ export class ProfileComponent {
             // TODO: add possibility to change usernames as well
             avatarUrl: data.profileByUserId.profile.avatarUrl,
             username: this.resolvedUser.urlUsername,
+            isVerified: data.profileByUserId.isVerified,
           },
         });
       });
