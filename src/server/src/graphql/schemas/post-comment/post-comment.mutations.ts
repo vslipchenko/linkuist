@@ -15,7 +15,7 @@ export const postCommentMutationTypeDefinitions = gql`
 
 const createPostComment = async (
   _: unknown,
-  {input}: {input: Pick<IPostComment, 'postId' | 'commentId' | 'body'>},
+  {input}: {input: Pick<IPostComment, 'postId' | 'body'>},
   {accessToken}: {accessToken: string},
 ): Promise<MongooseDocument<IPostComment> | ApolloError | null> => {
   const {tokenData, error} = await authenticationGuard(accessToken);

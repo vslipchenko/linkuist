@@ -28,12 +28,14 @@ export class PostCommentService {
 
   public getByPostId(
     postId: string,
+    skipPostCommentIds: Array<string>,
     skipProfileTeaserIds: Array<string>,
     parameters: RequestParameters,
   ): Observable<ApolloQueryResult<PostCommentsByPostIdQueryResult>> {
     return this.apollo.query({
       query: GET_POST_COMMENTS_BY_POST_ID,
-      variables: {postId, skipProfileTeaserIds, parameters},
+      variables: {postId, skipPostCommentIds, skipProfileTeaserIds, parameters},
+      fetchPolicy: 'network-only', // https://www.apollographql.com/docs/react/data/queries/#supported-fetch-policies
     });
   }
 }

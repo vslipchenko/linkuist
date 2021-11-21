@@ -5,7 +5,8 @@ import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actio
 import {PostsReducers} from '~app/modules/profile/modules/posts/store/posts.reducers';
 import {PostsEffects} from '~app/modules/profile/modules/posts/store/posts.effects';
 import {UIPost} from '~app/types/post/post.interfaces';
-import {UIPostComment, UIPostSubcomment} from '~app/types/post-comment/post-comment.interfaces';
+import {UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
+import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
 
 export type PostsState = Immutable<{
   posts: Array<UIPost>;
@@ -13,7 +14,7 @@ export type PostsState = Immutable<{
   postComments: {[postId: string]: Array<UIPostComment>};
   postSubcomments: {[commentId: string]: Array<UIPostSubcomment>};
   postCommentTotalCount: {[postId: string]: number};
-  // postSubcommentTotalCount: {[commentId: string]: number};
+  postSubcommentTotalCount: {[commentId: string]: number};
   // visiblePostComments: {
   //   [postId: string]: {
   //     [commentId: string]: {[subcommentId: string]: boolean};
@@ -22,6 +23,7 @@ export type PostsState = Immutable<{
   // profileTeasers: {[userId: string]: {username: string; avatarUrl: string}};
   isLoadingPosts: boolean;
   isLoadingPostComments: boolean;
+  isLoadingPostSubcomments: boolean;
 }>;
 
 const PostsInitialState: PostsState = {
@@ -30,10 +32,12 @@ const PostsInitialState: PostsState = {
   postSubcomments: {},
   postTotalCount: 0,
   postCommentTotalCount: {},
+  postSubcommentTotalCount: {},
   // visiblePostComments: {},
   // profileTeasers: {},
   isLoadingPosts: false,
   isLoadingPostComments: false,
+  isLoadingPostSubcomments: false,
 };
 
 export const PostsStore: StoreConfig<PostsState> = {

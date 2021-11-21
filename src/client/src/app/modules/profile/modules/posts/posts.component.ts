@@ -4,7 +4,6 @@ import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {UIPost} from '~app/types/post/post.interfaces';
 // import {MONTH_NAMES} from '~app/constants/date';
 import {Observable} from 'rxjs';
-import {PostCommentCreatePayload} from '~app/types/post-comment/post-comment.interfaces';
 import {AppSelectors} from '~app/store/app.selectors';
 import {Store} from '@ng-estate/store';
 import {ResolvedUser} from '~app/types/user/user.interfaces';
@@ -97,44 +96,6 @@ export class PostsComponent implements OnInit {
   public createPost(text: string): void {
     // this.progressBarService.show();
     this.store.dispatch$(PostsActions.createPost, text).pipe(untilDestroyed(this)).subscribe();
-  }
-
-  public handlePostDelete(_id: string): void {
-    // this.progressBarService.show();
-    // console.log(_id, this.post);
-    this.store.dispatch$(PostsActions.deletePost, _id).pipe(untilDestroyed(this)).subscribe();
-    // this.postService
-    //   .deleteById(_id)
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     // finalize(() => this.progressBarService.hide()),
-    //   )
-    //   .subscribe(({data}: FetchResult<PostDeleteCountMutationResult>) => {
-    //     if (!data?.deletePost) return;
-    //
-    //     this.posts.splice(
-    //       this.posts.findIndex((post) => post._id === _id),
-    //       1,
-    //     );
-    //   });
-  }
-
-  public handleAddPostComment(payload: PostCommentCreatePayload): void {
-    // this.progressBarService.show();
-    console.log(payload);
-    this.store
-      .dispatch$(PostsActions.createPostComment, payload)
-      .pipe(untilDestroyed(this))
-      .subscribe(console.log);
-    // this.postCommentService
-    //   .create(payload)
-    //   .pipe(
-    //     untilDestroyed(this),
-    //     finalize(() => this.progressBarService.hide()),
-    //   )
-    //   .subscribe(({data}: FetchResult<PostCommentCreateMutationResult>) => {
-    //     console.log(data);
-    //   });
   }
 
   public showMorePosts(): void {

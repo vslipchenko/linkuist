@@ -1,36 +1,37 @@
 import {UserProfileTeaser} from '~app/types/user/user.interfaces';
 import {Observable} from 'rxjs';
 
-interface PostComment {
+export interface PostCommentBase {
   _id: string;
   userId: string;
   postId: string;
+  commentId?: string; // is null for subcomments
   body: string;
   createdAt: number;
 }
 
-interface PostCommentBase {
+interface PostComment extends PostCommentBase {
+  totalSubcomments: number;
+}
+
+export interface UIPostCommentBase {
   date: string;
   timeElapsedAfterCreation$: Observable<string>;
-  isRecentlyAdded?: boolean;
+  isRecentlyAdded?: boolean; // Flag that symbolized that record was created recently and may be out of order
 }
 
-export interface UIPostComment extends PostComment, PostCommentBase {
+export interface UIPostComment extends PostComment, UIPostCommentBase {
   totalSubcomments: number; // Absent for subcomments
-}
-
-export interface UIPostSubcomment extends PostComment, PostCommentBase {
-  commentId: string;
 }
 
 export interface PostCommentCreatePayload {
   postId: string;
-  commentId?: string;
+  // commentId?: string;
   body: string;
 }
 
 export interface PostCommentCreateMutationResult {
-  createPostComment: PostComment;
+  createPostComment: PostCommentBase;
 }
 
 export interface PostCommentsByPostIdQueryResult {

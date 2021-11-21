@@ -15,6 +15,10 @@ import {
   postCommentTypeDefinitions,
 } from './schemas/post-comment/post-comment.schema';
 import {makeExecutableSchema} from '@graphql-tools/schema';
+import {
+  postSubcommentResolvers,
+  postSubcommentTypeDefinitions,
+} from './schemas/post-subcomment/post-subcomment.schema';
 
 // TODO remove as soon as extend of empty types is available
 const rootTypeDefs = gql`
@@ -36,6 +40,7 @@ export default makeExecutableSchema({
     ...userTypeDefinitions,
     ...postTypeDefinitions,
     ...postCommentTypeDefinitions,
+    ...postSubcommentTypeDefinitions,
     ...linkardTypeDefinitions,
     // ...profileTypeDefinitions,
   ],
@@ -47,6 +52,7 @@ export default makeExecutableSchema({
     ...userResolvers,
     ...postResolvers,
     ...postCommentResolvers,
+    ...postSubcommentResolvers,
     ...linkardResolvers,
     // ...profileResolvers,
   ),

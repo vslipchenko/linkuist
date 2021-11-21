@@ -131,7 +131,7 @@ $user-avatar-size: 176px;
   }
 
   @include media.above-huge {
-    height: calc(50vh - #{var.$common-navigation-height});
+    height: calc(45vh - #{var.$common-navigation-height});
   }
 }
 

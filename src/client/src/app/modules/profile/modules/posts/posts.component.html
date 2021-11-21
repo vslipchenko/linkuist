@@ -1,12 +1,7 @@
 <app-add-post *ngIf="hasUserRole" (addPost)="createPost($event)"></app-add-post>
 
 <div class="post-list mx-auto">
-  <app-post
-    *ngFor="let post of posts$ | async; trackBy: postsTrackBy"
-    [post]="post"
-    (addComment)="handleAddPostComment({postId: post._id, body: $event})"
-    (deletePost)="handlePostDelete(post._id)"
-  ></app-post>
+  <app-post *ngFor="let post of posts$ | async; trackBy: postsTrackBy" [post]="post"></app-post>
   <!--  <div *ngFor="let post of posts; trackBy: postsTrackBy.bind(this)" class="note">-->
   <!--    <div class="panel">-->
   <!--      <div class="user-block d-flex align-items-center">-->

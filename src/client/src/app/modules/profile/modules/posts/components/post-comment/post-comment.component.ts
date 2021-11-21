@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import {Observable} from 'rxjs';
 import {AddCommentComponent} from '~app/modules/profile/modules/posts/components/add-comment/add-comment.component';
+import {Store} from '@ng-estate/store';
+import {PostsState} from '~app/modules/profile/modules/posts/store';
 
 @Component({
   selector: 'app-post-comment',
@@ -28,7 +30,10 @@ export class PostCommentComponent {
 
   public _showAddReply = false;
 
-  public constructor(private readonly changeDetector: ChangeDetectorRef) {}
+  public constructor(
+    private readonly changeDetector: ChangeDetectorRef,
+    private readonly store: Store<PostsState>,
+  ) {}
 
   // public ngOnInit(): void {}
 
@@ -37,6 +42,10 @@ export class PostCommentComponent {
     this.changeDetector.detectChanges();
     this.addCommentComponent.focusElasticInput();
     // debugger;
+  }
+
+  public addCommentReply(value: string): void {
+    // this.
   }
 
   // public focusElasticInput(): void {

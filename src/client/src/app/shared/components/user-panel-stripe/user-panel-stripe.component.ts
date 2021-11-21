@@ -27,6 +27,7 @@ export class UserPanelStripeComponent {
   }
 
   public get isPostOwner(): boolean {
+    // TODO: Maybe just check resolved user role ???
     return this.resolvedUserUrlUsername === this.username;
   }
 }

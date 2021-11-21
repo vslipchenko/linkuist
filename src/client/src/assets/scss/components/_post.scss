@@ -1,0 +1,8 @@
+@use 'variables' as var;
+@use 'shared';
+
+.post-item {
+  background-color: var.$color-light;
+
+  @include shared.content-block-border;
+}

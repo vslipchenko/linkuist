@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'app-number-cutter',
   template: '{{formattedValue}}',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NumberCutterComponent implements OnInit {
+export class NumberCutterComponent implements OnChanges {
   @Input() public readonly value: number = 0;
 
   public formattedValue = '';
@@ -13,8 +14,12 @@ export class NumberCutterComponent implements OnInit {
     return value.replace(RegExp(`(?<=^.{${position}})`), ',');
   }
 
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ('currentValue' in changes.value) this.calculateFormattedValue();
+  }
+
   // Up to 10 billion
-  public ngOnInit(): void {
+  private calculateFormattedValue(): void {
     switch (true) {
       case this.value < 1000:
         this.formattedValue = this.value.toString();
@@ -82,15 +87,6 @@ export class NumberCutterComponent implements OnInit {
           : `${slice.slice(0, -1)}b`;
         return;
       }
-      // case this.value < 100_000_000_000: {
-      //   const slice = this.value.toString().slice(0, 3);
-      //   const isFloat = slice[2] !== '0';
-      //
-      //   this.formattedValue = isFloat
-      //     ? `${NumberCutterComponent.insertCommaAtPosition(slice, 2)}b`
-      //     : `${slice.slice(0, -1)}b`;
-      //   return;
-      // }
     }
   }
 }

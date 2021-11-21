@@ -13,6 +13,7 @@ export const postCommentQueryTypeDefinitions = gql`
   extend type Query {
     postCommentsByPostId(
       postId: String!
+      skipPostCommentIds: [String]!
       skipProfileTeaserIds: [String]!
       parameters: RequestParameters!
     ): UserPostComments!
@@ -21,6 +22,7 @@ export const postCommentQueryTypeDefinitions = gql`
 
 const aggregatePostCommentData = async (
   postId: string,
+  skipPostCommentIds: Array<string>,
   skipProfileTeaserIds: Array<string>,
   parameters: RequestParameters,
 ): Promise<unknown> => {
@@ -30,7 +32,13 @@ const aggregatePostCommentData = async (
   skipProfileTeaserIds.forEach((userId) => (skipProfileTeaserIdsMap[userId] = 1));
 
   const aggregationResult = await PostComment.aggregate([
-    {$match: {postId: new mongoose.Types.ObjectId(postId), commentId: {$exists: false}}},
+    {
+      $match: {
+        postId: new mongoose.Types.ObjectId(postId),
+        commentId: {$exists: false},
+        _id: {$nin: skipPostCommentIds.map((id) => new mongoose.Types.ObjectId(id))}, // do not lookup for recently added comments in order to avoid duplicate entry & wrong results
+      },
+    },
     {
       $facet: {
         data: [
@@ -71,14 +79,20 @@ const aggregatePostCommentData = async (
     userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
   };
 };
-
+// TODO extend with commentId ???
 const postCommentsByPostId = (
   _: unknown,
   {
     postId,
+    skipPostCommentIds,
     skipProfileTeaserIds,
     parameters,
-  }: {postId: string; skipProfileTeaserIds: Array<string>; parameters: RequestParameters},
+  }: {
+    postId: string;
+    skipPostCommentIds: Array<string>;
+    skipProfileTeaserIds: Array<string>;
+    parameters: RequestParameters;
+  },
 ): Promise<unknown> | null => {
   const {isInvalidData} = checkDataValidity({
     data: {postId, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
@@ -93,7 +107,7 @@ const postCommentsByPostId = (
 
   if (isInvalidData) return null;
 
-  return aggregatePostCommentData(postId, skipProfileTeaserIds, parameters);
+  return aggregatePostCommentData(postId, skipPostCommentIds, skipProfileTeaserIds, parameters);
 };
 
 export const postCommentQueryResolvers = {

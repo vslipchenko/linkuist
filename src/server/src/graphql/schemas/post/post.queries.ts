@@ -14,6 +14,22 @@ import {userProfileTeasersByUserIds} from '../user/user.queries';
 // import {getUtcTimestamp} from '../../../utilities/date';
 // import {composePostDate} from '../../../utilities/date';
 
+/* Basic post related data retrieval flow:
+ * - On each post list load feed back post list with up to date post count
+ * Once received by the client, updates the list of posts & post total count
+ * (this will allow to load the most recent posts until "Show more posts" button is gone,
+ * BUT because it use an offset each time you request a new portion of data, it can preserve stale info state on the client (e.g. posts that were deleted))
+ * - On each comment list load for a particular post feed back list of comments with up to date comment count
+ * Once received by the client, updates the list of post comments & post comment total count
+ * * (this will allow to load the most recent post comments until "Show more comments" button is gone,
+ * BUT because it use an offset each time you request a new portion of data, it can preserve stale info state on the client (e.g. posts comments that were deleted))
+ * - On each subcomment (reply) list load feed back list of subcomments with up to date subcomment count
+ * Once received by the client, updates the list of post subcomments & post subcomment total count
+ * * (this will allow to load the most recent post subcomments until "Show more replies" button is gone
+ * BUT because it use an offset each time you request a new portion of data, it can contain preserve stale info state on the client (e.g. post subcomments that were deleted))
+ * THESE TOTAL COUNT INFO UPDATES HAPPEN ONLY ON SHOW MORE (COMMENTS / REPLIES) ACTION & IGNORED ON COMMENT CREATION / DELETION, ETC
+ */
+
 // TODO inspect Post null issue
 export const postQueryTypeDefinitions = gql`
   extend type Query {

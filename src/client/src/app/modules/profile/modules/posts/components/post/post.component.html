@@ -1,210 +1,251 @@
-<div *ngIf="profileTeasers$ | async as profileTeasers" class="post-section">
-  <!--  <div class="user-panel d-flex align-items-center p-2 border-bottom">-->
-  <!--  ngIf caused by race condition-->
-  <div class="post-item">
-    <app-user-post-panel
-      *ngIf="profileTeasers[post.userId]"
-      extendsClass="post-user-panel p-2 border-bottom"
-      [avatarUrl]="profileTeasers[post.userId].avatarUrl"
-      [username]="profileTeasers[post.userId].username"
-      [isVerifiedUser]="profileTeasers[post.userId].isVerified"
-      [creationDate]="post.date"
-      [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"
-      [resolvedUserUrlUsername]="resolvedUser.urlUsername"
-    >
-      <button
-        *ngIf="hasUserRole"
-        [matMenuTriggerFor]="postSettings"
-        mat-icon-button
-        color="primary"
-        class="ml-auto"
-        aria-label="Example icon button with a delete icon"
+<ng-container
+  *ngIf="{
+    profileTeasers: profileTeasers$ | async,
+    postCommentTotalCount: postCommentTotalCount$ | async
+  } as data"
+>
+  <div class="post-section">
+    <!--  <div class="user-panel d-flex align-items-center p-2 border-bottom">-->
+    <!--  ngIf caused by race condition-->
+    <div class="post-item">
+      <app-user-post-panel
+        *ngIf="data.profileTeasers[post.userId]"
+        extendsClass="post-user-panel p-2 border-bottom"
+        [avatarUrl]="data.profileTeasers[post.userId].avatarUrl"
+        [username]="data.profileTeasers[post.userId].username"
+        [isVerifiedUser]="data.profileTeasers[post.userId].isVerified"
+        [creationDate]="post.date"
+        [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"
+        [resolvedUserUrlUsername]="resolvedUser.urlUsername"
       >
-        <mat-icon svgIcon="dots-horizontal"></mat-icon>
-      </button>
-      <mat-menu #postSettings>
-        <!--      <button mat-menu-item>-->
-        <!--        <mat-icon svgIcon="share-variant"></mat-icon>-->
-        <!--        Share to-->
-        <!--      </button>-->
-        <button mat-menu-item (click)="delete()">
-          <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>
-          Delete
-        </button>
-      </mat-menu>
-    </app-user-post-panel>
-    <div class="post-content px-2 py-3">{{ post.text }}</div>
-    <div class="d-flex justify-content-around flex-wrap color-light-dark border-top">
-      <!--    TODO: permissions-->
-      <button
-        mat-button
-        class="icon-button d-flex justify-content-center flex"
-        (click)="(null)"
-        [color]="null ? 'warn' : null"
-      >
-        <!--    <div style="display: flex; align-items: center" class="mr-1">-->
-        <mat-icon svgIcon="heart" class="d-flex mr-h icon-sm"></mat-icon>
-        <span class="font-weight-bold">27k</span>
-        <!--    </div>-->
-      </button>
-      <button
-        mat-button
-        class="icon-button d-flex justify-content-center align-items-center flex"
-        (click)="addComment.focusElasticInput()"
-      >
-        <mat-icon svgIcon="comment" class="d-flex mr-h icon-sm"></mat-icon>
-        <span class="font-weight-bold">
-          <app-number-cutter
-            *ngIf="post.totalComments; else commentTemplate"
-            [value]="post.totalComments"
-          ></app-number-cutter>
-          <ng-template #commentTemplate>Comment</ng-template>
-        </span>
-      </button>
-      <button
-        mat-button
-        class="icon-button d-flex justify-content-center flex"
-        (click)="(null)"
-        [color]="null ? 'primary' : null"
-      >
-        <mat-icon svgIcon="share" class="mr-h"></mat-icon>
-        <span class="font-weight-bold">27k</span>
-      </button>
-    </div>
-    <!--    <div class="d-flex align-items-end border-top">-->
-    <!--      &lt;!&ndash;    TODO: permissions&ndash;&gt;-->
-    <!--      <app-elastic-input-->
-    <!--        #commentInput-->
-    <!--        class="w-100 min-width-0"-->
-    <!--        placeholder="Write a comment..."-->
-    <!--        [maxCharacterLength]="POST_COMMENT_MAX_LENGTH"-->
-    <!--        [formControl]="addCommentControl"-->
-    <!--      ></app-elastic-input>-->
-    <!--      <div class="p-1">-->
-    <!--        <button-->
-    <!--          mat-icon-button-->
-    <!--          color="primary"-->
-    <!--          matTooltip="Add comment"-->
-    <!--          matTooltipPosition="right"-->
-    <!--          (click)="comment()"-->
-    <!--        >-->
-    <!--          <mat-icon svgIcon="comment-plus"></mat-icon>-->
-    <!--        </button>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <app-add-comment
-      #addComment
-      placeholder="Write a comment..."
-      [maxCharLength]="POST_COMMENT_MAX_LENGTH"
-      (comment)="comment($event)"
-    ></app-add-comment>
-  </div>
-
-  <!--  <ng-container *ngIf="showPostComments && postComments$ | async as postComments">-->
-  <!--  <ng-container *ngIf="(visiblePostComments$ | async)?.[post._id]">-->
-
-  <ng-container *ngIf="showPostComments">
-    <div class="post-item border-accent-primary p-2 my-1">Comments:</div>
-
-    <ng-container
-      *ngFor="
-        let postComment of postComments$ | async;
-        trackBy: postCommentsTrackBy;
-        let isFirst = first
-      "
-    >
-      <!--      <ng-container *ngIf="profileTeasers[post.userId]">-->
-      <div
-        class="post-item border-accent-primary"
-        [class.mt-glue]="!isFirst"
-        [class.border-dashed]="postComment.isRecentlyAdded"
-      >
-        <!--        {{ isFirst }}-->
-        <app-post-comment
-          #postCommentComponent
-          [avatarUrl]="profileTeasers[post.userId].avatarUrl"
-          [username]="profileTeasers[post.userId].username"
-          [isVerifiedUser]="profileTeasers[post.userId].isVerified"
-          [creationDate]="postComment.date"
-          [timeElapsedAfterCreation$]="postComment.timeElapsedAfterCreation$"
-          [resolvedUserUrlUsername]="resolvedUser.urlUsername"
-          [body]="postComment.body"
+        <button
+          *ngIf="hasUserRole"
+          [matMenuTriggerFor]="postSettings"
+          mat-icon-button
+          color="primary"
+          class="ml-auto"
+          aria-label="Example icon button with a delete icon"
         >
+          <mat-icon svgIcon="dots-horizontal"></mat-icon>
+        </button>
+        <mat-menu #postSettings>
+          <!--      <button mat-menu-item>-->
+          <!--        <mat-icon svgIcon="share-variant"></mat-icon>-->
+          <!--        Share to-->
+          <!--      </button>-->
+          <button mat-menu-item (click)="handlePostDelete()">
+            <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>
+            Delete
+          </button>
+        </mat-menu>
+      </app-user-post-panel>
+      <div class="post-content px-2 py-3">{{ post.text }}</div>
+      <div class="d-flex justify-content-around flex-wrap color-light-dark border-top">
+        <!--    TODO: permissions-->
+        <button
+          mat-button
+          class="icon-button d-flex justify-content-center flex"
+          (click)="(null)"
+          [color]="null ? 'warn' : null"
+        >
+          <!--    <div style="display: flex; align-items: center" class="mr-1">-->
+          <mat-icon svgIcon="heart" class="d-flex mr-h icon-sm"></mat-icon>
+          <span class="font-weight-bold">27k</span>
+          <!--    </div>-->
+        </button>
+        <button
+          mat-button
+          class="icon-button d-flex justify-content-center align-items-center flex"
+          (click)="addComment.focusElasticInput()"
+        >
+          <mat-icon svgIcon="comment" class="d-flex mr-h icon-sm"></mat-icon>
+          <span class="font-weight-bold">
+            <app-number-cutter
+              *ngIf="data.postCommentTotalCount; else commentTemplate"
+              [value]="data.postCommentTotalCount"
+            ></app-number-cutter>
+            <ng-template #commentTemplate>Comment</ng-template>
+          </span>
+        </button>
+        <button
+          mat-button
+          class="icon-button d-flex justify-content-center flex"
+          (click)="(null)"
+          [color]="null ? 'primary' : null"
+        >
+          <mat-icon svgIcon="share" class="mr-h"></mat-icon>
+          <span class="font-weight-bold">27k</span>
+        </button>
+      </div>
+      <!--    <div class="d-flex align-items-end border-top">-->
+      <!--      &lt;!&ndash;    TODO: permissions&ndash;&gt;-->
+      <!--      <app-elastic-input-->
+      <!--        #commentInput-->
+      <!--        class="w-100 min-width-0"-->
+      <!--        placeholder="Write a comment..."-->
+      <!--        [maxCharacterLength]="POST_COMMENT_MAX_LENGTH"-->
+      <!--        [formControl]="addCommentControl"-->
+      <!--      ></app-elastic-input>-->
+      <!--      <div class="p-1">-->
+      <!--        <button-->
+      <!--          mat-icon-button-->
+      <!--          color="primary"-->
+      <!--          matTooltip="Add comment"-->
+      <!--          matTooltipPosition="right"-->
+      <!--          (click)="comment()"-->
+      <!--        >-->
+      <!--          <mat-icon svgIcon="comment-plus"></mat-icon>-->
+      <!--        </button>-->
+      <!--      </div>-->
+      <!--    </div>-->
+      <app-add-comment
+        #addComment
+        placeholder="Write a comment..."
+        [maxCharLength]="POST_COMMENT_MAX_LENGTH"
+        (comment)="comment($event)"
+      ></app-add-comment>
+    </div>
+
+    <!--  <ng-container *ngIf="showPostComments && postComments$ | async as postComments">-->
+    <!--  <ng-container *ngIf="(visiblePostComments$ | async)?.[post._id]">-->
+
+    <ng-container *ngIf="showPostComments">
+      <div class="post-item border-accent-primary p-2 my-1">Comments:</div>
+
+      <ng-container
+        *ngFor="
+          let postComment of postComments$ | async;
+          trackBy: postCommentsTrackBy;
+          let isFirst = first
+        "
+      >
+        <!--      <ng-container *ngIf="profileTeasers[post.userId]">-->
+        <div
+          class="post-item border-accent-primary"
+          [class.mt-glue]="!isFirst"
+          [class.border-dashed]="postComment.isRecentlyAdded"
+        >
+          <!--        {{ isFirst }}-->
+          <app-post-comment
+            #postCommentComponent
+            [avatarUrl]="data.profileTeasers[post.userId].avatarUrl"
+            [username]="data.profileTeasers[post.userId].username"
+            [isVerifiedUser]="data.profileTeasers[post.userId].isVerified"
+            [creationDate]="postComment.date"
+            [timeElapsedAfterCreation$]="postComment.timeElapsedAfterCreation$"
+            [resolvedUserUrlUsername]="resolvedUser.urlUsername"
+            [body]="postComment.body"
+          >
+            <button
+              mat-button
+              color="accent"
+              class="w-100 max-width-content ordinary-button"
+              (click)="postCommentComponent.showAddReply()"
+            >
+              <mat-icon svgIcon="reply" class="mr-h"></mat-icon>
+              <!--            Reply-->
+              <app-number-cutter
+                *ngIf="postComment.totalSubcomments; else replyTemplate"
+                [value]="postComment.totalSubcomments"
+              ></app-number-cutter>
+              <ng-template #replyTemplate>Reply</ng-template>
+            </button>
+          </app-post-comment>
+        </div>
+
+        <app-post-subcomments
+          [commentId]="postComment._id"
+          [profileTeasers]="data.profileTeasers"
+        ></app-post-subcomments>
+        <!-- TODO: change condition similar to Show comments -->
+        <div *ngIf="postComment.totalSubcomments" class="post-item mt-glue">
           <button
             mat-button
             color="accent"
-            class="w-100 max-width-content ordinary-button"
-            (click)="postCommentComponent.showAddReply()"
+            class="w-100"
+            (click)="showSubcomments(postComment._id)"
+            [disabled]="isLoadingPostComments$ | async"
           >
-            <mat-icon svgIcon="reply" class="mr-h"></mat-icon>
-            <!--            Reply-->
-            <app-number-cutter
-              *ngIf="postComment.totalSubcomments; else replyTemplate"
-              [value]="postComment.totalSubcomments"
-            ></app-number-cutter>
-            <ng-template #replyTemplate>Reply</ng-template>
+            <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
+            Show replies
           </button>
-        </app-post-comment>
-      </div>
-      <!--      <div *ngFor="" class="post-item border-accent-secondary mt-glue">-->
-      <!--        <app-post-comment-->
-      <!--          [avatarUrl]="profileTeasers[post.userId].avatarUrl"-->
-      <!--          [username]="profileTeasers[post.userId].username"-->
-      <!--          [creationDate]="'20 October'"-->
-      <!--          [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"-->
-      <!--          [resolvedUserUrlUsername]="resolvedUser.urlUsername"-->
-      <!--          [body]="'Test'"-->
-      <!--        ></app-post-comment>-->
-      <!--      </div>-->
+        </div>
+        <!--      </ng-container>-->
+      </ng-container>
+    </ng-container>
 
-      <div *ngIf="postComment.totalSubcomments" class="post-item mt-glue">
+    <!--  </ng-container>-->
+
+    <!--  </ng-container>-->
+    <ng-container
+      *ngIf="{
+        postComments: postComments$ | async,
+        isLoadingPostComments: isLoadingPostComments$ | async
+      } as commentData"
+    >
+      postComments: {{ commentData.postComments?.length }} postCommentTotalCount:
+      {{ data.postCommentTotalCount }} comparison:
+      {{ commentData.postComments?.length < data.postCommentTotalCount }}
+      <div
+        *ngIf="
+          commentData.postComments?.length ||
+          commentData.postComments?.length < data.postCommentTotalCount
+        "
+        class="post-item mt-1 d-flex"
+      >
         <button
+          *ngIf="commentData.postComments?.length < data.postCommentTotalCount"
           mat-button
-          color="accent"
-          class="w-100"
-          (click)="showSubcomments(postComment._id)"
-          [disabled]="isLoadingPostComments$ | async"
+          color="primary"
+          class="w-100 rounded-0"
+          (click)="showComments(post._id, commentData.postComments)"
+          [disabled]="commentData.isLoadingPostComments"
         >
           <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
-          Show replies
+          Show comments
+        </button>
+        <button
+          *ngIf="commentData.postComments?.length"
+          mat-button
+          [class.border-left]="commentData.postComments?.length < data.postCommentTotalCount"
+          class="w-100 color-light-dark rounded-0"
+          (click)="hideCommentThread(post._id)"
+          [disabled]="commentData.isLoadingPostComments"
+        >
+          <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
+          Hide all comments
         </button>
       </div>
-      <!--      </ng-container>-->
     </ng-container>
-  </ng-container>
-
-  <!--  </ng-container>-->
-
-  <!--  </ng-container>-->
-  <div
-    *ngIf="
-      (postComments$ | async)?.length ||
-      (postComments$ | async)?.length < (postCommentTotalCount$ | async)
-    "
-    class="post-item mt-1 d-flex"
-  >
-    <button
-      *ngIf="(postComments$ | async)?.length < (postCommentTotalCount$ | async)"
-      mat-button
-      color="primary"
-      class="w-100 rounded-0"
-      (click)="showComments(post._id)"
-      [disabled]="isLoadingPostComments$ | async"
-    >
-      <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
-      Show comments
-    </button>
-    <button
-      *ngIf="(postComments$ | async)?.length"
-      mat-button
-      [class.border-left]="(postComments$ | async)?.length < (postCommentTotalCount$ | async)"
-      class="w-100 color-light-dark rounded-0"
-      (click)="hideCommentThread(post._id)"
-      [disabled]="isLoadingPostComments$ | async"
-    >
-      <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
-      Hide all comments
-    </button>
+    <!--  <div-->
+    <!--    *ngIf="-->
+    <!--      (postComments$ | async)?.length ||-->
+    <!--      (postComments$ | async)?.length < (postCommentTotalCount$ | async)-->
+    <!--    "-->
+    <!--    class="post-item mt-1 d-flex"-->
+    <!--  >-->
+    <!--    <button-->
+    <!--      *ngIf="(postComments$ | async)?.length < (postCommentTotalCount$ | async)"-->
+    <!--      mat-button-->
+    <!--      color="primary"-->
+    <!--      class="w-100 rounded-0"-->
+    <!--      (click)="showComments(post._id)"-->
+    <!--      [disabled]="isLoadingPostComments$ | async"-->
+    <!--    >-->
+    <!--      <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>-->
+    <!--      Show comments-->
+    <!--    </button>-->
+    <!--    <button-->
+    <!--      *ngIf="(postComments$ | async)?.length"-->
+    <!--      mat-button-->
+    <!--      [class.border-left]="(postComments$ | async)?.length < (postCommentTotalCount$ | async)"-->
+    <!--      class="w-100 color-light-dark rounded-0"-->
+    <!--      (click)="hideCommentThread(post._id)"-->
+    <!--      [disabled]="isLoadingPostComments$ | async"-->
+    <!--    >-->
+    <!--      <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>-->
+    <!--      Hide all comments-->
+    <!--    </button>-->
+    <!--  </div>-->
   </div>
-  <!--  </div>-->
-</div>
+</ng-container>

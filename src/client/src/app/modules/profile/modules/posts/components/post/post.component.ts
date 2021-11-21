@@ -1,8 +1,7 @@
-import {ChangeDetectionStrategy, Component, Inject, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {UserRole} from '~app/types/user/user.enums';
-import {EventEmitter} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {POST_COMMENT_MAX_LENGTH} from '~app/constants/post';
 import {UIPost} from '~app/types/post/post.interfaces';
@@ -15,8 +14,8 @@ import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {AppSelectors} from '~app/store/app.selectors';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {
+  PostCommentCreatePayload,
   UIPostComment,
-  UIPostSubcomment,
 } from '~app/types/post-comment/post-comment.interfaces';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
 
@@ -30,16 +29,13 @@ import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.sel
 export class PostComponent implements OnInit {
   @Input() public readonly post!: UIPost;
 
-  @Output() public readonly deletePost = new EventEmitter<void>();
-  @Output() public readonly addComment = new EventEmitter<string>();
-
   public readonly profileTeasers$: Observable<ProfileTeasers>;
   // public readonly visiblePostComments$: Observable<PostsState['visiblePostComments']>;
   public readonly isLoadingPostComments$: Observable<boolean>;
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   public readonly addCommentControl = new FormControl('');
   public postComments$: Observable<Array<UIPostComment>> = of();
-  public postSubcomments$: Observable<Array<UIPostSubcomment>> = of();
+  // public postSubcomments$: Observable<Array<UIPostSubcomment>> = of();
   public postCommentTotalCount$: Observable<number> = of();
   public showPostComments = false;
   public showPostSubcomments = false;
@@ -66,6 +62,7 @@ export class PostComponent implements OnInit {
 
   public ngOnInit(): void {
     this.postComments$ = this.store.select$(PostsSelectors.getPostCommentsByPostId, this.post._id);
+    // this.postSubcomments$ = this.store.select$(PostsSelectors.get, this.post._id);
     this.postCommentTotalCount$ = this.store.select$(
       PostsSelectors.getPostCommentTotalCount,
       this.post._id,
@@ -84,25 +81,29 @@ export class PostComponent implements OnInit {
     });
   }
 
-  public delete(): void {
-    this.deletePost.emit();
-  }
-
   public comment(value: string): void {
     if (!this.showPostComments) this.showPostComments = true;
 
-    this.addComment.emit(value);
+    // this.addComment.emit(value);
+    this.handleAddPostComment(value);
   }
 
-  public showComments(postId: string): void {
+  public showComments(postId: string, postComments: Array<UIPostComment>): void {
     if (!this.showPostComments) this.showPostComments = true;
 
     // console.log(this.store.select(PostsSelectors.getPostCommentCount, postId) ?? 0);
     // console.log(postId, this.store.select(PostsSelectors.getPostCommentCount));
 
+    const recentlyAddedPostCommentIds = postComments
+      ? postComments
+          .filter((postComment) => postComment.isRecentlyAdded)
+          .map((postComment) => postComment._id)
+      : [];
+
     this.store
       .dispatch$(PostsActions.loadPostComments, {
         postId,
+        recentlyAddedPostCommentIds,
         skipProfileTeaserIds: Object.keys(this.store.select(ProfileSelectors.getProfileTeasers)),
         offset: this.store.select(PostsSelectors.getPostCommentCount, postId),
       })
@@ -128,12 +129,62 @@ export class PostComponent implements OnInit {
       .subscribe(console.log);
   }
 
+  public handleAddPostComment(body: string): void {
+    // this.progressBarService.show();
+    // console.log(payload);
+    this.store
+      .dispatch$(PostsActions.createPostComment, {
+        postId: this.post._id,
+        body,
+      } as PostCommentCreatePayload)
+      .pipe(untilDestroyed(this))
+      .subscribe(console.log);
+    // this.postCommentService
+    //   .create(payload)
+    //   .pipe(
+    //     untilDestroyed(this),
+    //     finalize(() => this.progressBarService.hide()),
+    //   )
+    //   .subscribe(({data}: FetchResult<PostCommentCreateMutationResult>) => {
+    //     console.log(data);
+    //   });
+  }
+
+  public handlePostDelete(): void {
+    // this.progressBarService.show();
+    // console.log(_id, this.post);
+    this.store
+      .dispatch$(PostsActions.deletePost, this.post._id)
+      .pipe(untilDestroyed(this))
+      .subscribe();
+    // this.postService
+    //   .deleteById(_id)
+    //   .pipe(
+    //     untilDestroyed(this),
+    //     // finalize(() => this.progressBarService.hide()),
+    //   )
+    //   .subscribe(({data}: FetchResult<PostDeleteCountMutationResult>) => {
+    //     if (!data?.deletePost) return;
+    //
+    //     this.posts.splice(
+    //       this.posts.findIndex((post) => post._id === _id),
+    //       1,
+    //     );
+    //   });
+  }
+
   // public isPostOwner(username: string): boolean {
   //   return this.resolvedUser.urlUsername === username;
   // }
 
+  // public isButtonRenderable(condition1, condition2): boolean {
+  //   return condition1 || condition2;
+  // }
+
   public get hasUserRole(): boolean {
-    return this.resolvedUser.role === UserRole.USER;
+    console.log(this.resolvedUser);
+    // If profile owner
+    return this.resolvedUser.role === UserRole.USER; // TODO or post author
   }
 
   // ngOnChanges(changes: SimpleChanges): void {
