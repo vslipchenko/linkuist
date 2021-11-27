@@ -218,6 +218,7 @@ export const PostsEffects: Effects<PostsState> = {
             dateService,
           }),
           isRecentlyAdded: true,
+          // hasToBeSkippedByApi: true,
         };
 
         console.log('postComment ', postComment);
@@ -251,7 +252,7 @@ export const PostsEffects: Effects<PostsState> = {
         payload.skipProfileTeaserIds,
         {
           order: payload.order ?? SortOrder.ASCENDING,
-          offset: payload.offset,
+          offset: payload.offset - payload.recentlyAddedPostCommentIds.length,
           limit: payload.limit ?? POST_COMMENT_FETCH_LIMIT,
         },
       )

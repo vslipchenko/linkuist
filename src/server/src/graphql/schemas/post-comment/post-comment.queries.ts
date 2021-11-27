@@ -49,7 +49,7 @@ const aggregatePostCommentData = async (
           parameters.offset ? {$skip: parameters.offset} : null,
           {$limit: parameters.limit},
         ].filter((stage) => stage), // Filter null,
-        total: [{$count: 'total'}],
+        // total: [{$count: 'total'}],
       },
     },
   ]);
@@ -74,7 +74,11 @@ const aggregatePostCommentData = async (
   return {
     postComments: {
       data,
-      total: aggregationResult[0].total.length ? aggregationResult[0].total[0].total : 0,
+      // total: aggregationResult[0].total.length ? aggregationResult[0].total[0].total : 0,
+      total: await PostComment.countDocuments({
+        postId,
+        commentId: {$exists: false}, // do not count subcomments (replies)
+      }),
     },
     userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
   };

@@ -1,7 +1,7 @@
 <app-add-post *ngIf="hasUserRole" (addPost)="createPost($event)"></app-add-post>
 
-<div class="post-list mx-auto">
-  <app-post *ngFor="let post of posts$ | async; trackBy: postsTrackBy" [post]="post"></app-post>
+<div *ngIf="posts$ | async as posts" class="post-list mx-auto">
+  <app-post *ngFor="let post of posts; trackBy: postsTrackBy" [post]="post"></app-post>
   <!--  <div *ngFor="let post of posts; trackBy: postsTrackBy.bind(this)" class="note">-->
   <!--    <div class="panel">-->
   <!--      <div class="user-block d-flex align-items-center">-->
@@ -63,12 +63,12 @@
   <!--  </div>-->
   <!--  {{ postTotalCount$ | async }} {{ postCount$ | async }}-->
   <button
-    *ngIf="(postCount$ | async) < (postTotalCount$ | async)"
+    *ngIf="posts.length < (postTotalCount$ | async)"
     mat-flat-button
     color="primary"
     class="button-note rounded-0"
     [disabled]="isLoadingPosts$ | async"
-    (click)="showMorePosts()"
+    (click)="loadPosts(posts.length)"
   >
     <!--      (click)="addPost.emit(postInput.textContent)"-->
     <mat-icon svgIcon="eye" class="mt-n1 mt-nh"></mat-icon>

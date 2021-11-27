@@ -18,6 +18,7 @@ import {
   UIPostComment,
 } from '~app/types/post-comment/post-comment.interfaces';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
+import { UIPostSubcomment } from "~app/types/post-subcomment/post-subcomment.interfaces";
 
 @UntilDestroy()
 @Component({
@@ -32,13 +33,14 @@ export class PostComponent implements OnInit {
   public readonly profileTeasers$: Observable<ProfileTeasers>;
   // public readonly visiblePostComments$: Observable<PostsState['visiblePostComments']>;
   public readonly isLoadingPostComments$: Observable<boolean>;
+  public readonly isLoadingPostSubcomments$: Observable<boolean>;
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   public readonly addCommentControl = new FormControl('');
   public postComments$: Observable<Array<UIPostComment>> = of();
   // public postSubcomments$: Observable<Array<UIPostSubcomment>> = of();
   public postCommentTotalCount$: Observable<number> = of();
   public showPostComments = false;
-  public showPostSubcomments = false;
+  // public showPostSubcomments = false;
 
   public resolvedUser!: ResolvedUser;
 
@@ -51,6 +53,7 @@ export class PostComponent implements OnInit {
     this.profileTeasers$ = this.store.select$(ProfileSelectors.getProfileTeasers);
     // this.visiblePostComments$ = this.store.select$(PostsSelectors.getVisiblePostComments);
     this.isLoadingPostComments$ = this.store.select$(PostsSelectors.getIsLoadingPostComments);
+    this.isLoadingPostSubcomments$ = this.store.select$(PostsSelectors.getIsLoadingPostSubcomments);
 
     this.store
       .select$<ResolvedUser>(AppSelectors.getResolvedUser)
@@ -93,7 +96,6 @@ export class PostComponent implements OnInit {
 
     // console.log(this.store.select(PostsSelectors.getPostCommentCount, postId) ?? 0);
     // console.log(postId, this.store.select(PostsSelectors.getPostCommentCount));
-
     const recentlyAddedPostCommentIds = postComments
       ? postComments
           .filter((postComment) => postComment.isRecentlyAdded)
@@ -105,7 +107,8 @@ export class PostComponent implements OnInit {
         postId,
         recentlyAddedPostCommentIds,
         skipProfileTeaserIds: Object.keys(this.store.select(ProfileSelectors.getProfileTeasers)),
-        offset: this.store.select(PostsSelectors.getPostCommentCount, postId),
+        // offset: this.store.select(PostsSelectors.getPostCommentCount, postId),
+        offset: postComments?.length ?? 0,
       })
       .pipe(untilDestroyed(this))
       .subscribe(console.log);
@@ -117,7 +120,7 @@ export class PostComponent implements OnInit {
   }
 
   public showSubcomments(commentId: string): void {
-    if (!this.showPostSubcomments) this.showPostSubcomments = true;
+    // if (!this.showPostSubcomments) this.showPostSubcomments = true;
 
     this.store
       .dispatch$(PostsActions.loadPostSubcomments, {
@@ -127,6 +130,11 @@ export class PostComponent implements OnInit {
       })
       .pipe(untilDestroyed(this))
       .subscribe(console.log);
+  }
+
+  public hideSubcommentThread(commentId: string): void {
+    // if (!this.showPostSubcomments) this.showPostSubcomments = true;
+    this.store.dispatch(PostsActions.removeSubcommentThread, commentId);
   }
 
   public handleAddPostComment(body: string): void {
@@ -173,6 +181,15 @@ export class PostComponent implements OnInit {
     //   });
   }
 
+  // public addPostComment(value: string): void {
+  //
+  // }
+  //
+  //
+  // public addPostSubcomment(value: string): void {
+  //
+  // }
+
   // public isPostOwner(username: string): boolean {
   //   return this.resolvedUser.urlUsername === username;
   // }
@@ -180,6 +197,14 @@ export class PostComponent implements OnInit {
   // public isButtonRenderable(condition1, condition2): boolean {
   //   return condition1 || condition2;
   // }
+
+  public getPostSubcomments$(commentId: string): Observable<Array<UIPostSubcomment>> {
+    return this.store.select$(PostsSelectors.getPostSubcommentsByCommentId, commentId);
+  }
+
+  public getPostSubcommentTotalCount$(commentId: string): Observable<number> {
+    return this.store.select$(PostsSelectors.getPostSubcommentTotalCount, commentId);
+  }
 
   public get hasUserRole(): boolean {
     console.log(this.resolvedUser);

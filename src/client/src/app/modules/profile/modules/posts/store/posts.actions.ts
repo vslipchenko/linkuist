@@ -3,6 +3,7 @@ export const PostsActions = {
   // prependSubcomment: 'Create post',
   prependPost: 'Prepend post',
   removeCommentThread: 'Remove comments & subcomments for specific post',
+  removeSubcommentThread: 'Remove subcomments for specific post comment',
   prependPostComment: 'Prepend post comment',
   deletePost: 'Delete post',
   removePost: 'Remove post from posts',

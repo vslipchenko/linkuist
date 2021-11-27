@@ -125,4 +125,12 @@ export const PostsReducers: Reducers<PostsState> = {
       [postId]: [], // TODO Consider reset subcomments as well
     },
   }),
+  [PostsActions.removeSubcommentThread]: (state, commentId: string) => ({
+    ...state,
+    postSubcomments: {
+      ...state.postSubcomments,
+      // [payload._id]: payload
+      [commentId]: [], // TODO Consider reset subcomments as well
+    },
+  }),
 };

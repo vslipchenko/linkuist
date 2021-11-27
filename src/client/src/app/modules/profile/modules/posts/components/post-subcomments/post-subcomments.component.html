@@ -42,7 +42,7 @@
     *ngIf="_showAddReply"
     placeholder="Write a reply..."
     [maxCharLength]="0"
-    (comment)="(null)"
+    (comment)="addPostSubcomment($event)"
   ></app-add-comment>
   <!--  </ng-container>-->
 </div>

@@ -25,6 +25,8 @@ export class PostCommentComponent {
   @Input() public readonly body!: string;
   @Input() public readonly isVerifiedUser!: boolean;
 
+  // @Output() public readonly comment = new EventEmitter<string>();
+
   @ViewChild(AddCommentComponent)
   private readonly addCommentComponent!: AddCommentComponent;
 
@@ -44,9 +46,7 @@ export class PostCommentComponent {
     // debugger;
   }
 
-  public addCommentReply(value: string): void {
-    // this.
-  }
+  public addPostComment(value: string): void {}
 
   // public focusElasticInput(): void {
   //   // console.log(this.elasticInputComponent.);

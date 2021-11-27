@@ -18,6 +18,7 @@ export interface UIPostCommentBase {
   date: string;
   timeElapsedAfterCreation$: Observable<string>;
   isRecentlyAdded?: boolean; // Flag that symbolized that record was created recently and may be out of order
+  // hasToBeSkippedByApi?: boolean;
 }
 
 export interface UIPostComment extends PostComment, UIPostCommentBase {

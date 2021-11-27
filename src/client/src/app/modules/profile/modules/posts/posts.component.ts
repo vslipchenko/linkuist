@@ -40,7 +40,7 @@ export class PostsComponent implements OnInit {
   // public readonly UserRole = UserRole;
   // public posts: Array<any> = [];
   public posts$: Observable<Array<UIPost>>;
-  public postCount$: Observable<number>;
+  // public postCount$: Observable<number>;
   public postTotalCount$: Observable<number>;
   public isLoadingPosts$: Observable<boolean>;
   // public profileTeasers: {[userId: string]: {username: string; avatarUrl: string}} = {};
@@ -58,7 +58,7 @@ export class PostsComponent implements OnInit {
       });
 
     this.posts$ = this.store.select$(PostsSelectors.getPosts);
-    this.postCount$ = this.store.select$(PostsSelectors.getPostCount);
+    // this.postCount$ = this.store.select$(PostsSelectors.getPostCount);
     this.postTotalCount$ = this.store.select$(PostsSelectors.getPostTotalCount);
     this.isLoadingPosts$ = this.store.select$(PostsSelectors.getIsLoadingPosts);
   }
@@ -98,11 +98,11 @@ export class PostsComponent implements OnInit {
     this.store.dispatch$(PostsActions.createPost, text).pipe(untilDestroyed(this)).subscribe();
   }
 
-  public showMorePosts(): void {
-    const offset = this.store.select<number>(PostsSelectors.getPostCount);
-
-    this.loadPosts(offset);
-  }
+  // public showMorePosts(postCount: number): void {
+  //   // const offset = this.store.select<number>(PostsSelectors.getPostCount);
+  //
+  //   this.loadPosts(offset);
+  // }
 
   // private bindProfileChange(): void {
   //   this.profileService.userProfile$.pipe(untilDestroyed(this)).subscribe((_profile) => {
@@ -118,7 +118,7 @@ export class PostsComponent implements OnInit {
   //   });
   // }
 
-  private loadPosts(offset = 0): void {
+  public loadPosts(offset = 0): void {
     // Profile teasers is empty at this point as current user profile is not fetched yet,
     // use resoled user id as a prediction
     let skipProfileTeaserIds = Object.keys(this.store.select(ProfileSelectors.getProfileTeasers));

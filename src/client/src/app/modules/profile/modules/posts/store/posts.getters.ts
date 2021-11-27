@@ -7,10 +7,11 @@ export const PostsGetters: Getters<PostsState> = {
   [PostsSelectors.getPostCommentsByPostId]: (state, payload: string) => state.postComments[payload],
   [PostsSelectors.getPostSubcommentsByCommentId]: (state, payload: string) =>
     state.postSubcomments[payload],
-  [PostsSelectors.getPostCount]: (state) => state.posts.length,
+  // [PostsSelectors.getPostCount]: (state) => state.posts.length,
   [PostsSelectors.getPostTotalCount]: (state) => state.postTotalCount,
   [PostsSelectors.getIsLoadingPosts]: (state) => state.isLoadingPosts,
   [PostsSelectors.getIsLoadingPostComments]: (state) => state.isLoadingPostComments,
+  [PostsSelectors.getIsLoadingPostSubcomments]: (state) => state.isLoadingPostSubcomments,
   [PostsSelectors.getPostCommentCount]: (state, postId: string) =>
     state.postComments[postId]?.length ?? 0,
   [PostsSelectors.getPostSubcommentCount]: (state, commentId: string) =>

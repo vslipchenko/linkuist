@@ -58,4 +58,6 @@ export class PostSubcommentsComponent implements OnInit {
     this.addCommentComponent.focusElasticInput();
     // debugger;
   }
+
+  public addPostSubcomment(value: string): void {}
 }
