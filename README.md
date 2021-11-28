@@ -1,8 +1,11 @@
 # Linkuist
 MEAN GraphQL stack application
 
+MIGRATION:
+* Client: UPDATE apollo-angular & graphql to newer version once apollo-angular supports Angular 13
+
 TODO
-* Implement comments
+* Implement subcomments (creation, deletion, show/hide)
 * Implement liking, sharing
 * Implement proper user input sanitization
 * Tree shake unused graphql types
