@@ -3,7 +3,6 @@
     font-family: $font-family;
     font-style: $font-style;
     font-weight: $font-weight;
-
     src: url('~assets/fonts/#{$font-family}/#{$font-family}-#{$font-type}.ttf') format('truetype');
   }
 }

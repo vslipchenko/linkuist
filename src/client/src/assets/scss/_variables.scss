@@ -1,10 +1,12 @@
 @use '~@angular/material/theming' as mat;
+@use 'sass:map';
+
 //@use 'components/navigation/variables' as navigationVar;
 
 /* color */
-$color-primary: map-get(mat.$mat-blue, 500); // #2196f3
-$color-accent: map-get(mat.$mat-pink, 500); // #e91e63
-$color-warn: map-get(mat.$mat-red, 500); // #f44336
+$color-primary: map.get(mat.$mat-blue, 500); // #2196f3
+$color-accent: map.get(mat.$mat-pink, 500); // #e91e63
+$color-warn: map.get(mat.$mat-red, 500); // #f44336
 //$color-warn: #f44336;
 $color-success: #28a745;
 $color-light: #fff;
@@ -32,6 +34,7 @@ $font-size-largest: 2rem;
 $font-size-larger: 1.5rem;
 $font-size-large: 1.2rem;
 $font-size-regular: 0.9rem;
+
 //$font-size-medium: 0.7rem;
 //$font-size-small: 0.5rem;
 
@@ -41,18 +44,22 @@ $breakpoint-medium: 768px; // > tablets
 $breakpoint-large: 992px; // > large tablets, laptops, desktops
 $breakpoint-huge: 1200px; // > laptops, desktops
 $unit-interval-px: 1;
+
 //$unit-interval-em: 0.01;
 //$unit-interval-rem: 0.1;
 
 /* common variables */
 // navigation component
 $common-navigation-height: 48px;
+
 // global
 $common-main-screen-height: calc(100vh - #{$common-navigation-height});
 $common-line-height: 1.428;
 $common-default-material-icon-size: 24px;
+
 // profile-page
-//$common-user-page-content-block-min-height: 148px; // littlest height that dont cause scroll on device viewport >= iphone se
+//$common-user-page-content-block-min-height: 148px;
+// littlest height that dont cause scroll on device viewport >= iphone se
 $common-user-page-content-block-width-1: calc(100% - #{$unit-2} * 2);
 $common-user-page-content-block-width-2: 500px;
 $common-user-page-content-block-width-3: 650px;

@@ -2,10 +2,6 @@
 @use 'variables' as var;
 @use 'media';
 
-:host(.reserve-navigation) .navigation {
-  z-index: 1;
-}
-
 .navigation {
   align-items: center;
   background-color: var.$color-light;
@@ -13,12 +9,17 @@
   bottom: 0;
   display: flex;
   height: var.$common-navigation-height;
+
   //justify-content: space-between;
   //box-shadow: $home-shadow;
   padding: 0 var.$unit-2;
   position: fixed;
   width: 100%;
   z-index: 2;
+}
+
+:host(.reserve-navigation) .navigation {
+  z-index: 1;
 }
 
 .secondary-actions {
