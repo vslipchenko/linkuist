@@ -1,11 +1,11 @@
 {
   "plugins": [
     "stylelint-order",
-    "stylelint-scss",
     "stylelint-prettier"
   ],
   "extends": [
-    "stylelint-config-prettier"
+    "stylelint-config-prettier",
+    "stylelint-config-standard-scss"
   ],
   "rules": {
     "at-rule-disallowed-list": [
