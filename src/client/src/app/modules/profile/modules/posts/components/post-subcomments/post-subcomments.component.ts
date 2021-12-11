@@ -13,7 +13,10 @@ import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.sel
 import {Store} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store';
 import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
+import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
+import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-post-subcomments',
   templateUrl: './post-subcomments.component.html',
@@ -21,6 +24,7 @@ import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostSubcommentsComponent implements OnInit {
+  @Input() public readonly postId!: string;
   @Input() public readonly commentId!: string;
   // @Input() public readonly avatarUrl!: string;
   // @Input() public readonly username!: string;
@@ -58,6 +62,18 @@ export class PostSubcommentsComponent implements OnInit {
     this.addCommentComponent.focusElasticInput();
     // debugger;
   }
-
-  public addPostSubcomment(value: string): void {}
+  // Subcomment reply has to have @username that is going before text body
+  public addPostSubcomment(body: string): void {
+    this.store
+      .dispatch$(PostsActions.createPostSubcomment, {
+        subcommentPayload: {
+          postId: this.postId,
+          commentId: this.commentId,
+          body,
+        },
+        insertAtPosition: undefined, // TODO
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe(console.log);
+  }
 }

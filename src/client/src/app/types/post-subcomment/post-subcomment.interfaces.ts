@@ -12,6 +12,7 @@ export interface PostSubcommentsByCommentIdQueryResult {
 }
 
 export interface PostSubcommentCreatePayload {
+  postId: string;
   commentId: string;
   // commentId?: string;
   body: string;
@@ -21,4 +22,6 @@ export interface PostSubcommentCreateMutationResult {
   createPostSubcomment: PostCommentBase;
 }
 
-export interface UIPostSubcomment extends PostCommentBase, UIPostCommentBase {}
+export interface UIPostSubcomment extends Omit<PostCommentBase, 'postId'>, UIPostCommentBase {
+  commentId: string;
+}

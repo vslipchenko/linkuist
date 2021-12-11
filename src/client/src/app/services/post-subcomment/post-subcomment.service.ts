@@ -34,7 +34,7 @@ export class PostSubcommentService {
     return this.apollo.query({
       query: GET_POST_SUBCOMMENTS_BY_COMMENT_ID,
       variables: {commentId, skipProfileTeaserIds, parameters},
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'network-only', // Prevents cached results; https://www.apollographql.com/docs/react/data/queries/#supported-fetch-policies
     });
   }
 }

@@ -9,7 +9,10 @@ import {Observable} from 'rxjs';
 import {AddCommentComponent} from '~app/modules/profile/modules/posts/components/add-comment/add-comment.component';
 import {Store} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store';
+import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
+import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-post-comment',
   templateUrl: './post-comment.component.html',
@@ -17,6 +20,8 @@ import {PostsState} from '~app/modules/profile/modules/posts/store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostCommentComponent {
+  @Input() public readonly postId!: string;
+  @Input() public readonly commentId!: string;
   @Input() public readonly avatarUrl!: string;
   @Input() public readonly username!: string;
   @Input() public readonly resolvedUserUrlUsername!: string;
@@ -25,7 +30,7 @@ export class PostCommentComponent {
   @Input() public readonly body!: string;
   @Input() public readonly isVerifiedUser!: boolean;
 
-  // @Output() public readonly comment = new EventEmitter<string>();
+  // @Output() public readonly submit = new EventEmitter<string>();
 
   @ViewChild(AddCommentComponent)
   private readonly addCommentComponent!: AddCommentComponent;
@@ -46,7 +51,19 @@ export class PostCommentComponent {
     // debugger;
   }
 
-  public addPostComment(value: string): void {}
+  public addPostSubcomment(body: string): void {
+    this.store
+      .dispatch$(PostsActions.createPostSubcomment, {
+        subcommentPayload: {
+          postId: this.postId,
+          commentId: this.commentId,
+          body,
+        },
+        insertAtPosition: 0,
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe(console.log);
+  }
 
   // public focusElasticInput(): void {
   //   // console.log(this.elasticInputComponent.);

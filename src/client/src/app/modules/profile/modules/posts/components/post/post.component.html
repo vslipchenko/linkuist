@@ -123,11 +123,13 @@
         <div
           class="post-item border-accent-primary"
           [class.mt-glue]="!isFirst"
-          [class.border-dashed]="postComment.isRecentlyAdded"
+          [class.border-left-dashed]="postComment.isRecentlyAdded"
         >
           <!--        {{ isFirst }}-->
           <app-post-comment
             #postCommentComponent
+            [postId]="post._id"
+            [commentId]="postComment._id"
             [avatarUrl]="data.profileTeasers[post.userId].avatarUrl"
             [username]="data.profileTeasers[post.userId].username"
             [isVerifiedUser]="data.profileTeasers[post.userId].isVerified"
@@ -154,6 +156,7 @@
         </div>
 
         <app-post-subcomments
+          [postId]="post._id"
           [commentId]="postComment._id"
           [profileTeasers]="data.profileTeasers"
         ></app-post-subcomments>
@@ -172,7 +175,7 @@
               subcommentData.postSubcomments?.length ||
               subcommentData.postSubcomments?.length < subcommentData.postSubcommentTotalCount
             "
-            class="post-item mt-glue"
+            class="post-item mt-glue d-flex"
           >
             <button
               *ngIf="

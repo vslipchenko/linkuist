@@ -35,7 +35,7 @@ export class PostCommentService {
     return this.apollo.query({
       query: GET_POST_COMMENTS_BY_POST_ID,
       variables: {postId, skipPostCommentIds, skipProfileTeaserIds, parameters},
-      fetchPolicy: 'network-only', // https://www.apollographql.com/docs/react/data/queries/#supported-fetch-policies
+      fetchPolicy: 'network-only', // Prevents cached results; https://www.apollographql.com/docs/react/data/queries/#supported-fetch-policies
     });
   }
 }

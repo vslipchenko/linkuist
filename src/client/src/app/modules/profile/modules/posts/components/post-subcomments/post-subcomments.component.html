@@ -2,6 +2,7 @@
 <div
   *ngFor="let postSubcomment of postSubcomments$ | async"
   class="post-item border-accent-secondary mt-glue"
+  [class.border-left-dashed]="postSubcomment.isRecentlyAdded"
 >
   <!--  <ng-container *ngFor="let postSubcomment of postSubcomments$ | async">-->
   <app-user-post-panel
@@ -37,7 +38,7 @@
     </button>
     <!--  </div>-->
   </div>
-
+  40
   <app-add-comment
     *ngIf="_showAddReply"
     placeholder="Write a reply..."

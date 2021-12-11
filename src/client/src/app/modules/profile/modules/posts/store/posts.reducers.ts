@@ -4,6 +4,7 @@ import {PostsState} from '~app/modules/profile/modules/posts/store/index';
 import {UIPost} from '~app/types/post/post.interfaces';
 import {UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
 import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
+import {immutableInsertAt} from '~app/utilities/array';
 
 export const PostsReducers: Reducers<PostsState> = {
   [PostsActions.loadPostSubcomments]: (state) => ({
@@ -28,9 +29,33 @@ export const PostsReducers: Reducers<PostsState> = {
     posts: state.posts.filter((post) => post._id !== _id),
     postTotalCount: state.postTotalCount - 1,
   }),
-  [PostsActions.insertPostSubcomment]: (state, payload) => ({
+  [PostsActions.insertPostSubcomment]: (
+    state,
+    {
+      insertAtPosition,
+      postSubcomment,
+    }: {
+      insertAtPosition: number;
+      postSubcomment: UIPostSubcomment;
+    },
+  ) => ({
     // TODO
     ...state,
+    postSubcomments: {
+      ...state.postSubcomments,
+      // [payload.postSubcomment.commentId]: [payload, ...(state.postComments[payload.postId] ?? [])],
+      [postSubcomment.commentId]: state.postSubcomments[postSubcomment.commentId]
+        ? immutableInsertAt(
+            state.postSubcomments[postSubcomment.commentId] ?? [],
+            insertAtPosition,
+            postSubcomment,
+          )
+        : [postSubcomment],
+    },
+    postSubcommentTotalCount: {
+      ...state.postSubcommentTotalCount,
+      [postSubcomment.commentId]: state.postSubcommentTotalCount[postSubcomment.commentId] + 1,
+    },
   }),
   [PostsActions.appendPostSubcomments]: (
     state,
@@ -110,7 +135,6 @@ export const PostsReducers: Reducers<PostsState> = {
       ...state.postCommentTotalCount,
       [payload.postId]: payload.postCommentTotalCount,
     },
-    // TODO Update postSubcommentTotalCount ??? Doubtful
     postSubcommentTotalCount: {
       ...state.postSubcommentTotalCount,
       ...payload.postSubcommentTotalCount,

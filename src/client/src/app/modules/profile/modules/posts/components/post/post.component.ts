@@ -18,7 +18,7 @@ import {
   UIPostComment,
 } from '~app/types/post-comment/post-comment.interfaces';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
-import { UIPostSubcomment } from "~app/types/post-subcomment/post-subcomment.interfaces";
+import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
 
 @UntilDestroy()
 @Component({
@@ -207,7 +207,7 @@ export class PostComponent implements OnInit {
   }
 
   public get hasUserRole(): boolean {
-    console.log(this.resolvedUser);
+    // console.log(this.resolvedUser);
     // If profile owner
     return this.resolvedUser.role === UserRole.USER; // TODO or post author
   }

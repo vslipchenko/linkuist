@@ -5,7 +5,7 @@ export interface PostCommentBase {
   _id: string;
   userId: string;
   postId: string;
-  commentId?: string; // is null for subcomments
+  // commentId?: string; // is null for subcomments
   body: string;
   createdAt: number;
 }

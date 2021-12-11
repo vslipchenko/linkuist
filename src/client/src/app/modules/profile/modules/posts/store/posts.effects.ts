@@ -169,17 +169,20 @@ export const PostsEffects: Effects<PostsState> = {
     payload,
     dispatch,
     injector,
-  }: EffectOptions<PostsState, PostSubcommentCreatePayload>) => {
+  }: EffectOptions<
+    PostsState,
+    {subcommentPayload: PostSubcommentCreatePayload; insertAtPosition: number}
+  >) => {
     const postSubcommentService = injector.get(PostSubcommentService);
 
-    return postSubcommentService.create(payload).pipe(
+    return postSubcommentService.create(payload.subcommentPayload).pipe(
       tap(({data}: FetchResult<PostSubcommentCreateMutationResult>) => {
         const translateService = injector.get(TranslateService);
         const dateService = injector.get(DateService);
 
         const {createdAt} = data!.createPostSubcomment;
 
-        const postSubcomment: Partial<UIPostComment> = {
+        const postSubcomment: Partial<UIPostSubcomment> = {
           ...data?.createPostSubcomment,
           date: getPostFullDate(createdAt, translateService),
           timeElapsedAfterCreation$: getTimeElapsedAfterCreation$({
@@ -190,7 +193,11 @@ export const PostsEffects: Effects<PostsState> = {
           isRecentlyAdded: true,
         };
 
-        dispatch(PostsActions.insertPostSubcomment, postSubcomment);
+        // console.log(data!.createPostSubcomment, postSubcomment);
+        dispatch(PostsActions.insertPostSubcomment, {
+          insertAtPosition: payload.insertAtPosition,
+          postSubcomment,
+        });
       }),
     );
   },

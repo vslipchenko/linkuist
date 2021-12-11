@@ -32,7 +32,7 @@ export class AddCommentComponent {
   }
 
   public addComment(): void {
-    this.comment.emit(this.addCommentControl.value);
+    this.comment.emit(this.addCommentControl.value as string);
     // Reset
     this.addCommentControl.setValue('');
   }
