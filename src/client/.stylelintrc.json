@@ -1,4 +1,5 @@
 {
+  "customSyntax": "postcss-html",
   "plugins": [
     "stylelint-order",
     "stylelint-prettier"
