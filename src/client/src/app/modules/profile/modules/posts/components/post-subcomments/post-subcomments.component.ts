@@ -2,19 +2,25 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {AddCommentComponent} from '~app/modules/profile/modules/posts/components/add-comment/add-comment.component';
-import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
+import {
+  PostSubcommentCreateMutationResult,
+  UIPostSubcomment,
+} from '~app/types/post-subcomment/post-subcomment.interfaces';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
 import {Store} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store';
 import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
+import {FetchResult} from '@apollo/client/core';
 
 @UntilDestroy()
 @Component({
@@ -35,6 +41,8 @@ export class PostSubcommentsComponent implements OnInit {
   // @Input() public readonly isVerifiedUser!: boolean;
 
   @Input() public readonly profileTeasers!: ProfileTeasers;
+
+  @Output() public readonly newSubcomment = new EventEmitter<{id: string; commentId: string}>();
 
   public postSubcomments$: Observable<Array<UIPostSubcomment>> = of();
 
@@ -63,17 +71,25 @@ export class PostSubcommentsComponent implements OnInit {
     // debugger;
   }
   // Subcomment reply has to have @username that is going before text body
-  public addPostSubcomment(body: string): void {
+  public addPostSubcomment(body: string, index: number): void {
     this.store
-      .dispatch$(PostsActions.createPostSubcomment, {
-        subcommentPayload: {
-          postId: this.postId,
-          commentId: this.commentId,
-          body,
+      .dispatch$<FetchResult<PostSubcommentCreateMutationResult>>(
+        PostsActions.createPostSubcomment,
+        {
+          subcommentPayload: {
+            postId: this.postId,
+            commentId: this.commentId,
+            body,
+          },
+          insertAtPosition: index + 1, // Insert right after subcomment being replied to
         },
-        insertAtPosition: undefined, // TODO
-      })
+      )
       .pipe(untilDestroyed(this))
-      .subscribe(console.log);
+      .subscribe((result) =>
+        this.newSubcomment.emit({
+          id: result.data!.createPostSubcomment._id,
+          commentId: this.commentId,
+        }),
+      );
   }
 }

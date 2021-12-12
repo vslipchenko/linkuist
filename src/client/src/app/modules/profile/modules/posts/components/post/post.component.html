@@ -142,6 +142,7 @@
               [timeElapsedAfterCreation$]="postComment.timeElapsedAfterCreation$"
               [resolvedUserUrlUsername]="resolvedUser.urlUsername"
               [body]="postComment.body"
+              (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
             >
               <button
                 mat-button
@@ -164,6 +165,7 @@
             [postId]="post._id"
             [commentId]="postComment._id"
             [profileTeasers]="data.profileTeasers"
+            (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
           ></app-post-subcomments>
 
           <ng-container

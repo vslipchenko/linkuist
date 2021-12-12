@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angula
 import {DOCUMENT} from '@angular/common';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {UserRole} from '~app/types/user/user.enums';
-import {FormControl} from '@angular/forms';
 import {POST_COMMENT_MAX_LENGTH} from '~app/constants/post';
 import {UIPost} from '~app/types/post/post.interfaces';
 import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
@@ -14,11 +13,13 @@ import {ResolvedUser} from '~app/types/user/user.interfaces';
 import {AppSelectors} from '~app/store/app.selectors';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {
+  PostCommentCreateMutationResult,
   PostCommentCreatePayload,
   UIPostComment,
 } from '~app/types/post-comment/post-comment.interfaces';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
 import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
+import {FetchResult} from '@apollo/client/core';
 
 @UntilDestroy()
 @Component({
@@ -35,7 +36,7 @@ export class PostComponent implements OnInit {
   public readonly isLoadingPostComments$: Observable<boolean>;
   public readonly isLoadingPostSubcomments$: Observable<boolean>;
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
-  public readonly addCommentControl = new FormControl('');
+  // public readonly addCommentControl = new FormControl('');
   public postComments$: Observable<Array<UIPostComment>> = of();
   // public postSubcomments$: Observable<Array<UIPostSubcomment>> = of();
   public postCommentTotalCount$: Observable<number> = of();
@@ -43,6 +44,9 @@ export class PostComponent implements OnInit {
   // public showPostSubcomments = false;
 
   public resolvedUser!: ResolvedUser;
+
+  private recentlyAddedPostCommentIds: Array<string> = [];
+  private recentlyAddedPostSubcommentIds: {[commentId: string]: Array<string>} = {};
 
   public constructor(
     @Inject(DOCUMENT) private readonly document: Document,
@@ -91,21 +95,30 @@ export class PostComponent implements OnInit {
     this.handleAddPostComment(value);
   }
 
+  public updateRecentlyAddedSubcommentIds({id, commentId}: {id: string; commentId: string}): void {
+    if (!this.recentlyAddedPostSubcommentIds[commentId]) {
+      this.recentlyAddedPostSubcommentIds[commentId] = [];
+    }
+
+    this.recentlyAddedPostSubcommentIds[commentId].push(id);
+  }
+
   public showComments(postId: string, postComments: Array<UIPostComment>): void {
     if (!this.showPostComments) this.showPostComments = true;
 
     // console.log(this.store.select(PostsSelectors.getPostCommentCount, postId) ?? 0);
     // console.log(postId, this.store.select(PostsSelectors.getPostCommentCount));
-    const recentlyAddedPostCommentIds = postComments
-      ? postComments
-          .filter((postComment) => postComment.isRecentlyAdded)
-          .map((postComment) => postComment._id)
-      : [];
+
+    // const recentlyAddedPostCommentIds = postComments
+    //   ? postComments
+    //       .filter((postComment) => postComment.isRecentlyAdded)
+    //       .map((postComment) => postComment._id)
+    //   : [];
 
     this.store
       .dispatch$(PostsActions.loadPostComments, {
         postId,
-        recentlyAddedPostCommentIds,
+        recentlyAddedPostCommentIds: this.recentlyAddedPostCommentIds,
         skipProfileTeaserIds: Object.keys(this.store.select(ProfileSelectors.getProfileTeasers)),
         // offset: this.store.select(PostsSelectors.getPostCommentCount, postId),
         offset: postComments?.length ?? 0,
@@ -117,14 +130,20 @@ export class PostComponent implements OnInit {
   public hideCommentThread(postId: string): void {
     this.store.dispatch(PostsActions.removeCommentThread, postId);
     this.showPostComments = false;
+    this.recentlyAddedPostCommentIds = [];
+    this.recentlyAddedPostSubcommentIds = {};
   }
 
   public showSubcomments(commentId: string): void {
     // if (!this.showPostSubcomments) this.showPostSubcomments = true;
+    if (!this.recentlyAddedPostSubcommentIds[commentId]) {
+      this.recentlyAddedPostSubcommentIds[commentId] = [];
+    }
 
     this.store
       .dispatch$(PostsActions.loadPostSubcomments, {
         commentId,
+        recentlyAddedPostSubcommentIds: this.recentlyAddedPostSubcommentIds[commentId],
         skipProfileTeaserIds: Object.keys(this.store.select(ProfileSelectors.getProfileTeasers)),
         offset: this.store.select(PostsSelectors.getPostSubcommentCount, commentId),
       })
@@ -135,18 +154,21 @@ export class PostComponent implements OnInit {
   public hideSubcommentThread(commentId: string): void {
     // if (!this.showPostSubcomments) this.showPostSubcomments = true;
     this.store.dispatch(PostsActions.removeSubcommentThread, commentId);
+    this.recentlyAddedPostSubcommentIds = {};
   }
 
   public handleAddPostComment(body: string): void {
     // this.progressBarService.show();
     // console.log(payload);
     this.store
-      .dispatch$(PostsActions.createPostComment, {
+      .dispatch$<FetchResult<PostCommentCreateMutationResult>>(PostsActions.createPostComment, {
         postId: this.post._id,
         body,
       } as PostCommentCreatePayload)
       .pipe(untilDestroyed(this))
-      .subscribe(console.log);
+      .subscribe((result) => {
+        this.recentlyAddedPostCommentIds.push(result.data!.createPostComment._id);
+      });
     // this.postCommentService
     //   .create(payload)
     //   .pipe(

@@ -1,6 +1,6 @@
 <!--<div *ngIf="postSubcomments$ | async as postSubcomments">-->
 <div
-  *ngFor="let postSubcomment of postSubcomments$ | async"
+  *ngFor="let postSubcomment of postSubcomments$ | async; let index = index"
   class="post-item border-accent-secondary mt-glue"
   [class.border-left-dashed]="postSubcomment.isRecentlyAdded"
 >
@@ -21,6 +21,7 @@
   </div>
   <div class="border-top color-light-dark d-flex justify-content-between">
     <!--  <div>-->
+    <!-- !!! TODO Duplicate ng-content !!! -->
     <ng-content></ng-content>
     <!--  </div>-->
 
@@ -38,12 +39,12 @@
     </button>
     <!--  </div>-->
   </div>
-  40
+
   <app-add-comment
     *ngIf="_showAddReply"
     placeholder="Write a reply..."
     [maxCharLength]="0"
-    (comment)="addPostSubcomment($event)"
+    (comment)="addPostSubcomment($event, index)"
   ></app-add-comment>
   <!--  </ng-container>-->
 </div>

@@ -96,6 +96,7 @@ export const PostsEffects: Effects<PostsState> = {
     PostsState,
     {
       commentId: string;
+      recentlyAddedPostSubcommentIds: Array<string>;
       skipProfileTeaserIds: Array<string>;
       offset: number;
       order?: SortOrder;
@@ -105,11 +106,16 @@ export const PostsEffects: Effects<PostsState> = {
     const postSubcommentService = injector.get(PostSubcommentService);
 
     return postSubcommentService
-      .getByCommentId(payload.commentId, payload.skipProfileTeaserIds, {
-        order: payload.order ?? SortOrder.ASCENDING,
-        offset: payload.offset,
-        limit: payload.limit ?? POST_COMMENT_FETCH_LIMIT,
-      })
+      .getByCommentId(
+        payload.commentId,
+        payload.recentlyAddedPostSubcommentIds,
+        payload.skipProfileTeaserIds,
+        {
+          order: payload.order ?? SortOrder.ASCENDING,
+          offset: payload.offset - payload.recentlyAddedPostSubcommentIds.length,
+          limit: payload.limit ?? POST_COMMENT_FETCH_LIMIT,
+        },
+      )
       .pipe(
         tap(({data}: FetchResult<PostSubcommentsByCommentIdQueryResult>) => {
           const translateService = injector.get(TranslateService);

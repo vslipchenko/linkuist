@@ -28,12 +28,13 @@ export class PostSubcommentService {
 
   public getByCommentId(
     commentId: string,
+    skipPostSubcommentIds: Array<string>,
     skipProfileTeaserIds: Array<string>,
     parameters: RequestParameters,
   ): Observable<ApolloQueryResult<PostSubcommentsByCommentIdQueryResult>> {
     return this.apollo.query({
       query: GET_POST_SUBCOMMENTS_BY_COMMENT_ID,
-      variables: {commentId, skipProfileTeaserIds, parameters},
+      variables: {commentId, skipPostSubcommentIds, skipProfileTeaserIds, parameters},
       fetchPolicy: 'network-only', // Prevents cached results; https://www.apollographql.com/docs/react/data/queries/#supported-fetch-policies
     });
   }

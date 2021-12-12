@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
+  Output,
   ViewChild,
 } from '@angular/core';
 import {Observable} from 'rxjs';
@@ -11,6 +13,8 @@ import {Store} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
+import {FetchResult} from '@apollo/client/core';
+import {PostSubcommentCreateMutationResult} from '~app/types/post-subcomment/post-subcomment.interfaces';
 
 @UntilDestroy()
 @Component({
@@ -30,7 +34,7 @@ export class PostCommentComponent {
   @Input() public readonly body!: string;
   @Input() public readonly isVerifiedUser!: boolean;
 
-  // @Output() public readonly submit = new EventEmitter<string>();
+  @Output() public readonly newSubcomment = new EventEmitter<{id: string; commentId: string}>();
 
   @ViewChild(AddCommentComponent)
   private readonly addCommentComponent!: AddCommentComponent;
@@ -53,16 +57,24 @@ export class PostCommentComponent {
 
   public addPostSubcomment(body: string): void {
     this.store
-      .dispatch$(PostsActions.createPostSubcomment, {
-        subcommentPayload: {
-          postId: this.postId,
-          commentId: this.commentId,
-          body,
+      .dispatch$<FetchResult<PostSubcommentCreateMutationResult>>(
+        PostsActions.createPostSubcomment,
+        {
+          subcommentPayload: {
+            postId: this.postId,
+            commentId: this.commentId,
+            body,
+          },
+          insertAtPosition: 0,
         },
-        insertAtPosition: 0,
-      })
+      )
       .pipe(untilDestroyed(this))
-      .subscribe(console.log);
+      .subscribe((result) =>
+        this.newSubcomment.emit({
+          id: result.data!.createPostSubcomment._id,
+          commentId: this.commentId,
+        }),
+      );
   }
 
   // public focusElasticInput(): void {

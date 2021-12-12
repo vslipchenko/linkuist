@@ -13,6 +13,7 @@ export const postSubcommentQueryTypeDefinitions = gql`
   extend type Query {
     postSubcommentsByCommentId(
       commentId: String!
+      skipPostSubcommentIds: [String]!
       skipProfileTeaserIds: [String]!
       parameters: RequestParameters!
     ): UserPostSubcomments!
@@ -21,6 +22,7 @@ export const postSubcommentQueryTypeDefinitions = gql`
 
 const aggregatePostSubcommentData = async (
   commentId: string,
+  skipPostSubcommentIds: Array<string>,
   skipProfileTeaserIds: Array<string>,
   parameters: RequestParameters,
 ): Promise<unknown> => {
@@ -30,7 +32,12 @@ const aggregatePostSubcommentData = async (
   skipProfileTeaserIds.forEach((userId) => (skipProfileTeaserIdsMap[userId] = 1));
 
   const aggregationResult = await PostComment.aggregate([
-    {$match: {commentId: new mongoose.Types.ObjectId(commentId)}},
+    {
+      $match: {
+        _id: {$nin: skipPostSubcommentIds.map((id) => new mongoose.Types.ObjectId(id))},
+        commentId: new mongoose.Types.ObjectId(commentId),
+      },
+    },
     {
       $facet: {
         data: [
@@ -41,7 +48,6 @@ const aggregatePostSubcommentData = async (
           parameters.offset ? {$skip: parameters.offset} : null,
           {$limit: parameters.limit},
         ].filter((stage) => stage), // Filter null,
-        total: [{$count: 'total'}],
       },
     },
   ]);
@@ -51,8 +57,7 @@ const aggregatePostSubcommentData = async (
   const data = aggregationResult[0].data as Array<IPostComment>;
 
   for (const comment of data) {
-    // comment.totalSubcomments = await PostComment.countDocuments({commentId: comment._id});
-    console.log(comment);
+    // console.log(comment);
     const userId = comment.userId.toString();
 
     if (!uniqueUserIdsMap[userId] && !skipProfileTeaserIdsMap[userId]) {
@@ -66,7 +71,10 @@ const aggregatePostSubcommentData = async (
   return {
     postSubcomments: {
       data,
-      total: aggregationResult[0].total.length ? aggregationResult[0].total[0].total : 0,
+      // total: aggregationResult[0].total.length ? aggregationResult[0].total[0].total : 0,
+      total: await PostComment.countDocuments({
+        commentId: commentId,
+      }),
     },
     userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
   };
@@ -77,9 +85,15 @@ const postSubcommentsByCommentId = (
   _: unknown,
   {
     commentId,
+    skipPostSubcommentIds,
     skipProfileTeaserIds,
     parameters,
-  }: {commentId: string; skipProfileTeaserIds: Array<string>; parameters: RequestParameters},
+  }: {
+    commentId: string;
+    skipPostSubcommentIds: Array<string>;
+    skipProfileTeaserIds: Array<string>;
+    parameters: RequestParameters;
+  },
 ): Promise<unknown> | null => {
   const {isInvalidData} = checkDataValidity({
     data: {commentId, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
@@ -95,7 +109,12 @@ const postSubcommentsByCommentId = (
 
   if (isInvalidData) return null;
 
-  return aggregatePostSubcommentData(commentId, skipProfileTeaserIds, parameters);
+  return aggregatePostSubcommentData(
+    commentId,
+    skipPostSubcommentIds,
+    skipProfileTeaserIds,
+    parameters,
+  );
 };
 
 export const postSubcommentQueryResolvers = {
