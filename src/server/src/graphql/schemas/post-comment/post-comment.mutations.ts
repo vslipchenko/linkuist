@@ -7,6 +7,8 @@ import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {PostComment} from '../../../models/post-comment';
 import {getUtcTimestamp} from '../../../utilities/date';
 
+// TODO Deletion functionality (should delete both parent comment & related subcomments)
+
 export const postCommentMutationTypeDefinitions = gql`
   extend type Mutation {
     createPostComment(input: CreatePostCommentMutationInput): PostComment

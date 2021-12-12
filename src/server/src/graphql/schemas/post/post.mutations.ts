@@ -6,11 +6,12 @@ import {Post} from '../../../models/post';
 import {getUtcTimestamp} from '../../../utilities/date';
 import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
+import {PostComment} from '../../../models/post-comment';
 
 export const postMutationTypeDefinitions = gql`
   extend type Mutation {
     createPost(input: CreatePostMutationInput!): Post
-    deletePost(input: DeletePostMutationInput!): Int
+    deletePost(input: DeletePostMutationInput!): PostDeletedCount
   }
 `;
 
@@ -30,7 +31,9 @@ const deletePost = async (
   _: unknown,
   {input}: {input: Pick<IPost, '_id'>},
   {accessToken}: {accessToken: string},
-): Promise<number | null | undefined | ApolloError> => {
+): Promise<
+  {postDeletedCount: number; commentDeletedCount: number} | null | undefined | ApolloError
+> => {
   const {tokenData, error} = await authenticationGuard(accessToken);
 
   if (error) return error;
@@ -46,10 +49,25 @@ const deletePost = async (
   // return Post.deleteOne(input);
 
   try {
-    const {deletedCount} = await Post.deleteOne({_id: input._id, userId: tokenData.userId});
-    return deletedCount;
+    const {deletedCount: postDeletedCount} = await Post.deleteOne({
+      _id: input._id,
+      userId: tokenData.userId, // userId condition is used in order to prevent deletion by third-parties
+    });
+
+    const {deletedCount: commentDeletedCount} = await PostComment.deleteMany({
+      postId: input._id,
+      userId: tokenData.userId,
+    });
+
+    return {
+      postDeletedCount,
+      commentDeletedCount,
+    };
   } catch {
-    return 0;
+    return {
+      postDeletedCount: 0,
+      commentDeletedCount: 0,
+    };
   }
 };
 

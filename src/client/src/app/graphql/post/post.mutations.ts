@@ -15,6 +15,9 @@ export const CREATE_POST = gql`
 
 export const DELETE_POST = gql`
   mutation ($input: DeletePostMutationInput!) {
-    deletePost(input: $input)
+    deletePost(input: $input) {
+      postDeletedCount
+      commentDeletedCount
+    }
   }
 `;

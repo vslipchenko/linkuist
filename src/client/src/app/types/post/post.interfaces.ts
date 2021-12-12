@@ -25,7 +25,10 @@ export interface PostCreateMutationResult {
 }
 
 export interface PostDeleteCountMutationResult {
-  deletePost: number;
+  deletePost: {
+    postDeletedCount: number;
+    commentDeletedCount: number;
+  };
 }
 
 // export interface PostCommentCreatePayload {

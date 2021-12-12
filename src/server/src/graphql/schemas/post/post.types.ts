@@ -27,6 +27,11 @@ export const postTypes = gql`
     total: Float!
   }
 
+  type PostDeletedCount {
+    postDeletedCount: Int!
+    commentDeletedCount: Int!
+  }
+
   type UserPosts {
     posts: Posts!
     userProfileTeasers: [UserProfileTeaser!]!
