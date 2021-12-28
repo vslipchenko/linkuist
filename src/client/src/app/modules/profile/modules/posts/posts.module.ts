@@ -40,6 +40,6 @@ import {PostSubcommentsComponent} from './components/post-subcomments/post-subco
 })
 export class PostsModule {
   public constructor(storeManager: StoreManager) {
-    storeManager.push(PostsStore);
+    storeManager.registerStore(PostsStore);
   }
 }

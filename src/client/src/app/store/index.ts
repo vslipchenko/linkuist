@@ -30,4 +30,7 @@ export const AppStore: StoreRootConfig<AppState> = {
   actions: AppActions,
   reducers: AppReducers,
   // effects: AppEffects,
+  config: {
+    debug: true, // TODO setup proper env resolution
+  },
 } as const;
