@@ -6,6 +6,12 @@ import {fetchUrlMetadata} from '../../../utilities/url-metadata';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
 import {getUtcTimestamp} from '../../../utilities/date';
 
+export const linkardMutationTypeDefinitions = gql`
+  extend type Mutation {
+    createLinkard(input: CreateLinkardMutationInput!): Linkard
+  }
+`;
+
 const createLinkard = async (
   _: unknown,
   {input}: {input: Omit<ILinkard, 'userId' | 'createdAt'>},
@@ -39,12 +45,6 @@ const createLinkard = async (
     createdAt: getUtcTimestamp(),
   });
 };
-
-export const linkardMutationTypeDefinitions = gql`
-  extend type Mutation {
-    createLinkard(input: CreateLinkardMutationInput!): Linkard
-  }
-`;
 
 export const linkardMutationResolvers = {
   Mutation: {

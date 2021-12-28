@@ -56,12 +56,12 @@ const deletePost = async (
 
     const {deletedCount: commentDeletedCount} = await PostComment.deleteMany({
       postId: input._id,
-      userId: tokenData.userId,
+      userId: tokenData.userId, // This may be different; TODO 28.9.27: this one is probably wrong; Model needs to be updated with userId field which would correspond to profile owner id, and current user id would be renamed to authorId
     });
 
     return {
       postDeletedCount,
-      commentDeletedCount,
+      commentDeletedCount, // Includes subcomments as well
     };
   } catch {
     return {

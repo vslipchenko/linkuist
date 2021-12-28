@@ -17,6 +17,11 @@ export const postCommentTypes = gql`
     total: Float!
   }
 
+  type PostCommentDeletedCount {
+    commentDeletedCount: Int!
+    subcommentDeletedCount: Int!
+  }
+
   type UserPostComments { # 'User' is basically a prefix used to avoid naming collision
     postComments: PostComments!
     userProfileTeasers: [UserProfileTeaser!]!

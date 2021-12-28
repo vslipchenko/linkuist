@@ -6,4 +6,8 @@ export const postSubcommentInputs = gql`
     commentId: ID!
     body: String!
   }
+
+  input DeletePostSubcommentMutationInput {
+    _id: String
+  }
 `;

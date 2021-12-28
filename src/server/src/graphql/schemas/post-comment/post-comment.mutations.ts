@@ -12,6 +12,7 @@ import {getUtcTimestamp} from '../../../utilities/date';
 export const postCommentMutationTypeDefinitions = gql`
   extend type Mutation {
     createPostComment(input: CreatePostCommentMutationInput): PostComment
+    deletePostComment(input: DeletePostCommentMutationInput!): PostCommentDeletedCount
   }
 `;
 
@@ -40,8 +41,50 @@ const createPostComment = async (
   return PostComment.create({...input, userId: tokenData.userId, createdAt: getUtcTimestamp()});
 };
 
+const deletePostComment = async (
+  _: unknown,
+  {input}: {input: Pick<IPostComment, '_id'>},
+  {accessToken}: {accessToken: string},
+): Promise<
+  {commentDeletedCount: number; subcommentDeletedCount: number} | null | undefined | ApolloError
+> => {
+  const {tokenData, error} = await authenticationGuard(accessToken);
+
+  if (error) return error;
+
+  const {isInvalidData} = checkDataValidity({
+    data: input._id,
+    pattern: RECORD_ID_REGEXP,
+  });
+
+  if (isInvalidData) return null;
+
+  try {
+    const {deletedCount: commentDeletedCount} = await PostComment.deleteOne({
+      _id: input._id,
+      userId: tokenData.userId, // check TODO 28.9.27
+    });
+
+    const {deletedCount: subcommentDeletedCount} = await PostComment.deleteMany({
+      commentId: input._id,
+      userId: tokenData.userId, // check TODO 28.9.27
+    });
+
+    return {
+      commentDeletedCount,
+      subcommentDeletedCount,
+    };
+  } catch {
+    return {
+      commentDeletedCount: 0,
+      subcommentDeletedCount: 0,
+    };
+  }
+};
+
 export const postCommentMutationResolvers = {
   Mutation: {
     createPostComment,
+    deletePostComment,
   },
 };

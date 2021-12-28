@@ -5,4 +5,8 @@ export const postCommentInputs = gql`
     postId: ID!
     body: String!
   }
+
+  input DeletePostCommentMutationInput {
+    _id: String
+  }
 `;

@@ -10,6 +10,7 @@ import {getUtcTimestamp} from '../../../utilities/date';
 export const postSubcommentMutationTypeDefinitions = gql`
   extend type Mutation {
     createPostSubcomment(input: CreatePostSubcommentMutationInput): PostSubcomment
+    deletePostSubcomment(input: DeletePostSubcommentMutationInput!): Int!
   }
 `;
 
@@ -38,8 +39,37 @@ const createPostSubcomment = async (
   return PostComment.create({...input, userId: tokenData.userId, createdAt: getUtcTimestamp()});
 };
 
+const deletePostSubcomment = async (
+  _: unknown,
+  {input}: {input: Pick<IPostComment, '_id'>},
+  {accessToken}: {accessToken: string},
+): Promise<number | null | undefined | ApolloError> => {
+  const {tokenData, error} = await authenticationGuard(accessToken);
+
+  if (error) return error;
+
+  const {isInvalidData} = checkDataValidity({
+    data: input._id,
+    pattern: RECORD_ID_REGEXP,
+  });
+
+  if (isInvalidData) return null;
+
+  try {
+    const {deletedCount: subcommentDeletedCount} = await PostComment.deleteOne({
+      _id: input._id,
+      userId: tokenData.userId, // check TODO 28.9.27
+    });
+
+    return subcommentDeletedCount;
+  } catch {
+    return 0;
+  }
+};
+
 export const postSubcommentMutationResolvers = {
   Mutation: {
     createPostSubcomment,
+    deletePostSubcomment,
   },
 };
