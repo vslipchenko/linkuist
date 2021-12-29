@@ -163,6 +163,7 @@ export class PostComponent implements OnInit {
     this.store
       .dispatch$<FetchResult<PostCommentCreateMutationResult>>(PostsActions.createPostComment, {
         postId: this.post._id,
+        userId: this.resolvedUser.id,
         body,
       } as PostCommentCreatePayload)
       .pipe(untilDestroyed(this))

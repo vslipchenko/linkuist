@@ -18,7 +18,7 @@ export const postCommentMutationTypeDefinitions = gql`
 
 const createPostComment = async (
   _: unknown,
-  {input}: {input: Pick<IPostComment, 'postId' | 'body'>},
+  {input}: {input: Pick<IPostComment, 'postId' | 'body' | 'userId'>},
   {accessToken}: {accessToken: string},
 ): Promise<MongooseDocument<IPostComment> | ApolloError | null> => {
   const {tokenData, error} = await authenticationGuard(accessToken);
@@ -29,6 +29,7 @@ const createPostComment = async (
     data: input,
     pattern: {
       postId: RECORD_ID_REGEXP,
+      userId: RECORD_ID_REGEXP,
       commentId: RECORD_ID_REGEXP,
       body: (value: unknown) => typeof value === 'string' && value.length < 3001,
     },
@@ -38,7 +39,7 @@ const createPostComment = async (
 
   if (isInvalidData) return null;
 
-  return PostComment.create({...input, userId: tokenData.userId, createdAt: getUtcTimestamp()});
+  return PostComment.create({...input, authorId: tokenData.userId, createdAt: getUtcTimestamp()});
 };
 
 const deletePostComment = async (

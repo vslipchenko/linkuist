@@ -7,12 +7,12 @@
   <!--  <ng-container *ngFor="let postSubcomment of postSubcomments$ | async">-->
   <app-user-post-panel
     extendsClass="post-comment-user-panel p-2 border-bottom"
-    [avatarUrl]="profileTeasers[postSubcomment.userId].avatarUrl"
-    [username]="profileTeasers[postSubcomment.userId].username"
+    [avatarUrl]="profileTeasers[postSubcomment.authorId].avatarUrl"
+    [username]="profileTeasers[postSubcomment.authorId].username"
     [creationDate]="postSubcomment.date"
     [timeElapsedAfterCreation$]="postSubcomment.timeElapsedAfterCreation$"
     [resolvedUserUrlUsername]="'resolvedUserUrlUsername'"
-    [isVerifiedUser]="profileTeasers[postSubcomment.userId].isVerified"
+    [isVerifiedUser]="profileTeasers[postSubcomment.authorId].isVerified"
   >
     <ng-content></ng-content>
   </app-user-post-panel>
