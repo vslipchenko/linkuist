@@ -5,7 +5,7 @@ export const CREATE_POST_SUBCOMMENT = gql`
     createPostSubcomment(input: $input) {
       _id
       commentId
-      userId
+      authorId
       body
       likes
       createdAt

@@ -14,12 +14,13 @@ export interface PostSubcommentsByCommentIdQueryResult {
 export interface PostSubcommentCreatePayload {
   postId: string;
   commentId: string;
+  userId: string;
   // commentId?: string;
   body: string;
 }
 
 export interface PostSubcommentCreateMutationResult {
-  createPostSubcomment: PostCommentBase;
+  createPostSubcomment: Omit<PostCommentBase, 'postId'> & {commentId: string};
 }
 
 export interface UIPostSubcomment extends Omit<PostCommentBase, 'postId'>, UIPostCommentBase {

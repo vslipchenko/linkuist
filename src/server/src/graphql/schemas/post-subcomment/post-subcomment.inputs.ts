@@ -3,6 +3,7 @@ import {gql} from 'apollo-server-express';
 export const postSubcommentInputs = gql`
   input CreatePostSubcommentMutationInput {
     postId: ID!
+    userId: ID!
     commentId: ID!
     body: String!
   }

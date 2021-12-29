@@ -26,10 +26,10 @@ const aggregatePostSubcommentData = async (
   skipProfileTeaserIds: Array<string>,
   parameters: RequestParameters,
 ): Promise<unknown> => {
-  const uniqueUserIdsMap: {[userId: string]: number} = {};
-  const skipProfileTeaserIdsMap: {[userId: string]: number} = {};
+  const uniqueUserIdsMap: {[authorId: string]: number} = {};
+  const skipProfileTeaserIdsMap: {[authorId: string]: number} = {};
 
-  skipProfileTeaserIds.forEach((userId) => (skipProfileTeaserIdsMap[userId] = 1));
+  skipProfileTeaserIds.forEach((authorId) => (skipProfileTeaserIdsMap[authorId] = 1));
 
   const aggregationResult = await PostComment.aggregate([
     {
@@ -58,11 +58,11 @@ const aggregatePostSubcommentData = async (
 
   for (const comment of data) {
     // console.log(comment);
-    const userId = comment.userId.toString();
+    const authorId = comment.authorId.toString();
 
-    if (!uniqueUserIdsMap[userId] && !skipProfileTeaserIdsMap[userId]) {
+    if (!uniqueUserIdsMap[authorId] && !skipProfileTeaserIdsMap[authorId]) {
       // console.log('unique ', post.userId.toString(), uniqueUserIdsMap, skipProfileTeaserIds);
-      uniqueUserIdsMap[userId] = 1;
+      uniqueUserIdsMap[authorId] = 1;
     }
   }
 
