@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 
 export interface PostCommentBase {
   _id: string;
+  // userId: string;
   authorId: string;
   postId: string;
   // commentId?: string; // is null for subcomments

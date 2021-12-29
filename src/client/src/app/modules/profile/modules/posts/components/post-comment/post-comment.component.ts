@@ -15,7 +15,6 @@ import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actio
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {FetchResult} from '@apollo/client/core';
 import {PostSubcommentCreateMutationResult} from '~app/types/post-subcomment/post-subcomment.interfaces';
-import {ResolvedUser} from '~app/types/user/user.interfaces';
 
 @UntilDestroy()
 @Component({
@@ -29,7 +28,7 @@ export class PostCommentComponent {
   @Input() public readonly commentId!: string;
   @Input() public readonly avatarUrl!: string;
   @Input() public readonly username!: string;
-  @Input() public readonly resolvedUser!: ResolvedUser;
+  @Input() public readonly resolvedUserUrlUsername!: string;
   @Input() public readonly creationDate!: string;
   @Input() public readonly timeElapsedAfterCreation$!: Observable<string>;
   @Input() public readonly body!: string;
@@ -62,7 +61,6 @@ export class PostCommentComponent {
         PostsActions.createPostSubcomment,
         {
           subcommentPayload: {
-            userId: this.resolvedUser.id,
             postId: this.postId,
             commentId: this.commentId,
             body,

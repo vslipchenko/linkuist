@@ -43,7 +43,7 @@ export class AddPostComponent {
   }
 
   public handleAddPost(): void {
-    this.addPost.emit(this.addPostControl.value as string);
+    this.addPost.emit(this.addPostControl.value);
     this.addPostControl.reset('');
   }
 

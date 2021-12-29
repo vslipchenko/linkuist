@@ -140,7 +140,7 @@
               [isVerifiedUser]="data.profileTeasers[post.userId].isVerified"
               [creationDate]="postComment.date"
               [timeElapsedAfterCreation$]="postComment.timeElapsedAfterCreation$"
-              [resolvedUser]="resolvedUser"
+              [resolvedUserUrlUsername]="resolvedUser.urlUsername"
               [body]="postComment.body"
               (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
             >
@@ -165,7 +165,6 @@
             [postId]="post._id"
             [commentId]="postComment._id"
             [profileTeasers]="data.profileTeasers"
-            [resolvedUser]="resolvedUser"
             (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
           ></app-post-subcomments>
 

@@ -21,7 +21,6 @@ import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {FetchResult} from '@apollo/client/core';
-import {ResolvedUser} from '~app/types/user/user.interfaces';
 
 @UntilDestroy()
 @Component({
@@ -33,7 +32,6 @@ import {ResolvedUser} from '~app/types/user/user.interfaces';
 export class PostSubcommentsComponent implements OnInit {
   @Input() public readonly postId!: string;
   @Input() public readonly commentId!: string;
-  @Input() public readonly resolvedUser!: ResolvedUser;
   // @Input() public readonly avatarUrl!: string;
   // @Input() public readonly username!: string;
   // @Input() public readonly resolvedUserUrlUsername!: string;
@@ -79,7 +77,6 @@ export class PostSubcommentsComponent implements OnInit {
         PostsActions.createPostSubcomment,
         {
           subcommentPayload: {
-            userId: this.resolvedUser.id,
             postId: this.postId,
             commentId: this.commentId,
             body,

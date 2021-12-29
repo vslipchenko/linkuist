@@ -5,7 +5,7 @@ export const postCommentTypes = gql`
   type PostComment {
     _id: ID!
     postId: ID!
-    authorId: ID!
+    userId: ID!
     body: String!
     createdAt: Float!
     likes: Int!
