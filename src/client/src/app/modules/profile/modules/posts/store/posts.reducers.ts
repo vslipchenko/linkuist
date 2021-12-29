@@ -24,11 +24,10 @@ export const PostsReducers: Reducers<PostsState> = {
     posts: [newPost, ...state.posts],
     postTotalCount: state.postTotalCount + 1,
   }),
-  [PostsActions.removePost]: (state, postId: string): ReducerResult<PostsState> => ({
+  [PostsActions.removePost]: (state, _id: string): ReducerResult<PostsState> => ({
     ...state,
-    posts: state.posts.filter((post) => post._id !== postId),
+    posts: state.posts.filter((post) => post._id !== _id),
     postTotalCount: state.postTotalCount - 1,
-    // TODO: cleanup post related data such as comments & subcomments
   }),
   [PostsActions.insertPostSubcomment]: (
     state,

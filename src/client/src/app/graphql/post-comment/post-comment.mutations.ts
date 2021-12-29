@@ -4,7 +4,7 @@ export const CREATE_POST_COMMENT = gql`
   mutation ($input: CreatePostCommentMutationInput!) {
     createPostComment(input: $input) {
       _id
-      authorId
+      userId
       postId
       body
       likes

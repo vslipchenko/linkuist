@@ -40,7 +40,6 @@ export class UserResolver implements Resolve<boolean> {
       if (data?.username === username) {
         // resolvedUser.role = UserRole.USER;
         // this.resolvedUserService.user.role = UserRole.USER;
-        // TODO resolved role corresponds to profile viewer role
         this.store.dispatch(AppActions.setResolvedUserRole, UserRole.USER);
 
         return true;

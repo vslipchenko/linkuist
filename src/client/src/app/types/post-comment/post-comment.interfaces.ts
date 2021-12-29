@@ -3,8 +3,7 @@ import {Observable} from 'rxjs';
 
 export interface PostCommentBase {
   _id: string;
-  // userId: string;
-  authorId: string;
+  userId: string;
   postId: string;
   // commentId?: string; // is null for subcomments
   body: string;
@@ -28,7 +27,6 @@ export interface UIPostComment extends PostComment, UIPostCommentBase {
 
 export interface PostCommentCreatePayload {
   postId: string;
-  userId: string;
   // commentId?: string;
   body: string;
 }
