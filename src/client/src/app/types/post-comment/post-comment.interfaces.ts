@@ -44,3 +44,10 @@ export interface PostCommentsByPostIdQueryResult {
     userProfileTeasers: Array<UserProfileTeaser>;
   };
 }
+
+export interface DeletePostCommentMutationResult {
+  deletePostComment?: {
+    commentDeletedCount: number;
+    subcommentDeletedCount: number;
+  };
+}

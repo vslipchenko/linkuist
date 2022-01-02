@@ -47,6 +47,10 @@ const deletePost = async (
   // console.warn(accessToken, error);
 
   // return Post.deleteOne(input);
+  const failedDeletionResult = {
+    postDeletedCount: 0,
+    commentDeletedCount: 0,
+  };
 
   try {
     const {deletedCount: postDeletedCount} = await Post.deleteOne({
@@ -54,9 +58,10 @@ const deletePost = async (
       userId: tokenData.userId, // userId condition is used in order to prevent deletion by third-parties
     });
 
+    if (!postDeletedCount) return failedDeletionResult;
+    // Assume user is a true post owner & it was deleted successfully
     const {deletedCount: commentDeletedCount} = await PostComment.deleteMany({
       postId: input._id,
-      userId: tokenData.userId, // This may be different; TODO 28.9.27: this one is probably wrong; Model needs to be updated with userId field which would correspond to profile owner id, and current user id would be renamed to authorId
     });
 
     return {
@@ -64,10 +69,7 @@ const deletePost = async (
       commentDeletedCount, // Includes subcomments as well
     };
   } catch {
-    return {
-      postDeletedCount: 0,
-      commentDeletedCount: 0,
-    };
+    return failedDeletionResult;
   }
 };
 

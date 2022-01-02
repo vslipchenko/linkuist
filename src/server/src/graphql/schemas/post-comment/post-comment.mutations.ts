@@ -6,13 +6,14 @@ import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {PostComment} from '../../../models/post-comment';
 import {getUtcTimestamp} from '../../../utilities/date';
+import {Post} from '../../../models/post';
 
 // TODO Deletion functionality (should delete both parent comment & related subcomments)
 
 export const postCommentMutationTypeDefinitions = gql`
   extend type Mutation {
     createPostComment(input: CreatePostCommentMutationInput): PostComment
-    deletePostComment(input: DeletePostCommentMutationInput!): PostCommentDeletedCount
+    deletePostComment(commentId: ID!): PostCommentDeletedCount
   }
 `;
 
@@ -43,7 +44,7 @@ const createPostComment = async (
 
 const deletePostComment = async (
   _: unknown,
-  {input}: {input: Pick<IPostComment, '_id'>},
+  {commentId}: {commentId: IPostComment['_id']},
   {accessToken}: {accessToken: string},
 ): Promise<
   {commentDeletedCount: number; subcommentDeletedCount: number} | null | undefined | ApolloError
@@ -53,32 +54,50 @@ const deletePostComment = async (
   if (error) return error;
 
   const {isInvalidData} = checkDataValidity({
-    data: input._id,
+    data: commentId,
     pattern: RECORD_ID_REGEXP,
   });
 
   if (isInvalidData) return null;
 
-  try {
-    const {deletedCount: commentDeletedCount} = await PostComment.deleteOne({
-      _id: input._id,
-      userId: tokenData.userId, // check TODO 28.9.27
-    });
+  const postComment = await PostComment.findOne({_id: commentId}).exec();
 
+  if (!postComment) return null;
+
+  const post = await Post.findOne({_id: postComment.postId}).exec();
+
+  if (!post) return null;
+
+  // PostComment.deleteOne({postId: ''}).exec().catch();
+  console.log('POST.USER_ID', post.userId);
+  const isPostOwner = post.userId === tokenData.userId;
+
+  const commentFilter = {
+    _id: commentId,
+  } as {_id: string; userId?: string};
+
+  if (!isPostOwner) commentFilter.userId = tokenData.userId;
+
+  const failedDeletionResult = {
+    commentDeletedCount: 0,
+    subcommentDeletedCount: 0,
+  };
+
+  try {
+    const {deletedCount: commentDeletedCount} = await PostComment.deleteOne(commentFilter);
+
+    if (!commentDeletedCount) return failedDeletionResult;
+    // Assume something went wrong during post comment deletion (probably forged data or stale request context)
     const {deletedCount: subcommentDeletedCount} = await PostComment.deleteMany({
-      commentId: input._id,
-      userId: tokenData.userId, // check TODO 28.9.27
-    });
+      commentId,
+    }); // Delete subcomment thread
 
     return {
       commentDeletedCount,
       subcommentDeletedCount,
     };
   } catch {
-    return {
-      commentDeletedCount: 0,
-      subcommentDeletedCount: 0,
-    };
+    return failedDeletionResult;
   }
 };
 

@@ -24,11 +24,43 @@ export const PostsReducers: Reducers<PostsState> = {
     posts: [newPost, ...state.posts],
     postTotalCount: state.postTotalCount + 1,
   }),
-  [PostsActions.removePost]: (state, _id: string): ReducerResult<PostsState> => ({
+  [PostsActions.removePost]: (state, postId: string): ReducerResult<PostsState> => ({
     ...state,
-    posts: state.posts.filter((post) => post._id !== _id),
+    posts: state.posts.filter((post) => post._id !== postId),
     postTotalCount: state.postTotalCount - 1,
+    // let other linked entities such as comments and subcomments to leave in a ghost mode in memory
   }),
+  [PostsActions.removeCommentRelatedData]: (
+    state,
+    {
+      postId,
+      commentId,
+      commentDeletedCount,
+    }: {
+      postId: string;
+      commentId: string;
+      commentDeletedCount: number;
+      subcommentDeletedCount: number;
+    },
+  ): ReducerResult<PostsState> => {
+    return {
+      ...state,
+      postComments: {
+        ...state.postComments,
+        [postId]: state.postComments[postId].filter((comment) => comment._id !== commentId),
+      },
+      // postSubcomments: {...state.postSubcomments, [commentId]: []},
+      postCommentTotalCount: {
+        ...state.postCommentTotalCount,
+        [postId]: state.postCommentTotalCount[postId] - commentDeletedCount,
+      },
+      // let subcomments to leave in a ghost mode in memory
+      // postSubcommentTotalCount: {
+      //   ...state.postSubcommentTotalCount,
+      //   [commentId]: 0,
+      // },
+    };
+  },
   [PostsActions.insertPostSubcomment]: (
     state,
     {
@@ -38,7 +70,7 @@ export const PostsReducers: Reducers<PostsState> = {
       insertAtPosition: number;
       postSubcomment: UIPostSubcomment;
     },
-  ) => ({
+  ): ReducerResult<PostsState> => ({
     // TODO
     ...state,
     postSubcomments: {
@@ -64,7 +96,7 @@ export const PostsReducers: Reducers<PostsState> = {
       postSubcomments: Array<UIPostSubcomment>;
       postSubcommentTotalCount: number;
     },
-  ) => ({
+  ): ReducerResult<PostsState> => ({
     // TODO
     ...state,
     postSubcomments: {

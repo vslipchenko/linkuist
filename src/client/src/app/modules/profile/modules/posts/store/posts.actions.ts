@@ -8,6 +8,8 @@ export const PostsActions = {
   deletePost: 'Delete post',
   removePost: 'Remove post from posts',
   createPostComment: 'Create post comment',
+  deletePostComment: 'Delete post comment',
+  removeCommentRelatedData: 'Remove post comment & related subcomments',
   createPostSubcomment: 'Create post subcomment',
   insertPostSubcomment: 'Insert post subcomment at certain position',
   // createPostSubcomment: 'Create post subcomment',

@@ -203,6 +203,13 @@ export class PostComponent implements OnInit {
     //   });
   }
 
+  public handlePostCommentDelete(postId: string, commentId: string): void {
+    this.store
+      .dispatch$(PostsActions.deletePostComment, {postId, commentId})
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
+
   // public addPostComment(value: string): void {
   //
   // }

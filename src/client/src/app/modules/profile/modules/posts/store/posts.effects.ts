@@ -82,7 +82,8 @@ export const PostsEffects: Effects<PostsState> = {
 
     return postService.deleteById(payload).pipe(
       tap(({data}: FetchResult<PostDeleteCountMutationResult>) => {
-        if (!data?.deletePost) return;
+        // TODO add failed deletion processing
+        if (!data?.deletePost?.postDeletedCount) return;
 
         dispatch(PostsActions.removePost, payload);
       }),
@@ -203,6 +204,26 @@ export const PostsEffects: Effects<PostsState> = {
         dispatch(PostsActions.insertPostSubcomment, {
           insertAtPosition: payload.insertAtPosition,
           postSubcomment,
+        });
+      }),
+    );
+  },
+  [PostsActions.deletePostComment]: ({
+    payload,
+    dispatch,
+    injector,
+  }: EffectOptions<PostsState, {postId: string; commentId: string}>) => {
+    const postCommentService = injector.get(PostCommentService);
+
+    return postCommentService.deleteByCommentId(payload.commentId).pipe(
+      tap(({data}) => {
+        // TODO add failed deletion processing
+        if (!data?.deletePostComment?.commentDeletedCount) return;
+
+        dispatch(PostsActions.removeCommentRelatedData, {
+          ...data.deletePostComment,
+          commentId: payload.commentId,
+          postId: payload.postId,
         });
       }),
     );

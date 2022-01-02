@@ -142,22 +142,47 @@
               [timeElapsedAfterCreation$]="postComment.timeElapsedAfterCreation$"
               [resolvedUserUrlUsername]="resolvedUser.urlUsername"
               [body]="postComment.body"
+              [panelButtonsRef]="postCommentPanelButtons"
+              [bottomButtonsRef]="postCommentBottomButtons"
               (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
             >
-              <button
-                mat-button
-                color="accent"
-                class="w-100 max-width-content ordinary-button"
-                (click)="postCommentComponent.showAddReply()"
-              >
-                <mat-icon svgIcon="reply" class="mr-h"></mat-icon>
-                <!--            Reply-->
-                <app-number-cutter
-                  *ngIf="commentData.postSubcommentTotalCount; else replyTemplate"
-                  [value]="commentData.postSubcommentTotalCount"
-                ></app-number-cutter>
-                <ng-template #replyTemplate>Reply</ng-template>
-              </button>
+              <ng-template #postCommentPanelButtons>
+                <button
+                  *ngIf="hasUserRole"
+                  [matMenuTriggerFor]="postSettings"
+                  mat-icon-button
+                  color="primary"
+                  class="ml-auto"
+                  aria-label="Example icon button with a delete icon"
+                >
+                  <mat-icon svgIcon="dots-horizontal"></mat-icon>
+                </button>
+                <mat-menu #postSettings>
+                  <button
+                    mat-menu-item
+                    (click)="handlePostCommentDelete(post._id, postComment._id)"
+                  >
+                    <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>
+                    Delete
+                  </button>
+                </mat-menu>
+              </ng-template>
+              <ng-template #postCommentBottomButtons>
+                <button
+                  mat-button
+                  color="accent"
+                  class="w-100 max-width-content ordinary-button"
+                  (click)="postCommentComponent.showAddReply()"
+                >
+                  <mat-icon svgIcon="reply" class="mr-h"></mat-icon>
+                  <!--            Reply-->
+                  <app-number-cutter
+                    *ngIf="commentData.postSubcommentTotalCount; else replyTemplate"
+                    [value]="commentData.postSubcommentTotalCount"
+                  ></app-number-cutter>
+                  <ng-template #replyTemplate>Reply</ng-template>
+                </button>
+              </ng-template>
             </app-post-comment>
           </div>
 

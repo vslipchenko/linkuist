@@ -2,8 +2,12 @@ import {Injectable} from '@angular/core';
 import {Apollo} from 'apollo-angular';
 import {Observable} from 'rxjs';
 import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
-import {CREATE_POST_COMMENT} from '~app/graphql/post-comment/post-comment.mutations';
 import {
+  CREATE_POST_COMMENT,
+  DELETE_POST_COMMENT,
+} from '~app/graphql/post-comment/post-comment.mutations';
+import {
+  DeletePostCommentMutationResult,
   PostCommentCreateMutationResult,
   PostCommentCreatePayload,
   PostCommentsByPostIdQueryResult,
@@ -36,6 +40,15 @@ export class PostCommentService {
       query: GET_POST_COMMENTS_BY_POST_ID,
       variables: {postId, skipPostCommentIds, skipProfileTeaserIds, parameters},
       fetchPolicy: 'network-only', // Prevents cached results; https://www.apollographql.com/docs/react/data/queries/#supported-fetch-policies
+    });
+  }
+
+  public deleteByCommentId(
+    commentId: string,
+  ): Observable<FetchResult<DeletePostCommentMutationResult>> {
+    return this.apollo.mutate({
+      mutation: DELETE_POST_COMMENT,
+      variables: {commentId},
     });
   }
 }

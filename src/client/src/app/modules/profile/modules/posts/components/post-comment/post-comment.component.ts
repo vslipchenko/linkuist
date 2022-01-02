@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Input,
   Output,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import {Observable} from 'rxjs';
@@ -33,6 +34,8 @@ export class PostCommentComponent {
   @Input() public readonly timeElapsedAfterCreation$!: Observable<string>;
   @Input() public readonly body!: string;
   @Input() public readonly isVerifiedUser!: boolean;
+  @Input() public readonly panelButtonsRef!: TemplateRef<unknown>;
+  @Input() public readonly bottomButtonsRef!: TemplateRef<unknown>;
 
   @Output() public readonly newSubcomment = new EventEmitter<{id: string; commentId: string}>();
 

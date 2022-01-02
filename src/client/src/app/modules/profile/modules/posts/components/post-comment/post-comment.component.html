@@ -7,15 +7,14 @@
   [resolvedUserUrlUsername]="resolvedUserUrlUsername"
   [isVerifiedUser]="isVerifiedUser"
 >
-  <ng-content></ng-content>
+  <ng-container [ngTemplateOutlet]="panelButtonsRef"></ng-container>
 </app-user-post-panel>
 <div class="px-2 py-3">
   {{ body }}
 </div>
 <div class="border-top color-light-dark d-flex justify-content-between">
   <!--  <div>-->
-  <!-- !!! TODO Duplicate ng-content !!! -->
-  <ng-content></ng-content>
+  <ng-container [ngTemplateOutlet]="bottomButtonsRef"></ng-container>
   <!--  </div>-->
 
   <!--  <div>-->
