@@ -204,6 +204,7 @@ export const PostsEffects: Effects<PostsState> = {
         dispatch(PostsActions.insertPostSubcomment, {
           insertAtPosition: payload.insertAtPosition,
           postSubcomment,
+          postId: payload.subcommentPayload.postId,
         });
       }),
     );
@@ -255,7 +256,7 @@ export const PostsEffects: Effects<PostsState> = {
           // hasToBeSkippedByApi: true,
         };
 
-        console.log('postComment ', postComment);
+        // console.log('postComment ', postComment);
 
         dispatch(PostsActions.prependPostComment, postComment);
       }),
@@ -355,6 +356,7 @@ export const PostsEffects: Effects<PostsState> = {
             postId: payload.postId,
             postComments,
             postCommentTotalCount: data.postCommentsByPostId.postComments.total,
+            totalCommentsSubcomments: data.postCommentsByPostId.totalCommentsSubcomments,
             postSubcommentTotalCount,
           });
         }),
@@ -400,11 +402,13 @@ export const PostsEffects: Effects<PostsState> = {
           });
 
           const postCommentTotalCount: {[postId: string]: number} = {};
+          const postCommentSubcommentTotalCount: {[postId: string]: number} = {};
 
           const posts = data.postsByUserId.posts.data.map((post) => {
-            const newPost: Partial<UIPost> = {...post}; // TODO: consider to exclude totalComments from newPost
+            const newPost: Partial<UIPost> = {...post}; // TODO: consider to exclude totalComments & totalCommentsSubcomments from newPost
 
             postCommentTotalCount[post._id] = post.totalComments;
+            postCommentSubcommentTotalCount[post._id] = post.totalCommentsSubcomments;
 
             // newPost.millisecondsElapsed = dateService.serverUtcTimestamp - post.createdAt;
             newPost.date = getPostFullDate(post.createdAt, translateService);
@@ -438,6 +442,7 @@ export const PostsEffects: Effects<PostsState> = {
           dispatch(PostsActions.appendPosts, {
             posts,
             postCommentTotalCount,
+            postCommentSubcommentTotalCount,
             postTotalCount: data.postsByUserId.posts.total,
           });
         }),

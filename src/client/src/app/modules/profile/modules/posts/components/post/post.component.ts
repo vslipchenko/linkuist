@@ -38,6 +38,8 @@ export class PostComponent implements OnInit {
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   // public readonly addCommentControl = new FormControl('');
   public postComments$: Observable<Array<UIPostComment>> = of();
+  // public postSubcommentTotalCount$: Observable<Array<UIPostComment>> = of();
+  public postCommentSubcommentTotalCount$: Observable<number> = of();
   // public postSubcomments$: Observable<Array<UIPostSubcomment>> = of();
   public postCommentTotalCount$: Observable<number> = of();
   public showPostComments = false;
@@ -69,6 +71,26 @@ export class PostComponent implements OnInit {
 
   public ngOnInit(): void {
     this.postComments$ = this.store.select$(PostsSelectors.getPostCommentsByPostId, this.post._id);
+    // this.postSubcommentTotalCount$ = this.store.select$(
+    //   PostsSelectors.getPostSubcommentsTotalCount,
+    // );
+    // this.postCommentSubcommentTotalCount$ = this.store
+    //   .select$<number>(PostsSelectors.getPostCommentSubcommentTotalCount, this.post._id)
+    //   .pipe(
+    //     // skip(1),
+    //     // startWith(
+    //     //   this.store.select(PostsSelectors.getPostCommentSubcommentTotalCount2, this.post._id),
+    //     // ),
+    //     switchMap(() => {
+    //       return iif(() => true, of(1), of(2));
+    //     }),
+    //     tap(console.log),
+    //   );
+
+    this.postCommentSubcommentTotalCount$ = this.store.select$(
+      PostsSelectors.getPostCommentSubcommentTotalCount,
+      this.post._id,
+    );
     // this.postSubcomments$ = this.store.select$(PostsSelectors.get, this.post._id);
     this.postCommentTotalCount$ = this.store.select$(
       PostsSelectors.getPostCommentTotalCount,
@@ -128,6 +150,13 @@ export class PostComponent implements OnInit {
   }
 
   public hideCommentThread(postId: string): void {
+    // this.store.dispatch(PostsActions.setPostCmmentSubcommentTotalCount, {
+    //   postId,
+    //   commentSubcommentTotalCount: this.store.select(
+    //     PostsSelectors.getPostCommentSubcommentTotalCount2,
+    //     this.post._id,
+    //   ),
+    // });
     this.store.dispatch(PostsActions.removeCommentThread, postId);
     this.showPostComments = false;
     this.recentlyAddedPostCommentIds = [];

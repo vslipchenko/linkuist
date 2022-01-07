@@ -20,5 +20,9 @@ export const PostsGetters: Getters<PostsState> = {
     state.postCommentTotalCount[postId],
   [PostsSelectors.getPostSubcommentTotalCount]: (state, commentId: string) =>
     state.postSubcommentTotalCount[commentId],
+  // [PostsSelectors.getPostSubcommentsTotalCount]: (state) => state.postSubcommentTotalCount,
+  [PostsSelectors.getPostCommentSubcommentTotalCount]: (state, postId: string) => {
+    return state.postCommentSubcommentTotalCount[postId];
+  },
   // [PostsSelectors.getVisiblePostComments]: (state) => state.visiblePostComments,
 };

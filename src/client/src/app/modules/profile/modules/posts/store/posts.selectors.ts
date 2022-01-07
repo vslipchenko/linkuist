@@ -9,7 +9,10 @@ export const PostsSelectors = {
   getPostSubcommentsByCommentId: 'Get post subcomments by post id',
   getPostCommentTotalCount: 'Get post comment total count',
   getPostSubcommentTotalCount: 'Get post subcomment total count',
+  // getPostSubcommentsTotalCount: 'Get post subcomments total count',
   getPostCommentCount: 'Get post comment count',
   getPostSubcommentCount: 'Get post subcomment count',
+  // getPostCommentSubcommentTotalCount: 'Get post comment & subcomment total count',
+  getPostCommentSubcommentTotalCount: 'Get post comment & subcomment total count',
   // getVisiblePostComments: 'Get visible post comments',
 } as const;
