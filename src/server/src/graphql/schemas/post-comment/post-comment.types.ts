@@ -24,6 +24,7 @@ export const postCommentTypes = gql`
 
   type UserPostComments { # 'User' is basically a prefix used to avoid naming collision
     postComments: PostComments!
+    totalCommentsSubcomments: Int
     userProfileTeasers: [UserProfileTeaser!]!
   }
 `;

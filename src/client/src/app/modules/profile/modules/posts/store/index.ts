@@ -13,6 +13,7 @@ export type PostsState = Immutable<{
   postTotalCount: number;
   postComments: {[postId: string]: Array<UIPostComment>};
   postSubcomments: {[commentId: string]: Array<UIPostSubcomment>};
+  postCommentSubcommentTotalCount: {[postId: string]: number};
   postCommentTotalCount: {[postId: string]: number};
   postSubcommentTotalCount: {[commentId: string]: number};
   // visiblePostComments: {
@@ -31,6 +32,7 @@ const PostsInitialState: PostsState = {
   postComments: {},
   postSubcomments: {},
   postTotalCount: 0,
+  postCommentSubcommentTotalCount: {},
   postCommentTotalCount: {},
   postSubcommentTotalCount: {},
   // visiblePostComments: {},

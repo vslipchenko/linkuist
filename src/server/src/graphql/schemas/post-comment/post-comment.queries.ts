@@ -8,6 +8,7 @@ import mongoose from 'mongoose';
 import {PostComment} from '../../../models/post-comment';
 import {IPostComment} from '../../../types/post-comment/post-comment.interfaces';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
+import {postCommentSubcommentTotalCount} from '../post/post.queries';
 
 export const postCommentQueryTypeDefinitions = gql`
   extend type Query {
@@ -80,6 +81,9 @@ const aggregatePostCommentData = async (
         commentId: {$exists: false}, // do not count subcomments (replies)
       }),
     },
+    totalCommentsSubcomments: !parameters.offset
+      ? await postCommentSubcommentTotalCount(postId)
+      : null, // TODO add this property conditionally if offset is 0
     userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
   };
 };

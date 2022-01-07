@@ -11,6 +11,7 @@ export const postTypes = gql`
     likes: Int!
     createdAt: Float!
     totalComments: Int! # DOES NOT EXIST FOR POST CREATE BUT IS USED THERE
+    totalCommentsSubcomments: Int! # DOES NOT EXIST FOR POST CREATE BUT IS USED THERE
   }
 
   # Consider rename to Post

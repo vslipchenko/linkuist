@@ -79,7 +79,9 @@ const aggregatePostData = async (
     },
   ]);
 
-  const data = aggregationResult[0].data as Array<IPost & {totalComments: number}>;
+  const data = aggregationResult[0].data as Array<
+    IPost & {totalCommentsSubcomments: number; totalComments: number}
+  >;
   // const data = aggregationResult[0].data as Array<IPost>;
   // Associative array
   // const postCommentCount: Array<{postId: string; count: number}> = [];
@@ -102,6 +104,8 @@ const aggregatePostData = async (
       postId: post._id,
       commentId: {$exists: false}, // do not count subcomments (replies)
     });
+
+    post.totalCommentsSubcomments = await postCommentSubcommentTotalCount(post._id);
     // post.userId is of type mongoose ObjectId;
     const userId = post.userId.toString();
 
@@ -174,6 +178,12 @@ const postsByUserId = (
   }
 
   return aggregatePostData(userId, skipProfileTeaserIds, parameters);
+};
+
+export const postCommentSubcommentTotalCount = (postId: string): Promise<number> => {
+  return PostComment.countDocuments({
+    postId,
+  }).exec();
 };
 
 // const postsByUsername = async (

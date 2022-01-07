@@ -12,6 +12,7 @@ interface Post {
   text: string;
   isRepost: boolean;
   totalComments: number;
+  totalCommentsSubcomments: number;
 }
 
 export interface UIPost extends Post {

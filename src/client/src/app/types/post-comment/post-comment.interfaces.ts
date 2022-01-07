@@ -41,6 +41,7 @@ export interface PostCommentsByPostIdQueryResult {
       data: Array<PostComment>;
       total: number;
     };
+    totalCommentsSubcomments: number;
     userProfileTeasers: Array<UserProfileTeaser>;
   };
 }
