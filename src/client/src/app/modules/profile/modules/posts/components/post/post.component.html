@@ -6,109 +6,20 @@
   } as data"
 >
   <div class="post-section">
-    <!--  <div class="user-panel d-flex align-items-center p-2 border-bottom">-->
-    <!--  ngIf caused by race condition-->
-    <div class="post-item">
-      <app-user-post-panel
-        *ngIf="data.profileTeasers[post.userId]"
-        extendsClass="post-user-panel p-2 border-bottom"
-        [avatarUrl]="data.profileTeasers[post.userId].avatarUrl"
-        [username]="data.profileTeasers[post.userId].username"
-        [isVerifiedUser]="data.profileTeasers[post.userId].isVerified"
-        [creationDate]="post.date"
-        [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"
-        [resolvedUserUrlUsername]="resolvedUser.urlUsername"
-      >
-        <button
-          *ngIf="hasUserRole"
-          [matMenuTriggerFor]="postSettings"
-          mat-icon-button
-          color="primary"
-          class="ml-auto"
-          aria-label="Example icon button with a delete icon"
-        >
-          <mat-icon svgIcon="dots-horizontal"></mat-icon>
-        </button>
-        <mat-menu #postSettings>
-          <!--      <button mat-menu-item>-->
-          <!--        <mat-icon svgIcon="share-variant"></mat-icon>-->
-          <!--        Share to-->
-          <!--      </button>-->
-          <button mat-menu-item (click)="handlePostDelete()">
-            <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>
-            Delete
-          </button>
-        </mat-menu>
-      </app-user-post-panel>
-      <div class="post-content px-2 py-3">{{ post.text }}</div>
-      <div class="d-flex justify-content-around flex-wrap color-light-dark border-top">
-        <!--    TODO: permissions-->
-        <button
-          mat-button
-          class="icon-button d-flex justify-content-center flex"
-          (click)="(null)"
-          [color]="null ? 'warn' : null"
-        >
-          <!--    <div style="display: flex; align-items: center" class="mr-1">-->
-          <mat-icon svgIcon="heart" class="d-flex mr-h icon-sm"></mat-icon>
-          <span class="font-weight-bold">27k</span>
-          <!--    </div>-->
-        </button>
-        <button
-          mat-button
-          class="icon-button d-flex justify-content-center align-items-center flex"
-          (click)="addComment.focusElasticInput()"
-        >
-          <mat-icon svgIcon="comment" class="d-flex mr-h icon-sm"></mat-icon>
-          <span class="font-weight-bold">
-            <app-number-cutter
-              *ngIf="data.postCommentSubcommentTotalCount; else commentTemplate"
-              [value]="data.postCommentSubcommentTotalCount"
-            ></app-number-cutter>
-            <ng-template #commentTemplate>Comment</ng-template>
-          </span>
-        </button>
-        <button
-          mat-button
-          class="icon-button d-flex justify-content-center flex"
-          (click)="(null)"
-          [color]="null ? 'primary' : null"
-        >
-          <mat-icon svgIcon="share" class="mr-h"></mat-icon>
-          <span class="font-weight-bold">27k</span>
-        </button>
-      </div>
-      <!--    <div class="d-flex align-items-end border-top">-->
-      <!--      &lt;!&ndash;    TODO: permissions&ndash;&gt;-->
-      <!--      <app-elastic-input-->
-      <!--        #commentInput-->
-      <!--        class="w-100 min-width-0"-->
-      <!--        placeholder="Write a comment..."-->
-      <!--        [maxCharacterLength]="POST_COMMENT_MAX_LENGTH"-->
-      <!--        [formControl]="addCommentControl"-->
-      <!--      ></app-elastic-input>-->
-      <!--      <div class="p-1">-->
-      <!--        <button-->
-      <!--          mat-icon-button-->
-      <!--          color="primary"-->
-      <!--          matTooltip="Add comment"-->
-      <!--          matTooltipPosition="right"-->
-      <!--          (click)="comment()"-->
-      <!--        >-->
-      <!--          <mat-icon svgIcon="comment-plus"></mat-icon>-->
-      <!--        </button>-->
-      <!--      </div>-->
-      <!--    </div>-->
-      <app-add-comment
-        #addComment
-        placeholder="Write a comment..."
-        [maxCharLength]="POST_COMMENT_MAX_LENGTH"
-        (comment)="comment($event)"
-      ></app-add-comment>
-    </div>
-
-    <!--  <ng-container *ngIf="showPostComments && postComments$ | async as postComments">-->
-    <!--  <ng-container *ngIf="(visiblePostComments$ | async)?.[post._id]">-->
+    <app-post-item
+      [isPost]="true"
+      [showAddComment]="true"
+      [avatarUrl]="data.profileTeasers[post.userId].avatarUrl"
+      [username]="data.profileTeasers[post.userId].username"
+      [isVerifiedUser]="data.profileTeasers[post.userId].isVerified"
+      [creationDate]="post.date"
+      [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"
+      [resolvedUserUrlUsername]="resolvedUser.urlUsername"
+      [commentTotalCount]="data.postCommentSubcommentTotalCount"
+      [body]="post.text"
+      (delete)="handlePostDelete()"
+      (comment)="comment($event)"
+    ></app-post-item>
 
     <ng-container *ngIf="showPostComments">
       <div class="post-item border-accent-primary p-2 my-1">Comments:</div>
@@ -126,71 +37,42 @@
           } as commentData"
         >
           <!--      <ng-container *ngIf="profileTeasers[post.userId]">-->
-          <div
-            class="post-item border-accent-primary"
-            [class.mt-glue]="!isFirst"
-            [class.border-left-dashed]="postComment.isRecentlyAdded"
+          <!--          <div-->
+          <!--            class="post-item border-accent-primary"-->
+          <!--            [class.mt-glue]="!isFirst"-->
+          <!--            [class.border-left-dashed]="postComment.isRecentlyAdded"-->
+          <!--          >-->
+          <!--        {{ isFirst }}-->
+          <app-post-comment
+            [postItemComponent]="postItemComponent"
+            [postId]="post._id"
+            [commentId]="postComment._id"
+            (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
           >
-            <!--        {{ isFirst }}-->
-            <app-post-comment
-              #postCommentComponent
-              [postId]="post._id"
-              [commentId]="postComment._id"
+            <app-post-item
+              #postItemComponent
+              [ngClasses]="{
+                'border-accent-primary': true,
+                'mt-glue': !isFirst,
+                'border-left-dashed': postComment.isRecentlyAdded
+              }"
               [avatarUrl]="data.profileTeasers[post.userId].avatarUrl"
               [username]="data.profileTeasers[post.userId].username"
               [isVerifiedUser]="data.profileTeasers[post.userId].isVerified"
               [creationDate]="postComment.date"
               [timeElapsedAfterCreation$]="postComment.timeElapsedAfterCreation$"
               [resolvedUserUrlUsername]="resolvedUser.urlUsername"
+              [commentTotalCount]="commentData.postSubcommentTotalCount"
               [body]="postComment.body"
-              [panelButtonsRef]="postCommentPanelButtons"
-              [bottomButtonsRef]="postCommentBottomButtons"
-              (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
-            >
-              <ng-template #postCommentPanelButtons>
-                <button
-                  *ngIf="hasUserRole"
-                  [matMenuTriggerFor]="postSettings"
-                  mat-icon-button
-                  color="primary"
-                  class="ml-auto"
-                  aria-label="Example icon button with a delete icon"
-                >
-                  <mat-icon svgIcon="dots-horizontal"></mat-icon>
-                </button>
-                <mat-menu #postSettings>
-                  <button
-                    mat-menu-item
-                    (click)="handlePostCommentDelete(post._id, postComment._id)"
-                  >
-                    <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>
-                    Delete
-                  </button>
-                </mat-menu>
-              </ng-template>
-              <ng-template #postCommentBottomButtons>
-                <button
-                  mat-button
-                  color="accent"
-                  class="w-100 max-width-content ordinary-button"
-                  (click)="postCommentComponent.showAddReply()"
-                >
-                  <mat-icon svgIcon="reply" class="mr-h"></mat-icon>
-                  <!--            Reply-->
-                  <app-number-cutter
-                    *ngIf="commentData.postSubcommentTotalCount; else replyTemplate"
-                    [value]="commentData.postSubcommentTotalCount"
-                  ></app-number-cutter>
-                  <ng-template #replyTemplate>Reply</ng-template>
-                </button>
-              </ng-template>
-            </app-post-comment>
-          </div>
+            ></app-post-item>
+          </app-post-comment>
+          <!--          </div>-->
 
           <app-post-subcomments
             [postId]="post._id"
             [commentId]="postComment._id"
             [profileTeasers]="data.profileTeasers"
+            [resolvedUserUrlUsername]="resolvedUser.urlUsername"
             (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
           ></app-post-subcomments>
 

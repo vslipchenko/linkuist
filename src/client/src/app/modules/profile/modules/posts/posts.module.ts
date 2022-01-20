@@ -15,6 +15,7 @@ import {PostsStore} from '~app/modules/profile/modules/posts/store';
 import {PostCommentComponent} from './components/post-comment/post-comment.component';
 import {AddCommentComponent} from './components/add-comment/add-comment.component';
 import {PostSubcommentsComponent} from './components/post-subcomments/post-subcomments.component';
+import {PostItemComponent} from './components/post-item/post-item.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {PostSubcommentsComponent} from './components/post-subcomments/post-subco
     PostCommentComponent,
     AddCommentComponent,
     PostSubcommentsComponent,
+    PostItemComponent,
   ],
   imports: [
     CommonModule,

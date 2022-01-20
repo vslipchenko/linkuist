@@ -6,6 +6,7 @@ import {
   Input,
   OnInit,
   Output,
+  TemplateRef,
   ViewChild,
 } from '@angular/core';
 import {Observable, of} from 'rxjs';
@@ -32,15 +33,10 @@ import {FetchResult} from '@apollo/client/core';
 export class PostSubcommentsComponent implements OnInit {
   @Input() public readonly postId!: string;
   @Input() public readonly commentId!: string;
-  // @Input() public readonly avatarUrl!: string;
-  // @Input() public readonly username!: string;
-  // @Input() public readonly resolvedUserUrlUsername!: string;
-  // @Input() public readonly creationDate!: string;
-  // @Input() public readonly timeElapsedAfterCreation$!: Observable<string>;
-  // @Input() public readonly body!: string;
-  // @Input() public readonly isVerifiedUser!: boolean;
-
   @Input() public readonly profileTeasers!: ProfileTeasers;
+  @Input() public readonly panelButtonsRef!: TemplateRef<unknown>;
+  @Input() public readonly bottomButtonsRef!: TemplateRef<unknown>;
+  @Input() public readonly resolvedUserUrlUsername!: string;
 
   @Output() public readonly newSubcomment = new EventEmitter<{id: string; commentId: string}>();
 
@@ -91,5 +87,13 @@ export class PostSubcommentsComponent implements OnInit {
           commentId: this.commentId,
         }),
       );
+  }
+
+  public handlePostSubcommentDelete(): void {
+    // NOT IMPLEMENTED YET
+    // this.store
+    //   .dispatch$(PostsActions.deletePostComment, {postId: this.postId, commentId: this.commentId})
+    //   .pipe(untilDestroyed(this))
+    //   .subscribe();
   }
 }

@@ -1,51 +1,16 @@
-<!--<div *ngIf="postSubcomments$ | async as postSubcomments">-->
-<div
+<app-post-item
   *ngFor="let postSubcomment of postSubcomments$ | async; let index = index"
-  class="post-item border-accent-secondary mt-glue"
-  [class.border-left-dashed]="postSubcomment.isRecentlyAdded"
->
-  <!--  <ng-container *ngFor="let postSubcomment of postSubcomments$ | async">-->
-  <app-user-post-panel
-    extendsClass="post-comment-user-panel p-2 border-bottom"
-    [avatarUrl]="profileTeasers[postSubcomment.userId].avatarUrl"
-    [username]="profileTeasers[postSubcomment.userId].username"
-    [creationDate]="postSubcomment.date"
-    [timeElapsedAfterCreation$]="postSubcomment.timeElapsedAfterCreation$"
-    [resolvedUserUrlUsername]="'resolvedUserUrlUsername'"
-    [isVerifiedUser]="profileTeasers[postSubcomment.userId].isVerified"
-  >
-    <ng-content></ng-content>
-  </app-user-post-panel>
-  <div class="px-2 py-3">
-    {{ postSubcomment.body }}
-  </div>
-  <div class="border-top color-light-dark d-flex justify-content-between">
-    <!--  <div>-->
-    <!-- !!! TODO Duplicate ng-content !!! -->
-    <ng-content></ng-content>
-    <!--  </div>-->
-
-    <!--  <div>-->
-    <button
-      mat-button
-      class="icon-button d-flex justify-content-center flex ml-auto max-width-content"
-      (click)="(null)"
-      [color]="null ? 'warn' : null"
-    >
-      <!--    <div style="display: flex; align-items: center" class="mr-1">-->
-      <mat-icon svgIcon="heart" class="d-flex mr-h icon-sm"></mat-icon>
-      <span class="font-weight-bold">27k</span>
-      <!--    </div>-->
-    </button>
-    <!--  </div>-->
-  </div>
-
-  <app-add-comment
-    *ngIf="_showAddReply"
-    placeholder="Write a reply..."
-    [maxCharLength]="0"
-    (comment)="addPostSubcomment($event, index)"
-  ></app-add-comment>
-  <!--  </ng-container>-->
-</div>
-<!--</div>-->
+  [ngClasses]="{
+    'border-accent-secondary mt-glue': true,
+    'border-left-dashed': postSubcomment.isRecentlyAdded
+  }"
+  [avatarUrl]="profileTeasers[postSubcomment.userId].avatarUrl"
+  [username]="profileTeasers[postSubcomment.userId].username"
+  [isVerifiedUser]="profileTeasers[postSubcomment.userId].isVerified"
+  [creationDate]="postSubcomment.date"
+  [timeElapsedAfterCreation$]="postSubcomment.timeElapsedAfterCreation$"
+  [resolvedUserUrlUsername]="resolvedUserUrlUsername"
+  [body]="postSubcomment.body"
+  (delete)="handlePostSubcommentDelete()"
+  (comment)="addPostSubcomment($event, index)"
+></app-post-item>

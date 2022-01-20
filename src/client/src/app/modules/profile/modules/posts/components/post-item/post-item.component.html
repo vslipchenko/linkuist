@@ -1,0 +1,100 @@
+<!--TODO: Permissions-->
+<div class="post-item" [ngClass]="ngClasses">
+  <app-user-post-panel
+    extendsClass="post-comment-user-panel p-2 border-bottom"
+    [avatarUrl]="avatarUrl"
+    [username]="username"
+    [creationDate]="creationDate"
+    [timeElapsedAfterCreation$]="timeElapsedAfterCreation$"
+    [resolvedUserUrlUsername]="resolvedUserUrlUsername"
+    [isVerifiedUser]="isVerifiedUser"
+  >
+    <!--  <ng-container [ngTemplateOutlet]="panelButtonsRef"></ng-container>-->
+    <button
+      [matMenuTriggerFor]="postSettings"
+      mat-icon-button
+      color="primary"
+      class="ml-auto"
+      aria-label="Example icon button with a delete icon"
+    >
+      <mat-icon svgIcon="dots-horizontal"></mat-icon>
+    </button>
+    <mat-menu #postSettings>
+      <button mat-menu-item (click)="delete.emit()">
+        <mat-icon svgIcon="delete-forever" color="warn"></mat-icon>
+        Delete
+      </button>
+    </mat-menu>
+  </app-user-post-panel>
+
+  <div class="px-2 py-3">
+    {{ body }}
+  </div>
+
+  <ng-container [ngTemplateOutlet]="isPost ? postSocialPanel : commentSocialPanel"></ng-container>
+
+  <app-add-comment
+    *ngIf="showAddComment"
+    (comment)="comment.emit($event)"
+    [placeholder]="isPost ? 'Write a comment...' : 'Write a reply...'"
+    [maxCharLength]="POST_COMMENT_MAX_LENGTH"
+  ></app-add-comment>
+</div>
+
+<ng-template #postSocialPanel>
+  <div class="d-flex justify-content-around flex-wrap color-light-dark border-top">
+    <!--    TODO: permissions-->
+    <button
+      mat-button
+      class="icon-button d-flex justify-content-center flex"
+      (click)="(null)"
+      [color]="null ? 'warn' : null"
+    >
+      <!--    <div style="display: flex; align-items: center" class="mr-1">-->
+      <mat-icon svgIcon="heart" class="d-flex mr-h icon-sm"></mat-icon>
+      <span class="font-weight-bold">27k</span>
+      <!--    </div>-->
+    </button>
+    <button
+      mat-button
+      class="icon-button d-flex justify-content-center align-items-center flex"
+      (click)="addCommentComponent.focusElasticInput()"
+    >
+      <mat-icon svgIcon="comment" class="d-flex mr-h icon-sm"></mat-icon>
+      <span class="font-weight-bold">
+        <app-number-cutter
+          *ngIf="commentTotalCount; else commentTemplate"
+          [value]="commentTotalCount"
+        ></app-number-cutter>
+        <ng-template #commentTemplate>Comment</ng-template>
+      </span>
+    </button>
+    <button
+      mat-button
+      class="icon-button d-flex justify-content-center flex"
+      (click)="(null)"
+      [color]="null ? 'primary' : null"
+    >
+      <mat-icon svgIcon="share" class="mr-h"></mat-icon>
+      <span class="font-weight-bold">27k</span>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #commentSocialPanel>
+  <div class="border-top color-light-dark d-flex justify-content-between">
+    <button
+      mat-button
+      color="accent"
+      class="w-100 max-width-content ordinary-button"
+      (click)="toggleAddComment()"
+    >
+      <mat-icon svgIcon="reply" class="mr-h"></mat-icon>
+      <app-number-cutter
+        *ngIf="commentTotalCount; else replyTemplate"
+        [value]="commentTotalCount"
+      ></app-number-cutter>
+      <ng-template #replyTemplate>Reply</ng-template>
+    </button>
+  </div>
+</ng-template>

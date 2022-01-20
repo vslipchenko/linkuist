@@ -1,21 +1,18 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
-  TemplateRef,
-  ViewChild,
 } from '@angular/core';
-import {Observable} from 'rxjs';
-import {AddCommentComponent} from '~app/modules/profile/modules/posts/components/add-comment/add-comment.component';
 import {Store} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {FetchResult} from '@apollo/client/core';
 import {PostSubcommentCreateMutationResult} from '~app/types/post-subcomment/post-subcomment.interfaces';
+import {PostItemComponent} from '~app/modules/profile/modules/posts/components/post-item/post-item.component';
 
 @UntilDestroy()
 @Component({
@@ -24,38 +21,30 @@ import {PostSubcommentCreateMutationResult} from '~app/types/post-subcomment/pos
   styleUrls: ['./post-comment.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostCommentComponent {
+export class PostCommentComponent implements OnInit {
   @Input() public readonly postId!: string;
   @Input() public readonly commentId!: string;
-  @Input() public readonly avatarUrl!: string;
-  @Input() public readonly username!: string;
-  @Input() public readonly resolvedUserUrlUsername!: string;
-  @Input() public readonly creationDate!: string;
-  @Input() public readonly timeElapsedAfterCreation$!: Observable<string>;
-  @Input() public readonly body!: string;
-  @Input() public readonly isVerifiedUser!: boolean;
-  @Input() public readonly panelButtonsRef!: TemplateRef<unknown>;
-  @Input() public readonly bottomButtonsRef!: TemplateRef<unknown>;
+  @Input() public readonly postItemComponent!: PostItemComponent;
 
   @Output() public readonly newSubcomment = new EventEmitter<{id: string; commentId: string}>();
 
-  @ViewChild(AddCommentComponent)
-  private readonly addCommentComponent!: AddCommentComponent;
+  public constructor(private readonly store: Store<PostsState>) {}
 
-  public _showAddReply = false;
+  public ngOnInit(): void {
+    this.postItemComponent.delete
+      .pipe(untilDestroyed(this))
+      .subscribe(this.handlePostCommentDelete.bind(this));
 
-  public constructor(
-    private readonly changeDetector: ChangeDetectorRef,
-    private readonly store: Store<PostsState>,
-  ) {}
+    this.postItemComponent.comment
+      .pipe(untilDestroyed(this))
+      .subscribe(this.addPostSubcomment.bind(this));
+  }
 
-  // public ngOnInit(): void {}
-
-  public showAddReply(): void {
-    this._showAddReply = true;
-    this.changeDetector.detectChanges();
-    this.addCommentComponent.focusElasticInput();
-    // debugger;
+  public handlePostCommentDelete(): void {
+    this.store
+      .dispatch$(PostsActions.deletePostComment, {postId: this.postId, commentId: this.commentId})
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 
   public addPostSubcomment(body: string): void {
@@ -79,9 +68,4 @@ export class PostCommentComponent {
         }),
       );
   }
-
-  // public focusElasticInput(): void {
-  //   // console.log(this.elasticInputComponent.);
-  //   this.addCommentComponent.focus();
-  // }
 }
