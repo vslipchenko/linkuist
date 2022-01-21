@@ -11,6 +11,8 @@ export const PostsActions = {
   deletePostComment: 'Delete post comment',
   removeCommentRelatedData: 'Remove post comment & related subcomments',
   createPostSubcomment: 'Create post subcomment',
+  deletePostSubcomment: 'Delete post subcomment',
+  removePostSubcomment: 'Remove post subcomment',
   insertPostSubcomment: 'Insert post subcomment at certain position',
   // createPostSubcomment: 'Create post subcomment',
   appendPostComments: 'Append post comments',

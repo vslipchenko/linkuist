@@ -12,3 +12,9 @@ export const CREATE_POST_SUBCOMMENT = gql`
     }
   }
 `;
+
+export const DELETE_POST_SUBCOMMENT = gql`
+  mutation ($subcommentId: ID!) {
+    deletePostSubcomment(subcommentId: $subcommentId)
+  }
+`;

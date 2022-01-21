@@ -89,11 +89,14 @@ export class PostSubcommentsComponent implements OnInit {
       );
   }
 
-  public handlePostSubcommentDelete(): void {
-    // NOT IMPLEMENTED YET
-    // this.store
-    //   .dispatch$(PostsActions.deletePostComment, {postId: this.postId, commentId: this.commentId})
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe();
+  public handlePostSubcommentDelete(subcommentId: string): void {
+    this.store
+      .dispatch$(PostsActions.deletePostSubcomment, {
+        postId: this.postId,
+        commentId: this.commentId,
+        subcommentId,
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 }

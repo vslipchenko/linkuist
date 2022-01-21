@@ -11,6 +11,6 @@
   [timeElapsedAfterCreation$]="postSubcomment.timeElapsedAfterCreation$"
   [resolvedUserUrlUsername]="resolvedUserUrlUsername"
   [body]="postSubcomment.body"
-  (delete)="handlePostSubcommentDelete()"
+  (delete)="handlePostSubcommentDelete(postSubcomment._id)"
   (comment)="addPostSubcomment($event, index)"
 ></app-post-item>

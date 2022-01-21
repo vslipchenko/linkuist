@@ -25,3 +25,7 @@ export interface PostSubcommentCreateMutationResult {
 export interface UIPostSubcomment extends Omit<PostCommentBase, 'postId'>, UIPostCommentBase {
   commentId: string;
 }
+
+export interface DeletePostSubcommentMutationResult {
+  deletePostSubcomment?: number;
+}

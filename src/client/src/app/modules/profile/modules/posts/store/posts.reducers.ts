@@ -226,6 +226,26 @@ export const PostsReducers: Reducers<PostsState> = {
 
     return nextState;
   },
+  [PostsActions.removePostSubcomment]: (
+    state,
+    {postId, commentId, subcommentId}: {postId: string; commentId: string; subcommentId: string},
+  ) => ({
+    ...state,
+    postCommentSubcommentTotalCount: {
+      ...state.postCommentSubcommentTotalCount,
+      [postId]: state.postCommentSubcommentTotalCount[postId] - 1,
+    },
+    postSubcommentTotalCount: {
+      ...state.postSubcommentTotalCount,
+      [commentId]: state.postSubcommentTotalCount[commentId] - 1,
+    },
+    postSubcomments: {
+      ...state.postSubcomments,
+      [commentId]: state.postSubcomments[commentId].filter(
+        (subcomment) => subcomment._id !== subcommentId,
+      ),
+    },
+  }),
   [PostsActions.removeCommentThread]: (state, postId: string) => {
     const postSubcomments = {
       ...state.postSubcomments,

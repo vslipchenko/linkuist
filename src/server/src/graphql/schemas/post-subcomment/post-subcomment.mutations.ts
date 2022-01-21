@@ -6,11 +6,12 @@ import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {PostComment} from '../../../models/post-comment';
 import {getUtcTimestamp} from '../../../utilities/date';
+import {Post} from '../../../models/post';
 
 export const postSubcommentMutationTypeDefinitions = gql`
   extend type Mutation {
     createPostSubcomment(input: CreatePostSubcommentMutationInput): PostSubcomment
-    deletePostSubcomment(input: DeletePostSubcommentMutationInput!): Int!
+    deletePostSubcomment(subcommentId: ID!): Int!
   }
 `;
 
@@ -41,25 +42,38 @@ const createPostSubcomment = async (
 
 const deletePostSubcomment = async (
   _: unknown,
-  {input}: {input: Pick<IPostComment, '_id'>},
+  {subcommentId}: {subcommentId: IPostComment['_id']},
   {accessToken}: {accessToken: string},
-): Promise<number | null | undefined | ApolloError> => {
+): Promise<number | null | ApolloError> => {
   const {tokenData, error} = await authenticationGuard(accessToken);
 
   if (error) return error;
 
   const {isInvalidData} = checkDataValidity({
-    data: input._id,
+    data: subcommentId,
     pattern: RECORD_ID_REGEXP,
   });
 
   if (isInvalidData) return null;
 
+  const postComment = await PostComment.findOne({_id: subcommentId}).exec();
+
+  if (!postComment) return null;
+
+  const post = await Post.findOne({_id: postComment.postId}).exec();
+
+  if (!post) return null;
+
+  const isPostOwner = post.userId === tokenData.userId;
+
+  const subcommentFilter = {
+    _id: subcommentId,
+  } as {_id: string; userId?: string};
+
+  if (!isPostOwner) subcommentFilter.userId = tokenData.userId;
+
   try {
-    const {deletedCount: subcommentDeletedCount} = await PostComment.deleteOne({
-      _id: input._id,
-      userId: tokenData.userId, // check TODO 28.9.27
-    });
+    const {deletedCount: subcommentDeletedCount} = await PostComment.deleteOne(subcommentFilter);
 
     return subcommentDeletedCount;
   } catch {

@@ -5,11 +5,15 @@ import {ApolloQueryResult, FetchResult} from '@apollo/client/core';
 import {Apollo} from 'apollo-angular';
 import {GET_POST_SUBCOMMENTS_BY_COMMENT_ID} from '~app/graphql/post-subcomment/post-subcomment.queries';
 import {
+  DeletePostSubcommentMutationResult,
   PostSubcommentCreateMutationResult,
   PostSubcommentCreatePayload,
   PostSubcommentsByCommentIdQueryResult,
 } from '~app/types/post-subcomment/post-subcomment.interfaces';
-import {CREATE_POST_SUBCOMMENT} from '~app/graphql/post-subcomment/post-subcomment.mutations';
+import {
+  CREATE_POST_SUBCOMMENT,
+  DELETE_POST_SUBCOMMENT,
+} from '~app/graphql/post-subcomment/post-subcomment.mutations';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +40,15 @@ export class PostSubcommentService {
       query: GET_POST_SUBCOMMENTS_BY_COMMENT_ID,
       variables: {commentId, skipPostSubcommentIds, skipProfileTeaserIds, parameters},
       fetchPolicy: 'network-only', // Prevents cached results; https://www.apollographql.com/docs/react/data/queries/#supported-fetch-policies
+    });
+  }
+
+  public deleteById(
+    subcommentId: string,
+  ): Observable<FetchResult<DeletePostSubcommentMutationResult>> {
+    return this.apollo.mutate({
+      mutation: DELETE_POST_SUBCOMMENT,
+      variables: {subcommentId},
     });
   }
 }

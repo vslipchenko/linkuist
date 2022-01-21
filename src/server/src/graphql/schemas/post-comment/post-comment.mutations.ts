@@ -46,9 +46,7 @@ const deletePostComment = async (
   _: unknown,
   {commentId}: {commentId: IPostComment['_id']},
   {accessToken}: {accessToken: string},
-): Promise<
-  {commentDeletedCount: number; subcommentDeletedCount: number} | null | undefined | ApolloError
-> => {
+): Promise<{commentDeletedCount: number; subcommentDeletedCount: number} | null | ApolloError> => {
   const {tokenData, error} = await authenticationGuard(accessToken);
 
   if (error) return error;
@@ -68,8 +66,6 @@ const deletePostComment = async (
 
   if (!post) return null;
 
-  // PostComment.deleteOne({postId: ''}).exec().catch();
-  console.log('POST.USER_ID', post.userId);
   const isPostOwner = post.userId === tokenData.userId;
 
   const commentFilter = {
@@ -86,7 +82,7 @@ const deletePostComment = async (
   try {
     const {deletedCount: commentDeletedCount} = await PostComment.deleteOne(commentFilter);
 
-    if (!commentDeletedCount) return failedDeletionResult;
+    if (!commentDeletedCount) return failedDeletionResult; // Failed transaction
     // Assume something went wrong during post comment deletion (probably forged data or stale request context)
     const {deletedCount: subcommentDeletedCount} = await PostComment.deleteMany({
       commentId,

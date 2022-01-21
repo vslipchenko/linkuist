@@ -31,9 +31,7 @@ const deletePost = async (
   _: unknown,
   {input}: {input: Pick<IPost, '_id'>},
   {accessToken}: {accessToken: string},
-): Promise<
-  {postDeletedCount: number; commentDeletedCount: number} | null | undefined | ApolloError
-> => {
+): Promise<{postDeletedCount: number; commentDeletedCount: number} | null | ApolloError> => {
   const {tokenData, error} = await authenticationGuard(accessToken);
 
   if (error) return error;
@@ -58,7 +56,7 @@ const deletePost = async (
       userId: tokenData.userId, // userId condition is used in order to prevent deletion by third-parties
     });
 
-    if (!postDeletedCount) return failedDeletionResult;
+    if (!postDeletedCount) return failedDeletionResult; // Failed transaction
     // Assume user is a true post owner & it was deleted successfully
     const {deletedCount: commentDeletedCount} = await PostComment.deleteMany({
       postId: input._id,

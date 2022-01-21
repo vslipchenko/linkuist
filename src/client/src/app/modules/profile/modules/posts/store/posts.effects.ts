@@ -229,6 +229,22 @@ export const PostsEffects: Effects<PostsState> = {
       }),
     );
   },
+  [PostsActions.deletePostSubcomment]: ({
+    payload,
+    dispatch,
+    injector,
+  }: EffectOptions<PostsState, {postId: string; commentId: string; subcommentId: string}>) => {
+    const postSubcommentService = injector.get(PostSubcommentService);
+
+    return postSubcommentService.deleteById(payload.subcommentId).pipe(
+      tap(({data}) => {
+        // TODO add failed deletion processing
+        if (!data?.deletePostSubcomment) return;
+
+        dispatch(PostsActions.removePostSubcomment, payload);
+      }),
+    );
+  },
   [PostsActions.createPostComment]: ({
     payload,
     dispatch,
