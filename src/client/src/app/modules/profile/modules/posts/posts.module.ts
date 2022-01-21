@@ -16,6 +16,7 @@ import {PostCommentComponent} from './components/post-comment/post-comment.compo
 import {AddCommentComponent} from './components/add-comment/add-comment.component';
 import {PostSubcommentsComponent} from './components/post-subcomments/post-subcomments.component';
 import {PostItemComponent} from './components/post-item/post-item.component';
+import {CommentManagePanelComponent} from './components/comment-manage-panel/comment-manage-panel.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {PostItemComponent} from './components/post-item/post-item.component';
     AddCommentComponent,
     PostSubcommentsComponent,
     PostItemComponent,
+    CommentManagePanelComponent,
   ],
   imports: [
     CommonModule,

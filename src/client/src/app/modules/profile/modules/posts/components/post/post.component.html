@@ -36,13 +36,6 @@
             postSubcommentTotalCount: getPostSubcommentTotalCount$(postComment._id) | async
           } as commentData"
         >
-          <!--      <ng-container *ngIf="profileTeasers[post.userId]">-->
-          <!--          <div-->
-          <!--            class="post-item border-accent-primary"-->
-          <!--            [class.mt-glue]="!isFirst"-->
-          <!--            [class.border-left-dashed]="postComment.isRecentlyAdded"-->
-          <!--          >-->
-          <!--        {{ isFirst }}-->
           <app-post-comment
             [postItemComponent]="postItemComponent"
             [postId]="post._id"
@@ -66,7 +59,6 @@
               [body]="postComment.body"
             ></app-post-item>
           </app-post-comment>
-          <!--          </div>-->
 
           <app-post-subcomments
             [postId]="post._id"
@@ -76,126 +68,26 @@
             (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
           ></app-post-subcomments>
 
-          <ng-container
-            *ngIf="{
-              postSubcomments: getPostSubcomments$(postComment._id) | async,
-              isLoadingPostSubcomments: isLoadingPostSubcomments$ | async
-            } as subcommentData"
-          >
-            <!--          {{ subcommentData | json }}-->
-            <!--          <div *ngIf="postComment.totalSubcomments" class="post-item mt-glue">-->
-            <div
-              *ngIf="
-                subcommentData.postSubcomments?.length ||
-                subcommentData.postSubcomments?.length < commentData.postSubcommentTotalCount
-              "
-              class="post-item mt-glue d-flex"
-            >
-              <button
-                *ngIf="
-                  subcommentData.postSubcomments?.length < commentData.postSubcommentTotalCount
-                "
-                mat-button
-                color="accent"
-                class="w-100"
-                (click)="showSubcomments(postComment._id)"
-                [disabled]="isLoadingPostComments$ | async"
-              >
-                <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
-                Load replies
-              </button>
-              <button
-                *ngIf="subcommentData.postSubcomments?.length"
-                mat-button
-                [class.border-left]="
-                  subcommentData.postSubcomments?.length < commentData.postSubcommentTotalCount
-                "
-                class="w-100 color-light-dark rounded-0"
-                (click)="hideSubcommentThread(postComment._id)"
-                [disabled]="subcommentData.isLoadingPostSubcomments"
-              >
-                <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
-                Hide all replies
-              </button>
-            </div>
-          </ng-container>
-          <!--      </ng-container>-->
+          <app-comment-manage-panel
+            extendClass="mt-glue"
+            [data]="getPostSubcomments$(postComment._id) | async"
+            [isLoading]="isLoadingPostSubcomments$ | async"
+            [totalCount]="commentData.postSubcommentTotalCount"
+            (loadMore)="showSubcomments(postComment._id)"
+            (hide)="hideSubcommentThread(postComment._id)"
+          ></app-comment-manage-panel>
         </ng-container>
       </ng-container>
     </ng-container>
 
-    <!--  </ng-container>-->
-
-    <!--  </ng-container>-->
-    <ng-container
-      *ngIf="{
-        postComments: postComments$ | async,
-        isLoadingPostComments: isLoadingPostComments$ | async
-      } as commentData"
-    >
-      <!--      postComments: {{ commentData.postComments?.length }} postCommentTotalCount:-->
-      <!--      {{ data.postCommentTotalCount }} comparison:-->
-      <!--      {{ commentData.postComments?.length < data.postCommentTotalCount }}-->
-      <div
-        *ngIf="
-          commentData.postComments?.length ||
-          commentData.postComments?.length < data.postCommentTotalCount
-        "
-        class="post-item mt-1 d-flex"
-      >
-        <button
-          *ngIf="commentData.postComments?.length < data.postCommentTotalCount"
-          mat-button
-          color="primary"
-          class="w-100 rounded-0"
-          (click)="showComments(post._id, commentData.postComments)"
-          [disabled]="commentData.isLoadingPostComments"
-        >
-          <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
-          Load comments
-        </button>
-        <button
-          *ngIf="commentData.postComments?.length"
-          mat-button
-          [class.border-left]="commentData.postComments?.length < data.postCommentTotalCount"
-          class="w-100 color-light-dark rounded-0"
-          (click)="hideCommentThread(post._id)"
-          [disabled]="commentData.isLoadingPostComments"
-        >
-          <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
-          Hide all comments
-        </button>
-      </div>
-    </ng-container>
-    <!--  <div-->
-    <!--    *ngIf="-->
-    <!--      (postComments$ | async)?.length ||-->
-    <!--      (postComments$ | async)?.length < (postCommentTotalCount$ | async)-->
-    <!--    "-->
-    <!--    class="post-item mt-1 d-flex"-->
-    <!--  >-->
-    <!--    <button-->
-    <!--      *ngIf="(postComments$ | async)?.length < (postCommentTotalCount$ | async)"-->
-    <!--      mat-button-->
-    <!--      color="primary"-->
-    <!--      class="w-100 rounded-0"-->
-    <!--      (click)="showComments(post._id)"-->
-    <!--      [disabled]="isLoadingPostComments$ | async"-->
-    <!--    >-->
-    <!--      <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>-->
-    <!--      Show comments-->
-    <!--    </button>-->
-    <!--    <button-->
-    <!--      *ngIf="(postComments$ | async)?.length"-->
-    <!--      mat-button-->
-    <!--      [class.border-left]="(postComments$ | async)?.length < (postCommentTotalCount$ | async)"-->
-    <!--      class="w-100 color-light-dark rounded-0"-->
-    <!--      (click)="hideCommentThread(post._id)"-->
-    <!--      [disabled]="isLoadingPostComments$ | async"-->
-    <!--    >-->
-    <!--      <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>-->
-    <!--      Hide all comments-->
-    <!--    </button>-->
-    <!--  </div>-->
+    <app-comment-manage-panel
+      extendClass="mt-1"
+      [isComment]="true"
+      [data]="postComments$ | async"
+      [isLoading]="isLoadingPostComments$ | async"
+      [totalCount]="data.postCommentTotalCount"
+      (loadMore)="showComments($event, post._id)"
+      (hide)="hideCommentThread(post._id)"
+    ></app-comment-manage-panel>
   </div>
 </ng-container>

@@ -1,0 +1,24 @@
+<div *ngIf="data?.length || data?.length < totalCount" class="post-item d-flex" [class]="extendClass">
+  <button
+    *ngIf="data?.length < totalCount"
+    mat-button
+    [color]="isComment ? 'primary' : 'accent'"
+    class="w-100 rounded-0"
+    (click)="loadMore.emit(data)"
+    [disabled]="isLoading"
+  >
+    <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
+    Load {{ isComment ? 'comments' : 'replies' }}
+  </button>
+  <button
+    *ngIf="data?.length"
+    mat-button
+    [class.border-left]="data?.length < totalCount"
+    class="w-100 color-light-dark rounded-0"
+    (click)="hide.emit()"
+    [disabled]="isLoading"
+  >
+    <mat-icon svgIcon="comment-eye" class="mr-h"></mat-icon>
+    Hide all {{ isComment ? 'comments' : 'replies' }}
+  </button>
+</div>

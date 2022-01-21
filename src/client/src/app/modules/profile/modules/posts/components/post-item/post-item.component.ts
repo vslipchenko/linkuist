@@ -4,7 +4,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -18,8 +17,8 @@ import {AddCommentComponent} from '~app/modules/profile/modules/posts/components
   styleUrls: ['./post-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostItemComponent implements OnInit {
-  @Input() public readonly isPost!: boolean;
+export class PostItemComponent {
+  @Input() public readonly isPost!: boolean; // Else post comment / subcomment
   @Input() public readonly postId!: string;
   @Input() public readonly commentId!: string;
   @Input() public readonly avatarUrl!: string;
@@ -48,8 +47,6 @@ export class PostItemComponent implements OnInit {
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
 
   public constructor(private readonly changeDetector: ChangeDetectorRef) {}
-
-  public ngOnInit(): void {}
 
   public toggleAddComment(): void {
     this.showAddComment = !this.showAddComment;

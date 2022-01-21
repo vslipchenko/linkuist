@@ -125,7 +125,7 @@ export class PostComponent implements OnInit {
     this.recentlyAddedPostSubcommentIds[commentId].push(id);
   }
 
-  public showComments(postId: string, postComments: Array<UIPostComment>): void {
+  public showComments(postComments: Array<UIPostComment>, postId: string): void {
     if (!this.showPostComments) this.showPostComments = true;
 
     // console.log(this.store.select(PostsSelectors.getPostCommentCount, postId) ?? 0);
