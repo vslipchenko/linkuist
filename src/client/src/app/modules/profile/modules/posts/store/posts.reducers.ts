@@ -226,14 +226,25 @@ export const PostsReducers: Reducers<PostsState> = {
 
     return nextState;
   },
-  [PostsActions.removeCommentThread]: (state, postId: string) => ({
-    ...state,
-    postComments: {
-      ...state.postComments,
-      // [payload._id]: payload
-      [postId]: [], // TODO Consider reset subcomments as well
-    },
-  }),
+  [PostsActions.removeCommentThread]: (state, postId: string) => {
+    const postSubcomments = {
+      ...state.postSubcomments,
+    };
+
+    state.postComments[postId].forEach((comment) => {
+      if (postSubcomments[comment._id]) postSubcomments[comment._id] = [];
+    });
+
+    return {
+      ...state,
+      postComments: {
+        ...state.postComments,
+        // [payload._id]: payload
+        [postId]: [],
+      },
+      postSubcomments,
+    };
+  },
   [PostsActions.removeSubcommentThread]: (state, commentId: string) => ({
     ...state,
     postSubcomments: {
