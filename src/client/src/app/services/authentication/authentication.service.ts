@@ -6,7 +6,7 @@ import {
   SIGN_IN,
 } from '~app/graphql/authentication/authentication.queries';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
-import {ApolloQueryResult} from '@apollo/client/core';
+import {ApolloError, ApolloQueryResult} from '@apollo/client/core';
 import {
   AccessTokenData,
   AccessTokenQueryResult,
@@ -38,7 +38,11 @@ export class AuthenticationService {
           query: ACCESS_TOKEN_BY_REFRESH_TOKEN,
           variables: {refreshToken: this.refreshToken},
         })
-      : throwError('REFRESH_TOKEN_EMPTY');
+      : throwError(
+          new ApolloError({
+            errorMessage: 'User authentication error',
+          }),
+        );
   }
 
   public signIn(input: UserSignInPayload): Observable<ApolloQueryResult<SignInQueryResult>> {
