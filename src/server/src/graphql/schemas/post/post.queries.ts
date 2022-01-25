@@ -110,7 +110,7 @@ const aggregatePostData = async (
 
     if (accessToken) {
       // If user is logged in, fetch his post like stat as well
-      const {tokenData, error} = await authenticationGuard(accessToken);
+      const {tokenData, error} = authenticationGuard(accessToken);
 
       if (!error) {
         const postStats = await PostStats.findOne(

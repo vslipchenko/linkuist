@@ -9,7 +9,7 @@
 //   {accessToken}: {accessToken: string},
 // ): // ): Promise<MongooseDocument<IProfile> | ApolloError> => {
 // Promise<unknown> => {
-//   const {tokenData, error} = await authenticationGuard(accessToken);
+//   const {tokenData, error} = authenticationGuard(accessToken);
 //   if (error) return error;
 //
 //   return Profile.findOneAndUpdate({userId: tokenData.userId}, input, {new: true, upsert: true});

@@ -17,7 +17,7 @@ const createLinkard = async (
   {input}: {input: Omit<ILinkard, 'userId' | 'createdAt'>},
   {accessToken}: {accessToken: string},
 ): Promise<MongooseDocument<ILinkard> | ApolloError> => {
-  const {tokenData, error} = await authenticationGuard(accessToken);
+  const {tokenData, error} = authenticationGuard(accessToken);
   if (error) return error;
   // TODO Bookmark input validation
   // try {

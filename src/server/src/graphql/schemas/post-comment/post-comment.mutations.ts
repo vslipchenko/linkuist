@@ -22,7 +22,7 @@ const createPostComment = async (
   {input}: {input: Pick<IPostComment, 'postId' | 'body'>},
   {accessToken}: {accessToken: string},
 ): Promise<MongooseDocument<IPostComment> | ApolloError | null> => {
-  const {tokenData, error} = await authenticationGuard(accessToken);
+  const {tokenData, error} = authenticationGuard(accessToken);
 
   if (error) return error;
 
@@ -47,7 +47,7 @@ const deletePostComment = async (
   {commentId}: {commentId: IPostComment['_id']},
   {accessToken}: {accessToken: string},
 ): Promise<{commentDeletedCount: number; subcommentDeletedCount: number} | null | ApolloError> => {
-  const {tokenData, error} = await authenticationGuard(accessToken);
+  const {tokenData, error} = authenticationGuard(accessToken);
 
   if (error) return error;
 

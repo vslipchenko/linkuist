@@ -18,7 +18,7 @@ const linkardsByUserId = async (
   {userId}: {userId: ILinkard['userId']},
 ): // {accessToken}: {accessToken: string},
 Promise<Array<MongooseDocument<ILinkard>> | null> => {
-  // const {error} = await authenticationGuard(accessToken);
+  // const {error} = authenticationGuard(accessToken);
   // if (error) return error;
 
   const {isInvalidData} = checkDataValidity({data: userId, pattern: RECORD_ID_REGEXP});
@@ -35,7 +35,7 @@ Promise<Array<MongooseDocument<ILinkard>> | null> => {
 //   {username}: {username: IUser['username']},
 // ): // {accessToken}: {accessToken: string},
 // Promise<Array<MongooseDocument<ILinkard>> | null | UserInputError> => {
-//   // const {error} = await authenticationGuard(accessToken);
+//   // const {error} = authenticationGuard(accessToken);
 //   // if (error) return error;
 //
 //   const {isInvalidData} = checkDataValidity({data: username, pattern: USERNAME_REGEXP});

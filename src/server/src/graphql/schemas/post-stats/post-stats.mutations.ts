@@ -22,7 +22,7 @@ const likePost = async (
   {accessToken}: {accessToken: string},
 ): Promise<MongooseDocument<IPostStats> | {deletedCount: number} | ApolloError | null> => {
   // TODO CHECK TOKEN DATA INTEGRITY ISSUE, STAT ABUSE
-  const {tokenData, error} = await authenticationGuard(accessToken);
+  const {tokenData, error} = authenticationGuard(accessToken);
 
   if (error) return error;
 
@@ -60,7 +60,7 @@ const sharePost = async (
   {postId}: {postId: Pick<IPostComment, 'postId'>},
   {accessToken}: {accessToken: string},
 ): Promise<MongooseDocument<IPostComment> | ApolloError | null> => {
-  const {tokenData, error} = await authenticationGuard(accessToken);
+  const {tokenData, error} = authenticationGuard(accessToken);
 
   if (error) return error;
 

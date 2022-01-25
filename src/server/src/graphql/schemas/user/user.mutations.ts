@@ -48,7 +48,7 @@ const updateProfile = async (
   {accessToken}: {accessToken: string},
 ): // ): Promise<MongooseDocument<IProfile> | ApolloError> => {
 Promise<unknown> => {
-  const {tokenData, error} = await authenticationGuard(accessToken);
+  const {tokenData, error} = authenticationGuard(accessToken);
   if (error) return error;
   // console.warn(input);
   return User.findOneAndUpdate({_id: tokenData.userId}, {profile: input}, {new: true});

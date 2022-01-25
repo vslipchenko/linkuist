@@ -20,7 +20,7 @@ const createPost = async (
   {input}: {input: Omit<IPost, 'createdAt' | '_id'>},
   {accessToken}: {accessToken: string},
 ): Promise<MongooseDocument<IPost> | ApolloError> => {
-  const {tokenData, error} = await authenticationGuard(accessToken);
+  const {tokenData, error} = authenticationGuard(accessToken);
   // console.warn(accessToken, error);
   if (error) return error;
 
@@ -32,7 +32,7 @@ const deletePost = async (
   {input}: {input: Pick<IPost, '_id'>},
   {accessToken}: {accessToken: string},
 ): Promise<{postDeletedCount: number; commentDeletedCount: number} | null | ApolloError> => {
-  const {tokenData, error} = await authenticationGuard(accessToken);
+  const {tokenData, error} = authenticationGuard(accessToken);
 
   if (error) return error;
 
