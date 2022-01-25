@@ -26,8 +26,6 @@
     ></app-post-item>
 
     <ng-container *ngIf="showPostComments && data.postCommentTotalCount">
-      <div class="post-item border-accent-primary p-2 my-1">Comments:</div>
-
       <ng-container
         *ngFor="
           let postComment of postComments$ | async;
@@ -49,8 +47,7 @@
             <app-post-item
               #postItemComponent
               [ngClasses]="{
-                'border-accent-primary': true,
-                'mt-glue': !isFirst,
+                'border-accent-primary mt-glue': true,
                 'border-left-dashed': postComment.isRecentlyAdded
               }"
               [avatarUrl]="data.profileTeasers[post.userId].avatarUrl"
