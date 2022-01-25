@@ -9,10 +9,6 @@ const userSchema = new mongoose.Schema({
   accessKey: {
     type: String,
     required: true,
-    index: {
-      unique: true, // allow duplicate null values
-      partialFilterExpression: {accessKey: {$type: 'string'}},
-    },
   },
   profile: {
     backgroundUrl: {type: String},

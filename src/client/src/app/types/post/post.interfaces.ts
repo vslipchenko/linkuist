@@ -1,5 +1,6 @@
 import {Observable} from 'rxjs';
 import {UserProfileTeaser} from '~app/types/user/user.interfaces';
+import {State} from '~app/types/shared/shared.enums';
 
 export interface PostCreatePayload {
   text: string;
@@ -13,6 +14,7 @@ interface Post {
   isRepost: boolean;
   totalComments: number;
   totalCommentsSubcomments: number;
+  like: State;
 }
 
 export interface UIPost extends Post {

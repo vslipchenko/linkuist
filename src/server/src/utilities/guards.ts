@@ -11,6 +11,7 @@ interface AuthenticationInterceptorResult {
 export const authenticationGuard = (
   accessToken: string,
 ): Promise<AuthenticationInterceptorResult> => {
+  // TODO: Get rid of promise as jwt.verify is synchronous
   return new Promise((resolve) => {
     if (!accessToken) {
       return resolve({

@@ -19,6 +19,7 @@ import {
   postSubcommentResolvers,
   postSubcommentTypeDefinitions,
 } from './schemas/post-subcomment/post-subcomment.schema';
+import {postStatsResolvers, postStatsTypeDefinitions} from './schemas/post-stats/post-stats.schema';
 
 // TODO remove as soon as extend of empty types is available
 const rootTypeDefs = gql`
@@ -42,6 +43,7 @@ export default makeExecutableSchema({
     ...postCommentTypeDefinitions,
     ...postSubcommentTypeDefinitions,
     ...linkardTypeDefinitions,
+    ...postStatsTypeDefinitions,
     // ...profileTypeDefinitions,
   ],
   resolvers: _merge(
@@ -54,6 +56,7 @@ export default makeExecutableSchema({
     ...postCommentResolvers,
     ...postSubcommentResolvers,
     ...linkardResolvers,
+    ...postStatsResolvers,
     // ...profileResolvers,
   ),
   // resolvers: {

@@ -56,11 +56,11 @@ const deletePostSubcomment = async (
 
   if (isInvalidData) return null;
 
-  const postComment = await PostComment.findOne({_id: subcommentId}).exec();
+  const postComment = await PostComment.findOne({_id: subcommentId}, 'postId').exec();
 
   if (!postComment) return null;
 
-  const post = await Post.findOne({_id: postComment.postId}).exec();
+  const post = await Post.findOne({_id: postComment.postId}, 'userId').exec();
 
   if (!post) return null;
 

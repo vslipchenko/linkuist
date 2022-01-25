@@ -46,18 +46,29 @@
     <!--    TODO: permissions-->
     <button
       mat-button
-      class="icon-button d-flex justify-content-center flex"
-      (click)="(null)"
-      [color]="null ? 'warn' : null"
+      class="icon-button d-flex justify-content-center flex rounded-0"
+      (click)="like.emit(liked)"
+      [color]="isLiked ? 'primary' : null"
     >
       <!--    <div style="display: flex; align-items: center" class="mr-1">-->
-      <mat-icon svgIcon="heart" class="d-flex mr-h icon-sm"></mat-icon>
+      <mat-icon svgIcon="thumb-up" class="d-flex mr-h icon-sm"></mat-icon>
       <span class="font-weight-bold">27k</span>
       <!--    </div>-->
     </button>
     <button
       mat-button
-      class="icon-button d-flex justify-content-center align-items-center flex"
+      class="icon-button d-flex justify-content-center flex rounded-0"
+      (click)="dislike.emit(liked)"
+      [color]="isDisliked ? 'warn' : null"
+    >
+      <!--    <div style="display: flex; align-items: center" class="mr-1">-->
+      <mat-icon svgIcon="thumb-down" class="d-flex mr-h icon-sm"></mat-icon>
+      <span class="font-weight-bold">27k</span>
+      <!--    </div>-->
+    </button>
+    <button
+      mat-button
+      class="icon-button d-flex justify-content-center align-items-center flex rounded-0"
       (click)="addCommentComponent.focusElasticInput()"
     >
       <mat-icon svgIcon="comment" class="d-flex mr-h icon-sm"></mat-icon>
@@ -69,10 +80,11 @@
         <ng-template #commentTemplate>Comment</ng-template>
       </span>
     </button>
+    <!--    TODO: disable share button for a page owner-->
     <button
       mat-button
-      class="icon-button d-flex justify-content-center flex"
-      (click)="(null)"
+      class="icon-button d-flex justify-content-center flex rounded-0"
+      (click)="share.emit()"
       [color]="null ? 'primary' : null"
     >
       <mat-icon svgIcon="share" class="mr-h"></mat-icon>

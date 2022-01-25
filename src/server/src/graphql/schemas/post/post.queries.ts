@@ -5,12 +5,14 @@ import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 // import {User} from '../../../models/user';
 import {Post} from '../../../models/post';
 import {ILinkard} from '../../../types/linkard/linkard.interfaces';
-import {SortOrder} from '../../../types/shared/shared.enums';
+import {SortOrder, State} from '../../../types/shared/shared.enums';
 import mongoose from 'mongoose';
 import {RequestParameters} from '../../../types/shared/shared.types';
 import {POST_FETCH_LIMIT} from '../../../constants/post';
 import {PostComment} from '../../../models/post-comment';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
+import {PostStats} from '../../../models/post-stats';
+import {authenticationGuard} from '../../../utilities/guards';
 // import {getUtcTimestamp} from '../../../utilities/date';
 // import {composePostDate} from '../../../utilities/date';
 
@@ -46,6 +48,7 @@ const aggregatePostData = async (
   userId: string,
   skipProfileTeaserIds: Array<string>,
   parameters: RequestParameters,
+  accessToken: string,
 ): Promise<{
   posts: {data: unknown; total: unknown};
   // postCommentCount: {[postId: string]: number};
@@ -80,7 +83,7 @@ const aggregatePostData = async (
   ]);
 
   const data = aggregationResult[0].data as Array<
-    IPost & {totalCommentsSubcomments: number; totalComments: number}
+    IPost & {totalCommentsSubcomments: number; totalComments: number; like: State}
   >;
   // const data = aggregationResult[0].data as Array<IPost>;
   // Associative array
@@ -104,6 +107,20 @@ const aggregatePostData = async (
       postId: post._id,
       commentId: {$exists: false}, // do not count subcomments (replies)
     });
+
+    if (accessToken) {
+      // If user is logged in, fetch his post like stat as well
+      const {tokenData, error} = await authenticationGuard(accessToken);
+
+      if (!error) {
+        const postStats = await PostStats.findOne(
+          {postId: post._id, userId: tokenData.userId},
+          'like',
+        ).exec();
+
+        if (postStats) post.like = postStats.like;
+      }
+    }
 
     post.totalCommentsSubcomments = await postCommentSubcommentTotalCount(post._id);
     // post.userId is of type mongoose ObjectId;
@@ -161,6 +178,7 @@ const postsByUserId = (
     skipProfileTeaserIds: Array<string>;
     parameters: RequestParameters;
   },
+  {accessToken}: {accessToken: string},
 ): Promise<{posts: {data: unknown; total: unknown}; userProfileTeasers: Array<unknown>}> | null => {
   const {isInvalidData} = checkDataValidity({
     data: {userId, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
@@ -177,7 +195,7 @@ const postsByUserId = (
     return null;
   }
 
-  return aggregatePostData(userId, skipProfileTeaserIds, parameters);
+  return aggregatePostData(userId, skipProfileTeaserIds, parameters, accessToken);
 };
 
 export const postCommentSubcommentTotalCount = (postId: string): Promise<number> => {

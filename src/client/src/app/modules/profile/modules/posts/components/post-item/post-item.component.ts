@@ -10,6 +10,7 @@ import {
 import {Observable} from 'rxjs';
 import {POST_COMMENT_MAX_LENGTH} from '~app/constants/post';
 import {AddCommentComponent} from '~app/modules/profile/modules/posts/components/add-comment/add-comment.component';
+import {State} from '~app/types/shared/shared.enums';
 
 @Component({
   selector: 'app-post-item',
@@ -28,6 +29,7 @@ export class PostItemComponent {
   @Input() public readonly timeElapsedAfterCreation$!: Observable<string>;
   @Input() public readonly body!: string;
   @Input() public readonly isVerifiedUser!: boolean;
+  @Input() public readonly liked!: State;
   // TODO: make use of it
   @Input() public readonly likeTotalCount!: number;
   @Input() public readonly commentTotalCount!: number;
@@ -37,6 +39,9 @@ export class PostItemComponent {
   // @Input() public readonly panelButtonsRef!: TemplateRef<unknown>;
   // @Input() public readonly bottomButtonsRef!: TemplateRef<unknown>;
 
+  @Output() public readonly like = new EventEmitter<State>();
+  @Output() public readonly dislike = new EventEmitter<State>();
+  @Output() public readonly share = new EventEmitter<void>();
   @Output() public readonly delete = new EventEmitter<void>();
   @Output() public readonly comment = new EventEmitter<string>();
 
@@ -55,5 +60,13 @@ export class PostItemComponent {
 
     this.changeDetector.detectChanges();
     this.addCommentComponent.focusElasticInput();
+  }
+
+  public get isLiked(): boolean {
+    return this.liked === State.YES;
+  }
+
+  public get isDisliked(): boolean {
+    return this.liked === State.NO;
   }
 }

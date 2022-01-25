@@ -9,3 +9,9 @@ export enum ElapsedTimeMeasure {
   HOUR,
   DAY,
 }
+
+export enum State {
+  NONE,
+  YES,
+  NO,
+}

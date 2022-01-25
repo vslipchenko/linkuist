@@ -20,7 +20,7 @@ import {
   PostCommentsByPostIdQueryResult,
   UIPostComment,
 } from '~app/types/post-comment/post-comment.interfaces';
-import {SortOrder} from '~app/types/shared/shared.enums';
+import {SortOrder, State} from '~app/types/shared/shared.enums';
 import {POST_COMMENT_FETCH_LIMIT, POST_FETCH_LIMIT} from '~app/constants/post';
 import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
 import {hasLessMillisecondsThanDay} from '~app/utilities/date';
@@ -32,6 +32,8 @@ import {
   PostSubcommentsByCommentIdQueryResult,
   UIPostSubcomment,
 } from '~app/types/post-subcomment/post-subcomment.interfaces';
+import {PostStatsService} from '~app/services/post-stats/post-stats.service';
+import {LikePostMutationResult} from '~app/types/post-stats/post-stats.interfaces';
 
 export const PostsEffects: Effects<PostsState> = {
   [PostsActions.createPost]: ({dispatch, payload, injector}: EffectOptions<PostsState, string>) => {
@@ -86,6 +88,22 @@ export const PostsEffects: Effects<PostsState> = {
         if (!data?.deletePost?.postDeletedCount) return;
 
         dispatch(PostsActions.removePost, payload);
+      }),
+    );
+  },
+  [PostsActions.likePost]: ({
+    payload,
+    dispatch,
+    injector,
+  }: EffectOptions<PostsState, {postId: string; like: State}>) => {
+    const postStatsService = injector.get(PostStatsService);
+
+    return postStatsService.like(payload).pipe(
+      tap(({data}: FetchResult<LikePostMutationResult>) => {
+        dispatch(PostsActions.setPostLike, {
+          postId: payload.postId,
+          like: data?.likePost?.like, // undefined is acceptible as well
+        });
       }),
     );
   },

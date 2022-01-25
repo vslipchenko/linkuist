@@ -52,6 +52,8 @@ export const ICONS: Array<Icon> = [
   {name: 'comment-plus', fileName: 'comment-plus'},
   {name: 'post-plus', fileName: 'post_add_black_24dp'},
   {name: 'reply', fileName: 'reply'},
+  {name: 'thumb-up', fileName: 'thumb-up'},
+  {name: 'thumb-down', fileName: 'thumb-down'},
   // {name: 'google', fileName: 'google-24px', isOutlined: true},
   // {name: 'facebook', fileName: 'facebook-24px', isOutlined: true}
 ];

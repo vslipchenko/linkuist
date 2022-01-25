@@ -20,6 +20,7 @@ import {
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
 import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
 import {FetchResult} from '@apollo/client/core';
+import {State} from '~app/types/shared/shared.enums';
 
 @UntilDestroy()
 @Component({
@@ -209,6 +210,20 @@ export class PostComponent implements OnInit {
     //   });
   }
 
+  public handlePostLike(currentState: State): void {
+    const nextState = currentState === State.YES ? State.NONE : State.YES;
+
+    this.likePost(nextState);
+  }
+
+  public handlePostDislike(currentState: State): void {
+    const nextState = currentState === State.NO ? State.NONE : State.NO;
+
+    this.likePost(nextState);
+  }
+
+  public handlePostShare(): void {}
+
   public handlePostDelete(): void {
     // this.progressBarService.show();
     // console.log(_id, this.post);
@@ -255,6 +270,13 @@ export class PostComponent implements OnInit {
 
   public getPostSubcommentTotalCount$(commentId: string): Observable<number> {
     return this.store.select$(PostsSelectors.getPostSubcommentTotalCount, commentId);
+  }
+
+  private likePost(nextState: State): void {
+    this.store
+      .dispatch$(PostsActions.likePost, {postId: this.post._id, like: nextState})
+      .pipe(untilDestroyed(this))
+      .subscribe();
   }
 
   public get hasUserRole(): boolean {

@@ -5,6 +5,7 @@ import {UIPost} from '~app/types/post/post.interfaces';
 import {UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
 import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
 import {immutableInsertAt} from '~app/utilities/array';
+import {State} from '~app/types/shared/shared.enums';
 
 export const PostsReducers: Reducers<PostsState> = {
   [PostsActions.loadPostSubcomments]: (state) => ({
@@ -185,6 +186,22 @@ export const PostsReducers: Reducers<PostsState> = {
       ...state.postCommentTotalCount,
       [payload.postId]: state.postCommentTotalCount[payload.postId] + 1,
     },
+  }),
+  [PostsActions.setPostLike]: (
+    state,
+    payload: {postId: string; like: State},
+  ): ReducerResult<PostsState> => ({
+    ...state,
+    posts: state.posts.map((post) => {
+      if (post._id === payload.postId) {
+        return {
+          ...post,
+          like: payload.like,
+        };
+      }
+
+      return post;
+    }),
   }),
   [PostsActions.appendPostComments]: (
     state,

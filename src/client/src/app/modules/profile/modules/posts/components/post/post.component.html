@@ -17,11 +17,15 @@
       [resolvedUserUrlUsername]="resolvedUser.urlUsername"
       [commentTotalCount]="data.postCommentSubcommentTotalCount"
       [body]="post.text"
+      [liked]="post.like"
+      (like)="handlePostLike($event)"
+      (dislike)="handlePostDislike($event)"
+      (share)="handlePostShare()"
       (delete)="handlePostDelete()"
       (comment)="comment($event)"
     ></app-post-item>
 
-    <ng-container *ngIf="showPostComments">
+    <ng-container *ngIf="showPostComments && data.postCommentTotalCount">
       <div class="post-item border-accent-primary p-2 my-1">Comments:</div>
 
       <ng-container
