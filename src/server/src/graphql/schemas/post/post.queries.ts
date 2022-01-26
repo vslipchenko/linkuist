@@ -13,6 +13,7 @@ import {PostComment} from '../../../models/post-comment';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
 import {PostStats} from '../../../models/post-stats';
 import {authenticationGuard} from '../../../utilities/guards';
+import {AccessTokenData} from '../../../types/jwt/jwt.interfaces';
 // import {getUtcTimestamp} from '../../../utilities/date';
 // import {composePostDate} from '../../../utilities/date';
 
@@ -110,41 +111,40 @@ const aggregatePostData = async (
     //   commentId: {$exists: false}, // do not count subcomments (replies)
     // });
 
-    post.totalLikes = await PostStats.countDocuments({
-      postId: post._id,
-      like: State.YES,
+    const postStats = await PostStats.find({postId: post._id});
+
+    let totalLikes = 0;
+    let totalDislikes = 0;
+    let tokenData: AccessTokenData;
+
+    if (accessToken) {
+      // If user is logged in, fetch his post like stat as well
+      const {tokenData: decodedTokenData} = authenticationGuard(accessToken);
+
+      if (decodedTokenData) tokenData = decodedTokenData;
+    }
+
+    postStats.forEach((stat) => {
+      // Check whether request user has liked post
+      if (tokenData && stat.userId.toString() === tokenData.userId) post.like = stat.like;
+      if (stat.like === State.YES) return totalLikes++;
+      totalDislikes++; // case: State.NO
     });
 
-    post.totalDislikes = await PostStats.countDocuments({
-      postId: post._id,
-      like: State.NO,
-    });
-
+    post.totalLikes = totalLikes;
+    post.totalDislikes = totalDislikes;
     post.totalShares = await Post.countDocuments({
       postId: post._id,
     });
 
+    // totalComments results already contain data totalCommentsSubcomments, thus countDocuments can be dropped in favor of find() with further local processing
     post.totalComments = await PostComment.countDocuments({
       postId: post._id,
       commentId: {$exists: false}, // do not count subcomments (replies)
     });
-
-    if (accessToken) {
-      // If user is logged in, fetch his post like stat as well
-      const {tokenData, error} = authenticationGuard(accessToken);
-
-      if (!error) {
-        const postStats = await PostStats.findOne(
-          {postId: post._id, userId: tokenData.userId},
-          'like',
-        ).exec();
-
-        if (postStats) post.like = postStats.like;
-      }
-    }
-
     post.totalCommentsSubcomments = await postCommentSubcommentTotalCount(post._id);
-    // post.userId is of type mongoose ObjectId;
+
+    // Might be optimized as post might have only one owner (profile owner); others teaser data relevance may be sacrificed
     const userId = post.userId.toString();
 
     if (!uniqueUserIdsMap[userId] && !skipProfileTeaserIdsMap[userId]) {

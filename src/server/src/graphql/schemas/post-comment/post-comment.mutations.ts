@@ -66,7 +66,7 @@ const deletePostComment = async (
 
   if (!post) return null;
 
-  const isPostOwner = post.userId === tokenData.userId;
+  const isPostOwner = post.userId.toString() === tokenData.userId;
 
   const commentFilter = {
     _id: commentId,

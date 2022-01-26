@@ -64,7 +64,7 @@ const deletePostSubcomment = async (
 
   if (!post) return null;
 
-  const isPostOwner = post.userId === tokenData.userId;
+  const isPostOwner = post.userId.toString() === tokenData.userId;
 
   const subcommentFilter = {
     _id: subcommentId,

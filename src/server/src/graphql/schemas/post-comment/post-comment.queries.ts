@@ -83,7 +83,7 @@ const aggregatePostCommentData = async (
     },
     totalCommentsSubcomments: !parameters.offset
       ? await postCommentSubcommentTotalCount(postId)
-      : null, // TODO add this property conditionally if offset is 0
+      : null,
     userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
   };
 };

@@ -25,14 +25,8 @@
       (comment)="comment($event)"
     ></app-post-item>
 
-    <ng-container *ngIf="showPostComments && data.postCommentTotalCount">
-      <ng-container
-        *ngFor="
-          let postComment of postComments$ | async;
-          trackBy: postCommentsTrackBy;
-          let isFirst = first
-        "
-      >
+    <ng-container *ngIf="showPostComments">
+      <ng-container *ngFor="let postComment of postComments$ | async; trackBy: postCommentsTrackBy">
         <ng-container
           *ngIf="{
             postSubcommentTotalCount: getPostSubcommentTotalCount$(postComment._id) | async
