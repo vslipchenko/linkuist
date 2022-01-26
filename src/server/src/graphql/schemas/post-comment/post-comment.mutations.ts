@@ -82,7 +82,6 @@ const deletePostComment = async (
   try {
     const {deletedCount: commentDeletedCount} = await PostComment.deleteOne(commentFilter);
 
-    if (!commentDeletedCount) return failedDeletionResult; // Failed transaction
     // Assume something went wrong during post comment deletion (probably forged data or stale request context)
     const {deletedCount: subcommentDeletedCount} = await PostComment.deleteMany({
       commentId,

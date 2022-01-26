@@ -3,9 +3,10 @@ import {MongooseDocument, MongooseSchema} from '../types/mongoose/mongoose.types
 import {IPostStats} from '../types/post-stats/post-stats.interface';
 
 const postStatsSchema = new mongoose.Schema({
+  // TODO: review index relevance
   postId: {type: mongoose.Schema.Types.ObjectId, required: true, index: true},
   userId: {type: mongoose.Schema.Types.ObjectId, required: true, index: true},
-  like: {type: Number}, // Represented by the State enum
+  like: {type: Number, required: true, index: true}, // Represented by the State enum
 } as MongooseSchema<IPostStats>);
 
 export const PostStats = mongoose.model<MongooseDocument<IPostStats>>(

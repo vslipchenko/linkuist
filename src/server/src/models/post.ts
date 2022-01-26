@@ -6,8 +6,6 @@ const postSchema = new mongoose.Schema({
   userId: {type: mongoose.Schema.Types.ObjectId, required: true, index: true}, // Post author id
   text: {type: String}, // Required if isRepost = true // TODO rename to 'body'
   postId: {type: mongoose.Schema.Types.ObjectId}, // Original post ObjectId reference
-  isRepost: {type: Boolean, required: true},
-  likes: {type: Number, default: 0},
   createdAt: {type: Number, required: true},
 } as MongooseSchema<IPost>);
 

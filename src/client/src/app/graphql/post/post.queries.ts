@@ -14,9 +14,11 @@ export const GET_POSTS_BY_USER_ID = gql`
           # date
           createdAt
           text
-          isRepost
           totalComments
           totalCommentsSubcomments
+          totalLikes
+          totalDislikes
+          totalShares
           like
         }
         total

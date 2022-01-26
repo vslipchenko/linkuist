@@ -7,7 +7,6 @@ export const CREATE_POST = gql`
       userId
       createdAt
       text
-      isRepost
     }
     # createRepost ...
   }

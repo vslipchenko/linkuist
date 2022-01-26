@@ -7,11 +7,12 @@ export const postTypes = gql`
     userId: ID!
     text: String
     # postId: String
-    isRepost: Boolean!
-    likes: Int!
     createdAt: Float!
-    totalComments: Int! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
-    totalCommentsSubcomments: Int! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
+    totalComments: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
+    totalCommentsSubcomments: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
+    totalLikes: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
+    totalDislikes: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
+    totalShares: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
     like: Int # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
   }
 

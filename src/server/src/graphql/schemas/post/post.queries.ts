@@ -83,7 +83,14 @@ const aggregatePostData = async (
   ]);
 
   const data = aggregationResult[0].data as Array<
-    IPost & {totalCommentsSubcomments: number; totalComments: number; like: State}
+    IPost & {
+      totalCommentsSubcomments: number;
+      totalComments: number;
+      totalDislikes: number;
+      totalLikes: number;
+      totalShares: number;
+      like: State;
+    }
   >;
   // const data = aggregationResult[0].data as Array<IPost>;
   // Associative array
@@ -102,6 +109,20 @@ const aggregatePostData = async (
     //   postId: post._id,
     //   commentId: {$exists: false}, // do not count subcomments (replies)
     // });
+
+    post.totalLikes = await PostStats.countDocuments({
+      postId: post._id,
+      like: State.YES,
+    });
+
+    post.totalDislikes = await PostStats.countDocuments({
+      postId: post._id,
+      like: State.NO,
+    });
+
+    post.totalShares = await Post.countDocuments({
+      postId: post._id,
+    });
 
     post.totalComments = await PostComment.countDocuments({
       postId: post._id,

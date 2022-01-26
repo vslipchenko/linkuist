@@ -11,7 +11,9 @@ interface Post {
   userId: string;
   createdAt: number;
   text: string;
-  isRepost: boolean;
+  totalLikes: number;
+  totalDislikes: number;
+  totalShares: number;
   totalComments: number;
   totalCommentsSubcomments: number;
   like: State;

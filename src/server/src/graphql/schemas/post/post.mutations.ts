@@ -7,6 +7,7 @@ import {getUtcTimestamp} from '../../../utilities/date';
 import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {PostComment} from '../../../models/post-comment';
+import {PostStats} from '../../../models/post-stats';
 
 export const postMutationTypeDefinitions = gql`
   extend type Mutation {
@@ -56,11 +57,15 @@ const deletePost = async (
       userId: tokenData.userId, // userId condition is used in order to prevent deletion by third-parties
     });
 
-    if (!postDeletedCount) return failedDeletionResult; // Failed transaction
     // Assume user is a true post owner & it was deleted successfully
     const {deletedCount: commentDeletedCount} = await PostComment.deleteMany({
       postId: input._id,
     });
+    // Clear post stats
+    await PostStats.deleteMany({
+      postId: input._id,
+    });
+    // TODO: Clear comment stats
 
     return {
       postDeletedCount,
