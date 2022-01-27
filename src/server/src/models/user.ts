@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
   username: {type: String, required: true, unique: true},
   password: {type: String, required: true},
   accessKey: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    default: mongoose.Types.ObjectId,
     required: true,
   },
   profile: {

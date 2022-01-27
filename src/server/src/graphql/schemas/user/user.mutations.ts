@@ -1,6 +1,5 @@
 import {gql} from 'apollo-server-express';
 import bcrypt from 'bcrypt';
-import {v4 as uuidv4} from 'uuid';
 import {EMAIL_REGEXP, PASSWORD_REGEXP, USERNAME_REGEXP} from '../../../constants/regexps';
 import {User} from '../../../models/user';
 import {IUser} from '../../../types/user/user.interfaces';
@@ -36,7 +35,6 @@ const createUser = (
   if (isInvalidData) return null;
 
   input.password = bcrypt.hashSync(input.password, 15);
-  input.accessKey = uuidv4();
   input.createdAt = getUtcTimestamp();
 
   return User.create(input);
