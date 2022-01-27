@@ -30,11 +30,12 @@ export class PostItemComponent {
   @Input() public readonly body!: string;
   @Input() public readonly isVerifiedUser!: boolean;
   @Input() public readonly liked!: State;
-  // TODO: make use of it
+
   @Input() public readonly likeTotalCount!: number;
+  @Input() public readonly dislikeTotalCount!: number;
   @Input() public readonly commentTotalCount!: number;
-  // TODO: make use of it
   @Input() public readonly shareTotalCount!: number;
+
   @Input() public readonly ngClasses!: {[className: string]: boolean};
   // @Input() public readonly panelButtonsRef!: TemplateRef<unknown>;
   // @Input() public readonly bottomButtonsRef!: TemplateRef<unknown>;

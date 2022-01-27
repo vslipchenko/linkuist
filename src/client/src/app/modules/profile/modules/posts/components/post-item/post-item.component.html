@@ -52,7 +52,13 @@
     >
       <!--    <div style="display: flex; align-items: center" class="mr-1">-->
       <mat-icon svgIcon="thumb-up" class="d-flex mr-h icon-sm"></mat-icon>
-      <span class="font-weight-bold">27k</span>
+      <span class="font-weight-bold">
+        <app-number-cutter
+          *ngIf="likeTotalCount; else likeTemplate"
+          [value]="likeTotalCount"
+        ></app-number-cutter>
+        <ng-template #likeTemplate>Like</ng-template>
+      </span>
       <!--    </div>-->
     </button>
     <button
@@ -63,7 +69,13 @@
     >
       <!--    <div style="display: flex; align-items: center" class="mr-1">-->
       <mat-icon svgIcon="thumb-down" class="d-flex mr-h icon-sm"></mat-icon>
-      <span class="font-weight-bold">27k</span>
+      <span class="font-weight-bold">
+        <app-number-cutter
+          *ngIf="dislikeTotalCount; else dislikeTemplate"
+          [value]="dislikeTotalCount"
+        ></app-number-cutter>
+        <ng-template #dislikeTemplate>Dislike</ng-template>
+      </span>
       <!--    </div>-->
     </button>
     <button
@@ -88,7 +100,13 @@
       [color]="null ? 'primary' : null"
     >
       <mat-icon svgIcon="share" class="mr-h"></mat-icon>
-      <span class="font-weight-bold">27k</span>
+      <span class="font-weight-bold">
+        <app-number-cutter
+          *ngIf="shareTotalCount; else shareTemplate"
+          [value]="shareTotalCount"
+        ></app-number-cutter>
+        <ng-template #shareTemplate>Share</ng-template>
+      </span>
     </button>
   </div>
 </ng-template>

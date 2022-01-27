@@ -194,8 +194,42 @@ export const PostsReducers: Reducers<PostsState> = {
     ...state,
     posts: state.posts.map((post) => {
       if (post._id === payload.postId) {
+        let totalLikes = post.totalLikes;
+        let totalDislikes = post.totalDislikes;
+
+        switch (true) {
+          // like
+          case !post.like && payload.like === State.YES:
+            totalLikes++;
+            break;
+          // dislike
+          case !post.like && payload.like === State.NO:
+            totalDislikes++;
+            break;
+          // undo like
+          case post.like === State.YES && !payload.like:
+            totalLikes--;
+            break;
+          // undo dislike
+          case post.like === State.NO && !payload.like:
+            totalDislikes--;
+            break;
+          // like to dislike
+          case post.like === State.YES && payload.like === State.NO:
+            totalLikes--;
+            totalDislikes++;
+            break;
+          // dislike to like
+          case post.like === State.NO && payload.like === State.YES:
+            totalLikes++;
+            totalDislikes--;
+            break;
+        }
+
         return {
           ...post,
+          totalLikes,
+          totalDislikes,
           like: payload.like,
         };
       }
