@@ -1,4 +1,8 @@
-<div *ngIf="data?.length || data?.length < totalCount" class="post-item d-flex" [class]="extendClass">
+<div
+  *ngIf="data?.length || data?.length < totalCount"
+  class="post-item d-flex"
+  [class]="extendClass"
+>
   <button
     *ngIf="data?.length < totalCount"
     mat-button

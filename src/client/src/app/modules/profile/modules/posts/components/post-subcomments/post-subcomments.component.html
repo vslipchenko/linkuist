@@ -1,7 +1,7 @@
 <app-post-item
   *ngFor="let postSubcomment of postSubcomments$ | async; let index = index"
   [ngClasses]="{
-    'border-accent-secondary mt-glue': true,
+    'border-accent-secondary': true,
     'border-left-dashed': postSubcomment.isRecentlyAdded
   }"
   [avatarUrl]="profileTeasers[postSubcomment.userId].avatarUrl"

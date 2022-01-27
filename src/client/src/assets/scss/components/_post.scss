@@ -4,5 +4,5 @@
 .post-item {
   background-color: var.$color-light;
 
-  @include shared.content-block-border;
+  @include shared.content-block-border($has-top-border: false);
 }

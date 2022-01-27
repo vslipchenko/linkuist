@@ -7,6 +7,9 @@
 >
   <div class="post-section">
     <app-post-item
+      [ngClasses]="{
+        'border-top': true
+      }"
       [isPost]="true"
       [showAddComment]="true"
       [avatarUrl]="data.profileTeasers[post.userId].avatarUrl"
@@ -44,7 +47,7 @@
             <app-post-item
               #postItemComponent
               [ngClasses]="{
-                'border-accent-primary mt-glue': true,
+                'border-accent-primary': true,
                 'border-left-dashed': postComment.isRecentlyAdded
               }"
               [avatarUrl]="data.profileTeasers[post.userId].avatarUrl"
@@ -67,7 +70,6 @@
           ></app-post-subcomments>
 
           <app-comment-manage-panel
-            extendClass="mt-glue"
             [data]="getPostSubcomments$(postComment._id) | async"
             [isLoading]="isLoadingPostSubcomments$ | async"
             [totalCount]="commentData.postSubcommentTotalCount"
@@ -79,7 +81,7 @@
     </ng-container>
 
     <app-comment-manage-panel
-      extendClass="mt-1"
+      extendClass="border-top mt-1"
       [isComment]="true"
       [data]="postComments$ | async"
       [isLoading]="isLoadingPostComments$ | async"
