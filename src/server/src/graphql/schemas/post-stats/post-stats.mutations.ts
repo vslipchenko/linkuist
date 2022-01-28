@@ -21,14 +21,17 @@ const likePost = async (
   {input}: {input: {postId: IPostComment['postId']; like: State}},
   {accessToken}: {accessToken: string},
 ): Promise<MongooseDocument<IPostStats> | {deletedCount: number} | ApolloError | null> => {
-  // TODO CHECK TOKEN DATA INTEGRITY ISSUE, STAT ABUSE
   const {tokenData, error} = authenticationGuard(accessToken);
 
   if (error) return error;
 
   const {isInvalidData} = checkDataValidity({
-    data: input.postId,
-    pattern: RECORD_ID_REGEXP,
+    data: input,
+    pattern: {
+      postId: RECORD_ID_REGEXP,
+      // Make enum condition a part of util method
+      like: (value) => value === State.NONE || value === State.YES || value === State.NO,
+    },
   });
 
   if (isInvalidData) return null;

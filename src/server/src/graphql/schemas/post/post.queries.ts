@@ -111,6 +111,7 @@ const aggregatePostData = async (
     //   commentId: {$exists: false}, // do not count subcomments (replies)
     // });
 
+    // TODO move to post-stats.queries
     const postStats = await PostStats.find({postId: post._id});
 
     let totalLikes = 0;

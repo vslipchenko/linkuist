@@ -1,9 +1,10 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-comment-manage-panel',
   templateUrl: './comment-manage-panel.component.html',
   styleUrls: ['./comment-manage-panel.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentManagePanelComponent {
   @Input() public readonly data!: any;

@@ -13,6 +13,7 @@ import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {FetchResult} from '@apollo/client/core';
 import {PostSubcommentCreateMutationResult} from '~app/types/post-subcomment/post-subcomment.interfaces';
 import {PostItemComponent} from '~app/modules/profile/modules/posts/components/post-item/post-item.component';
+import {State} from '~app/types/shared/shared.enums';
 
 @UntilDestroy()
 @Component({
@@ -38,16 +39,28 @@ export class PostCommentComponent implements OnInit {
     this.postItemComponent.comment
       .pipe(untilDestroyed(this))
       .subscribe(this.addPostSubcomment.bind(this));
+
+    this.postItemComponent.like
+      .pipe(untilDestroyed(this))
+      .subscribe(this.handlePostCommentLike.bind(this));
+
+    this.postItemComponent.dislike
+      .pipe(untilDestroyed(this))
+      .subscribe(this.handlePostCommentDislike.bind(this));
   }
 
-  public handlePostCommentDelete(): void {
+  private handlePostCommentLike(currentState: State): void {}
+
+  private handlePostCommentDislike(currentState: State): void {}
+
+  private handlePostCommentDelete(): void {
     this.store
       .dispatch$(PostsActions.deletePostComment, {postId: this.postId, commentId: this.commentId})
       .pipe(untilDestroyed(this))
       .subscribe();
   }
 
-  public addPostSubcomment(body: string): void {
+  private addPostSubcomment(body: string): void {
     this.store
       .dispatch$<FetchResult<PostSubcommentCreateMutationResult>>(
         PostsActions.createPostSubcomment,

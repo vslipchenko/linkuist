@@ -44,40 +44,11 @@
 <ng-template #postSocialPanel>
   <div class="d-flex justify-content-around flex-wrap color-light-dark border-top">
     <!--    TODO: permissions-->
-    <button
-      mat-button
-      class="icon-button d-flex justify-content-center flex rounded-0"
-      (click)="like.emit(liked)"
-      [color]="isLiked ? 'primary' : null"
-    >
-      <!--    <div style="display: flex; align-items: center" class="mr-1">-->
-      <mat-icon svgIcon="thumb-up" class="d-flex mr-h icon-sm"></mat-icon>
-      <span class="font-weight-bold">
-        <app-number-cutter
-          *ngIf="likeTotalCount; else likeTemplate"
-          [value]="likeTotalCount"
-        ></app-number-cutter>
-        <ng-template #likeTemplate>Like</ng-template>
-      </span>
-      <!--    </div>-->
-    </button>
-    <button
-      mat-button
-      class="icon-button d-flex justify-content-center flex rounded-0"
-      (click)="dislike.emit(liked)"
-      [color]="isDisliked ? 'warn' : null"
-    >
-      <!--    <div style="display: flex; align-items: center" class="mr-1">-->
-      <mat-icon svgIcon="thumb-down" class="d-flex mr-h icon-sm"></mat-icon>
-      <span class="font-weight-bold">
-        <app-number-cutter
-          *ngIf="dislikeTotalCount; else dislikeTemplate"
-          [value]="dislikeTotalCount"
-        ></app-number-cutter>
-        <ng-template #dislikeTemplate>Dislike</ng-template>
-      </span>
-      <!--    </div>-->
-    </button>
+    <ng-container
+      [ngTemplateOutlet]="likeButtons"
+      [ngTemplateOutletContext]="{$implicit: true}"
+    ></ng-container>
+
     <button
       mat-button
       class="icon-button d-flex justify-content-center align-items-center flex rounded-0"
@@ -92,7 +63,7 @@
         <ng-template #commentTemplate>Comment</ng-template>
       </span>
     </button>
-    <!--    TODO: disable share button for a page owner-->
+
     <button
       mat-button
       class="icon-button d-flex justify-content-center flex rounded-0"
@@ -116,7 +87,7 @@
     <button
       mat-button
       color="accent"
-      class="w-100 max-width-content ordinary-button"
+      class="w-100 max-width-content ordinary-button rounded-0"
       (click)="toggleAddComment()"
     >
       <mat-icon svgIcon="reply" class="mr-h"></mat-icon>
@@ -126,5 +97,46 @@
       ></app-number-cutter>
       <ng-template #replyTemplate>Reply</ng-template>
     </button>
+    <div class="d-flex">
+      <ng-container [ngTemplateOutlet]="likeButtons"></ng-container>
+    </div>
   </div>
+</ng-template>
+
+<ng-template #likeButtons let-showLabels>
+  <button
+    mat-button
+    class="icon-button d-flex justify-content-center align-items-center flex rounded-0 min-width-0"
+    (click)="like.emit(liked)"
+    [color]="isLiked ? 'primary' : null"
+  >
+    <mat-icon svgIcon="thumb-up" class="d-flex mr-h icon-sm"></mat-icon>
+    <span class="font-weight-bold">
+      <app-number-cutter
+        *ngIf="likeTotalCount; else likeTemplate"
+        [value]="likeTotalCount"
+      ></app-number-cutter>
+      <ng-template #likeTemplate>
+        <ng-template [ngIf]="showLabels">Like</ng-template>
+      </ng-template>
+    </span>
+  </button>
+
+  <button
+    mat-button
+    class="icon-button d-flex justify-content-center align-items-center flex rounded-0 min-width-0"
+    (click)="dislike.emit(liked)"
+    [color]="isDisliked ? 'warn' : null"
+  >
+    <mat-icon svgIcon="thumb-down" class="d-flex mr-h icon-sm"></mat-icon>
+    <span class="font-weight-bold">
+      <app-number-cutter
+        *ngIf="dislikeTotalCount; else dislikeTemplate"
+        [value]="dislikeTotalCount"
+      ></app-number-cutter>
+      <ng-template #dislikeTemplate>
+        <ng-template [ngIf]="showLabels">Dislike</ng-template>
+      </ng-template>
+    </span>
+  </button>
 </ng-template>

@@ -9,7 +9,6 @@ interface AuthenticationInterceptorResult {
 }
 
 export const authenticationGuard = (accessToken: string): AuthenticationInterceptorResult => {
-  // TODO: Get rid of promise as jwt.verify is synchronous
   if (!accessToken) {
     return {
       error: new ApolloError('', 'ACCESS_TOKEN_EMPTY'),
