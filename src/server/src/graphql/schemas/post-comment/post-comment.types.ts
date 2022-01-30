@@ -8,13 +8,13 @@ export const postCommentTypes = gql`
     userId: ID!
     body: String!
     createdAt: Float!
-    likes: Int!
+    likes: Int # Null for created comment
     totalSubcomments: Int!
   }
 
   type PostComments {
     data: [PostComment]!
-    total: Float!
+    total: Float
   }
 
   type PostCommentDeletedCount {

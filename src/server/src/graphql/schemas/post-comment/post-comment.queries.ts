@@ -75,11 +75,12 @@ const aggregatePostCommentData = async (
   return {
     postComments: {
       data,
-      // total: aggregationResult[0].total.length ? aggregationResult[0].total[0].total : 0,
-      total: await PostComment.countDocuments({
-        postId,
-        commentId: {$exists: false}, // do not count subcomments (replies)
-      }),
+      total: !parameters.offset
+        ? await PostComment.countDocuments({
+            postId,
+            commentId: {$exists: false}, // do not count subcomments (replies)
+          })
+        : null,
     },
     totalCommentsSubcomments: !parameters.offset
       ? await postCommentSubcommentTotalCount(postId)

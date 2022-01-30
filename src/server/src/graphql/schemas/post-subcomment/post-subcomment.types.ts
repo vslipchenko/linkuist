@@ -7,12 +7,12 @@ export const postSubcommentTypes = gql`
     userId: ID!
     body: String!
     createdAt: Float!
-    likes: Int!
+    likes: Int # Null for created subcomment
   }
 
   type PostSubcomments {
     data: [PostSubcomment]!
-    total: Float!
+    total: Float
   }
 
   type UserPostSubcomments { # 'User' is basically a prefix used to avoid naming collision

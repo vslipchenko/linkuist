@@ -71,10 +71,11 @@ const aggregatePostSubcommentData = async (
   return {
     postSubcomments: {
       data,
-      // total: aggregationResult[0].total.length ? aggregationResult[0].total[0].total : 0,
-      total: await PostComment.countDocuments({
-        commentId: commentId,
-      }),
+      total: !parameters.offset
+        ? await PostComment.countDocuments({
+            commentId: commentId,
+          })
+        : null,
     },
     userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
   };

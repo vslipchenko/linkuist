@@ -111,21 +111,28 @@ export const PostsReducers: Reducers<PostsState> = {
       postSubcomments: Array<UIPostSubcomment>;
       postSubcommentTotalCount: number;
     },
-  ): ReducerResult<PostsState> => ({
-    // TODO
-    ...state,
-    postSubcomments: {
-      ...state.postSubcomments,
-      [payload.commentId]: state.postSubcomments[payload.commentId]
-        ? [...state.postSubcomments[payload.commentId], ...payload.postSubcomments]
-        : payload.postSubcomments,
-    },
-    postSubcommentTotalCount: {
-      ...state.postCommentTotalCount,
-      [payload.commentId]: payload.postSubcommentTotalCount,
-    },
-    isLoadingPostSubcomments: false,
-  }),
+  ): ReducerResult<PostsState> => {
+    const nextState = {
+      ...state,
+      postSubcomments: {
+        ...state.postSubcomments,
+        [payload.commentId]: state.postSubcomments[payload.commentId]
+          ? [...state.postSubcomments[payload.commentId], ...payload.postSubcomments]
+          : payload.postSubcomments,
+      },
+      isLoadingPostSubcomments: false,
+    };
+
+    if (payload.postSubcommentTotalCount !== null) {
+      // If it's a first-most subcomment load, update subcomment total count
+      nextState.postSubcommentTotalCount = {
+        ...state.postCommentTotalCount,
+        [payload.commentId]: payload.postSubcommentTotalCount,
+      };
+    }
+
+    return nextState;
+  },
   // [PostsActions.setPostCmmentSubcommentTotalCount]: (
   //   state,
   //   {
@@ -256,16 +263,20 @@ export const PostsReducers: Reducers<PostsState> = {
           ? [...state.postComments[payload.postId], ...payload.postComments]
           : payload.postComments,
       },
-      postCommentTotalCount: {
-        ...state.postCommentTotalCount,
-        [payload.postId]: payload.postCommentTotalCount,
-      },
       postSubcommentTotalCount: {
         ...state.postSubcommentTotalCount,
         ...payload.postSubcommentTotalCount,
       },
       isLoadingPostComments: false,
     };
+
+    if (payload.postCommentTotalCount !== null) {
+      // If it's a first-most comment load, update comment total count
+      nextState.postCommentTotalCount = {
+        ...state.postCommentTotalCount,
+        [payload.postId]: payload.postCommentTotalCount,
+      };
+    }
 
     if (payload.totalCommentsSubcomments !== null) {
       // If it's a first-most comment load, update comments & subcomments total count
