@@ -9,6 +9,7 @@ import {PostComment} from '../../../models/post-comment';
 import {IPostComment} from '../../../types/post-comment/post-comment.interfaces';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
 import {postCommentSubcommentTotalCount} from '../post/post.queries';
+import {PostCommentReply} from '../../../models/post-reply';
 
 export const postCommentQueryTypeDefinitions = gql`
   extend type Query {
@@ -35,9 +36,8 @@ const aggregatePostCommentData = async (
   const aggregationResult = await PostComment.aggregate([
     {
       $match: {
-        postId: new mongoose.Types.ObjectId(postId),
-        commentId: {$exists: false},
         _id: {$nin: skipPostCommentIds.map((id) => new mongoose.Types.ObjectId(id))}, // do not lookup for recently added comments in order to avoid duplicate entry & wrong results
+        postId: new mongoose.Types.ObjectId(postId),
       },
     },
     {
@@ -60,7 +60,7 @@ const aggregatePostCommentData = async (
   const data = aggregationResult[0].data as Array<IPostComment & {totalSubcomments: number}>;
 
   for (const comment of data) {
-    comment.totalSubcomments = await PostComment.countDocuments({commentId: comment._id});
+    comment.totalSubcomments = await PostCommentReply.countDocuments({commentId: comment._id});
 
     const userId = comment.userId.toString();
 
@@ -78,7 +78,6 @@ const aggregatePostCommentData = async (
       total: !parameters.offset
         ? await PostComment.countDocuments({
             postId,
-            commentId: {$exists: false}, // do not count subcomments (replies)
           })
         : null,
     },

@@ -17,7 +17,6 @@ export const GET_POST_SUBCOMMENTS_BY_COMMENT_ID = gql`
         data {
           _id
           userId
-          commentId
           body
           likes
           createdAt

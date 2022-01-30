@@ -14,6 +14,7 @@ import {userProfileTeasersByUserIds} from '../user/user.queries';
 import {PostStats} from '../../../models/post-stats';
 import {authenticationGuard} from '../../../utilities/guards';
 import {AccessTokenData} from '../../../types/jwt/jwt.interfaces';
+import {PostCommentReply} from '../../../models/post-reply';
 // import {getUtcTimestamp} from '../../../utilities/date';
 // import {composePostDate} from '../../../utilities/date';
 
@@ -141,7 +142,6 @@ const aggregatePostData = async (
     // totalComments results already contain data totalCommentsSubcomments, thus countDocuments can be dropped in favor of find() with further local processing
     post.totalComments = await PostComment.countDocuments({
       postId: post._id,
-      commentId: {$exists: false}, // do not count subcomments (replies)
     });
     post.totalCommentsSubcomments = await postCommentSubcommentTotalCount(post._id);
 
@@ -220,10 +220,18 @@ const postsByUserId = (
   return aggregatePostData(userId, skipProfileTeaserIds, parameters, accessToken);
 };
 
-export const postCommentSubcommentTotalCount = (postId: string): Promise<number> => {
-  return PostComment.countDocuments({
+export const postCommentSubcommentTotalCount = async (postId: string): Promise<number> => {
+  const commentCount = await PostComment.countDocuments({
     postId,
   }).exec();
+
+  if (!commentCount) return 0;
+
+  const replyCount = await PostCommentReply.countDocuments({
+    postId,
+  }).exec();
+
+  return commentCount + replyCount;
 };
 
 // const postsByUsername = async (

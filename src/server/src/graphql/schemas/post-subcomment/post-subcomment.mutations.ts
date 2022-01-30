@@ -7,6 +7,8 @@ import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {PostComment} from '../../../models/post-comment';
 import {getUtcTimestamp} from '../../../utilities/date';
 import {Post} from '../../../models/post';
+import {IPostCommentReply} from '../../../types/post-reply/post-reply.interface';
+import {PostCommentReply} from '../../../models/post-reply';
 
 export const postSubcommentMutationTypeDefinitions = gql`
   extend type Mutation {
@@ -17,9 +19,9 @@ export const postSubcommentMutationTypeDefinitions = gql`
 
 const createPostSubcomment = async (
   _: unknown,
-  {input}: {input: Pick<IPostComment, 'postId' | 'commentId' | 'body'>},
+  {input}: {input: Pick<IPostCommentReply, 'postId' | 'commentId' | 'body'>},
   {accessToken}: {accessToken: string},
-): Promise<MongooseDocument<IPostComment> | ApolloError | null> => {
+): Promise<MongooseDocument<IPostCommentReply> | ApolloError | null> => {
   const {tokenData, error} = authenticationGuard(accessToken);
 
   if (error) return error;
@@ -37,7 +39,11 @@ const createPostSubcomment = async (
 
   if (isInvalidData) return null;
 
-  return PostComment.create({...input, userId: tokenData.userId, createdAt: getUtcTimestamp()});
+  return PostCommentReply.create({
+    ...input,
+    userId: tokenData.userId,
+    createdAt: getUtcTimestamp(),
+  });
 };
 
 const deletePostSubcomment = async (

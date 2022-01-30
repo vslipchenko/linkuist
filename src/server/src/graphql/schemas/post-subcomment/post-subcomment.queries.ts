@@ -4,10 +4,10 @@ import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {SortOrder} from '../../../types/shared/shared.enums';
 import {POST_SUBCOMMENT_FETCH_LIMIT} from '../../../constants/post';
-import {PostComment} from '../../../models/post-comment';
 import mongoose from 'mongoose';
-import {IPostComment} from '../../../types/post-comment/post-comment.interfaces';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
+import {PostCommentReply} from '../../../models/post-reply';
+import {IPostCommentReply} from '../../../types/post-reply/post-reply.interface';
 
 export const postSubcommentQueryTypeDefinitions = gql`
   extend type Query {
@@ -31,7 +31,7 @@ const aggregatePostSubcommentData = async (
 
   skipProfileTeaserIds.forEach((userId) => (skipProfileTeaserIdsMap[userId] = 1));
 
-  const aggregationResult = await PostComment.aggregate([
+  const aggregationResult = await PostCommentReply.aggregate([
     {
       $match: {
         _id: {$nin: skipPostSubcommentIds.map((id) => new mongoose.Types.ObjectId(id))},
@@ -54,7 +54,7 @@ const aggregatePostSubcommentData = async (
 
   //console.log('aggregationResult ', parameters, aggregationResult, new Date());
 
-  const data = aggregationResult[0].data as Array<IPostComment>;
+  const data = aggregationResult[0].data as Array<IPostCommentReply>;
 
   for (const comment of data) {
     // console.log(comment);
@@ -72,7 +72,7 @@ const aggregatePostSubcommentData = async (
     postSubcomments: {
       data,
       total: !parameters.offset
-        ? await PostComment.countDocuments({
+        ? await PostCommentReply.countDocuments({
             commentId: commentId,
           })
         : null,
