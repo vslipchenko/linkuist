@@ -1,19 +1,19 @@
 import gql from 'graphql-tag';
 
-export const GET_POST_SUBCOMMENTS_BY_COMMENT_ID = gql`
+export const GET_POST_REPLIES_BY_COMMENT_ID = gql`
   query (
     $commentId: String!
-    $skipPostSubcommentIds: [String]!
+    $skipPostReplyIds: [String]!
     $skipProfileTeaserIds: [String]!
     $parameters: RequestParameters!
   ) {
-    postSubcommentsByCommentId(
+    postRepliesByCommentId(
       commentId: $commentId
-      skipPostSubcommentIds: $skipPostSubcommentIds
+      skipPostReplyIds: $skipPostReplyIds
       skipProfileTeaserIds: $skipProfileTeaserIds
       parameters: $parameters
     ) {
-      postSubcomments {
+      postReplies {
         data {
           _id
           userId

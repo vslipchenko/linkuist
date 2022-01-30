@@ -25,13 +25,13 @@ import {POST_COMMENT_FETCH_LIMIT, POST_FETCH_LIMIT} from '~app/constants/post';
 import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
 import {hasLessMillisecondsThanDay} from '~app/utilities/date';
 import {ProfileActions} from '~app/modules/profile/store/profile.actions';
-import {PostSubcommentService} from '~app/services/post-subcomment/post-subcomment.service';
+import {PostReplyService} from '~app/services/post-reply/post-reply.service';
 import {
-  PostSubcommentCreateMutationResult,
-  PostSubcommentCreatePayload,
-  PostSubcommentsByCommentIdQueryResult,
-  UIPostSubcomment,
-} from '~app/types/post-subcomment/post-subcomment.interfaces';
+  PostReplyCreateMutationResult,
+  PostReplyCreatePayload,
+  PostRepliesByCommentIdQueryResult,
+  UIPostReply,
+} from '~app/types/post-reply/post-reply.interfaces';
 import {PostStatsService} from '~app/services/post-stats/post-stats.service';
 import {LikePostMutationResult} from '~app/types/post-stats/post-stats.interfaces';
 
@@ -107,7 +107,7 @@ export const PostsEffects: Effects<PostsState> = {
       }),
     );
   },
-  [PostsActions.loadPostSubcomments]: ({
+  [PostsActions.loadPostReplies]: ({
     dispatch,
     payload,
     injector,
@@ -115,63 +115,61 @@ export const PostsEffects: Effects<PostsState> = {
     PostsState,
     {
       commentId: string;
-      recentlyAddedPostSubcommentIds: Array<string>;
+      recentlyAddedPostReplyIds: Array<string>;
       skipProfileTeaserIds: Array<string>;
       offset: number;
       order?: SortOrder;
       limit?: number;
     }
   >) => {
-    const postSubcommentService = injector.get(PostSubcommentService);
+    const postReplyService = injector.get(PostReplyService);
 
-    return postSubcommentService
+    return postReplyService
       .getByCommentId(
         payload.commentId,
-        payload.recentlyAddedPostSubcommentIds,
+        payload.recentlyAddedPostReplyIds,
         payload.skipProfileTeaserIds,
         {
           order: payload.order ?? SortOrder.ASCENDING,
-          offset: payload.offset - payload.recentlyAddedPostSubcommentIds.length,
+          offset: payload.offset - payload.recentlyAddedPostReplyIds.length,
           limit: payload.limit ?? POST_COMMENT_FETCH_LIMIT,
         },
       )
       .pipe(
-        tap(({data}: FetchResult<PostSubcommentsByCommentIdQueryResult>) => {
+        tap(({data}: FetchResult<PostRepliesByCommentIdQueryResult>) => {
           const translateService = injector.get(TranslateService);
           const dateService = injector.get(DateService);
 
           const serverUtcTimestamp = dateService.serverUtcTimestamp;
 
           const profileTeasers: ProfileTeasers = {};
-          const postSubcomments = data?.postSubcommentsByCommentId.postSubcomments.data.map(
-            (postSubcomment) => {
-              const newPostSubcomment: Partial<UIPostSubcomment> = {...postSubcomment};
+          const postReplies = data?.postRepliesByCommentId.postReplies.data.map((postReply) => {
+            const newPostReply: Partial<UIPostReply> = {...postReply};
 
-              newPostSubcomment.date = getPostFullDate(postSubcomment.createdAt, translateService);
+            newPostReply.date = getPostFullDate(postReply.createdAt, translateService);
 
-              if (hasLessMillisecondsThanDay(serverUtcTimestamp - postSubcomment.createdAt)) {
-                newPostSubcomment.timeElapsedAfterCreation$ = getTimeElapsedAfterCreation$({
-                  createdAt: postSubcomment.createdAt,
-                  dateService,
-                  translateService,
-                });
+            if (hasLessMillisecondsThanDay(serverUtcTimestamp - postReply.createdAt)) {
+              newPostReply.timeElapsedAfterCreation$ = getTimeElapsedAfterCreation$({
+                createdAt: postReply.createdAt,
+                dateService,
+                translateService,
+              });
 
-                return newPostSubcomment;
-              }
+              return newPostReply;
+            }
 
-              newPostSubcomment.timeElapsedAfterCreation$ = of(
-                getPostShortDate({
-                  createdAt: postSubcomment.createdAt,
-                  serverUtcTimestamp: serverUtcTimestamp,
-                  translateService,
-                }),
-              );
+            newPostReply.timeElapsedAfterCreation$ = of(
+              getPostShortDate({
+                createdAt: postReply.createdAt,
+                serverUtcTimestamp: serverUtcTimestamp,
+                translateService,
+              }),
+            );
 
-              return newPostSubcomment;
-            },
-          );
+            return newPostReply;
+          });
           // TODO update response model shape ??? object instead of array
-          data?.postSubcommentsByCommentId.userProfileTeasers.forEach((profileTeaser) => {
+          data?.postRepliesByCommentId.userProfileTeasers.forEach((profileTeaser) => {
             profileTeasers[profileTeaser._id] = {
               username: profileTeaser.username,
               avatarUrl: profileTeaser.profile.avatarUrl,
@@ -182,33 +180,33 @@ export const PostsEffects: Effects<PostsState> = {
 
           // TODO: consider merge into a single dispatch
           dispatch(ProfileActions.patchProfileTeasers, profileTeasers); // profileTeasers type mismatch
-          dispatch(PostsActions.appendPostSubcomments, {
+          dispatch(PostsActions.appendPostReplies, {
             commentId: payload.commentId,
-            postSubcomments,
-            postSubcommentTotalCount: data?.postSubcommentsByCommentId.postSubcomments.total,
+            postReplies,
+            postReplyTotalCount: data?.postRepliesByCommentId.postReplies.total,
           });
         }),
       );
   },
-  [PostsActions.createPostSubcomment]: ({
+  [PostsActions.createPostReply]: ({
     payload,
     dispatch,
     injector,
   }: EffectOptions<
     PostsState,
-    {subcommentPayload: PostSubcommentCreatePayload; insertAtPosition: number}
+    {replyPayload: PostReplyCreatePayload; insertAtPosition: number}
   >) => {
-    const postSubcommentService = injector.get(PostSubcommentService);
+    const postReplyService = injector.get(PostReplyService);
 
-    return postSubcommentService.create(payload.subcommentPayload).pipe(
-      tap(({data}: FetchResult<PostSubcommentCreateMutationResult>) => {
+    return postReplyService.create(payload.replyPayload).pipe(
+      tap(({data}: FetchResult<PostReplyCreateMutationResult>) => {
         const translateService = injector.get(TranslateService);
         const dateService = injector.get(DateService);
 
-        const {createdAt} = data!.createPostSubcomment;
+        const {createdAt} = data!.createPostReply;
 
-        const postSubcomment: Partial<UIPostSubcomment> = {
-          ...data?.createPostSubcomment,
+        const postReply: Partial<UIPostReply> = {
+          ...data?.createPostReply,
           date: getPostFullDate(createdAt, translateService),
           timeElapsedAfterCreation$: getTimeElapsedAfterCreation$({
             createdAt,
@@ -218,11 +216,11 @@ export const PostsEffects: Effects<PostsState> = {
           isRecentlyAdded: true,
         };
 
-        // console.log(data!.createPostSubcomment, postSubcomment);
-        dispatch(PostsActions.insertPostSubcomment, {
+        // console.log(data!.createPostReply, postReply);
+        dispatch(PostsActions.insertPostReply, {
           insertAtPosition: payload.insertAtPosition,
-          postSubcomment,
-          postId: payload.subcommentPayload.postId,
+          postReply,
+          postId: payload.replyPayload.postId,
         });
       }),
     );
@@ -247,19 +245,19 @@ export const PostsEffects: Effects<PostsState> = {
       }),
     );
   },
-  [PostsActions.deletePostSubcomment]: ({
+  [PostsActions.deletePostReply]: ({
     payload,
     dispatch,
     injector,
-  }: EffectOptions<PostsState, {postId: string; commentId: string; subcommentId: string}>) => {
-    const postSubcommentService = injector.get(PostSubcommentService);
+  }: EffectOptions<PostsState, {postId: string; commentId: string; replyId: string}>) => {
+    const postReplyService = injector.get(PostReplyService);
 
-    return postSubcommentService.deleteById(payload.subcommentId).pipe(
+    return postReplyService.deleteById(payload.replyId).pipe(
       tap(({data}) => {
         // TODO add failed deletion processing
-        if (!data?.deletePostSubcomment) return;
+        if (!data?.deletePostReply) return;
 
-        dispatch(PostsActions.removePostSubcomment, payload);
+        dispatch(PostsActions.removePostReply, payload);
       }),
     );
   },
@@ -334,7 +332,7 @@ export const PostsEffects: Effects<PostsState> = {
           const serverUtcTimestamp = dateService.serverUtcTimestamp;
 
           const profileTeasers: ProfileTeasers = {};
-          const postSubcommentTotalCount: {[commentId: string]: number} = {};
+          const postReplyTotalCount: {[commentId: string]: number} = {};
 
           // const uniquePostComments = payload.recentlyAddedPostComments.length
           //   ? data.postCommentsByPostId.postComments.data.filter(
@@ -348,11 +346,11 @@ export const PostsEffects: Effects<PostsState> = {
           // console.log(data.postCommentsByPostId.postComments.data, uniquePostComments);
 
           const postComments = data.postCommentsByPostId.postComments.data.map((postComment) => {
-            const newPostComment: Partial<UIPostComment> = {...postComment}; // TODO: consider to exclude totalSubcomments from UIPostComment & newPostComment
+            const newPostComment: Partial<UIPostComment> = {...postComment}; // TODO: consider to exclude totalReplies from UIPostComment & newPostComment
 
             newPostComment.date = getPostFullDate(postComment.createdAt, translateService);
 
-            postSubcommentTotalCount[postComment._id] = postComment.totalSubcomments;
+            postReplyTotalCount[postComment._id] = postComment.totalReplies;
 
             if (hasLessMillisecondsThanDay(serverUtcTimestamp - postComment.createdAt)) {
               newPostComment.timeElapsedAfterCreation$ = getTimeElapsedAfterCreation$({
@@ -390,8 +388,8 @@ export const PostsEffects: Effects<PostsState> = {
             postId: payload.postId,
             postComments,
             postCommentTotalCount: data.postCommentsByPostId.postComments.total,
-            totalCommentsSubcomments: data.postCommentsByPostId.totalCommentsSubcomments,
-            postSubcommentTotalCount,
+            totalCommentsReplies: data.postCommentsByPostId.totalCommentsReplies,
+            postReplyTotalCount,
           });
         }),
       );
@@ -436,13 +434,13 @@ export const PostsEffects: Effects<PostsState> = {
           });
 
           const postCommentTotalCount: {[postId: string]: number} = {};
-          const postCommentSubcommentTotalCount: {[postId: string]: number} = {};
+          const postCommentReplyTotalCount: {[postId: string]: number} = {};
 
           const posts = data.postsByUserId.posts.data.map((post) => {
-            const newPost: Partial<UIPost> = {...post}; // TODO: consider to exclude totalComments & totalCommentsSubcomments from newPost
+            const newPost: Partial<UIPost> = {...post}; // TODO: consider to exclude totalComments & totalCommentsReplies from newPost
 
             postCommentTotalCount[post._id] = post.totalComments;
-            postCommentSubcommentTotalCount[post._id] = post.totalCommentsSubcomments;
+            postCommentReplyTotalCount[post._id] = post.totalCommentsReplies;
 
             // newPost.millisecondsElapsed = dateService.serverUtcTimestamp - post.createdAt;
             newPost.date = getPostFullDate(post.createdAt, translateService);
@@ -476,7 +474,7 @@ export const PostsEffects: Effects<PostsState> = {
           dispatch(PostsActions.appendPosts, {
             posts,
             postCommentTotalCount,
-            postCommentSubcommentTotalCount,
+            postCommentReplyTotalCount,
             postTotalCount: data.postsByUserId.posts.total,
           });
         }),

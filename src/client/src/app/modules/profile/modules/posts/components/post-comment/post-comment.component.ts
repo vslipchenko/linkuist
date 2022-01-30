@@ -11,7 +11,7 @@ import {PostsState} from '~app/modules/profile/modules/posts/store';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {FetchResult} from '@apollo/client/core';
-import {PostSubcommentCreateMutationResult} from '~app/types/post-subcomment/post-subcomment.interfaces';
+import {PostReplyCreateMutationResult} from '~app/types/post-reply/post-reply.interfaces';
 import {PostItemComponent} from '~app/modules/profile/modules/posts/components/post-item/post-item.component';
 import {State} from '~app/types/shared/shared.enums';
 
@@ -27,7 +27,7 @@ export class PostCommentComponent implements OnInit {
   @Input() public readonly commentId!: string;
   @Input() public readonly postItemComponent!: PostItemComponent;
 
-  @Output() public readonly newSubcomment = new EventEmitter<{id: string; commentId: string}>();
+  @Output() public readonly newReply = new EventEmitter<{id: string; commentId: string}>();
 
   public constructor(private readonly store: Store<PostsState>) {}
 
@@ -38,7 +38,7 @@ export class PostCommentComponent implements OnInit {
 
     this.postItemComponent.comment
       .pipe(untilDestroyed(this))
-      .subscribe(this.addPostSubcomment.bind(this));
+      .subscribe(this.addPostReply.bind(this));
 
     this.postItemComponent.like
       .pipe(untilDestroyed(this))
@@ -60,23 +60,20 @@ export class PostCommentComponent implements OnInit {
       .subscribe();
   }
 
-  private addPostSubcomment(body: string): void {
+  private addPostReply(body: string): void {
     this.store
-      .dispatch$<FetchResult<PostSubcommentCreateMutationResult>>(
-        PostsActions.createPostSubcomment,
-        {
-          subcommentPayload: {
-            postId: this.postId,
-            commentId: this.commentId,
-            body,
-          },
-          insertAtPosition: 0,
+      .dispatch$<FetchResult<PostReplyCreateMutationResult>>(PostsActions.createPostReply, {
+        replyPayload: {
+          postId: this.postId,
+          commentId: this.commentId,
+          body,
         },
-      )
+        insertAtPosition: 0,
+      })
       .pipe(untilDestroyed(this))
       .subscribe((result) =>
-        this.newSubcomment.emit({
-          id: result.data!.createPostSubcomment._id,
+        this.newReply.emit({
+          id: result.data!.createPostReply._id,
           commentId: this.commentId,
         }),
       );

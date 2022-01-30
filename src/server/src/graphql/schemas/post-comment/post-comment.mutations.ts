@@ -7,8 +7,9 @@ import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {PostComment} from '../../../models/post-comment';
 import {getUtcTimestamp} from '../../../utilities/date';
 import {Post} from '../../../models/post';
+import {PostCommentReply} from '../../../models/post-reply';
 
-// TODO Deletion functionality (should delete both parent comment & related subcomments)
+// TODO Deletion functionality (should delete both parent comment & related replies)
 
 export const postCommentMutationTypeDefinitions = gql`
   extend type Mutation {
@@ -46,7 +47,7 @@ const deletePostComment = async (
   _: unknown,
   {commentId}: {commentId: IPostComment['_id']},
   {accessToken}: {accessToken: string},
-): Promise<{commentDeletedCount: number; subcommentDeletedCount: number} | null | ApolloError> => {
+): Promise<{commentDeletedCount: number; replyDeletedCount: number} | null | ApolloError> => {
   const {tokenData, error} = authenticationGuard(accessToken);
 
   if (error) return error;
@@ -76,20 +77,19 @@ const deletePostComment = async (
 
   const failedDeletionResult = {
     commentDeletedCount: 0,
-    subcommentDeletedCount: 0,
+    replyDeletedCount: 0,
   };
 
   try {
     const {deletedCount: commentDeletedCount} = await PostComment.deleteOne(commentFilter);
 
-    // Assume something went wrong during post comment deletion (probably forged data or stale request context)
-    const {deletedCount: subcommentDeletedCount} = await PostComment.deleteMany({
+    const {deletedCount: replyDeletedCount} = await PostCommentReply.deleteMany({
       commentId,
-    }); // Delete subcomment thread
+    }); // Delete reply thread
 
     return {
       commentDeletedCount,
-      subcommentDeletedCount,
+      replyDeletedCount,
     };
   } catch {
     return failedDeletionResult;

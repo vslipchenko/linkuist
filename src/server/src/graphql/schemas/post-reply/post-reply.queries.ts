@@ -3,26 +3,26 @@ import {RequestParameters} from '../../../types/shared/shared.types';
 import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {SortOrder} from '../../../types/shared/shared.enums';
-import {POST_SUBCOMMENT_FETCH_LIMIT} from '../../../constants/post';
+import {POST_REPLY_FETCH_LIMIT} from '../../../constants/post';
 import mongoose from 'mongoose';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
 import {PostCommentReply} from '../../../models/post-reply';
 import {IPostCommentReply} from '../../../types/post-reply/post-reply.interface';
 
-export const postSubcommentQueryTypeDefinitions = gql`
+export const postReplyQueryTypeDefinitions = gql`
   extend type Query {
-    postSubcommentsByCommentId(
+    postRepliesByCommentId(
       commentId: String!
-      skipPostSubcommentIds: [String]!
+      skipPostReplyIds: [String]!
       skipProfileTeaserIds: [String]!
       parameters: RequestParameters!
-    ): UserPostSubcomments!
+    ): UserPostReplies!
   }
 `;
 
-const aggregatePostSubcommentData = async (
+const aggregatePostReplyData = async (
   commentId: string,
-  skipPostSubcommentIds: Array<string>,
+  skipPostReplyIds: Array<string>,
   skipProfileTeaserIds: Array<string>,
   parameters: RequestParameters,
 ): Promise<unknown> => {
@@ -34,7 +34,7 @@ const aggregatePostSubcommentData = async (
   const aggregationResult = await PostCommentReply.aggregate([
     {
       $match: {
-        _id: {$nin: skipPostSubcommentIds.map((id) => new mongoose.Types.ObjectId(id))},
+        _id: {$nin: skipPostReplyIds.map((id) => new mongoose.Types.ObjectId(id))},
         commentId: new mongoose.Types.ObjectId(commentId),
       },
     },
@@ -69,7 +69,7 @@ const aggregatePostSubcommentData = async (
   const uniqueUserIds = Object.keys(uniqueUserIdsMap);
 
   return {
-    postSubcomments: {
+    postReplies: {
       data,
       total: !parameters.offset
         ? await PostCommentReply.countDocuments({
@@ -82,16 +82,16 @@ const aggregatePostSubcommentData = async (
 };
 
 // TODO extend with commentId ???
-const postSubcommentsByCommentId = (
+const postRepliesByCommentId = (
   _: unknown,
   {
     commentId,
-    skipPostSubcommentIds,
+    skipPostReplyIds,
     skipProfileTeaserIds,
     parameters,
   }: {
     commentId: string;
-    skipPostSubcommentIds: Array<string>;
+    skipPostReplyIds: Array<string>;
     skipProfileTeaserIds: Array<string>;
     parameters: RequestParameters;
   },
@@ -103,23 +103,17 @@ const postSubcommentsByCommentId = (
       commentId: RECORD_ID_REGEXP,
       order: (value) => value === SortOrder.ASCENDING || value === SortOrder.DESCENDING,
       offset: Number.isSafeInteger,
-      limit: (value) =>
-        Number.isInteger(value) && value > 0 && value <= POST_SUBCOMMENT_FETCH_LIMIT,
+      limit: (value) => Number.isInteger(value) && value > 0 && value <= POST_REPLY_FETCH_LIMIT,
     },
   });
 
   if (isInvalidData) return null;
 
-  return aggregatePostSubcommentData(
-    commentId,
-    skipPostSubcommentIds,
-    skipProfileTeaserIds,
-    parameters,
-  );
+  return aggregatePostReplyData(commentId, skipPostReplyIds, skipProfileTeaserIds, parameters);
 };
 
-export const postSubcommentQueryResolvers = {
+export const postReplyQueryResolvers = {
   Query: {
-    postSubcommentsByCommentId,
+    postRepliesByCommentId,
   },
 };

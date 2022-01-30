@@ -3,14 +3,14 @@ import {ReducerResult, Reducers} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store/index';
 import {UIPost} from '~app/types/post/post.interfaces';
 import {UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
-import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
+import {UIPostReply} from '~app/types/post-reply/post-reply.interfaces';
 import {immutableInsertAt} from '~app/utilities/array';
 import {State} from '~app/types/shared/shared.enums';
 
 export const PostsReducers: Reducers<PostsState> = {
-  [PostsActions.loadPostSubcomments]: (state) => ({
+  [PostsActions.loadPostReplies]: (state) => ({
     ...state,
-    isLoadingPostSubcomments: true,
+    isLoadingPostReplies: true,
   }),
   [PostsActions.loadPostComments]: (state) => ({
     ...state,
@@ -29,7 +29,7 @@ export const PostsReducers: Reducers<PostsState> = {
     ...state,
     posts: state.posts.filter((post) => post._id !== postId),
     postTotalCount: state.postTotalCount - 1,
-    // let other linked entities such as comments and subcomments to leave in a ghost mode in memory
+    // let other linked entities such as comments and replies stay in memory
   }),
   [PostsActions.removeCommentRelatedData]: (
     state,
@@ -37,12 +37,12 @@ export const PostsReducers: Reducers<PostsState> = {
       postId,
       commentId,
       commentDeletedCount,
-      subcommentDeletedCount,
+      replyDeletedCount,
     }: {
       postId: string;
       commentId: string;
       commentDeletedCount: number;
-      subcommentDeletedCount: number;
+      replyDeletedCount: number;
     },
   ): ReducerResult<PostsState> => {
     return {
@@ -51,114 +51,112 @@ export const PostsReducers: Reducers<PostsState> = {
         ...state.postComments,
         [postId]: state.postComments[postId].filter((comment) => comment._id !== commentId),
       },
-      // postSubcomments: {...state.postSubcomments, [commentId]: []},
-      postCommentSubcommentTotalCount: {
-        ...state.postCommentSubcommentTotalCount,
+      // postReplies: {...state.postReplies, [commentId]: []},
+      postCommentReplyTotalCount: {
+        ...state.postCommentReplyTotalCount,
         [postId]:
-          state.postCommentSubcommentTotalCount[postId] -
-          (commentDeletedCount + subcommentDeletedCount),
+          state.postCommentReplyTotalCount[postId] - (commentDeletedCount + replyDeletedCount),
       },
       postCommentTotalCount: {
         ...state.postCommentTotalCount,
         [postId]: state.postCommentTotalCount[postId] - commentDeletedCount,
       },
-      // let subcomments to leave in a ghost mode in memory
-      // postSubcommentTotalCount: {
-      //   ...state.postSubcommentTotalCount,
+      // let replies to leave in a ghost mode in memory
+      // postReplyTotalCount: {
+      //   ...state.postReplyTotalCount,
       //   [commentId]: 0,
       // },
     };
   },
-  [PostsActions.insertPostSubcomment]: (
+  [PostsActions.insertPostReply]: (
     state,
     {
       insertAtPosition,
-      postSubcomment,
+      postReply,
       postId,
     }: {
       insertAtPosition: number;
-      postSubcomment: UIPostSubcomment;
+      postReply: UIPostReply;
       postId: string;
     },
   ): ReducerResult<PostsState> => ({
     // TODO
     ...state,
-    postCommentSubcommentTotalCount: {
-      ...state.postCommentSubcommentTotalCount,
-      [postId]: state.postCommentSubcommentTotalCount[postId] + 1,
+    postCommentReplyTotalCount: {
+      ...state.postCommentReplyTotalCount,
+      [postId]: state.postCommentReplyTotalCount[postId] + 1,
     },
-    postSubcomments: {
-      ...state.postSubcomments,
-      // [payload.postSubcomment.commentId]: [payload, ...(state.postComments[payload.postId] ?? [])],
-      [postSubcomment.commentId]: state.postSubcomments[postSubcomment.commentId]
+    postReplies: {
+      ...state.postReplies,
+      // [payload.postReply.commentId]: [payload, ...(state.postComments[payload.postId] ?? [])],
+      [postReply.commentId]: state.postReplies[postReply.commentId]
         ? immutableInsertAt(
-            state.postSubcomments[postSubcomment.commentId] ?? [],
+            state.postReplies[postReply.commentId] ?? [],
             insertAtPosition,
-            postSubcomment,
+            postReply,
           )
-        : [postSubcomment],
+        : [postReply],
     },
-    postSubcommentTotalCount: {
-      ...state.postSubcommentTotalCount,
-      [postSubcomment.commentId]:
-        (state.postSubcommentTotalCount[postSubcomment.commentId] ?? 0) + 1,
+    postReplyTotalCount: {
+      ...state.postReplyTotalCount,
+      [postReply.commentId]: (state.postReplyTotalCount[postReply.commentId] ?? 0) + 1,
     },
   }),
-  [PostsActions.appendPostSubcomments]: (
+  [PostsActions.appendPostReplies]: (
     state,
     payload: {
       commentId: string;
-      postSubcomments: Array<UIPostSubcomment>;
-      postSubcommentTotalCount: number;
+      postReplies: Array<UIPostReply>;
+      postReplyTotalCount: number;
     },
   ): ReducerResult<PostsState> => {
     const nextState = {
       ...state,
-      postSubcomments: {
-        ...state.postSubcomments,
-        [payload.commentId]: state.postSubcomments[payload.commentId]
-          ? [...state.postSubcomments[payload.commentId], ...payload.postSubcomments]
-          : payload.postSubcomments,
+      postReplies: {
+        ...state.postReplies,
+        [payload.commentId]: state.postReplies[payload.commentId]
+          ? [...state.postReplies[payload.commentId], ...payload.postReplies]
+          : payload.postReplies,
       },
-      isLoadingPostSubcomments: false,
+      isLoadingPostReplies: false,
     };
 
-    if (payload.postSubcommentTotalCount !== null) {
-      // If it's a first-most subcomment load, update subcomment total count
-      nextState.postSubcommentTotalCount = {
+    if (payload.postReplyTotalCount !== null) {
+      // If it's a first-most reply load, update reply total count
+      nextState.postReplyTotalCount = {
         ...state.postCommentTotalCount,
-        [payload.commentId]: payload.postSubcommentTotalCount,
+        [payload.commentId]: payload.postReplyTotalCount,
       };
     }
 
     return nextState;
   },
-  // [PostsActions.setPostCmmentSubcommentTotalCount]: (
+  // [PostsActions.setPostCmmentReplyTotalCount]: (
   //   state,
   //   {
   //     postId,
-  //     commentSubcommentTotalCount,
+  //     commentReplyTotalCount,
   //   }: {
   //     postId: string;
-  //     commentSubcommentTotalCount: number;
+  //     commentReplyTotalCount: number;
   //   },
   // ): ReducerResult<PostsState> => ({
   //   ...state,
-  //   postCommentSubcommentTotalCount: {
-  //     ...state.postCommentSubcommentTotalCount,
-  //     [postId]: commentSubcommentTotalCount,
+  //   postCommentReplyTotalCount: {
+  //     ...state.postCommentReplyTotalCount,
+  //     [postId]: commentReplyTotalCount,
   //   },
   // }),
   [PostsActions.appendPosts]: (
     state,
     {
       posts,
-      postCommentSubcommentTotalCount,
+      postCommentReplyTotalCount,
       postCommentTotalCount,
       postTotalCount,
     }: {
       posts: Array<UIPost>;
-      postCommentSubcommentTotalCount: {[postId: string]: number};
+      postCommentReplyTotalCount: {[postId: string]: number};
       postCommentTotalCount: {[postId: string]: number};
       postTotalCount: number;
     },
@@ -170,9 +168,9 @@ export const PostsReducers: Reducers<PostsState> = {
       ...state.postCommentTotalCount,
       ...postCommentTotalCount,
     },
-    postCommentSubcommentTotalCount: {
-      ...state.postCommentSubcommentTotalCount,
-      ...postCommentSubcommentTotalCount,
+    postCommentReplyTotalCount: {
+      ...state.postCommentReplyTotalCount,
+      ...postCommentReplyTotalCount,
     },
     isLoadingPosts: false,
   }),
@@ -181,9 +179,9 @@ export const PostsReducers: Reducers<PostsState> = {
     payload: UIPostComment,
   ): ReducerResult<PostsState> => ({
     ...state,
-    postCommentSubcommentTotalCount: {
-      ...state.postCommentSubcommentTotalCount,
-      [payload.postId]: state.postCommentSubcommentTotalCount[payload.postId] + 1,
+    postCommentReplyTotalCount: {
+      ...state.postCommentReplyTotalCount,
+      [payload.postId]: state.postCommentReplyTotalCount[payload.postId] + 1,
     },
     postComments: {
       ...state.postComments,
@@ -250,8 +248,8 @@ export const PostsReducers: Reducers<PostsState> = {
       postId: string;
       postComments: Array<UIPostComment>;
       postCommentTotalCount: number;
-      totalCommentsSubcomments: number;
-      postSubcommentTotalCount: {[commentId: string]: number};
+      totalCommentsReplies: number;
+      postReplyTotalCount: {[commentId: string]: number};
     },
   ): ReducerResult<PostsState> => {
     const nextState = {
@@ -263,9 +261,9 @@ export const PostsReducers: Reducers<PostsState> = {
           ? [...state.postComments[payload.postId], ...payload.postComments]
           : payload.postComments,
       },
-      postSubcommentTotalCount: {
-        ...state.postSubcommentTotalCount,
-        ...payload.postSubcommentTotalCount,
+      postReplyTotalCount: {
+        ...state.postReplyTotalCount,
+        ...payload.postReplyTotalCount,
       },
       isLoadingPostComments: false,
     };
@@ -278,43 +276,41 @@ export const PostsReducers: Reducers<PostsState> = {
       };
     }
 
-    if (payload.totalCommentsSubcomments !== null) {
-      // If it's a first-most comment load, update comments & subcomments total count
-      nextState.postCommentSubcommentTotalCount = {
-        ...state.postCommentSubcommentTotalCount,
-        [payload.postId]: payload.totalCommentsSubcomments,
+    if (payload.totalCommentsReplies !== null) {
+      // If it's a first-most comment load, update comments & replies total count
+      nextState.postCommentReplyTotalCount = {
+        ...state.postCommentReplyTotalCount,
+        [payload.postId]: payload.totalCommentsReplies,
       };
     }
 
     return nextState;
   },
-  [PostsActions.removePostSubcomment]: (
+  [PostsActions.removePostReply]: (
     state,
-    {postId, commentId, subcommentId}: {postId: string; commentId: string; subcommentId: string},
+    {postId, commentId, replyId}: {postId: string; commentId: string; replyId: string},
   ) => ({
     ...state,
-    postCommentSubcommentTotalCount: {
-      ...state.postCommentSubcommentTotalCount,
-      [postId]: state.postCommentSubcommentTotalCount[postId] - 1,
+    postCommentReplyTotalCount: {
+      ...state.postCommentReplyTotalCount,
+      [postId]: state.postCommentReplyTotalCount[postId] - 1,
     },
-    postSubcommentTotalCount: {
-      ...state.postSubcommentTotalCount,
-      [commentId]: state.postSubcommentTotalCount[commentId] - 1,
+    postReplyTotalCount: {
+      ...state.postReplyTotalCount,
+      [commentId]: state.postReplyTotalCount[commentId] - 1,
     },
-    postSubcomments: {
-      ...state.postSubcomments,
-      [commentId]: state.postSubcomments[commentId].filter(
-        (subcomment) => subcomment._id !== subcommentId,
-      ),
+    postReplies: {
+      ...state.postReplies,
+      [commentId]: state.postReplies[commentId].filter((reply) => reply._id !== replyId),
     },
   }),
   [PostsActions.removeCommentThread]: (state, postId: string) => {
-    const postSubcomments = {
-      ...state.postSubcomments,
+    const postReplies = {
+      ...state.postReplies,
     };
 
     state.postComments[postId].forEach((comment) => {
-      if (postSubcomments[comment._id]) postSubcomments[comment._id] = [];
+      if (postReplies[comment._id]) postReplies[comment._id] = [];
     });
 
     return {
@@ -324,15 +320,15 @@ export const PostsReducers: Reducers<PostsState> = {
         // [payload._id]: payload
         [postId]: [],
       },
-      postSubcomments,
+      postReplies,
     };
   },
-  [PostsActions.removeSubcommentThread]: (state, commentId: string) => ({
+  [PostsActions.removeReplyThread]: (state, commentId: string) => ({
     ...state,
-    postSubcomments: {
-      ...state.postSubcomments,
+    postReplies: {
+      ...state.postReplies,
       // [payload._id]: payload
-      [commentId]: [], // TODO Consider reset subcomments as well
+      [commentId]: [],
     },
   }),
 };

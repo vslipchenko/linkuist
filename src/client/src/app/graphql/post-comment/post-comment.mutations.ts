@@ -17,7 +17,7 @@ export const DELETE_POST_COMMENT = gql`
   mutation ($commentId: ID!) {
     deletePostComment(commentId: $commentId) {
       commentDeletedCount
-      subcommentDeletedCount
+      replyDeletedCount
     }
   }
 `;

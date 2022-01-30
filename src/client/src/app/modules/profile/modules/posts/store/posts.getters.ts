@@ -5,24 +5,24 @@ import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.sel
 export const PostsGetters: Getters<PostsState> = {
   [PostsSelectors.getPosts]: (state) => state.posts,
   [PostsSelectors.getPostCommentsByPostId]: (state, payload: string) => state.postComments[payload],
-  [PostsSelectors.getPostSubcommentsByCommentId]: (state, payload: string) =>
-    state.postSubcomments[payload],
+  [PostsSelectors.getPostRepliesByCommentId]: (state, payload: string) =>
+    state.postReplies[payload],
   // [PostsSelectors.getPostCount]: (state) => state.posts.length,
   [PostsSelectors.getPostTotalCount]: (state) => state.postTotalCount,
   [PostsSelectors.getIsLoadingPosts]: (state) => state.isLoadingPosts,
   [PostsSelectors.getIsLoadingPostComments]: (state) => state.isLoadingPostComments,
-  [PostsSelectors.getIsLoadingPostSubcomments]: (state) => state.isLoadingPostSubcomments,
+  [PostsSelectors.getIsLoadingPostReplies]: (state) => state.isLoadingPostReplies,
   [PostsSelectors.getPostCommentCount]: (state, postId: string) =>
     state.postComments[postId]?.length ?? 0,
-  [PostsSelectors.getPostSubcommentCount]: (state, commentId: string) =>
-    state.postSubcomments[commentId]?.length ?? 0,
+  [PostsSelectors.getPostReplyCount]: (state, commentId: string) =>
+    state.postReplies[commentId]?.length ?? 0,
   [PostsSelectors.getPostCommentTotalCount]: (state, postId: string) =>
     state.postCommentTotalCount[postId],
-  [PostsSelectors.getPostSubcommentTotalCount]: (state, commentId: string) =>
-    state.postSubcommentTotalCount[commentId],
-  // [PostsSelectors.getPostSubcommentsTotalCount]: (state) => state.postSubcommentTotalCount,
-  [PostsSelectors.getPostCommentSubcommentTotalCount]: (state, postId: string) => {
-    return state.postCommentSubcommentTotalCount[postId];
+  [PostsSelectors.getPostReplyTotalCount]: (state, commentId: string) =>
+    state.postReplyTotalCount[commentId],
+  // [PostsSelectors.getPostRepliesTotalCount]: (state) => state.postReplyTotalCount,
+  [PostsSelectors.getPostCommentReplyTotalCount]: (state, postId: string) => {
+    return state.postCommentReplyTotalCount[postId];
   },
   // [PostsSelectors.getVisiblePostComments]: (state) => state.visiblePostComments,
 };

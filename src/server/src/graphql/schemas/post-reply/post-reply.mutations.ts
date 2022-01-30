@@ -1,23 +1,21 @@
 import {ApolloError, gql} from 'apollo-server-express';
 import {MongooseDocument} from '../../../types/mongoose/mongoose.types';
-import {IPostComment} from '../../../types/post-comment/post-comment.interfaces';
 import {authenticationGuard} from '../../../utilities/guards';
 import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
-import {PostComment} from '../../../models/post-comment';
 import {getUtcTimestamp} from '../../../utilities/date';
 import {Post} from '../../../models/post';
 import {IPostCommentReply} from '../../../types/post-reply/post-reply.interface';
 import {PostCommentReply} from '../../../models/post-reply';
 
-export const postSubcommentMutationTypeDefinitions = gql`
+export const postReplyMutationTypeDefinitions = gql`
   extend type Mutation {
-    createPostSubcomment(input: CreatePostSubcommentMutationInput): PostSubcomment
-    deletePostSubcomment(subcommentId: ID!): Int!
+    createPostReply(input: CreatePostReplyMutationInput): PostReply
+    deletePostReply(replyId: ID!): Int!
   }
 `;
 
-const createPostSubcomment = async (
+const createPostReply = async (
   _: unknown,
   {input}: {input: Pick<IPostCommentReply, 'postId' | 'commentId' | 'body'>},
   {accessToken}: {accessToken: string},
@@ -46,9 +44,9 @@ const createPostSubcomment = async (
   });
 };
 
-const deletePostSubcomment = async (
+const deletePostReply = async (
   _: unknown,
-  {subcommentId}: {subcommentId: IPostComment['_id']},
+  {replyId}: {replyId: IPostCommentReply['_id']},
   {accessToken}: {accessToken: string},
 ): Promise<number | null | ApolloError> => {
   const {tokenData, error} = authenticationGuard(accessToken);
@@ -56,40 +54,40 @@ const deletePostSubcomment = async (
   if (error) return error;
 
   const {isInvalidData} = checkDataValidity({
-    data: subcommentId,
+    data: replyId,
     pattern: RECORD_ID_REGEXP,
   });
 
   if (isInvalidData) return null;
 
-  const postComment = await PostComment.findOne({_id: subcommentId}, 'postId').exec();
+  const postCommentReply = await PostCommentReply.findOne({_id: replyId}, 'postId').exec();
 
-  if (!postComment) return null;
+  if (!postCommentReply) return null;
 
-  const post = await Post.findOne({_id: postComment.postId}, 'userId').exec();
+  const post = await Post.findOne({_id: postCommentReply.postId}, 'userId').exec();
 
   if (!post) return null;
 
   const isPostOwner = post.userId.toString() === tokenData.userId;
 
-  const subcommentFilter = {
-    _id: subcommentId,
+  const replyFilter = {
+    _id: replyId,
   } as {_id: string; userId?: string};
 
-  if (!isPostOwner) subcommentFilter.userId = tokenData.userId;
+  if (!isPostOwner) replyFilter.userId = tokenData.userId;
 
   try {
-    const {deletedCount: subcommentDeletedCount} = await PostComment.deleteOne(subcommentFilter);
+    const {deletedCount: replyDeletedCount} = await PostCommentReply.deleteOne(replyFilter);
 
-    return subcommentDeletedCount;
+    return replyDeletedCount;
   } catch {
     return 0;
   }
 };
 
-export const postSubcommentMutationResolvers = {
+export const postReplyMutationResolvers = {
   Mutation: {
-    createPostSubcomment,
-    deletePostSubcomment,
+    createPostReply,
+    deletePostReply,
   },
 };

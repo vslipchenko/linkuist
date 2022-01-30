@@ -15,7 +15,7 @@ interface Post {
   totalDislikes: number;
   totalShares: number;
   totalComments: number;
-  totalCommentsSubcomments: number;
+  totalCommentsReplies: number;
   like: State;
 }
 

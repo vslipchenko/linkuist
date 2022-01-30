@@ -9,7 +9,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@
 export class CommentManagePanelComponent {
   @Input() public readonly data!: any;
   @Input() public readonly isLoading!: boolean;
-  @Input() public readonly isComment!: boolean; // Else subcomment
+  @Input() public readonly isComment!: boolean; // Else reply
   @Input() public readonly totalCount!: number;
   @Input() public readonly extendClass!: string;
 

@@ -9,7 +9,7 @@ export const postTypes = gql`
     # postId: String
     createdAt: Float!
     totalComments: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
-    totalCommentsSubcomments: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
+    totalCommentsReplies: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
     totalLikes: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
     totalDislikes: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
     totalShares: Float! # DOES NOT EXIST FOR POST CREATE; FOR UI NEEDS
@@ -33,6 +33,7 @@ export const postTypes = gql`
   type PostDeletedCount {
     postDeletedCount: Int!
     commentDeletedCount: Int!
+    replyDeletedCount: Int!
   }
 
   type UserPosts {

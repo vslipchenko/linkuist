@@ -8,7 +8,6 @@ import mongoose from 'mongoose';
 import {PostComment} from '../../../models/post-comment';
 import {IPostComment} from '../../../types/post-comment/post-comment.interfaces';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
-import {postCommentSubcommentTotalCount} from '../post/post.queries';
 import {PostCommentReply} from '../../../models/post-reply';
 
 export const postCommentQueryTypeDefinitions = gql`
@@ -57,10 +56,10 @@ const aggregatePostCommentData = async (
 
   //console.log('aggregationResult ', parameters, aggregationResult, new Date());
 
-  const data = aggregationResult[0].data as Array<IPostComment & {totalSubcomments: number}>;
+  const data = aggregationResult[0].data as Array<IPostComment & {totalReplies: number}>;
 
   for (const comment of data) {
-    comment.totalSubcomments = await PostCommentReply.countDocuments({commentId: comment._id});
+    comment.totalReplies = await PostCommentReply.countDocuments({commentId: comment._id});
 
     const userId = comment.userId.toString();
 
@@ -72,18 +71,32 @@ const aggregatePostCommentData = async (
 
   const uniqueUserIds = Object.keys(uniqueUserIdsMap);
 
+  let postCommentsTotal = null;
+  let totalCommentsReplies = null;
+
+  if (!parameters.offset) {
+    // Calculate only on the first most comment load
+    postCommentsTotal = await PostComment.countDocuments({
+      postId,
+    });
+
+    if (postCommentsTotal) {
+      const replyCount = await PostCommentReply.countDocuments({
+        postId,
+      }).exec();
+
+      totalCommentsReplies = postCommentsTotal + replyCount;
+    } else {
+      totalCommentsReplies = 0;
+    }
+  }
+
   return {
     postComments: {
       data,
-      total: !parameters.offset
-        ? await PostComment.countDocuments({
-            postId,
-          })
-        : null,
+      total: postCommentsTotal,
     },
-    totalCommentsSubcomments: !parameters.offset
-      ? await postCommentSubcommentTotalCount(postId)
-      : null,
+    totalCommentsReplies: totalCommentsReplies,
     userProfileTeasers: userProfileTeasersByUserIds(uniqueUserIds),
   };
 };

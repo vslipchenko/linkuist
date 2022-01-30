@@ -17,7 +17,7 @@ export const postCommentStatsMutationTypeDefinitions = gql`
 
 const likePostComment = async (
   _: unknown,
-  {input}: {input: {commentId: IPostComment['commentId']; like: State}},
+  {input}: {input: {commentId: IPostComment['_id']; like: State}},
   {accessToken}: {accessToken: string},
 ): Promise<MongooseDocument<IPostCommentStats> | {deletedCount: number} | ApolloError | null> => {
   const {tokenData, error} = authenticationGuard(accessToken);

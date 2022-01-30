@@ -8,6 +8,7 @@ import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {PostComment} from '../../../models/post-comment';
 import {PostStats} from '../../../models/post-stats';
+import {PostCommentReply} from '../../../models/post-reply';
 
 export const postMutationTypeDefinitions = gql`
   extend type Mutation {
@@ -32,7 +33,11 @@ const deletePost = async (
   _: unknown,
   {input}: {input: Pick<IPost, '_id'>},
   {accessToken}: {accessToken: string},
-): Promise<{postDeletedCount: number; commentDeletedCount: number} | null | ApolloError> => {
+): Promise<
+  | {postDeletedCount: number; commentDeletedCount: number; replyDeletedCount: number}
+  | null
+  | ApolloError
+> => {
   const {tokenData, error} = authenticationGuard(accessToken);
 
   if (error) return error;
@@ -49,6 +54,7 @@ const deletePost = async (
   const failedDeletionResult = {
     postDeletedCount: 0,
     commentDeletedCount: 0,
+    replyDeletedCount: 0,
   };
 
   try {
@@ -61,15 +67,21 @@ const deletePost = async (
     const {deletedCount: commentDeletedCount} = await PostComment.deleteMany({
       postId: input._id,
     });
+
+    const {deletedCount: replyDeletedCount} = await PostCommentReply.deleteMany({
+      postId: input._id,
+    });
+
     // Clear post stats
     await PostStats.deleteMany({
       postId: input._id,
     });
     // TODO: Clear comment stats
-
+    // TODO: Clear reply stats
     return {
       postDeletedCount,
-      commentDeletedCount, // Includes subcomments as well
+      commentDeletedCount,
+      replyDeletedCount,
     };
   } catch {
     return failedDeletionResult;

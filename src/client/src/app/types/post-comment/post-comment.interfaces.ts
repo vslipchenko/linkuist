@@ -5,13 +5,13 @@ export interface PostCommentBase {
   _id: string;
   userId: string;
   postId: string;
-  // commentId?: string; // is null for subcomments
+  // commentId?: string; // is null for replies
   body: string;
   createdAt: number;
 }
 
 interface PostComment extends PostCommentBase {
-  totalSubcomments: number;
+  totalReplies: number;
 }
 
 export interface UIPostCommentBase {
@@ -22,7 +22,7 @@ export interface UIPostCommentBase {
 }
 
 export interface UIPostComment extends PostComment, UIPostCommentBase {
-  totalSubcomments: number; // Absent for subcomments
+  totalReplies: number; // Absent for replies
 }
 
 export interface PostCommentCreatePayload {
@@ -41,7 +41,7 @@ export interface PostCommentsByPostIdQueryResult {
       data: Array<PostComment>;
       total: number;
     };
-    totalCommentsSubcomments: number;
+    totalCommentsReplies: number;
     userProfileTeasers: Array<UserProfileTeaser>;
   };
 }
@@ -49,6 +49,6 @@ export interface PostCommentsByPostIdQueryResult {
 export interface DeletePostCommentMutationResult {
   deletePostComment?: {
     commentDeletedCount: number;
-    subcommentDeletedCount: number;
+    replyDeletedCount: number;
   };
 }

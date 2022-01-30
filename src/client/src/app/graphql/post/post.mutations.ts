@@ -17,6 +17,7 @@ export const DELETE_POST = gql`
     deletePost(input: $input) {
       postDeletedCount
       commentDeletedCount
+      replyDeletedCount
     }
   }
 `;

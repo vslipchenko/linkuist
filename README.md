@@ -5,8 +5,13 @@ MIGRATION:
 * Client: UPDATE apollo-angular & graphql to newer version once apollo-angular supports Angular 13
 
 TODO
-* Implement subcomments (creation, deletion, show/hide)
+* Implement replies (creation, deletion, show/hide)
 * Implement liking, sharing
+* Implement connections / friends
+* Implement connection / friend search
+* Implement message inbox
+* Implement payment system
+* Implement post page
 * Implement proper user input sanitization
 * Tree shake unused graphql types
 

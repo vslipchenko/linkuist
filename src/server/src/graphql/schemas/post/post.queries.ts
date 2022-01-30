@@ -27,10 +27,10 @@ import {PostCommentReply} from '../../../models/post-reply';
  * Once received by the client, updates the list of post comments & post comment total count
  * * (this will allow to load the most recent post comments until "Show more comments" button is gone,
  * BUT because it use an offset each time you request a new portion of data, it can preserve stale info state on the client (e.g. posts comments that were deleted))
- * - On each subcomment (reply) list load feed back list of subcomments with up to date subcomment count
- * Once received by the client, updates the list of post subcomments & post subcomment total count
- * * (this will allow to load the most recent post subcomments until "Show more replies" button is gone
- * BUT because it use an offset each time you request a new portion of data, it can contain preserve stale info state on the client (e.g. post subcomments that were deleted))
+ * - On each reply (reply) list load feed back list of replies with up to date reply count
+ * Once received by the client, updates the list of post replies & post reply total count
+ * * (this will allow to load the most recent post replies until "Show more replies" button is gone
+ * BUT because it use an offset each time you request a new portion of data, it can contain preserve stale info state on the client (e.g. post replies that were deleted))
  * THESE TOTAL COUNT INFO UPDATES HAPPEN ONLY ON SHOW MORE (COMMENTS / REPLIES) ACTION & IGNORED ON COMMENT CREATION / DELETION, ETC
  */
 
@@ -86,7 +86,7 @@ const aggregatePostData = async (
 
   const data = aggregationResult[0].data as Array<
     IPost & {
-      totalCommentsSubcomments: number;
+      totalCommentsReplies: number;
       totalComments: number;
       totalDislikes: number;
       totalLikes: number;
@@ -109,7 +109,7 @@ const aggregatePostData = async (
 
     // totalPostComments[post.postId] = await PostComment.countDocuments({
     //   postId: post._id,
-    //   commentId: {$exists: false}, // do not count subcomments (replies)
+    //   commentId: {$exists: false}, // do not count replies (replies)
     // });
 
     // TODO move to post-stats.queries
@@ -139,11 +139,20 @@ const aggregatePostData = async (
       postId: post._id,
     });
 
-    // totalComments results already contain data totalCommentsSubcomments, thus countDocuments can be dropped in favor of find() with further local processing
     post.totalComments = await PostComment.countDocuments({
       postId: post._id,
     });
-    post.totalCommentsSubcomments = await postCommentSubcommentTotalCount(post._id);
+
+    if (post.totalComments) {
+      const totalReplies = await PostCommentReply.countDocuments({
+        postId: post._id,
+      }).exec();
+
+      post.totalCommentsReplies = post.totalComments + totalReplies;
+    } else {
+      // No comments - no replies
+      post.totalCommentsReplies = 0;
+    }
 
     // Might be optimized as post might have only one owner (profile owner); others teaser data relevance may be sacrificed
     const userId = post.userId.toString();
@@ -218,20 +227,6 @@ const postsByUserId = (
   }
 
   return aggregatePostData(userId, skipProfileTeaserIds, parameters, accessToken);
-};
-
-export const postCommentSubcommentTotalCount = async (postId: string): Promise<number> => {
-  const commentCount = await PostComment.countDocuments({
-    postId,
-  }).exec();
-
-  if (!commentCount) return 0;
-
-  const replyCount = await PostCommentReply.countDocuments({
-    postId,
-  }).exec();
-
-  return commentCount + replyCount;
 };
 
 // const postsByUsername = async (

@@ -1,0 +1,16 @@
+<app-post-item
+  *ngFor="let postReply of postReplies$ | async; let index = index"
+  [ngClasses]="{
+    'border-accent-secondary': true,
+    'border-left-dashed': postReply.isRecentlyAdded
+  }"
+  [avatarUrl]="profileTeasers[postReply.userId].avatarUrl"
+  [username]="profileTeasers[postReply.userId].username"
+  [isVerifiedUser]="profileTeasers[postReply.userId].isVerified"
+  [creationDate]="postReply.date"
+  [timeElapsedAfterCreation$]="postReply.timeElapsedAfterCreation$"
+  [resolvedUserUrlUsername]="resolvedUserUrlUsername"
+  [body]="postReply.body"
+  (delete)="handlePostReplyDelete(postReply._id)"
+  (comment)="addPostReply($event, index)"
+></app-post-item>

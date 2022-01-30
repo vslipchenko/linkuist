@@ -14,7 +14,7 @@ import {StoreManager} from '@ng-estate/store';
 import {PostsStore} from '~app/modules/profile/modules/posts/store';
 import {PostCommentComponent} from './components/post-comment/post-comment.component';
 import {AddCommentComponent} from './components/add-comment/add-comment.component';
-import {PostSubcommentsComponent} from './components/post-subcomments/post-subcomments.component';
+import {PostRepliesComponent} from './components/post-replies/post-replies.component';
 import {PostItemComponent} from './components/post-item/post-item.component';
 import {CommentManagePanelComponent} from './components/comment-manage-panel/comment-manage-panel.component';
 
@@ -25,7 +25,7 @@ import {CommentManagePanelComponent} from './components/comment-manage-panel/com
     AddPostComponent,
     PostCommentComponent,
     AddCommentComponent,
-    PostSubcommentsComponent,
+    PostRepliesComponent,
     PostItemComponent,
     CommentManagePanelComponent,
   ],

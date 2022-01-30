@@ -18,7 +18,7 @@ import {
   UIPostComment,
 } from '~app/types/post-comment/post-comment.interfaces';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
-import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
+import {UIPostReply} from '~app/types/post-reply/post-reply.interfaces';
 import {FetchResult} from '@apollo/client/core';
 import {State} from '~app/types/shared/shared.enums';
 
@@ -35,21 +35,21 @@ export class PostComponent implements OnInit {
   public readonly profileTeasers$: Observable<ProfileTeasers>;
   // public readonly visiblePostComments$: Observable<PostsState['visiblePostComments']>;
   public readonly isLoadingPostComments$: Observable<boolean>;
-  public readonly isLoadingPostSubcomments$: Observable<boolean>;
+  public readonly isLoadingPostReplies$: Observable<boolean>;
   public readonly POST_COMMENT_MAX_LENGTH = POST_COMMENT_MAX_LENGTH;
   // public readonly addCommentControl = new FormControl('');
   public postComments$: Observable<Array<UIPostComment>> = of();
-  // public postSubcommentTotalCount$: Observable<Array<UIPostComment>> = of();
-  public postCommentSubcommentTotalCount$: Observable<number> = of();
-  // public postSubcomments$: Observable<Array<UIPostSubcomment>> = of();
+  // public postReplyTotalCount$: Observable<Array<UIPostComment>> = of();
+  public postCommentReplyTotalCount$: Observable<number> = of();
+  // public postReplies$: Observable<Array<UIPostReply>> = of();
   public postCommentTotalCount$: Observable<number> = of();
   public showPostComments = false;
-  // public showPostSubcomments = false;
+  // public showPostReplies = false;
 
   public resolvedUser!: ResolvedUser;
 
   private recentlyAddedPostCommentIds: Array<string> = [];
-  private recentlyAddedPostSubcommentIds: {[commentId: string]: Array<string>} = {};
+  private recentlyAddedPostReplyIds: {[commentId: string]: Array<string>} = {};
 
   public constructor(
     @Inject(DOCUMENT) private readonly document: Document,
@@ -60,7 +60,7 @@ export class PostComponent implements OnInit {
     this.profileTeasers$ = this.store.select$(ProfileSelectors.getProfileTeasers);
     // this.visiblePostComments$ = this.store.select$(PostsSelectors.getVisiblePostComments);
     this.isLoadingPostComments$ = this.store.select$(PostsSelectors.getIsLoadingPostComments);
-    this.isLoadingPostSubcomments$ = this.store.select$(PostsSelectors.getIsLoadingPostSubcomments);
+    this.isLoadingPostReplies$ = this.store.select$(PostsSelectors.getIsLoadingPostReplies);
 
     this.store
       .select$<ResolvedUser>(AppSelectors.getResolvedUser)
@@ -72,15 +72,15 @@ export class PostComponent implements OnInit {
 
   public ngOnInit(): void {
     this.postComments$ = this.store.select$(PostsSelectors.getPostCommentsByPostId, this.post._id);
-    // this.postSubcommentTotalCount$ = this.store.select$(
-    //   PostsSelectors.getPostSubcommentsTotalCount,
+    // this.postReplyTotalCount$ = this.store.select$(
+    //   PostsSelectors.getPostRepliesTotalCount,
     // );
-    // this.postCommentSubcommentTotalCount$ = this.store
-    //   .select$<number>(PostsSelectors.getPostCommentSubcommentTotalCount, this.post._id)
+    // this.postCommentReplyTotalCount$ = this.store
+    //   .select$<number>(PostsSelectors.getPostCommentReplyTotalCount, this.post._id)
     //   .pipe(
     //     // skip(1),
     //     // startWith(
-    //     //   this.store.select(PostsSelectors.getPostCommentSubcommentTotalCount2, this.post._id),
+    //     //   this.store.select(PostsSelectors.getPostCommentReplyTotalCount2, this.post._id),
     //     // ),
     //     switchMap(() => {
     //       return iif(() => true, of(1), of(2));
@@ -88,11 +88,11 @@ export class PostComponent implements OnInit {
     //     tap(console.log),
     //   );
 
-    this.postCommentSubcommentTotalCount$ = this.store.select$(
-      PostsSelectors.getPostCommentSubcommentTotalCount,
+    this.postCommentReplyTotalCount$ = this.store.select$(
+      PostsSelectors.getPostCommentReplyTotalCount,
       this.post._id,
     );
-    // this.postSubcomments$ = this.store.select$(PostsSelectors.get, this.post._id);
+    // this.postReplies$ = this.store.select$(PostsSelectors.get, this.post._id);
     this.postCommentTotalCount$ = this.store.select$(
       PostsSelectors.getPostCommentTotalCount,
       this.post._id,
@@ -118,12 +118,12 @@ export class PostComponent implements OnInit {
     this.handleAddPostComment(value);
   }
 
-  public updateRecentlyAddedSubcommentIds({id, commentId}: {id: string; commentId: string}): void {
-    if (!this.recentlyAddedPostSubcommentIds[commentId]) {
-      this.recentlyAddedPostSubcommentIds[commentId] = [];
+  public updateRecentlyAddedReplyIds({id, commentId}: {id: string; commentId: string}): void {
+    if (!this.recentlyAddedPostReplyIds[commentId]) {
+      this.recentlyAddedPostReplyIds[commentId] = [];
     }
 
-    this.recentlyAddedPostSubcommentIds[commentId].push(id);
+    this.recentlyAddedPostReplyIds[commentId].push(id);
   }
 
   public showComments(postComments: Array<UIPostComment>, postId: string): void {
@@ -151,40 +151,40 @@ export class PostComponent implements OnInit {
   }
 
   public hideCommentThread(postId: string): void {
-    // this.store.dispatch(PostsActions.setPostCmmentSubcommentTotalCount, {
+    // this.store.dispatch(PostsActions.setPostCmmentReplyTotalCount, {
     //   postId,
-    //   commentSubcommentTotalCount: this.store.select(
-    //     PostsSelectors.getPostCommentSubcommentTotalCount2,
+    //   commentReplyTotalCount: this.store.select(
+    //     PostsSelectors.getPostCommentReplyTotalCount2,
     //     this.post._id,
     //   ),
     // });
     this.store.dispatch(PostsActions.removeCommentThread, postId);
     this.showPostComments = false;
     this.recentlyAddedPostCommentIds = [];
-    this.recentlyAddedPostSubcommentIds = {};
+    this.recentlyAddedPostReplyIds = {};
   }
 
-  public showSubcomments(commentId: string): void {
-    // if (!this.showPostSubcomments) this.showPostSubcomments = true;
-    if (!this.recentlyAddedPostSubcommentIds[commentId]) {
-      this.recentlyAddedPostSubcommentIds[commentId] = [];
+  public showReplies(commentId: string): void {
+    // if (!this.showPostReplies) this.showPostReplies = true;
+    if (!this.recentlyAddedPostReplyIds[commentId]) {
+      this.recentlyAddedPostReplyIds[commentId] = [];
     }
 
     this.store
-      .dispatch$(PostsActions.loadPostSubcomments, {
+      .dispatch$(PostsActions.loadPostReplies, {
         commentId,
-        recentlyAddedPostSubcommentIds: this.recentlyAddedPostSubcommentIds[commentId],
+        recentlyAddedPostReplyIds: this.recentlyAddedPostReplyIds[commentId],
         skipProfileTeaserIds: Object.keys(this.store.select(ProfileSelectors.getProfileTeasers)),
-        offset: this.store.select(PostsSelectors.getPostSubcommentCount, commentId),
+        offset: this.store.select(PostsSelectors.getPostReplyCount, commentId),
       })
       .pipe(untilDestroyed(this))
       .subscribe(console.log);
   }
 
-  public hideSubcommentThread(commentId: string): void {
-    // if (!this.showPostSubcomments) this.showPostSubcomments = true;
-    this.store.dispatch(PostsActions.removeSubcommentThread, commentId);
-    this.recentlyAddedPostSubcommentIds = {};
+  public hideReplyThread(commentId: string): void {
+    // if (!this.showPostReplies) this.showPostReplies = true;
+    this.store.dispatch(PostsActions.removeReplyThread, commentId);
+    this.recentlyAddedPostReplyIds = {};
   }
 
   public handleAddPostComment(body: string): void {
@@ -252,7 +252,7 @@ export class PostComponent implements OnInit {
   // }
   //
   //
-  // public addPostSubcomment(value: string): void {
+  // public addPostReply(value: string): void {
   //
   // }
 
@@ -264,12 +264,12 @@ export class PostComponent implements OnInit {
   //   return condition1 || condition2;
   // }
 
-  public getPostSubcomments$(commentId: string): Observable<Array<UIPostSubcomment>> {
-    return this.store.select$(PostsSelectors.getPostSubcommentsByCommentId, commentId);
+  public getPostReplies$(commentId: string): Observable<Array<UIPostReply>> {
+    return this.store.select$(PostsSelectors.getPostRepliesByCommentId, commentId);
   }
 
-  public getPostSubcommentTotalCount$(commentId: string): Observable<number> {
-    return this.store.select$(PostsSelectors.getPostSubcommentTotalCount, commentId);
+  public getPostReplyTotalCount$(commentId: string): Observable<number> {
+    return this.store.select$(PostsSelectors.getPostReplyTotalCount, commentId);
   }
 
   private likePost(nextState: State): void {

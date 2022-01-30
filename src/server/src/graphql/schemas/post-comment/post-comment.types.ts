@@ -9,7 +9,7 @@ export const postCommentTypes = gql`
     body: String!
     createdAt: Float!
     likes: Int # Null for created comment
-    totalSubcomments: Int!
+    totalReplies: Int!
   }
 
   type PostComments {
@@ -19,12 +19,12 @@ export const postCommentTypes = gql`
 
   type PostCommentDeletedCount {
     commentDeletedCount: Int!
-    subcommentDeletedCount: Int!
+    replyDeletedCount: Int!
   }
 
   type UserPostComments { # 'User' is basically a prefix used to avoid naming collision
     postComments: PostComments!
-    totalCommentsSubcomments: Int
+    totalCommentsReplies: Int
     userProfileTeasers: [UserProfileTeaser!]!
   }
 `;

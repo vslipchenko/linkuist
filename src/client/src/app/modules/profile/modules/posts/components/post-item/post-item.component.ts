@@ -19,7 +19,7 @@ import {State} from '~app/types/shared/shared.enums';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostItemComponent {
-  @Input() public readonly isPost!: boolean; // Else post comment / subcomment
+  @Input() public readonly isPost!: boolean; // Else post comment / reply
   @Input() public readonly postId!: string;
   @Input() public readonly commentId!: string;
   @Input() public readonly avatarUrl!: string;

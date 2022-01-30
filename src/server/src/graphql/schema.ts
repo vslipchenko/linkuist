@@ -15,10 +15,7 @@ import {
   postCommentTypeDefinitions,
 } from './schemas/post-comment/post-comment.schema';
 import {makeExecutableSchema} from '@graphql-tools/schema';
-import {
-  postSubcommentResolvers,
-  postSubcommentTypeDefinitions,
-} from './schemas/post-subcomment/post-subcomment.schema';
+import {postReplyResolvers, postReplyTypeDefinitions} from './schemas/post-reply/post-reply.schema';
 import {postStatsResolvers, postStatsTypeDefinitions} from './schemas/post-stats/post-stats.schema';
 import {
   postCommentStatsResolvers,
@@ -45,7 +42,7 @@ export default makeExecutableSchema({
     ...userTypeDefinitions,
     ...postTypeDefinitions,
     ...postCommentTypeDefinitions,
-    ...postSubcommentTypeDefinitions,
+    ...postReplyTypeDefinitions,
     ...linkardTypeDefinitions,
     ...postStatsTypeDefinitions,
     ...postCommentStatsTypeDefinitions,
@@ -59,7 +56,7 @@ export default makeExecutableSchema({
     ...userResolvers,
     ...postResolvers,
     ...postCommentResolvers,
-    ...postSubcommentResolvers,
+    ...postReplyResolvers,
     ...linkardResolvers,
     ...postStatsResolvers,
     ...postCommentStatsResolvers,

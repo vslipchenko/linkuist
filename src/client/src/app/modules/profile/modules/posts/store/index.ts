@@ -6,40 +6,40 @@ import {PostsReducers} from '~app/modules/profile/modules/posts/store/posts.redu
 import {PostsEffects} from '~app/modules/profile/modules/posts/store/posts.effects';
 import {UIPost} from '~app/types/post/post.interfaces';
 import {UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
-import {UIPostSubcomment} from '~app/types/post-subcomment/post-subcomment.interfaces';
+import {UIPostReply} from '~app/types/post-reply/post-reply.interfaces';
 
 export type PostsState = Immutable<{
   posts: Array<UIPost>;
   postTotalCount: number;
   postComments: {[postId: string]: Array<UIPostComment>};
-  postSubcomments: {[commentId: string]: Array<UIPostSubcomment>};
-  postCommentSubcommentTotalCount: {[postId: string]: number};
+  postReplies: {[commentId: string]: Array<UIPostReply>};
+  postCommentReplyTotalCount: {[postId: string]: number};
   postCommentTotalCount: {[postId: string]: number};
-  postSubcommentTotalCount: {[commentId: string]: number};
+  postReplyTotalCount: {[commentId: string]: number};
   // visiblePostComments: {
   //   [postId: string]: {
-  //     [commentId: string]: {[subcommentId: string]: boolean};
+  //     [commentId: string]: {[replyId: string]: boolean};
   //   };
   // };
   // profileTeasers: {[userId: string]: {username: string; avatarUrl: string}};
   isLoadingPosts: boolean;
   isLoadingPostComments: boolean;
-  isLoadingPostSubcomments: boolean;
+  isLoadingPostReplies: boolean;
 }>;
 
 const PostsInitialState: PostsState = {
   posts: [],
   postComments: {},
-  postSubcomments: {},
+  postReplies: {},
   postTotalCount: 0,
-  postCommentSubcommentTotalCount: {},
+  postCommentReplyTotalCount: {},
   postCommentTotalCount: {},
-  postSubcommentTotalCount: {},
+  postReplyTotalCount: {},
   // visiblePostComments: {},
   // profileTeasers: {},
   isLoadingPosts: false,
   isLoadingPostComments: false,
-  isLoadingPostSubcomments: false,
+  isLoadingPostReplies: false,
 };
 
 export const PostsStore: StoreConfig<PostsState> = {

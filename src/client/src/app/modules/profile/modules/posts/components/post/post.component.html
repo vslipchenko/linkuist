@@ -2,7 +2,7 @@
   *ngIf="{
     profileTeasers: profileTeasers$ | async,
     postCommentTotalCount: postCommentTotalCount$ | async,
-    postCommentSubcommentTotalCount: postCommentSubcommentTotalCount$ | async
+    postCommentReplyTotalCount: postCommentReplyTotalCount$ | async
   } as data"
 >
   <div class="post-section">
@@ -18,7 +18,7 @@
       [creationDate]="post.date"
       [timeElapsedAfterCreation$]="post.timeElapsedAfterCreation$"
       [resolvedUserUrlUsername]="resolvedUser.urlUsername"
-      [commentTotalCount]="data.postCommentSubcommentTotalCount"
+      [commentTotalCount]="data.postCommentReplyTotalCount"
       [likeTotalCount]="post.totalLikes"
       [dislikeTotalCount]="post.totalDislikes"
       [shareTotalCount]="post.totalShares"
@@ -35,14 +35,14 @@
       <ng-container *ngFor="let postComment of postComments$ | async; trackBy: postCommentsTrackBy">
         <ng-container
           *ngIf="{
-            postSubcommentTotalCount: getPostSubcommentTotalCount$(postComment._id) | async
+            postReplyTotalCount: getPostReplyTotalCount$(postComment._id) | async
           } as commentData"
         >
           <app-post-comment
             [postItemComponent]="postItemComponent"
             [postId]="post._id"
             [commentId]="postComment._id"
-            (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
+            (newReply)="updateRecentlyAddedReplyIds($event)"
           >
             <app-post-item
               #postItemComponent
@@ -56,25 +56,25 @@
               [creationDate]="postComment.date"
               [timeElapsedAfterCreation$]="postComment.timeElapsedAfterCreation$"
               [resolvedUserUrlUsername]="resolvedUser.urlUsername"
-              [commentTotalCount]="commentData.postSubcommentTotalCount"
+              [commentTotalCount]="commentData.postReplyTotalCount"
               [body]="postComment.body"
             ></app-post-item>
           </app-post-comment>
 
-          <app-post-subcomments
+          <app-post-replies
             [postId]="post._id"
             [commentId]="postComment._id"
             [profileTeasers]="data.profileTeasers"
             [resolvedUserUrlUsername]="resolvedUser.urlUsername"
-            (newSubcomment)="updateRecentlyAddedSubcommentIds($event)"
-          ></app-post-subcomments>
+            (newReply)="updateRecentlyAddedReplyIds($event)"
+          ></app-post-replies>
 
           <app-comment-manage-panel
-            [data]="getPostSubcomments$(postComment._id) | async"
-            [isLoading]="isLoadingPostSubcomments$ | async"
-            [totalCount]="commentData.postSubcommentTotalCount"
-            (loadMore)="showSubcomments(postComment._id)"
-            (hide)="hideSubcommentThread(postComment._id)"
+            [data]="getPostReplies$(postComment._id) | async"
+            [isLoading]="isLoadingPostReplies$ | async"
+            [totalCount]="commentData.postReplyTotalCount"
+            (loadMore)="showReplies(postComment._id)"
+            (hide)="hideReplyThread(postComment._id)"
           ></app-comment-manage-panel>
         </ng-container>
       </ng-container>

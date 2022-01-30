@@ -15,7 +15,7 @@ export const GET_POSTS_BY_USER_ID = gql`
           createdAt
           text
           totalComments
-          totalCommentsSubcomments
+          totalCommentsReplies
           totalLikes
           totalDislikes
           totalShares

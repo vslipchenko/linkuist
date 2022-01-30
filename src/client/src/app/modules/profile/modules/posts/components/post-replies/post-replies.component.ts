@@ -12,9 +12,9 @@ import {
 import {Observable, of} from 'rxjs';
 import {AddCommentComponent} from '~app/modules/profile/modules/posts/components/add-comment/add-comment.component';
 import {
-  PostSubcommentCreateMutationResult,
-  UIPostSubcomment,
-} from '~app/types/post-subcomment/post-subcomment.interfaces';
+  PostReplyCreateMutationResult,
+  UIPostReply,
+} from '~app/types/post-reply/post-reply.interfaces';
 import {PostsSelectors} from '~app/modules/profile/modules/posts/store/posts.selectors';
 import {Store} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store';
@@ -25,12 +25,12 @@ import {FetchResult} from '@apollo/client/core';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-post-subcomments',
-  templateUrl: './post-subcomments.component.html',
-  styleUrls: ['./post-subcomments.component.scss'],
+  selector: 'app-post-replies',
+  templateUrl: './post-replies.component.html',
+  styleUrls: ['./post-replies.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostSubcommentsComponent implements OnInit {
+export class PostRepliesComponent implements OnInit {
   @Input() public readonly postId!: string;
   @Input() public readonly commentId!: string;
   @Input() public readonly profileTeasers!: ProfileTeasers;
@@ -38,9 +38,9 @@ export class PostSubcommentsComponent implements OnInit {
   @Input() public readonly bottomButtonsRef!: TemplateRef<unknown>;
   @Input() public readonly resolvedUserUrlUsername!: string;
 
-  @Output() public readonly newSubcomment = new EventEmitter<{id: string; commentId: string}>();
+  @Output() public readonly newReply = new EventEmitter<{id: string; commentId: string}>();
 
-  public postSubcomments$: Observable<Array<UIPostSubcomment>> = of();
+  public postReplies$: Observable<Array<UIPostReply>> = of();
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   @ViewChild(AddCommentComponent)
@@ -54,8 +54,8 @@ export class PostSubcommentsComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.postSubcomments$ = this.store.select$(
-      PostsSelectors.getPostSubcommentsByCommentId,
+    this.postReplies$ = this.store.select$(
+      PostsSelectors.getPostRepliesByCommentId,
       this.commentId,
     );
   }
@@ -66,35 +66,32 @@ export class PostSubcommentsComponent implements OnInit {
     this.addCommentComponent.focusElasticInput();
     // debugger;
   }
-  // Subcomment reply has to have @username that is going before text body
-  public addPostSubcomment(body: string, index: number): void {
+  // Reply reply has to have @username that is going before text body
+  public addPostReply(body: string, index: number): void {
     this.store
-      .dispatch$<FetchResult<PostSubcommentCreateMutationResult>>(
-        PostsActions.createPostSubcomment,
-        {
-          subcommentPayload: {
-            postId: this.postId,
-            commentId: this.commentId,
-            body,
-          },
-          insertAtPosition: index + 1, // Insert right after subcomment being replied to
+      .dispatch$<FetchResult<PostReplyCreateMutationResult>>(PostsActions.createPostReply, {
+        replyPayload: {
+          postId: this.postId,
+          commentId: this.commentId,
+          body,
         },
-      )
+        insertAtPosition: index + 1, // Insert right after reply being replied to
+      })
       .pipe(untilDestroyed(this))
       .subscribe((result) =>
-        this.newSubcomment.emit({
-          id: result.data!.createPostSubcomment._id,
+        this.newReply.emit({
+          id: result.data!.createPostReply._id,
           commentId: this.commentId,
         }),
       );
   }
 
-  public handlePostSubcommentDelete(subcommentId: string): void {
+  public handlePostReplyDelete(replyId: string): void {
     this.store
-      .dispatch$(PostsActions.deletePostSubcomment, {
+      .dispatch$(PostsActions.deletePostReply, {
         postId: this.postId,
         commentId: this.commentId,
-        subcommentId,
+        replyId,
       })
       .pipe(untilDestroyed(this))
       .subscribe();
