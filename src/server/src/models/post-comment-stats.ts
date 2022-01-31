@@ -6,7 +6,7 @@ const postCommentStatsSchema = new mongoose.Schema({
   // TODO: review index relevance
   commentId: {type: mongoose.Schema.Types.ObjectId, required: true, index: true},
   userId: {type: mongoose.Schema.Types.ObjectId, required: true, index: true},
-  like: {type: Number, required: true, index: true}, // Represented by the State enum
+  like: {type: Number, required: true}, // Represented by the State enum
 } as MongooseSchema<IPostCommentStats>);
 
 export const PostCommentStats = mongoose.model<MongooseDocument<IPostCommentStats>>(

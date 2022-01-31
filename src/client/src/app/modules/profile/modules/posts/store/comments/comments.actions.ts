@@ -8,4 +8,4 @@ export const PostCommentsActions = {
   createPostComment: 'Create post comment',
   deletePostComment: 'Delete post comment',
   removeCommentRelatedData: 'Remove post comment & related replies',
-};
+} as const;
