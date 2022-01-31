@@ -2,13 +2,16 @@ import {gql} from 'apollo-server-express';
 import {RequestParameters} from '../../../types/shared/shared.types';
 import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
-import {SortOrder} from '../../../types/shared/shared.enums';
+import {SortOrder, State} from '../../../types/shared/shared.enums';
 import {POST_COMMENT_FETCH_LIMIT} from '../../../constants/post';
 import mongoose from 'mongoose';
 import {PostComment} from '../../../models/post-comment';
 import {IPostComment} from '../../../types/post-comment/post-comment.interfaces';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
 import {PostCommentReply} from '../../../models/post-reply';
+import {AccessTokenData} from '../../../types/jwt/jwt.interfaces';
+import {authenticationGuard} from '../../../utilities/guards';
+import {PostCommentStats} from '../../../models/post-comment-stats';
 
 export const postCommentQueryTypeDefinitions = gql`
   extend type Query {
@@ -26,6 +29,7 @@ const aggregatePostCommentData = async (
   skipPostCommentIds: Array<string>,
   skipProfileTeaserIds: Array<string>,
   parameters: RequestParameters,
+  accessToken: string,
 ): Promise<unknown> => {
   const uniqueUserIdsMap: {[userId: string]: number} = {};
   const skipProfileTeaserIdsMap: {[userId: string]: number} = {};
@@ -56,7 +60,9 @@ const aggregatePostCommentData = async (
 
   //console.log('aggregationResult ', parameters, aggregationResult, new Date());
 
-  const data = aggregationResult[0].data as Array<IPostComment & {totalReplies: number}>;
+  const data = aggregationResult[0].data as Array<
+    IPostComment & {totalReplies: number; totalLikes: number; totalDislikes: number; like: State}
+  >;
 
   for (const comment of data) {
     comment.totalReplies = await PostCommentReply.countDocuments({commentId: comment._id});
@@ -67,6 +73,29 @@ const aggregatePostCommentData = async (
       // console.log('unique ', post.userId.toString(), uniqueUserIdsMap, skipProfileTeaserIds);
       uniqueUserIdsMap[userId] = 1;
     }
+    // TODO move to utils
+    const postCommentStats = await PostCommentStats.find({commentId: comment._id});
+
+    let totalLikes = 0;
+    let totalDislikes = 0;
+    let tokenData: AccessTokenData;
+
+    if (accessToken) {
+      // If user is logged in, fetch his post like stat as well
+      const {tokenData: decodedTokenData} = authenticationGuard(accessToken);
+
+      if (decodedTokenData) tokenData = decodedTokenData;
+    }
+
+    postCommentStats.forEach((stat) => {
+      // Check whether request user has liked post
+      if (tokenData && stat.userId.toString() === tokenData.userId) comment.like = stat.like;
+      if (stat.like === State.YES) return totalLikes++;
+      totalDislikes++; // case: State.NO
+    });
+
+    comment.totalLikes = totalLikes;
+    comment.totalDislikes = totalDislikes;
   }
 
   const uniqueUserIds = Object.keys(uniqueUserIdsMap);
@@ -114,6 +143,7 @@ const postCommentsByPostId = (
     skipProfileTeaserIds: Array<string>;
     parameters: RequestParameters;
   },
+  {accessToken}: {accessToken: string},
 ): Promise<unknown> | null => {
   const {isInvalidData} = checkDataValidity({
     data: {postId, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
@@ -128,7 +158,13 @@ const postCommentsByPostId = (
 
   if (isInvalidData) return null;
 
-  return aggregatePostCommentData(postId, skipPostCommentIds, skipProfileTeaserIds, parameters);
+  return aggregatePostCommentData(
+    postId,
+    skipPostCommentIds,
+    skipProfileTeaserIds,
+    parameters,
+    accessToken,
+  );
 };
 
 export const postCommentQueryResolvers = {

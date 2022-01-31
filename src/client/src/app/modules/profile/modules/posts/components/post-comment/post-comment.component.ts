@@ -49,9 +49,28 @@ export class PostCommentComponent implements OnInit {
       .subscribe(this.handlePostCommentDislike.bind(this));
   }
 
-  private handlePostCommentLike(currentState: State): void {}
+  private handlePostCommentLike(currentState: State): void {
+    const nextState = currentState === State.YES ? State.NONE : State.YES;
 
-  private handlePostCommentDislike(currentState: State): void {}
+    this.likePostComment(nextState);
+  }
+
+  private handlePostCommentDislike(currentState: State): void {
+    const nextState = currentState === State.NO ? State.NONE : State.NO;
+
+    this.likePostComment(nextState);
+  }
+
+  private likePostComment(nextState: State): void {
+    this.store
+      .dispatch$(PostsActions.likePostComment, {
+        postId: this.postId,
+        commentId: this.commentId,
+        like: nextState,
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
 
   private handlePostCommentDelete(): void {
     this.store

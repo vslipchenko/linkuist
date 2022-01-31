@@ -6,6 +6,7 @@ import {UIPostComment} from '~app/types/post-comment/post-comment.interfaces';
 import {UIPostReply} from '~app/types/post-reply/post-reply.interfaces';
 import {immutableInsertAt} from '~app/utilities/array';
 import {State} from '~app/types/shared/shared.enums';
+import {getLikeIncrement} from '~app/utilities/post';
 
 export const PostsReducers: Reducers<PostsState> = {
   [PostsActions.loadPostReplies]: (state) => ({
@@ -192,6 +193,31 @@ export const PostsReducers: Reducers<PostsState> = {
       [payload.postId]: state.postCommentTotalCount[payload.postId] + 1,
     },
   }),
+  [PostsActions.setPostCommentLike]: (
+    state,
+    payload: {postId: string; commentId: string; like: State},
+  ): ReducerResult<PostsState> => ({
+    ...state,
+    postComments: {
+      ...state.postComments,
+      [payload.postId]: state.postComments[payload.postId].map((comment) => {
+        if (payload.commentId === comment._id) {
+          const increment = getLikeIncrement(comment.like, payload.like);
+          const totalLikes = comment.totalLikes + increment.like;
+          const totalDislikes = comment.totalDislikes + increment.dislike;
+
+          return {
+            ...comment,
+            totalLikes,
+            totalDislikes,
+            like: payload.like,
+          };
+        }
+
+        return comment;
+      }),
+    },
+  }),
   [PostsActions.setPostLike]: (
     state,
     payload: {postId: string; like: State},
@@ -199,37 +225,9 @@ export const PostsReducers: Reducers<PostsState> = {
     ...state,
     posts: state.posts.map((post) => {
       if (post._id === payload.postId) {
-        let totalLikes = post.totalLikes;
-        let totalDislikes = post.totalDislikes;
-
-        switch (true) {
-          // like
-          case !post.like && payload.like === State.YES:
-            totalLikes++;
-            break;
-          // dislike
-          case !post.like && payload.like === State.NO:
-            totalDislikes++;
-            break;
-          // undo like
-          case post.like === State.YES && !payload.like:
-            totalLikes--;
-            break;
-          // undo dislike
-          case post.like === State.NO && !payload.like:
-            totalDislikes--;
-            break;
-          // like to dislike
-          case post.like === State.YES && payload.like === State.NO:
-            totalLikes--;
-            totalDislikes++;
-            break;
-          // dislike to like
-          case post.like === State.NO && payload.like === State.YES:
-            totalLikes++;
-            totalDislikes--;
-            break;
-        }
+        const increment = getLikeIncrement(post.like, payload.like);
+        const totalLikes = post.totalLikes + increment.like;
+        const totalDislikes = post.totalDislikes + increment.dislike;
 
         return {
           ...post,

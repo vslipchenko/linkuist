@@ -18,10 +18,13 @@ export const GET_POST_COMMENTS_BY_POST_ID = gql`
           _id
           userId
           postId
-          totalReplies
           body
           likes
           createdAt
+          totalReplies
+          totalLikes
+          totalDislikes
+          like
         }
         total
       }

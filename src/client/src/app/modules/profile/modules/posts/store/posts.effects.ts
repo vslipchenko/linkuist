@@ -34,6 +34,8 @@ import {
 } from '~app/types/post-reply/post-reply.interfaces';
 import {PostStatsService} from '~app/services/post-stats/post-stats.service';
 import {LikePostMutationResult} from '~app/types/post-stats/post-stats.interfaces';
+import {PostCommentStatsService} from '~app/services/post-comment-stats/post-comment-stats.service';
+import {LikePostCommentMutationResult} from '~app/types/post-comment-stats/post-comment-stats.interfaces';
 
 export const PostsEffects: Effects<PostsState> = {
   [PostsActions.createPost]: ({dispatch, payload, injector}: EffectOptions<PostsState, string>) => {
@@ -103,6 +105,23 @@ export const PostsEffects: Effects<PostsState> = {
         dispatch(PostsActions.setPostLike, {
           postId: payload.postId,
           like: data?.likePost?.like, // undefined is acceptible as well
+        });
+      }),
+    );
+  },
+  [PostsActions.likePostComment]: ({
+    payload,
+    dispatch,
+    injector,
+  }: EffectOptions<PostsState, {postId: string; commentId: string; like: State}>) => {
+    const postCommentStatsService = injector.get(PostCommentStatsService);
+
+    return postCommentStatsService.like({commentId: payload.commentId, like: payload.like}).pipe(
+      tap(({data}: FetchResult<LikePostCommentMutationResult>) => {
+        dispatch(PostsActions.setPostCommentLike, {
+          postId: payload.postId,
+          commentId: payload.commentId,
+          like: data?.likePostComment?.like, // undefined is acceptible as well
         });
       }),
     );

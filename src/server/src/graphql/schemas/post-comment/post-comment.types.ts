@@ -10,6 +10,9 @@ export const postCommentTypes = gql`
     createdAt: Float!
     likes: Int # Null for created comment
     totalReplies: Int!
+    totalLikes: Float! # DOES NOT EXIST FOR COMMENT CREATE; FOR UI NEEDS
+    totalDislikes: Float! # DOES NOT EXIST FOR COMMENT CREATE; FOR UI NEEDS
+    like: Int # DOES NOT EXIST FOR COMMENT CREATE; FOR UI NEEDS
   }
 
   type PostComments {

@@ -7,7 +7,7 @@ import {
   millisecondsToHours,
   millisecondsToMinutes,
 } from '~app/utilities/date';
-import {ElapsedTimeMeasure} from '~app/types/shared/shared.enums';
+import {ElapsedTimeMeasure, State} from '~app/types/shared/shared.enums';
 import {DateService} from '~app/shared/services/date/date.service';
 
 export const getPostFullDate = (createdAt: number, translateService: TranslateService): string => {
@@ -117,4 +117,43 @@ export const getTimeElapsedAfterCreation$ = ({
       }),
       // tap(() => this.changeDetector.detectChanges()),
     );
+};
+
+export const getLikeIncrement = (
+  previousLikeState: State,
+  currentLikeState: State,
+): {like: number; dislike: number} => {
+  let like = 0;
+  let dislike = 0;
+
+  switch (true) {
+    // like
+    case !previousLikeState && currentLikeState === State.YES:
+      like++;
+      break;
+    // dislike
+    case !previousLikeState && currentLikeState === State.NO:
+      dislike++;
+      break;
+    // undo like
+    case previousLikeState === State.YES && !currentLikeState:
+      like--;
+      break;
+    // undo dislike
+    case previousLikeState === State.NO && !currentLikeState:
+      dislike--;
+      break;
+    // like to dislike
+    case previousLikeState === State.YES && currentLikeState === State.NO:
+      like--;
+      dislike++;
+      break;
+    // dislike to like
+    case previousLikeState === State.NO && currentLikeState === State.YES:
+      like++;
+      dislike--;
+      break;
+  }
+
+  return {like, dislike};
 };

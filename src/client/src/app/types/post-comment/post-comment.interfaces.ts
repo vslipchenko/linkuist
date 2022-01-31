@@ -1,5 +1,6 @@
 import {UserProfileTeaser} from '~app/types/user/user.interfaces';
 import {Observable} from 'rxjs';
+import {State} from '~app/types/shared/shared.enums';
 
 export interface PostCommentBase {
   _id: string;
@@ -8,6 +9,9 @@ export interface PostCommentBase {
   // commentId?: string; // is null for replies
   body: string;
   createdAt: number;
+  totalLikes: number;
+  totalDislikes: number;
+  like: State;
 }
 
 interface PostComment extends PostCommentBase {
