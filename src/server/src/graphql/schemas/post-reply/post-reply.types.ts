@@ -7,7 +7,9 @@ export const postReplyTypes = gql`
     userId: ID!
     body: String!
     createdAt: Float!
-    likes: Int # Null for created reply
+    totalLikes: Float! # DOES NOT EXIST FOR REPLY CREATE; FOR UI NEEDS
+    totalDislikes: Float! # DOES NOT EXIST FOR REPLY CREATE; FOR UI NEEDS
+    like: Int # DOES NOT EXIST FOR REPLY CREATE; FOR UI NEEDS
   }
 
   type PostReplies {

@@ -3,6 +3,8 @@ import {PostsState} from '~app/modules/profile/modules/posts/store';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {UIPostReply} from '~app/types/post-reply/post-reply.interfaces';
 import {immutableInsertAt} from '~app/utilities/array';
+import {State} from '~app/types/shared/shared.enums';
+import {getLikeIncrement} from '~app/utilities/post';
 
 export const PostRepliesReducers: Reducers<PostsState> = {
   [PostsActions.loadPostReplies]: (state) => ({
@@ -96,6 +98,31 @@ export const PostRepliesReducers: Reducers<PostsState> = {
       ...state.postReplies,
       // [payload._id]: payload
       [commentId]: [],
+    },
+  }),
+  [PostsActions.setPostReplyLike]: (
+    state,
+    payload: {commentId: string; replyId: string; like: State},
+  ): ReducerResult<PostsState> => ({
+    ...state,
+    postReplies: {
+      ...state.postReplies,
+      [payload.commentId]: state.postReplies[payload.commentId].map((reply) => {
+        if (payload.replyId === reply._id) {
+          const increment = getLikeIncrement(reply.like, payload.like);
+          const totalLikes = reply.totalLikes + increment.like;
+          const totalDislikes = reply.totalDislikes + increment.dislike;
+
+          return {
+            ...reply,
+            totalLikes,
+            totalDislikes,
+            like: payload.like,
+          };
+        }
+
+        return reply;
+      }),
     },
   }),
 };

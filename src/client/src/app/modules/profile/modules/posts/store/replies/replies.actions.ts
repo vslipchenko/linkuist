@@ -6,4 +6,6 @@ export const PostRepliesActions = {
   deletePostReply: 'Delete post reply',
   removePostReply: 'Remove post reply',
   insertPostReply: 'Insert post reply at certain position',
+  likePostReply: 'Like post reply',
+  setPostReplyLike: 'Set post reply like',
 } as const;

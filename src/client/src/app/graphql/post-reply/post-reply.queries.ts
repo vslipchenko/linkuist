@@ -18,8 +18,10 @@ export const GET_POST_REPLIES_BY_COMMENT_ID = gql`
           _id
           userId
           body
-          likes
           createdAt
+          totalLikes
+          totalDislikes
+          like
         }
         total
       }

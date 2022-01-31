@@ -22,6 +22,7 @@ import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {UntilDestroy, untilDestroyed} from '~app/utilities/until-destroy';
 import {FetchResult} from '@apollo/client/core';
+import {State} from '~app/types/shared/shared.enums';
 
 @UntilDestroy()
 @Component({
@@ -64,7 +65,6 @@ export class PostRepliesComponent implements OnInit {
     this._showAddReply = true;
     this.changeDetector.detectChanges();
     this.addCommentComponent.focusElasticInput();
-    // debugger;
   }
   // Reply reply has to have @username that is going before text body
   public addPostReply(body: string, index: number): void {
@@ -92,6 +92,29 @@ export class PostRepliesComponent implements OnInit {
         postId: this.postId,
         commentId: this.commentId,
         replyId,
+      })
+      .pipe(untilDestroyed(this))
+      .subscribe();
+  }
+
+  public handlePostReplyLike(currentState: State, replyId: string): void {
+    const nextState = currentState === State.YES ? State.NONE : State.YES;
+
+    this.likePostReply(nextState, replyId);
+  }
+
+  public handlePostReplyDislike(currentState: State, replyId: string): void {
+    const nextState = currentState === State.NO ? State.NONE : State.NO;
+
+    this.likePostReply(nextState, replyId);
+  }
+
+  private likePostReply(nextState: State, replyId: string): void {
+    this.store
+      .dispatch$(PostsActions.likePostReply, {
+        commentId: this.commentId,
+        replyId,
+        like: nextState,
       })
       .pipe(untilDestroyed(this))
       .subscribe();

@@ -11,6 +11,11 @@
   [timeElapsedAfterCreation$]="postReply.timeElapsedAfterCreation$"
   [resolvedUserUrlUsername]="resolvedUserUrlUsername"
   [body]="postReply.body"
+  [liked]="postReply.like"
+  [likeTotalCount]="postReply.totalLikes"
+  [dislikeTotalCount]="postReply.totalDislikes"
   (delete)="handlePostReplyDelete(postReply._id)"
   (comment)="addPostReply($event, index)"
+  (like)="handlePostReplyLike($event, postReply._id)"
+  (dislike)="handlePostReplyDislike($event, postReply._id)"
 ></app-post-item>

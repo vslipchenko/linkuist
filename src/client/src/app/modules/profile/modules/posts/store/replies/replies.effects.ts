@@ -1,7 +1,7 @@
 import {PostsActions} from '~app/modules/profile/modules/posts/store/posts.actions';
 import {EffectOptions, Effects} from '@ng-estate/store';
 import {PostsState} from '~app/modules/profile/modules/posts/store';
-import {SortOrder} from '~app/types/shared/shared.enums';
+import {SortOrder, State} from '~app/types/shared/shared.enums';
 import {PostReplyService} from '~app/services/post-reply/post-reply.service';
 import {POST_COMMENT_FETCH_LIMIT} from '~app/constants/post';
 import {of, tap} from 'rxjs';
@@ -18,6 +18,8 @@ import {ProfileTeasers} from '~app/types/profile/profile.interfaces';
 import {getPostFullDate, getPostShortDate, getTimeElapsedAfterCreation$} from '~app/utilities/post';
 import {hasLessMillisecondsThanDay} from '~app/utilities/date';
 import {ProfileActions} from '~app/modules/profile/store/profile.actions';
+import {PostReplyStatsService} from '~app/services/post-reply-stats/post-reply-stats.service';
+import {LikePostReplyMutationResult} from '~app/types/post-reply-stats/post-reply-stats.interfaces';
 
 export const PostRepliesEffects: Effects<PostsState> = {
   [PostsActions.loadPostReplies]: ({
@@ -151,6 +153,23 @@ export const PostRepliesEffects: Effects<PostsState> = {
         if (!data?.deletePostReply) return;
 
         dispatch(PostsActions.removePostReply, payload);
+      }),
+    );
+  },
+  [PostsActions.likePostReply]: ({
+    payload,
+    dispatch,
+    injector,
+  }: EffectOptions<PostsState, {commentId: string; replyId: string; like: State}>) => {
+    const postReplyStatsService = injector.get(PostReplyStatsService);
+
+    return postReplyStatsService.like({replyId: payload.replyId, like: payload.like}).pipe(
+      tap(({data}: FetchResult<LikePostReplyMutationResult>) => {
+        dispatch(PostsActions.setPostReplyLike, {
+          commentId: payload.commentId,
+          replyId: payload.replyId,
+          like: data?.likePostReply?.like, // undefined is acceptible as well
+        });
       }),
     );
   },

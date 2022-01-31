@@ -2,12 +2,15 @@ import {gql} from 'apollo-server-express';
 import {RequestParameters} from '../../../types/shared/shared.types';
 import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
-import {SortOrder} from '../../../types/shared/shared.enums';
+import {SortOrder, State} from '../../../types/shared/shared.enums';
 import {POST_REPLY_FETCH_LIMIT} from '../../../constants/post';
 import mongoose from 'mongoose';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
 import {PostCommentReply} from '../../../models/post-reply';
 import {IPostCommentReply} from '../../../types/post-reply/post-reply.interfaces';
+import {AccessTokenData} from '../../../types/jwt/jwt.interfaces';
+import {authenticationGuard} from '../../../utilities/guards';
+import {PostReplyStats} from '../../../models/post-reply-stats';
 
 export const postReplyQueryTypeDefinitions = gql`
   extend type Query {
@@ -25,6 +28,7 @@ const aggregatePostReplyData = async (
   skipPostReplyIds: Array<string>,
   skipProfileTeaserIds: Array<string>,
   parameters: RequestParameters,
+  accessToken: string,
 ): Promise<unknown> => {
   const uniqueUserIdsMap: {[userId: string]: number} = {};
   const skipProfileTeaserIdsMap: {[userId: string]: number} = {};
@@ -54,16 +58,42 @@ const aggregatePostReplyData = async (
 
   //console.log('aggregationResult ', parameters, aggregationResult, new Date());
 
-  const data = aggregationResult[0].data as Array<IPostCommentReply>;
+  const data = aggregationResult[0].data as Array<
+    IPostCommentReply & {totalLikes: number; totalDislikes: number; like: State}
+  >;
 
-  for (const comment of data) {
+  for (const reply of data) {
     // console.log(comment);
-    const userId = comment.userId.toString();
+    const userId = reply.userId.toString();
 
     if (!uniqueUserIdsMap[userId] && !skipProfileTeaserIdsMap[userId]) {
       // console.log('unique ', post.userId.toString(), uniqueUserIdsMap, skipProfileTeaserIds);
       uniqueUserIdsMap[userId] = 1;
     }
+
+    // TODO move to utils
+    const postReplyStats = await PostReplyStats.find({replyId: reply._id});
+
+    let totalLikes = 0;
+    let totalDislikes = 0;
+    let tokenData: AccessTokenData;
+
+    if (accessToken) {
+      // If user is logged in, fetch his post like stat as well
+      const {tokenData: decodedTokenData} = authenticationGuard(accessToken);
+
+      if (decodedTokenData) tokenData = decodedTokenData;
+    }
+
+    postReplyStats.forEach((stat) => {
+      // Check whether request user has liked post
+      if (tokenData && stat.userId.toString() === tokenData.userId) reply.like = stat.like;
+      if (stat.like === State.YES) return totalLikes++;
+      totalDislikes++; // case: State.NO
+    });
+
+    reply.totalLikes = totalLikes;
+    reply.totalDislikes = totalDislikes;
   }
 
   const uniqueUserIds = Object.keys(uniqueUserIdsMap);
@@ -95,6 +125,7 @@ const postRepliesByCommentId = (
     skipProfileTeaserIds: Array<string>;
     parameters: RequestParameters;
   },
+  {accessToken}: {accessToken: string},
 ): Promise<unknown> | null => {
   const {isInvalidData} = checkDataValidity({
     data: {commentId, order: parameters.order, offset: parameters.offset, limit: parameters.limit},
@@ -109,7 +140,13 @@ const postRepliesByCommentId = (
 
   if (isInvalidData) return null;
 
-  return aggregatePostReplyData(commentId, skipPostReplyIds, skipProfileTeaserIds, parameters);
+  return aggregatePostReplyData(
+    commentId,
+    skipPostReplyIds,
+    skipProfileTeaserIds,
+    parameters,
+    accessToken,
+  );
 };
 
 export const postReplyQueryResolvers = {
