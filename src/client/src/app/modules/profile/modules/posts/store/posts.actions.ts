@@ -1,29 +1,30 @@
+import {PostCommentsActions} from '~app/modules/profile/modules/posts/store/comments/comments.actions';
+
 export const PostsActions = {
   createPost: 'Create post',
   // prependReply: 'Create post',
   prependPost: 'Prepend post',
-  removeCommentThread: 'Remove comments & replies for specific post',
+
   removeReplyThread: 'Remove replies for specific post comment',
-  prependPostComment: 'Prepend post comment',
+
   deletePost: 'Delete post',
   removePost: 'Remove post from posts',
   likePost: 'Like post',
-  likePostComment: 'Like post comment',
+
   setPostLike: 'Set post like',
-  setPostCommentLike: 'Set post comment like',
+
   // dislikePost: 'Dislike post',
-  createPostComment: 'Create post comment',
-  deletePostComment: 'Delete post comment',
-  removeCommentRelatedData: 'Remove post comment & related replies',
+
   createPostReply: 'Create post reply',
   deletePostReply: 'Delete post reply',
   removePostReply: 'Remove post reply',
   insertPostReply: 'Insert post reply at certain position',
   // createPostReply: 'Create post reply',
-  appendPostComments: 'Append post comments',
+
   appendPostReplies: 'Append post replies',
   loadPosts: 'Load bunch of posts based on user id',
-  loadPostComments: 'Load post comments',
+
   loadPostReplies: 'Load post replies',
   appendPosts: 'Append posts',
+  ...PostCommentsActions,
 } as const;
