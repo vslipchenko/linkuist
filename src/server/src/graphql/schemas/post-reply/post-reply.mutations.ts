@@ -5,7 +5,7 @@ import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {getUtcTimestamp} from '../../../utilities/date';
 import {Post} from '../../../models/post';
-import {IPostCommentReply} from '../../../types/post-reply/post-reply.interface';
+import {IPostCommentReply} from '../../../types/post-reply/post-reply.interfaces';
 import {PostCommentReply} from '../../../models/post-reply';
 
 export const postReplyMutationTypeDefinitions = gql`

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import {MongooseDocument, MongooseSchema} from '../types/mongoose/mongoose.types';
-import {IPostCommentStats} from '../types/post-comment-stats/post-comment-stats.interface';
+import {IPostCommentStats} from '../types/post-comment-stats/post-comment-stats.interfaces';
 
 const postCommentStatsSchema = new mongoose.Schema({
   // TODO: review index relevance

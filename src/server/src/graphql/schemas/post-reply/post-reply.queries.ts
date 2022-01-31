@@ -7,7 +7,7 @@ import {POST_REPLY_FETCH_LIMIT} from '../../../constants/post';
 import mongoose from 'mongoose';
 import {userProfileTeasersByUserIds} from '../user/user.queries';
 import {PostCommentReply} from '../../../models/post-reply';
-import {IPostCommentReply} from '../../../types/post-reply/post-reply.interface';
+import {IPostCommentReply} from '../../../types/post-reply/post-reply.interfaces';
 
 export const postReplyQueryTypeDefinitions = gql`
   extend type Query {

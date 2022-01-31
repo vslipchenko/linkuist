@@ -21,6 +21,10 @@ import {
   postCommentStatsResolvers,
   postCommentStatsTypeDefinitions,
 } from './schemas/post-comment-stats/post-comment-stats.schema';
+import {
+  postReplyStatsResolvers,
+  postReplyStatsTypeDefinitions,
+} from './schemas/post-reply-stats/post-reply-stats.schema';
 
 // TODO remove as soon as extend of empty types is available
 const rootTypeDefs = gql`
@@ -46,6 +50,7 @@ export default makeExecutableSchema({
     ...linkardTypeDefinitions,
     ...postStatsTypeDefinitions,
     ...postCommentStatsTypeDefinitions,
+    ...postReplyStatsTypeDefinitions,
     // ...profileTypeDefinitions,
   ],
   resolvers: _merge(
@@ -60,6 +65,7 @@ export default makeExecutableSchema({
     ...linkardResolvers,
     ...postStatsResolvers,
     ...postCommentStatsResolvers,
+    ...postReplyStatsResolvers,
     // ...profileResolvers,
   ),
   // resolvers: {

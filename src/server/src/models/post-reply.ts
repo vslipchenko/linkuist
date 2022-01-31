@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import {MongooseDocument, MongooseSchema} from '../types/mongoose/mongoose.types';
-import {IPostCommentReply} from '../types/post-reply/post-reply.interface';
+import {IPostCommentReply} from '../types/post-reply/post-reply.interfaces';
 
 const postCommentReplySchema = new mongoose.Schema({
   userId: {type: mongoose.Schema.Types.ObjectId, required: true}, // Reply author id

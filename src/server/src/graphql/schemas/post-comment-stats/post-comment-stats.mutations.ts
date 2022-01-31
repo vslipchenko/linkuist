@@ -7,7 +7,7 @@ import {checkDataValidity} from '../../../utilities/validators';
 import {RECORD_ID_REGEXP} from '../../../constants/regexps';
 import {PostComment} from '../../../models/post-comment';
 import {PostCommentStats} from '../../../models/post-comment-stats';
-import {IPostCommentStats} from '../../../types/post-comment-stats/post-comment-stats.interface';
+import {IPostCommentStats} from '../../../types/post-comment-stats/post-comment-stats.interfaces';
 
 export const postCommentStatsMutationTypeDefinitions = gql`
   extend type Mutation {
